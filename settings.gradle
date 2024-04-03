@@ -1,0 +1,9 @@
+rootProject.name = 'openflexo-ui'
+
+include 'flexo-ui',
+        'flexo-ui-test',
+        'flexo-documentation-ui',
+        'flexo-ontology-ui',
+        'fml-technologyadapter-ui',
+        'fml-rt-technologyadapter-ui'
+ 

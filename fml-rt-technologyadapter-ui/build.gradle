@@ -1,0 +1,11 @@
+dependencies {
+  // openflexo dep
+  implementation flexoFoundation()
+  implementation flexoUi()
+  // external dep
+
+  // testing dep
+  testImplementation ginaTest()
+  testImplementation flexoUiTest()
+  testRuntimeOnly fmlTechnologyAdapterUi()
+}

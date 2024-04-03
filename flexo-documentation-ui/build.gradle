@@ -1,0 +1,10 @@
+dependencies {
+  // openflexo dep
+  implementation flexoFoundation()
+  implementation flexoUi()
+  implementation flexoDocumentation()
+  implementation ginaSwing()
+  testImplementation flexoUiTest()
+
+  // testing dep
+}

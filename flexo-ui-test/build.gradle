@@ -1,0 +1,13 @@
+dependencies {
+  // openflexo dep
+  implementation flexoFoundation()
+  implementation flexoUi()
+  implementation testUtils()
+  // external dep
+
+  // testing dep
+  api ginaTest()
+  testImplementation flexoFoundationTest()
+  testImplementation ginaSwingEditorTest()
+  testImplementation flexoTestResources()
+}
