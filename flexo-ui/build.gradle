@@ -19,10 +19,6 @@ dependencies {
 
   implementation 'commons-codec:commons-codec:1.10'
 
-  // testing dep
-  testImplementation flexoFoundationTest()
-  testImplementation flexoUiTest()
-
   // external dep
   if (!JavaVersion.current().isJava9Compatible()) {
   	implementation group: "org.openflexo.utils", name: "macos_ui_simulation", version: "1.1"

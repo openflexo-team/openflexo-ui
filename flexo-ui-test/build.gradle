@@ -8,7 +8,6 @@ dependencies {
   // testing dep
   api ginaTest()
   implementation flexoFoundationTest()
-  testImplementation flexoUiTest()
   testImplementation ginaSwingEditorTest()
   testImplementation flexoTestResources()
 }
