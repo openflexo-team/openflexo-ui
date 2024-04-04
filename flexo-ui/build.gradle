@@ -19,8 +19,9 @@ dependencies {
 
   implementation 'commons-codec:commons-codec:1.10'
 
+  // testing dep
+  testImplementation flexoFoundationTest()
   testImplementation flexoUiTest()
-  testImplementation ginaTest()
 
   // external dep
   if (!JavaVersion.current().isJava9Compatible()) {
