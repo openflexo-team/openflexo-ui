@@ -15,7 +15,7 @@ dependencies {
   api ginaSwing()
   api ginaSwingEditor()
   implementation dianaSwing()
-  implementation flexoHelp()
+  //implementation flexoHelp()
 
   implementation 'commons-codec:commons-codec:1.10'
 

@@ -54,7 +54,6 @@ import org.openflexo.br.SendBugReportServiceTask;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.help.FlexoHelp;
 import org.openflexo.jedit.JEditTextArea;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLoggingManager;
@@ -102,9 +101,9 @@ public class FlexoApplication {
 
 		JEditTextArea.DIALOG_FACTORY = FlexoDialog.DIALOG_FACTORY;
 
-		FlexoHelp.configure(applicationContext.getGeneralPreferences().getLanguage().getIdentifier(),
-				null/*UserType.getCurrentUserType().getIdentifier()*/);
-		FlexoHelp.reloadHelpSet();
+		// FlexoHelp.configure(applicationContext.getGeneralPreferences().getLanguage().getIdentifier(),
+		// null/*UserType.getCurrentUserType().getIdentifier()*/);
+		// FlexoHelp.reloadHelpSet();
 		FlexoObjectImpl.setCurrentUserIdentifier(applicationContext.getGeneralPreferences().getUserIdentifier());// Loads the preferences
 		// Thread myThread = new Thread(new FocusOwnerDisplayer());
 		// myThread.start();

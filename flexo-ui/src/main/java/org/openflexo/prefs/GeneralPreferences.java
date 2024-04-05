@@ -48,7 +48,6 @@ import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
-import org.openflexo.help.FlexoHelp;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.pamela.annotations.Getter;
@@ -271,10 +270,10 @@ public interface GeneralPreferences extends PreferencesContainer {
 			}
 			FlexoLocalization.setCurrentLanguage(language);
 			// FlexoLocalization.updateGUILocalized();
-			if (language != null) {
-				FlexoHelp.configure(language.getIdentifier(), null/*UserType.getCurrentUserType().getIdentifier()*/);
-				FlexoHelp.reloadHelpSet();
-			}
+			// if (language != null) {
+			// FlexoHelp.configure(language.getIdentifier(), null/*UserType.getCurrentUserType().getIdentifier()*/);
+			// FlexoHelp.reloadHelpSet();
+			// }
 		}
 
 		@Override
