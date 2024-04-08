@@ -5,5 +5,7 @@ include 'flexo-ui',
         'flexo-documentation-ui',
         'flexo-ontology-ui',
         'fml-technologyadapter-ui',
-        'fml-rt-technologyadapter-ui'
+        'fml-rt-technologyadapter-ui',
+        'ta-doc-generator'
+        
  
