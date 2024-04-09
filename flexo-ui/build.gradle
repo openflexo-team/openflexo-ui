@@ -17,7 +17,7 @@ dependencies {
   implementation dianaSwing()
   //implementation flexoHelp()
 
-  implementation 'commons-codec:commons-codec:1.10'
+  implementation 'commons-codec:commons-codec:1.16.1'
 
   // external dep
   if (!JavaVersion.current().isJava9Compatible()) {
