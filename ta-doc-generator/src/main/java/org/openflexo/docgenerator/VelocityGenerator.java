@@ -63,8 +63,12 @@ public abstract class VelocityGenerator<O extends FMLObject> extends AbstractGen
 
 	public VelocityGenerator(Class<O> objectClass, VelocityMasterGenerator<?> masterGenerator) {
 		super(objectClass, masterGenerator);
-		generatedFile = masterGenerator.getFileToBeGenerated(this);
+		generatedFile = getFileToBeGenerated();
 		System.out.println("Will generate: " + generatedFile.getAbsolutePath());
+	}
+
+	protected File getFileToBeGenerated() {
+		return getMasterGenerator().getFileToBeGenerated(this);
 	}
 
 	@Override

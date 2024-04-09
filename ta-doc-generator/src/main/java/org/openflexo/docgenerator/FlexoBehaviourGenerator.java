@@ -52,13 +52,20 @@ public abstract class FlexoBehaviourGenerator<FB extends FlexoBehaviour> extends
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoBehaviourGenerator.class.getPackage().getName());
 
+	private FB fb;
+
 	public FlexoBehaviourGenerator(Class<FB> objectClass, VelocityMasterGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
+		fb = getFMLModelFactory().newInstance(getObjectClass());
 	}
 
 	@Override
 	protected Image getIcon() {
 		return getTechnologyAdapterController().getIconForFlexoBehaviour(getObjectClass()).getImage();
+	}
+
+	public String getUsage(boolean fullQualified) {
+		return "Not implemented yet";
 	}
 
 }

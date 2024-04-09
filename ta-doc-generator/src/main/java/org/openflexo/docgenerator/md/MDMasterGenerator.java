@@ -186,4 +186,40 @@ public class MDMasterGenerator<TA extends TechnologyAdapter<TA>> extends Velocit
 		return className.replace(".", "/");
 	}
 
+	/*protected String getGlobalRolesReference() {
+		return masterGenerator.getRelativePath() + "/" + objectClass.getSimpleName() + "_roles.md";
+	}
+	
+	protected String getGlobalBehavioursReference() {
+		return masterGenerator.getRelativePath() + "/" + objectClass.getSimpleName() + "_behaviours.md";
+	}
+	
+	protected String getGlobalEditionActionsReference() {
+		return masterGenerator.getRelativePath() + "/" + objectClass.getSimpleName() + "_edition_actions.md";
+	}
+	
+	protected String getGlobalFetchRequestsReference() {
+		return masterGenerator.getRelativePath() + "/" + objectClass.getSimpleName() + "_fetch_requests.md";
+	}
+	
+	protected String getLocalReference() {
+		return "./" + objectClass.getSimpleName() + ".md";
+	}
+	
+	protected String getLocalRolesReference() {
+		return "./" + objectClass.getSimpleName() + "_roles.md";
+	}
+	
+	protected String getLocalBehavioursReference() {
+		return "./" + objectClass.getSimpleName() + "_behaviours.md";
+	}
+	
+	protected String getLocalEditionActionsReference() {
+		return "./" + objectClass.getSimpleName() + "_edition_actions.md";
+	}
+	
+	protected String getLocalFetchRequestsReference() {
+		return "./" + objectClass.getSimpleName() + "_fetch_requests.md";
+	}*/
+
 }

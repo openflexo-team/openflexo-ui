@@ -38,22 +38,26 @@
 
 package org.openflexo.docgenerator.md;
 
+import java.io.File;
 import java.util.logging.Logger;
 
-import org.openflexo.docgenerator.FetchRequestGenerator;
-import org.openflexo.foundation.fml.editionaction.FetchRequest;
+import org.openflexo.docgenerator.ModelSlotGenerator;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.logging.FlexoLogger;
 
 /**
- * Documentation generator for {@link FetchRequest}
+ * Documentation generator for {@link ModelSlot}
  * 
  */
-public class MDFetchRequestGenerator<FR extends FetchRequest<?, ?, ?>> extends FetchRequestGenerator<FR> {
+public class MDModelSlotEditionActionListGenerator<MS extends ModelSlot<?>> extends ModelSlotGenerator<MS> {
 
-	private static final Logger logger = FlexoLogger.getLogger(MDFetchRequestGenerator.class.getPackage().getName());
+	private static final Logger logger = FlexoLogger.getLogger(MDModelSlotEditionActionListGenerator.class.getPackage().getName());
 
-	public MDFetchRequestGenerator(Class<FR> objectClass, MDMasterGenerator<?> taDocGenerator) {
+	private MS ms;
+
+	public MDModelSlotEditionActionListGenerator(Class<MS> objectClass, MDMasterGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
+		ms = getFMLModelFactory().newInstance(getObjectClass());
 	}
 
 	@Override
@@ -61,13 +65,22 @@ public class MDFetchRequestGenerator<FR extends FetchRequest<?, ?, ?>> extends F
 		return (MDMasterGenerator<?>) super.getMasterGenerator();
 	}
 
+	@Override
+	protected File getFileToBeGenerated() {
+		return new File(getMDDir(), getObjectClass().getSimpleName() + "_edition_actions.md");
+	}
+
 	public String toMD(String text) {
 		return getMasterGenerator().toMD(text);
 	}
 
+	public File getMDDir() {
+		return getMasterGenerator().getMDDir();
+	}
+
 	@Override
 	public String getTemplateName() {
-		return "FetchRequest.md";
+		return "ModelSlot_edition_actions.md";
 	}
 
 	public String getSmallIconAsHTML() {

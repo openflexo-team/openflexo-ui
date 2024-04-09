@@ -52,13 +52,20 @@ public abstract class FetchRequestGenerator<FR extends FetchRequest<?, ?, ?>> ex
 
 	private static final Logger logger = FlexoLogger.getLogger(FetchRequestGenerator.class.getPackage().getName());
 
+	private FR fr;
+
 	public FetchRequestGenerator(Class<FR> objectClass, VelocityMasterGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
+		fr = getFMLModelFactory().newInstance(getObjectClass());
 	}
 
 	@Override
 	protected Image getIcon() {
 		return getTechnologyAdapterController().getIconForEditionAction(getObjectClass()).getImage();
+	}
+
+	public String getUsage(boolean fullQualified) {
+		return "Not implemented yet";
 	}
 
 }
