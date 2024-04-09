@@ -104,15 +104,6 @@ public class MDModelSlotGenerator<MS extends ModelSlot<?>> extends ModelSlotGene
 		return getMasterGenerator().getJavadocReference(getObjectClass());
 	}
 
-	@Override
-	public String generate() {
-		String returned = super.generate();
-		if (getObjectClass().getName().contains("TypedDiagramModelSlot")) {
-			// System.exit(-1);
-		}
-		return returned;
-	}
-
 	/*@Override
 	public void generate() {
 	
