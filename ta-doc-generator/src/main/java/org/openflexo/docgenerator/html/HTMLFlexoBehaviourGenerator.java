@@ -57,8 +57,8 @@ public class HTMLFlexoBehaviourGenerator<FB extends FlexoBehaviour> extends Flex
 	}
 
 	@Override
-	public HTMLTADocGenerator<?> getTADocGenerator() {
-		return (HTMLTADocGenerator<?>) super.getTADocGenerator();
+	public HTMLTADocGenerator<?> getMasterGenerator() {
+		return (HTMLTADocGenerator<?>) super.getMasterGenerator();
 	}
 
 	@Override

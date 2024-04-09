@@ -58,7 +58,7 @@ public abstract class EditionActionGenerator<EA extends EditionAction> extends V
 
 	private EA ea;
 
-	public EditionActionGenerator(Class<EA> objectClass, TADocVelocityGenerator<?> taDocGenerator) {
+	public EditionActionGenerator(Class<EA> objectClass, VelocityMasterGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
 		ea = getFMLModelFactory().newInstance(getObjectClass());
 	}

@@ -57,8 +57,8 @@ public class HTMLFlexoRoleGenerator<R extends FlexoRole<?>> extends FlexoRoleGen
 	}
 
 	@Override
-	public HTMLTADocGenerator<?> getTADocGenerator() {
-		return (HTMLTADocGenerator<?>) super.getTADocGenerator();
+	public HTMLTADocGenerator<?> getMasterGenerator() {
+		return (HTMLTADocGenerator<?>) super.getMasterGenerator();
 	}
 
 	@Override

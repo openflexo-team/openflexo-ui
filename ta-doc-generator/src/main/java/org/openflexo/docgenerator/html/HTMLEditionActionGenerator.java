@@ -57,8 +57,8 @@ public class HTMLEditionActionGenerator<EA extends EditionAction> extends Editio
 	}
 
 	@Override
-	public HTMLTADocGenerator<?> getTADocGenerator() {
-		return (HTMLTADocGenerator<?>) super.getTADocGenerator();
+	public HTMLTADocGenerator<?> getMasterGenerator() {
+		return (HTMLTADocGenerator<?>) super.getMasterGenerator();
 	}
 
 	@Override

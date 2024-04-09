@@ -45,7 +45,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.docgenerator.AbstractGenerator;
-import org.openflexo.docgenerator.TADocVelocityGenerator;
+import org.openflexo.docgenerator.VelocityMasterGenerator;
 import org.openflexo.docgenerator.icongenerator.IconGenerator;
 import org.openflexo.foundation.fml.FMLObject;
 import org.openflexo.foundation.fml.FlexoBehaviour;
@@ -61,7 +61,7 @@ import org.openflexo.toolbox.StringUtils;
  * Generate documentation for a {@link TechnologyAdapter}
  * 
  */
-public class MDTADocGenerator<TA extends TechnologyAdapter<TA>> extends TADocVelocityGenerator<TA> {
+public class MDTADocGenerator<TA extends TechnologyAdapter<TA>> extends VelocityMasterGenerator<TA> {
 
 	private static final Logger logger = FlexoLogger.getLogger(MDTADocGenerator.class.getPackage().getName());
 

@@ -52,7 +52,7 @@ public abstract class FlexoBehaviourGenerator<FB extends FlexoBehaviour> extends
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoBehaviourGenerator.class.getPackage().getName());
 
-	public FlexoBehaviourGenerator(Class<FB> objectClass, TADocVelocityGenerator<?> taDocGenerator) {
+	public FlexoBehaviourGenerator(Class<FB> objectClass, VelocityMasterGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
 	}
 

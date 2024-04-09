@@ -71,9 +71,9 @@ public abstract class AbstractGenerator<O extends FMLObject> {
 	private static final Logger logger = FlexoLogger.getLogger(AbstractGenerator.class.getPackage().getName());
 
 	private Class<O> objectClass;
-	private TADocGenerator<?> masterGenerator;
+	private DocumentationMasterGenerator<?> masterGenerator;
 
-	public AbstractGenerator(Class<O> objectClass, TADocGenerator<?> masterGenerator) {
+	public AbstractGenerator(Class<O> objectClass, DocumentationMasterGenerator<?> masterGenerator) {
 		this.objectClass = objectClass;
 		this.masterGenerator = masterGenerator;
 	}
@@ -85,7 +85,7 @@ public abstract class AbstractGenerator<O extends FMLObject> {
 	 */
 	public abstract Object generate();
 
-	public TADocGenerator<?> getTADocGenerator() {
+	public DocumentationMasterGenerator<?> getMasterGenerator() {
 		return masterGenerator;
 	}
 

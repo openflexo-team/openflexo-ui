@@ -58,12 +58,12 @@ public class MDFlexoBehaviourGenerator<FB extends FlexoBehaviour> extends FlexoB
 	}
 
 	@Override
-	public MDTADocGenerator<?> getTADocGenerator() {
-		return (MDTADocGenerator<?>) super.getTADocGenerator();
+	public MDTADocGenerator<?> getMasterGenerator() {
+		return (MDTADocGenerator<?>) super.getMasterGenerator();
 	}
 
 	public String toMD(String text) {
-		return getTADocGenerator().toMD(text);
+		return getMasterGenerator().toMD(text);
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class MDFlexoBehaviourGenerator<FB extends FlexoBehaviour> extends FlexoB
 		// sb.append("<h1><tt>" + getObjectClass().getSimpleName() + "</tt>" + getBigIconAsHTML() + "</h1>");
 		// sb.append(StringUtils.LINE_SEPARATOR);
 
-		sb.append(getTADocGenerator().getBigIconAsHTML(getObjectClass()) + " " + getFMLDescription());
+		sb.append(getMasterGenerator().getBigIconAsHTML(getObjectClass()) + " " + getFMLDescription());
 		sb.append(StringUtils.LINE_SEPARATOR);
 
 		return render(sb);

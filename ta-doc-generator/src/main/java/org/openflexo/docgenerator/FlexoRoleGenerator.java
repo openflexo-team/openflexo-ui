@@ -59,7 +59,7 @@ public abstract class FlexoRoleGenerator<R extends FlexoRole<?>> extends Velocit
 
 	private R role;
 
-	public FlexoRoleGenerator(Class<R> objectClass, TADocVelocityGenerator<?> taDocGenerator) {
+	public FlexoRoleGenerator(Class<R> objectClass, VelocityMasterGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
 		role = getFMLModelFactory().newInstance(getObjectClass());
 	}

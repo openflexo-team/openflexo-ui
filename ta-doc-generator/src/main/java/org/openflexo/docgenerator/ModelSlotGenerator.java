@@ -57,7 +57,7 @@ public abstract class ModelSlotGenerator<MS extends ModelSlot<?>> extends Veloci
 
 	private MS ms;
 
-	public ModelSlotGenerator(Class<MS> objectClass, TADocVelocityGenerator<?> taDocGenerator) {
+	public ModelSlotGenerator(Class<MS> objectClass, VelocityMasterGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
 		ms = getFMLModelFactory().newInstance(getObjectClass());
 	}

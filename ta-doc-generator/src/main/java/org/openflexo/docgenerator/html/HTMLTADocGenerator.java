@@ -43,7 +43,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.docgenerator.AbstractGenerator;
-import org.openflexo.docgenerator.TADocVelocityGenerator;
+import org.openflexo.docgenerator.VelocityMasterGenerator;
 import org.openflexo.foundation.fml.FlexoBehaviour;
 import org.openflexo.foundation.fml.FlexoRole;
 import org.openflexo.foundation.fml.editionaction.EditionAction;
@@ -56,7 +56,7 @@ import org.openflexo.logging.FlexoLogger;
  * HTML documentation generator for a dedicated {@link TechnologyAdapter}
  * 
  */
-public class HTMLTADocGenerator<TA extends TechnologyAdapter<TA>> extends TADocVelocityGenerator<TA> {
+public class HTMLTADocGenerator<TA extends TechnologyAdapter<TA>> extends VelocityMasterGenerator<TA> {
 
 	private static final Logger logger = FlexoLogger.getLogger(HTMLTADocGenerator.class.getPackage().getName());
 

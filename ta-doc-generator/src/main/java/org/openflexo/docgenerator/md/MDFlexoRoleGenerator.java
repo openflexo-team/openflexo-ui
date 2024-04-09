@@ -67,12 +67,12 @@ public class MDFlexoRoleGenerator<R extends FlexoRole<?>> extends FlexoRoleGener
 	}
 
 	@Override
-	public MDTADocGenerator<?> getTADocGenerator() {
-		return (MDTADocGenerator<?>) super.getTADocGenerator();
+	public MDTADocGenerator<?> getMasterGenerator() {
+		return (MDTADocGenerator<?>) super.getMasterGenerator();
 	}
 
 	public String toMD(String text) {
-		return getTADocGenerator().toMD(text);
+		return getMasterGenerator().toMD(text);
 	}
 
 	@Override
@@ -96,7 +96,7 @@ public class MDFlexoRoleGenerator<R extends FlexoRole<?>> extends FlexoRoleGener
 		// sb.append("<h1><tt>" + getObjectClass().getSimpleName() + "</tt>" + getBigIconAsHTML() + "</h1>");
 		// sb.append(StringUtils.LINE_SEPARATOR);
 
-		sb.append(getTADocGenerator().getBigIconAsHTML(getObjectClass()) + " " + getFMLDescription());
+		sb.append(getMasterGenerator().getBigIconAsHTML(getObjectClass()) + " " + getFMLDescription());
 		sb.append(StringUtils.LINE_SEPARATOR);
 
 		sb.append(StringUtils.LINE_SEPARATOR);
@@ -236,7 +236,7 @@ public class MDFlexoRoleGenerator<R extends FlexoRole<?>> extends FlexoRoleGener
 	protected String getHTMLReference(Class<? extends FMLObject> objectReference) {
 		StringBuffer sb = new StringBuffer();
 		AbstractGenerator<? extends FMLObject> generatorReference = getReference(objectReference);
-		sb.append(" - \u200E" + getTADocGenerator().getSmallIconAsHTML(generatorReference.getObjectClass()));
+		sb.append(" - \u200E" + getMasterGenerator().getSmallIconAsHTML(generatorReference.getObjectClass()));
 		sb.append(" [" + generatorReference.getFMLKeyword() + "](" + generatorReference.getObjectClass().getSimpleName() + ".md) : "
 				+ generatorReference.getFMLShortDescription());
 		return sb.toString();

@@ -65,13 +65,13 @@ public abstract class IconGenerator<O extends FMLObject> extends AbstractGenerat
 	protected File smallIconFile;
 	protected File bigIconFile;
 
-	public IconGenerator(Class<O> objectClass, IconsTADocGenerator<?> masterGenerator) {
+	public IconGenerator(Class<O> objectClass, IconsMasterGenerator<?> masterGenerator) {
 		super(objectClass, masterGenerator);
 	}
 
 	@Override
-	public IconsTADocGenerator<?> getTADocGenerator() {
-		return (IconsTADocGenerator<?>) super.getTADocGenerator();
+	public IconsMasterGenerator<?> getMasterGenerator() {
+		return (IconsMasterGenerator<?>) super.getMasterGenerator();
 	}
 
 	public static String getSmallIconFileName(Class<? extends FMLObject> fmlClass) {
@@ -86,10 +86,10 @@ public abstract class IconGenerator<O extends FMLObject> extends AbstractGenerat
 	public Image generate() {
 		Image icon = getIcon();
 		if (icon != null) {
-			smallIconFile = new File(getTADocGenerator().getImageDir(), getSmallIconFileName(getObjectClass()));
+			smallIconFile = new File(getMasterGenerator().getImageDir(), getSmallIconFileName(getObjectClass()));
 			saveImage(getIcon(), smallIconFile);
 			logger.info("Generated " + smallIconFile.getAbsolutePath());
-			bigIconFile = new File(getTADocGenerator().getImageDir(), getBigIconFileName(getObjectClass()));
+			bigIconFile = new File(getMasterGenerator().getImageDir(), getBigIconFileName(getObjectClass()));
 			saveImage(getIcon(), bigIconFile, 2.0);
 			logger.info("Generated " + bigIconFile.getAbsolutePath());
 		}

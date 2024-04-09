@@ -52,7 +52,7 @@ import org.openflexo.toolbox.FileUtils;
 /**
  * Abstract document generator
  * 
- * This generator is based on a Velocity template declared in the context of master {@link TADocGenerator}
+ * This generator is based on a Velocity template declared in the context of master {@link DocumentationMasterGenerator}
  * 
  */
 public abstract class VelocityGenerator<O extends FMLObject> extends AbstractGenerator<O> {
@@ -61,15 +61,15 @@ public abstract class VelocityGenerator<O extends FMLObject> extends AbstractGen
 
 	private File generatedFile;
 
-	public VelocityGenerator(Class<O> objectClass, TADocVelocityGenerator<?> masterGenerator) {
+	public VelocityGenerator(Class<O> objectClass, VelocityMasterGenerator<?> masterGenerator) {
 		super(objectClass, masterGenerator);
 		generatedFile = masterGenerator.getFileToBeGenerated(this);
 		System.out.println("Will generate: " + generatedFile.getAbsolutePath());
 	}
 
 	@Override
-	public TADocVelocityGenerator<?> getTADocGenerator() {
-		return (TADocVelocityGenerator<?>) super.getTADocGenerator();
+	public VelocityMasterGenerator<?> getMasterGenerator() {
+		return (VelocityMasterGenerator<?>) super.getMasterGenerator();
 	}
 
 	/**
@@ -97,7 +97,7 @@ public abstract class VelocityGenerator<O extends FMLObject> extends AbstractGen
 
 		System.out.println("generateContents() for " + getFMLKeyword());
 
-		Template t = getTADocGenerator().getVelocityEngine().getTemplate(getTemplateName());
+		Template t = getMasterGenerator().getVelocityEngine().getTemplate(getTemplateName());
 
 		System.out.println("Template: " + t);
 

@@ -52,7 +52,7 @@ public abstract class FetchRequestGenerator<FR extends FetchRequest<?, ?, ?>> ex
 
 	private static final Logger logger = FlexoLogger.getLogger(FetchRequestGenerator.class.getPackage().getName());
 
-	public FetchRequestGenerator(Class<FR> objectClass, TADocVelocityGenerator<?> taDocGenerator) {
+	public FetchRequestGenerator(Class<FR> objectClass, VelocityMasterGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
 	}
 
