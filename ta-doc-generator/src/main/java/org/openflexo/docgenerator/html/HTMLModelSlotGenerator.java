@@ -57,7 +57,6 @@ public class HTMLModelSlotGenerator<MS extends ModelSlot<?>> extends ModelSlotGe
 	public HTMLModelSlotGenerator(Class<MS> objectClass, HTMLTADocGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
 		ms = getFMLModelFactory().newInstance(getObjectClass());
-		generateIconFiles();
 	}
 
 	@Override
@@ -68,14 +67,6 @@ public class HTMLModelSlotGenerator<MS extends ModelSlot<?>> extends ModelSlotGe
 	@Override
 	public String getTemplateName() {
 		return "ModelSlot.html";
-	}
-
-	@Override
-	public void generate() {
-		super.generate();
-		if (getObjectClass().getName().contains("TypedDiagramModelSlot")) {
-			System.exit(-1);
-		}
 	}
 
 }

@@ -38,14 +38,7 @@
 
 package org.openflexo.docgenerator;
 
-import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -54,10 +47,6 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
-import javax.imageio.ImageIO;
-
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
 import org.openflexo.connie.DataBinding;
 import org.openflexo.connie.type.TypeUtils;
 import org.openflexo.foundation.fml.FMLModelContext;
@@ -70,7 +59,6 @@ import org.openflexo.foundation.fml.annotations.UsageExample;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.logging.FlexoLogger;
-import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.view.controller.TechnologyAdapterController;
 
@@ -83,55 +71,42 @@ public abstract class AbstractGenerator<O extends FMLObject> {
 	private static final Logger logger = FlexoLogger.getLogger(AbstractGenerator.class.getPackage().getName());
 
 	private Class<O> objectClass;
-	private TADocGenerator<?> taDocGenerator;
-	private File generatedFile;
-	protected File smallIconFile;
-	protected File bigIconFile;
+	private TADocGenerator<?> masterGenerator;
 
-	public AbstractGenerator(Class<O> objectClass, TADocGenerator<?> taDocGenerator) {
+	public AbstractGenerator(Class<O> objectClass, TADocGenerator<?> masterGenerator) {
 		this.objectClass = objectClass;
-		this.taDocGenerator = taDocGenerator;
-		generatedFile = new File(taDocGenerator.getMDDir(), objectClass.getSimpleName() + ".md");
-		System.out.println("Will generate: " + generatedFile.getAbsolutePath());
+		this.masterGenerator = masterGenerator;
 	}
 
-	public void generate() {
-		String contents = generateContents();
-		System.out.println(contents);
-	}
+	/**
+	 * Generate contents for this generator
+	 * 
+	 * @return
+	 */
+	public abstract Object generate();
 
 	public TADocGenerator<?> getTADocGenerator() {
-		return taDocGenerator;
-	}
-
-	protected void render(StringBuffer sb) {
-		try {
-			FileUtils.saveToFile(generatedFile, sb.toString());
-			System.out.println("Generated " + generatedFile.getAbsolutePath());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		return masterGenerator;
 	}
 
 	protected String getGlobalReference() {
-		return taDocGenerator.getRelativePath() + "/" + objectClass.getSimpleName() + ".md";
+		return masterGenerator.getRelativePath() + "/" + objectClass.getSimpleName() + ".md";
 	}
 
 	protected String getGlobalRolesReference() {
-		return taDocGenerator.getRelativePath() + "/" + objectClass.getSimpleName() + "_roles.md";
+		return masterGenerator.getRelativePath() + "/" + objectClass.getSimpleName() + "_roles.md";
 	}
 
 	protected String getGlobalBehavioursReference() {
-		return taDocGenerator.getRelativePath() + "/" + objectClass.getSimpleName() + "_behaviours.md";
+		return masterGenerator.getRelativePath() + "/" + objectClass.getSimpleName() + "_behaviours.md";
 	}
 
 	protected String getGlobalEditionActionsReference() {
-		return taDocGenerator.getRelativePath() + "/" + objectClass.getSimpleName() + "_edition_actions.md";
+		return masterGenerator.getRelativePath() + "/" + objectClass.getSimpleName() + "_edition_actions.md";
 	}
 
 	protected String getGlobalFetchRequestsReference() {
-		return taDocGenerator.getRelativePath() + "/" + objectClass.getSimpleName() + "_fetch_requests.md";
+		return masterGenerator.getRelativePath() + "/" + objectClass.getSimpleName() + "_fetch_requests.md";
 	}
 
 	protected String getLocalReference() {
@@ -163,100 +138,14 @@ public abstract class AbstractGenerator<O extends FMLObject> {
 		return className.replace(".", "/");
 	}
 
-	@Deprecated
-	protected String getHTMLReference(Class<? extends FMLObject> objectReference) {
-		StringBuffer sb = new StringBuffer();
-		AbstractGenerator<? extends FMLObject> generatorReference = getReference(objectReference);
-		sb.append(" - \u200E" + generatorReference.getSmallIconAsHTML());
-		sb.append(" [" + generatorReference.getFMLKeyword() + "](" + generatorReference.getObjectClass().getSimpleName() + ".md) : "
-				+ generatorReference.getFMLShortDescription());
-		return sb.toString();
-	}
-
 	protected abstract Image getIcon();
-
-	public String getSmallIconAsHTML() {
-		if (smallIconFile == null) {
-			return "";
-		}
-		return "<img src=\"" + "/openflexo-diagram/images/" + smallIconFile.getName() + "\" alt=\"" + getObjectClass().getSimpleName()
-				+ "\"/>";
-	}
-
-	public String getBigIconAsHTML() {
-		if (bigIconFile == null) {
-			return "";
-		}
-		return "<img src=\"" + "/openflexo-diagram/images/" + bigIconFile.getName() + "\" alt=\"" + getObjectClass().getSimpleName()
-				+ "\"/>";
-	}
-
-	protected void generateIconFiles() {
-		if (getIcon() != null) {
-			smallIconFile = new File(taDocGenerator.getImageDir(), objectClass.getSimpleName() + ".png");
-			saveImage(getIcon(), smallIconFile);
-			System.out.println("Generated " + smallIconFile.getAbsolutePath());
-			bigIconFile = new File(taDocGenerator.getImageDir(), objectClass.getSimpleName() + "_BIG.png");
-			saveImage(getIcon(), bigIconFile, 2.0);
-			System.out.println("Generated " + bigIconFile.getAbsolutePath());
-		}
-		else {
-			System.out.println("Cannot find icon for " + objectClass.getSimpleName());
-		}
-	}
-
-	protected static void saveImage(Image image, File file) {
-		saveImage(image, file, null);
-	}
-
-	protected static void saveImage(Image image, File file, Double scaleFactor) {
-		try {
-			ImageIO.write(imageToBufferedImage(image, scaleFactor), "png", file);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	private static BufferedImage imageToBufferedImage(Image im, Double scaleFactor) {
-		final int w = im.getWidth(null);
-		final int h = im.getHeight(null);
-		BufferedImage imageToSave;
-		if (scaleFactor != null) {
-			BufferedImage scaledImage = new BufferedImage((int) (w * scaleFactor), (int) (h * scaleFactor), BufferedImage.TYPE_INT_ARGB);
-			final AffineTransform at = AffineTransform.getScaleInstance(scaleFactor, scaleFactor);
-			final AffineTransformOp ato = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
-			BufferedImage initialImage = imageToBufferedImage(im, null);
-			scaledImage = ato.filter(initialImage, scaledImage);
-			imageToSave = scaledImage;
-		}
-		else {
-			imageToSave = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-			Graphics bg = imageToSave.getGraphics();
-			bg.drawImage(im, 0, 0, null);
-			bg.dispose();
-		}
-		return imageToSave;
-	}
 
 	public Class<O> getObjectClass() {
 		return objectClass;
 	}
 
 	public <R extends FMLObject> AbstractGenerator<R> getReference(Class<R> objectClass) {
-		return taDocGenerator.getGenerator(objectClass);
-	}
-
-	public String toMD(String text) {
-		String returned = text;
-		if (returned.startsWith("<html>")) {
-			returned = returned.substring(6);
-		}
-		if (returned.endsWith("</html>")) {
-			returned = returned.substring(0, returned.length() - 7);
-		}
-		returned = returned.replace("<br>", StringUtils.LINE_SEPARATOR + StringUtils.LINE_SEPARATOR);
-		return returned;
+		return masterGenerator.getGenerator(objectClass);
 	}
 
 	public String toCode(String text) {
@@ -322,21 +211,31 @@ public abstract class AbstractGenerator<O extends FMLObject> {
 		return getObjectClass().getSimpleName();
 	}
 
-	public final String getLocalMDPath() {
+	/*public final String getLocalMDPath() {
 		return getObjectClass().getSimpleName() + ".md";
-	}
+	}*/
 
+	/**
+	 * Return full description of represented FML class
+	 * 
+	 * @return
+	 */
 	public final String getFMLDescription() {
 		if (getFMLEntity() != null) {
 			String returned = getFMLEntity().getFmlAnnotation().description();
 			if (StringUtils.isEmpty(returned)) {
 				return "No documentation yet";
 			}
-			return toMD(getFMLEntity().getFmlAnnotation().description());
+			return getFMLEntity().getFmlAnnotation().description();
 		}
 		return "No documentation yet";
 	}
 
+	/**
+	 * Return short description of represented FML class : short description is the first paragraph
+	 * 
+	 * @return
+	 */
 	public final String getFMLShortDescription() {
 		if (getFMLEntity() != null) {
 			String returned = getFMLEntity().getFmlAnnotation().description();
@@ -346,7 +245,7 @@ public abstract class AbstractGenerator<O extends FMLObject> {
 			if (returned.contains("<br>")) {
 				returned = returned.substring(0, returned.indexOf("<br>"));
 			}
-			return toMD(returned);
+			return returned;
 		}
 		return "No documentation yet";
 	}
@@ -392,53 +291,28 @@ public abstract class AbstractGenerator<O extends FMLObject> {
 	}
 
 	public TechnologyAdapter<?> getTechnologyAdapter() {
-		return taDocGenerator.getTechnologyAdapter();
+		return masterGenerator.getTechnologyAdapter();
 	}
 
 	public TechnologyAdapterService getTechnologyAdapterService() {
-		return taDocGenerator.getTechnologyAdapterService();
+		return masterGenerator.getTechnologyAdapterService();
 	}
 
 	public TechnologyAdapterController<?> getTechnologyAdapterController() {
-		return taDocGenerator.getTechnologyAdapterController();
+		return masterGenerator.getTechnologyAdapterController();
 	}
 
 	public FMLModelFactory getFMLModelFactory() {
-		return taDocGenerator.getFMLModelFactory();
-	}
-
-	public File getGeneratedFile() {
-		return generatedFile;
+		return masterGenerator.getFMLModelFactory();
 	}
 
 	/*public String getMVNArtefactName() {
 		return taDocGenerator.getMVNArtefactName();
 	}*/
 
-	public File getMDDir() {
-		return taDocGenerator.getMDDir();
-	}
-
-	public abstract String getTemplateName();
-
-	public String generateContents() {
-
-		System.out.println("generateContents() for " + getFMLKeyword());
-
-		Template t = getTADocGenerator().getVelocityEngine().getTemplate(getTemplateName());
-
-		System.out.println("Template: " + t);
-
-		VelocityContext context = new VelocityContext();
-		// context.put("name", "World");
-		context.put("generator", this);
-
-		StringWriter writer = new StringWriter();
-		t.merge(context, writer);
-
-		return writer.toString();
-
-	}
+	/*public File getMDDir() {
+		return masterGenerator.getMDDir();
+	}*/
 
 	/**
 	 * Return resulting type of supplied property:

@@ -38,10 +38,12 @@
 
 package org.openflexo.docgenerator.html;
 
+import java.io.File;
 import java.util.logging.Logger;
 
 import org.openflexo.ApplicationContext;
-import org.openflexo.docgenerator.TADocGenerator;
+import org.openflexo.docgenerator.AbstractGenerator;
+import org.openflexo.docgenerator.TADocVelocityGenerator;
 import org.openflexo.foundation.fml.FlexoBehaviour;
 import org.openflexo.foundation.fml.FlexoRole;
 import org.openflexo.foundation.fml.editionaction.EditionAction;
@@ -54,7 +56,7 @@ import org.openflexo.logging.FlexoLogger;
  * HTML documentation generator for a dedicated {@link TechnologyAdapter}
  * 
  */
-public class HTMLTADocGenerator<TA extends TechnologyAdapter<TA>> extends TADocGenerator<TA> {
+public class HTMLTADocGenerator<TA extends TechnologyAdapter<TA>> extends TADocVelocityGenerator<TA> {
 
 	private static final Logger logger = FlexoLogger.getLogger(HTMLTADocGenerator.class.getPackage().getName());
 
@@ -68,27 +70,33 @@ public class HTMLTADocGenerator<TA extends TechnologyAdapter<TA>> extends TADocG
 	}
 
 	@Override
-	protected HTMLModelSlotGenerator<?> makeModelSlotGenerator(Class<? extends ModelSlot<?>> modelSlotClass) {
+	public File getFileToBeGenerated(AbstractGenerator<?> generator) {
+		// Does not generate files
+		return null;
+	}
+
+	@Override
+	protected <MS extends ModelSlot<?>> HTMLModelSlotGenerator<MS> makeModelSlotGenerator(Class<MS> modelSlotClass) {
 		return new HTMLModelSlotGenerator<>(modelSlotClass, this);
 	}
 
 	@Override
-	protected HTMLFlexoRoleGenerator<?> makeFlexoRoleGenerator(Class<? extends FlexoRole<?>> roleClass) {
+	protected <R extends FlexoRole<?>> HTMLFlexoRoleGenerator<R> makeFlexoRoleGenerator(Class<R> roleClass) {
 		return new HTMLFlexoRoleGenerator<>(roleClass, this);
 	}
 
 	@Override
-	protected HTMLFlexoBehaviourGenerator<?> makeFlexoBehaviourGenerator(Class<? extends FlexoBehaviour> behaviourClass) {
+	protected <B extends FlexoBehaviour> HTMLFlexoBehaviourGenerator<B> makeFlexoBehaviourGenerator(Class<B> behaviourClass) {
 		return new HTMLFlexoBehaviourGenerator<>(behaviourClass, this);
 	}
 
 	@Override
-	protected HTMLEditionActionGenerator<?> makeEditionActionGenerator(Class<? extends EditionAction> editionActionClass) {
+	protected <EA extends EditionAction> HTMLEditionActionGenerator<EA> makeEditionActionGenerator(Class<EA> editionActionClass) {
 		return new HTMLEditionActionGenerator<>(editionActionClass, this);
 	}
 
 	@Override
-	protected HTMLFetchRequestGenerator<?> makeFetchRequestGenerator(Class<? extends FetchRequest<?, ?, ?>> fetchRequestClass) {
+	protected <FR extends FetchRequest<?, ?, ?>> HTMLFetchRequestGenerator<FR> makeFetchRequestGenerator(Class<FR> fetchRequestClass) {
 		return new HTMLFetchRequestGenerator<>(fetchRequestClass, this);
 	}
 }

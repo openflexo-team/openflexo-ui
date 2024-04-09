@@ -51,16 +51,15 @@ import org.openflexo.toolbox.StringUtils;
  * Abstract documentation generator for {@link ModelSlot}
  * 
  */
-public abstract class ModelSlotGenerator<MS extends ModelSlot<?>> extends AbstractGenerator<MS> {
+public abstract class ModelSlotGenerator<MS extends ModelSlot<?>> extends VelocityGenerator<MS> {
 
 	private static final Logger logger = FlexoLogger.getLogger(ModelSlotGenerator.class.getPackage().getName());
 
 	private MS ms;
 
-	public ModelSlotGenerator(Class<MS> objectClass, TADocGenerator<?> taDocGenerator) {
+	public ModelSlotGenerator(Class<MS> objectClass, TADocVelocityGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
 		ms = getFMLModelFactory().newInstance(getObjectClass());
-		generateIconFiles();
 	}
 
 	@Override

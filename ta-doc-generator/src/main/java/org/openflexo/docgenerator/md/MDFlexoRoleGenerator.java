@@ -44,8 +44,10 @@ import java.util.logging.Logger;
 
 import org.openflexo.connie.DataBinding;
 import org.openflexo.connie.type.TypeUtils;
+import org.openflexo.docgenerator.AbstractGenerator;
 import org.openflexo.docgenerator.FlexoRoleGenerator;
 import org.openflexo.foundation.fml.FMLModelContext.FMLProperty;
+import org.openflexo.foundation.fml.FMLObject;
 import org.openflexo.foundation.fml.FlexoRole;
 import org.openflexo.foundation.fml.annotations.SeeAlso;
 import org.openflexo.foundation.fml.annotations.UsageExample;
@@ -65,14 +67,21 @@ public class MDFlexoRoleGenerator<R extends FlexoRole<?>> extends FlexoRoleGener
 	}
 
 	@Override
+	public MDTADocGenerator<?> getTADocGenerator() {
+		return (MDTADocGenerator<?>) super.getTADocGenerator();
+	}
+
+	public String toMD(String text) {
+		return getTADocGenerator().toMD(text);
+	}
+
+	@Override
 	public String getTemplateName() {
 		return "FlexoRole.md";
 	}
 
 	@Override
-	public void generate() {
-
-		generateIconFiles();
+	public String generate() {
 
 		StringBuffer sb = new StringBuffer();
 
@@ -87,7 +96,7 @@ public class MDFlexoRoleGenerator<R extends FlexoRole<?>> extends FlexoRoleGener
 		// sb.append("<h1><tt>" + getObjectClass().getSimpleName() + "</tt>" + getBigIconAsHTML() + "</h1>");
 		// sb.append(StringUtils.LINE_SEPARATOR);
 
-		sb.append(getBigIconAsHTML() + " " + getFMLDescription());
+		sb.append(getTADocGenerator().getBigIconAsHTML(getObjectClass()) + " " + getFMLDescription());
 		sb.append(StringUtils.LINE_SEPARATOR);
 
 		sb.append(StringUtils.LINE_SEPARATOR);
@@ -220,7 +229,16 @@ public class MDFlexoRoleGenerator<R extends FlexoRole<?>> extends FlexoRoleGener
 
 		// render(sb);
 
-		render(sb);
+		return render(sb);
 	}
 
+	@Deprecated
+	protected String getHTMLReference(Class<? extends FMLObject> objectReference) {
+		StringBuffer sb = new StringBuffer();
+		AbstractGenerator<? extends FMLObject> generatorReference = getReference(objectReference);
+		sb.append(" - \u200E" + getTADocGenerator().getSmallIconAsHTML(generatorReference.getObjectClass()));
+		sb.append(" [" + generatorReference.getFMLKeyword() + "](" + generatorReference.getObjectClass().getSimpleName() + ".md) : "
+				+ generatorReference.getFMLShortDescription());
+		return sb.toString();
+	}
 }

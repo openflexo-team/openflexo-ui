@@ -58,14 +58,21 @@ public class MDFlexoBehaviourGenerator<FB extends FlexoBehaviour> extends FlexoB
 	}
 
 	@Override
+	public MDTADocGenerator<?> getTADocGenerator() {
+		return (MDTADocGenerator<?>) super.getTADocGenerator();
+	}
+
+	public String toMD(String text) {
+		return getTADocGenerator().toMD(text);
+	}
+
+	@Override
 	public String getTemplateName() {
 		return "FlexoBehaviour.md";
 	}
 
 	@Override
-	public void generate() {
-
-		generateIconFiles();
+	public String generate() {
 
 		StringBuffer sb = new StringBuffer();
 
@@ -80,10 +87,10 @@ public class MDFlexoBehaviourGenerator<FB extends FlexoBehaviour> extends FlexoB
 		// sb.append("<h1><tt>" + getObjectClass().getSimpleName() + "</tt>" + getBigIconAsHTML() + "</h1>");
 		// sb.append(StringUtils.LINE_SEPARATOR);
 
-		sb.append(getBigIconAsHTML() + " " + getFMLDescription());
+		sb.append(getTADocGenerator().getBigIconAsHTML(getObjectClass()) + " " + getFMLDescription());
 		sb.append(StringUtils.LINE_SEPARATOR);
 
-		render(sb);
+		return render(sb);
 	}
 
 }

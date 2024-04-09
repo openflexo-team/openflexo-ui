@@ -52,16 +52,15 @@ import org.openflexo.toolbox.StringUtils;
  * Documentation generator for {@link EditionAction}
  * 
  */
-public abstract class EditionActionGenerator<EA extends EditionAction> extends AbstractGenerator<EA> {
+public abstract class EditionActionGenerator<EA extends EditionAction> extends VelocityGenerator<EA> {
 
 	private static final Logger logger = FlexoLogger.getLogger(EditionActionGenerator.class.getPackage().getName());
 
 	private EA ea;
 
-	public EditionActionGenerator(Class<EA> objectClass, TADocGenerator<?> taDocGenerator) {
+	public EditionActionGenerator(Class<EA> objectClass, TADocVelocityGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
 		ea = getFMLModelFactory().newInstance(getObjectClass());
-		generateIconFiles();
 	}
 
 	@Override

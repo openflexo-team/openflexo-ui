@@ -48,13 +48,12 @@ import org.openflexo.logging.FlexoLogger;
  * Documentation generator for {@link FetchRequest}
  * 
  */
-public abstract class FetchRequestGenerator<FR extends FetchRequest<?, ?, ?>> extends AbstractGenerator<FR> {
+public abstract class FetchRequestGenerator<FR extends FetchRequest<?, ?, ?>> extends VelocityGenerator<FR> {
 
 	private static final Logger logger = FlexoLogger.getLogger(FetchRequestGenerator.class.getPackage().getName());
 
-	public FetchRequestGenerator(Class<FR> objectClass, TADocGenerator<?> taDocGenerator) {
+	public FetchRequestGenerator(Class<FR> objectClass, TADocVelocityGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
-		generateIconFiles();
 	}
 
 	@Override

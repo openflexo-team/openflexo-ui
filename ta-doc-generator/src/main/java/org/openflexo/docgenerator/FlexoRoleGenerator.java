@@ -53,16 +53,15 @@ import org.openflexo.toolbox.StringUtils;
  * Documentation generator for {@link FlexoRole}
  * 
  */
-public abstract class FlexoRoleGenerator<R extends FlexoRole<?>> extends AbstractGenerator<R> {
+public abstract class FlexoRoleGenerator<R extends FlexoRole<?>> extends VelocityGenerator<R> {
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoRoleGenerator.class.getPackage().getName());
 
 	private R role;
 
-	public FlexoRoleGenerator(Class<R> objectClass, TADocGenerator<?> taDocGenerator) {
+	public FlexoRoleGenerator(Class<R> objectClass, TADocVelocityGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
 		role = getFMLModelFactory().newInstance(getObjectClass());
-		generateIconFiles();
 	}
 
 	@Override

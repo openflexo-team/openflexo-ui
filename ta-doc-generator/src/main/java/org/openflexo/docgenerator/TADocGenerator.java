@@ -43,7 +43,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.apache.velocity.app.VelocityEngine;
 import org.openflexo.ApplicationContext;
 import org.openflexo.foundation.fml.FMLModelContext;
 import org.openflexo.foundation.fml.FMLModelContext.FMLEntity;
@@ -58,9 +57,6 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
-import org.openflexo.rm.FileResourceImpl;
-import org.openflexo.rm.Resource;
-import org.openflexo.rm.ResourceLocator;
 import org.openflexo.view.controller.TechnologyAdapterController;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
@@ -87,15 +83,11 @@ public abstract class TADocGenerator<TA extends TechnologyAdapter<TA>> {
 	private String repositoryName;
 	// Name of the project in which the FML declarations (ModelSlot) are defined
 	private String mainProjectName;
-	// private String mvnArtefactName;
 
 	private File globalTADir;
 	private File globalTASiteDir;
-	private File globalMDDir;
 	private File taDir;
 	private File taSiteDir;
-	private File mdDir;
-	private File imageDir;
 
 	public TADocGenerator(Class<TA> taClass, String repositoryName, String mainProjectName, ApplicationContext applicationContext) {
 		this.taClass = taClass;
@@ -117,6 +109,17 @@ public abstract class TADocGenerator<TA extends TechnologyAdapter<TA>> {
 			e.printStackTrace();
 		}
 
+		initFilePaths();
+
+		generators = new HashMap<>();
+
+		for (Class<?> modelSlotClass : technologyAdapter.getAvailableModelSlotTypes()) {
+			prepareDocGenerationForModelSlot((Class) modelSlotClass);
+		}
+
+	}
+
+	protected void initFilePaths() {
 		System.out.println("Generator for " + technologyAdapter);
 		String currentDir = System.getProperty("user.dir");
 		File current = new File(currentDir);
@@ -130,32 +133,13 @@ public abstract class TADocGenerator<TA extends TechnologyAdapter<TA>> {
 			System.exit(-1);
 		}
 		taSiteDir = new File(taDir, "src/site");
-		mdDir = new File(taSiteDir, "markdown");
-		imageDir = new File(taSiteDir, "resources/images");
 		System.out.println("taDir=" + taDir.getAbsolutePath() + " exists=" + taDir.exists());
 		System.out.println("taSiteDir=" + taSiteDir.getAbsolutePath() + " exists=" + taSiteDir.exists());
-		System.out.println("mdDir=" + mdDir.getAbsolutePath() + " exists=" + mdDir.exists());
-
-		velocityEngine = new VelocityEngine();
-		Resource templateResource = ResourceLocator.locateResource(getTemplateDirectoryRelativePath());
-		if (templateResource instanceof FileResourceImpl) {
-			velocityEngine.setProperty("file.resource.loader.path", ((FileResourceImpl) templateResource).getFile().getAbsolutePath());
-		}
-
-		generators = new HashMap<>();
-
-		for (Class<?> modelSlotClass : technologyAdapter.getAvailableModelSlotTypes()) {
-			prepareDocGenerationForModelSlot((Class) modelSlotClass);
-		}
 
 	}
 
-	private VelocityEngine velocityEngine;
-
-	public abstract String getTemplateDirectoryRelativePath();
-
-	public VelocityEngine getVelocityEngine() {
-		return velocityEngine;
+	public String getRepositoryName() {
+		return repositoryName;
 	}
 
 	public <O extends FMLObject> AbstractGenerator<O> getGenerator(Class<O> objectClass) {
@@ -178,13 +162,13 @@ public abstract class TADocGenerator<TA extends TechnologyAdapter<TA>> {
 		return mainProjectName;
 	}
 
-	public File getMDDir() {
-		return mdDir;
+	public File getTASiteDir() {
+		return taSiteDir;
 	}
 
-	public File getImageDir() {
+	/*public File getImageDir() {
 		return imageDir;
-	}
+	}*/
 
 	/*public String getMVNArtefactName() {
 		return mvnArtefactName;
@@ -217,7 +201,7 @@ public abstract class TADocGenerator<TA extends TechnologyAdapter<TA>> {
 
 	private void prepareDocGenerationForModelSlot(Class<? extends ModelSlot<?>> modelSlotClass) {
 		System.out.println("ModelSlot class : " + modelSlotClass);
-		ModelSlotGenerator<?> generator = makeModelSlotGenerator(modelSlotClass);
+		AbstractGenerator<?> generator = makeModelSlotGenerator(modelSlotClass);
 		generators.put(modelSlotClass, generator);
 		for (Class<? extends FlexoRole<?>> roleClass : technologyAdapterService.getAvailableFlexoRoleTypes(modelSlotClass)) {
 			prepareDocGenerationForRole(roleClass);
@@ -236,37 +220,37 @@ public abstract class TADocGenerator<TA extends TechnologyAdapter<TA>> {
 
 	private void prepareDocGenerationForRole(Class<? extends FlexoRole<?>> roleClass) {
 		System.out.println("  > Role: " + roleClass);
-		FlexoRoleGenerator<?> generator = makeFlexoRoleGenerator(roleClass);
+		AbstractGenerator<?> generator = makeFlexoRoleGenerator(roleClass);
 		generators.put(roleClass, generator);
 	}
 
 	private void prepareDocGenerationForBehaviour(Class<? extends FlexoBehaviour> behaviourClass) {
 		System.out.println("  > Behaviour: " + behaviourClass);
-		FlexoBehaviourGenerator<?> generator = makeFlexoBehaviourGenerator(behaviourClass);
+		AbstractGenerator<?> generator = makeFlexoBehaviourGenerator(behaviourClass);
 		generators.put(behaviourClass, generator);
 	}
 
 	private void prepareDocGenerationForEditionAction(Class<? extends EditionAction> editionActionClass) {
 		System.out.println("  > EditionAction: " + editionActionClass);
-		EditionActionGenerator<?> generator = makeEditionActionGenerator(editionActionClass);
+		AbstractGenerator<?> generator = makeEditionActionGenerator(editionActionClass);
 		generators.put(editionActionClass, generator);
 
 	}
 
 	private void prepareDocGenerationForFetchRequest(Class<? extends FetchRequest<?, ?, ?>> fetchRequestClass) {
 		System.out.println("  > FetchRequest: " + fetchRequestClass);
-		FetchRequestGenerator<?> generator = makeFetchRequestGenerator(fetchRequestClass);
+		AbstractGenerator<?> generator = makeFetchRequestGenerator(fetchRequestClass);
 		generators.put(fetchRequestClass, generator);
 
 	}
 
-	protected abstract ModelSlotGenerator<?> makeModelSlotGenerator(Class<? extends ModelSlot<?>> modelSlotClass);
+	protected abstract <MS extends ModelSlot<?>> AbstractGenerator<MS> makeModelSlotGenerator(Class<MS> modelSlotClass);
 
-	protected abstract FlexoRoleGenerator<?> makeFlexoRoleGenerator(Class<? extends FlexoRole<?>> roleClass);
+	protected abstract <R extends FlexoRole<?>> AbstractGenerator<R> makeFlexoRoleGenerator(Class<R> roleClass);
 
-	protected abstract FlexoBehaviourGenerator<?> makeFlexoBehaviourGenerator(Class<? extends FlexoBehaviour> behaviourClass);
+	protected abstract <B extends FlexoBehaviour> AbstractGenerator<B> makeFlexoBehaviourGenerator(Class<B> behaviourClass);
 
-	protected abstract EditionActionGenerator<?> makeEditionActionGenerator(Class<? extends EditionAction> editionActionClass);
+	protected abstract <EA extends EditionAction> AbstractGenerator<EA> makeEditionActionGenerator(Class<EA> editionActionClass);
 
-	protected abstract FetchRequestGenerator<?> makeFetchRequestGenerator(Class<? extends FetchRequest<?, ?, ?>> fetchRequestClass);
+	protected abstract <FR extends FetchRequest<?, ?, ?>> AbstractGenerator<FR> makeFetchRequestGenerator(Class<FR> fetchRequestClass);
 }

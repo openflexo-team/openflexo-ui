@@ -48,13 +48,12 @@ import org.openflexo.logging.FlexoLogger;
  * Documentation generator for {@link FlexoBehaviour}
  * 
  */
-public abstract class FlexoBehaviourGenerator<FB extends FlexoBehaviour> extends AbstractGenerator<FB> {
+public abstract class FlexoBehaviourGenerator<FB extends FlexoBehaviour> extends VelocityGenerator<FB> {
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoBehaviourGenerator.class.getPackage().getName());
 
-	public FlexoBehaviourGenerator(Class<FB> objectClass, TADocGenerator<?> taDocGenerator) {
+	public FlexoBehaviourGenerator(Class<FB> objectClass, TADocVelocityGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
-		generateIconFiles();
 	}
 
 	@Override
