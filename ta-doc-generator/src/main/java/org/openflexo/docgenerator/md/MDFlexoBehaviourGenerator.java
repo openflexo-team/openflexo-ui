@@ -48,7 +48,7 @@ import org.openflexo.logging.FlexoLogger;
  * Documentation generator for {@link FlexoBehaviour}
  * 
  */
-public class MDFlexoBehaviourGenerator<FB extends FlexoBehaviour> extends FlexoBehaviourGenerator<FB> {
+public class MDFlexoBehaviourGenerator<FB extends FlexoBehaviour> extends FlexoBehaviourGenerator<FB> implements AbstractMDGenerator<FB> {
 
 	private static final Logger logger = FlexoLogger.getLogger(MDFlexoBehaviourGenerator.class.getPackage().getName());
 
@@ -61,29 +61,9 @@ public class MDFlexoBehaviourGenerator<FB extends FlexoBehaviour> extends FlexoB
 		return (MDMasterGenerator<?>) super.getMasterGenerator();
 	}
 
-	public String toMD(String text) {
-		return getMasterGenerator().toMD(text);
-	}
-
 	@Override
 	public String getTemplateName() {
 		return "FlexoBehaviour.md";
-	}
-
-	public String getSmallIconAsHTML() {
-		return getMasterGenerator().getSmallIconAsHTML(getObjectClass());
-	}
-
-	public String getBigIconAsHTML() {
-		return getMasterGenerator().getBigIconAsHTML(getObjectClass());
-	}
-
-	public String getLocalMDPath() {
-		return getMasterGenerator().getLocalMDPath(getObjectClass());
-	}
-
-	public String getJavadocReference() {
-		return getMasterGenerator().getJavadocReference(getObjectClass());
 	}
 
 }

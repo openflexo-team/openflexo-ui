@@ -72,9 +72,9 @@ public abstract class AbstractGenerator<O extends FMLObject> {
 	private static final Logger logger = FlexoLogger.getLogger(AbstractGenerator.class.getPackage().getName());
 
 	private Class<O> objectClass;
-	private DocumentationMasterGenerator<?> masterGenerator;
+	private AbstractMasterGenerator<?> masterGenerator;
 
-	public AbstractGenerator(Class<O> objectClass, DocumentationMasterGenerator<?> masterGenerator) {
+	public AbstractGenerator(Class<O> objectClass, AbstractMasterGenerator<?> masterGenerator) {
 		this.objectClass = objectClass;
 		this.masterGenerator = masterGenerator;
 	}
@@ -86,7 +86,7 @@ public abstract class AbstractGenerator<O extends FMLObject> {
 	 */
 	public abstract Object generate();
 
-	public DocumentationMasterGenerator<?> getMasterGenerator() {
+	public AbstractMasterGenerator<?> getMasterGenerator() {
 		return masterGenerator;
 	}
 
@@ -162,10 +162,6 @@ public abstract class AbstractGenerator<O extends FMLObject> {
 		}
 		return getObjectClass().getSimpleName();
 	}
-
-	/*public final String getLocalMDPath() {
-		return getObjectClass().getSimpleName() + ".md";
-	}*/
 
 	/**
 	 * Return full description of represented FML class
@@ -257,14 +253,6 @@ public abstract class AbstractGenerator<O extends FMLObject> {
 	public FMLModelFactory getFMLModelFactory() {
 		return masterGenerator.getFMLModelFactory();
 	}
-
-	/*public String getMVNArtefactName() {
-		return taDocGenerator.getMVNArtefactName();
-	}*/
-
-	/*public File getMDDir() {
-		return masterGenerator.getMDDir();
-	}*/
 
 	/**
 	 * Return resulting type of supplied property:

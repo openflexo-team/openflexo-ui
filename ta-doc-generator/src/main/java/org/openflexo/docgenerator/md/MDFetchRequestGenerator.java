@@ -48,7 +48,8 @@ import org.openflexo.logging.FlexoLogger;
  * Documentation generator for {@link FetchRequest}
  * 
  */
-public class MDFetchRequestGenerator<FR extends FetchRequest<?, ?, ?>> extends FetchRequestGenerator<FR> {
+public class MDFetchRequestGenerator<FR extends FetchRequest<?, ?, ?>> extends FetchRequestGenerator<FR>
+		implements AbstractMDGenerator<FR> {
 
 	private static final Logger logger = FlexoLogger.getLogger(MDFetchRequestGenerator.class.getPackage().getName());
 
@@ -61,29 +62,9 @@ public class MDFetchRequestGenerator<FR extends FetchRequest<?, ?, ?>> extends F
 		return (MDMasterGenerator<?>) super.getMasterGenerator();
 	}
 
-	public String toMD(String text) {
-		return getMasterGenerator().toMD(text);
-	}
-
 	@Override
 	public String getTemplateName() {
 		return "FetchRequest.md";
-	}
-
-	public String getSmallIconAsHTML() {
-		return getMasterGenerator().getSmallIconAsHTML(getObjectClass());
-	}
-
-	public String getBigIconAsHTML() {
-		return getMasterGenerator().getBigIconAsHTML(getObjectClass());
-	}
-
-	public String getLocalMDPath() {
-		return getMasterGenerator().getLocalMDPath(getObjectClass());
-	}
-
-	public String getJavadocReference() {
-		return getMasterGenerator().getJavadocReference(getObjectClass());
 	}
 
 }

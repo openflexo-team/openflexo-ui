@@ -53,7 +53,7 @@ import org.openflexo.rm.ResourceLocator;
  * Abstract representation of a document generator using Velocity dedicated to a {@link TechnologyAdapter}
  * 
  */
-public abstract class VelocityMasterGenerator<TA extends TechnologyAdapter<TA>> extends DocumentationMasterGenerator<TA> {
+public abstract class VelocityMasterGenerator<TA extends TechnologyAdapter<TA>> extends AbstractMasterGenerator<TA> {
 
 	private static final Logger logger = FlexoLogger.getLogger(VelocityMasterGenerator.class.getPackage().getName());
 

@@ -48,7 +48,7 @@ import org.openflexo.logging.FlexoLogger;
  * Documentation generator for {@link FlexoRole}
  * 
  */
-public class MDFlexoRoleGenerator<R extends FlexoRole<?>> extends FlexoRoleGenerator<R> {
+public class MDFlexoRoleGenerator<R extends FlexoRole<?>> extends FlexoRoleGenerator<R> implements AbstractMDGenerator<R> {
 
 	private static final Logger logger = FlexoLogger.getLogger(MDFlexoRoleGenerator.class.getPackage().getName());
 
@@ -61,29 +61,9 @@ public class MDFlexoRoleGenerator<R extends FlexoRole<?>> extends FlexoRoleGener
 		return (MDMasterGenerator<?>) super.getMasterGenerator();
 	}
 
-	public String toMD(String text) {
-		return getMasterGenerator().toMD(text);
-	}
-
 	@Override
 	public String getTemplateName() {
 		return "FlexoRole.md";
-	}
-
-	public String getSmallIconAsHTML() {
-		return getMasterGenerator().getSmallIconAsHTML(getObjectClass());
-	}
-
-	public String getBigIconAsHTML() {
-		return getMasterGenerator().getBigIconAsHTML(getObjectClass());
-	}
-
-	public String getLocalMDPath() {
-		return getMasterGenerator().getLocalMDPath(getObjectClass());
-	}
-
-	public String getJavadocReference() {
-		return getMasterGenerator().getJavadocReference(getObjectClass());
 	}
 
 }

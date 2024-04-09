@@ -39,46 +39,41 @@
 package org.openflexo.docgenerator.md;
 
 import java.io.File;
-import java.util.logging.Logger;
 
-import org.openflexo.docgenerator.ModelSlotGenerator;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.logging.FlexoLogger;
+import org.openflexo.foundation.fml.FMLObject;
 
 /**
- * Documentation generator for {@link ModelSlot}
+ * Abstract MarkDown generator
  * 
  */
-public class MDModelSlotFetchRequestListGenerator<MS extends ModelSlot<?>> extends ModelSlotGenerator<MS>
-		implements AbstractMDGenerator<MS> {
+public interface AbstractMDGenerator<O extends FMLObject> {
 
-	private static final Logger logger = FlexoLogger.getLogger(MDModelSlotFetchRequestListGenerator.class.getPackage().getName());
+	public MDMasterGenerator<?> getMasterGenerator();
 
-	private MS ms;
+	public Class<O> getObjectClass();
 
-	public MDModelSlotFetchRequestListGenerator(Class<MS> objectClass, MDMasterGenerator<?> taDocGenerator) {
-		super(objectClass, taDocGenerator);
-		ms = getFMLModelFactory().newInstance(getObjectClass());
+	default public File getMDDir() {
+		return getMasterGenerator().getMDDir();
 	}
 
-	@Override
-	public MDMasterGenerator<?> getMasterGenerator() {
-		return (MDMasterGenerator<?>) super.getMasterGenerator();
-	}
-
-	@Override
-	protected File getFileToBeGenerated() {
-		return new File(getMDDir(), getObjectClass().getSimpleName() + "_fetch_requests.md");
-	}
-
-	@Override
-	public String toMD(String text) {
+	default public String toMD(String text) {
 		return getMasterGenerator().toMD(text);
 	}
 
-	@Override
-	public String getTemplateName() {
-		return "ModelSlot_fetch_requests.md";
+	default public String getSmallIconAsHTML() {
+		return getMasterGenerator().getSmallIconAsHTML(getObjectClass());
+	}
+
+	default public String getBigIconAsHTML() {
+		return getMasterGenerator().getBigIconAsHTML(getObjectClass());
+	}
+
+	default public String getLocalMDPath() {
+		return getMasterGenerator().getLocalMDPath(getObjectClass());
+	}
+
+	default public String getJavadocReference() {
+		return getMasterGenerator().getJavadocReference(getObjectClass());
 	}
 
 }

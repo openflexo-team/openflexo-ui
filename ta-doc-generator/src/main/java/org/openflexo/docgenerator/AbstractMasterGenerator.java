@@ -64,9 +64,9 @@ import org.openflexo.view.controller.TechnologyAdapterControllerService;
  * Abstract representation of a document generator dedicated to a {@link TechnologyAdapter}
  * 
  */
-public abstract class DocumentationMasterGenerator<TA extends TechnologyAdapter<TA>> {
+public abstract class AbstractMasterGenerator<TA extends TechnologyAdapter<TA>> {
 
-	private static final Logger logger = FlexoLogger.getLogger(DocumentationMasterGenerator.class.getPackage().getName());
+	private static final Logger logger = FlexoLogger.getLogger(AbstractMasterGenerator.class.getPackage().getName());
 
 	private Class<? extends TechnologyAdapter<?>> taClass;
 	private ApplicationContext applicationContext;
@@ -89,7 +89,7 @@ public abstract class DocumentationMasterGenerator<TA extends TechnologyAdapter<
 	private File taDir;
 	private File taSiteDir;
 
-	public DocumentationMasterGenerator(Class<TA> taClass, String repositoryName, String mainProjectName,
+	public AbstractMasterGenerator(Class<TA> taClass, String repositoryName, String mainProjectName,
 			ApplicationContext applicationContext) {
 		this.taClass = taClass;
 		this.applicationContext = applicationContext;

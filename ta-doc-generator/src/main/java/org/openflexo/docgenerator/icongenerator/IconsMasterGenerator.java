@@ -45,7 +45,7 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 import org.openflexo.ApplicationContext;
-import org.openflexo.docgenerator.DocumentationMasterGenerator;
+import org.openflexo.docgenerator.AbstractMasterGenerator;
 import org.openflexo.foundation.fml.FlexoBehaviour;
 import org.openflexo.foundation.fml.FlexoRole;
 import org.openflexo.foundation.fml.editionaction.EditionAction;
@@ -58,7 +58,7 @@ import org.openflexo.logging.FlexoLogger;
  * Generate all icons for a {@link TechnologyAdapter}
  * 
  */
-public class IconsMasterGenerator<TA extends TechnologyAdapter<TA>> extends DocumentationMasterGenerator<TA> {
+public class IconsMasterGenerator<TA extends TechnologyAdapter<TA>> extends AbstractMasterGenerator<TA> {
 
 	private static final Logger logger = FlexoLogger.getLogger(IconsMasterGenerator.class.getPackage().getName());
 

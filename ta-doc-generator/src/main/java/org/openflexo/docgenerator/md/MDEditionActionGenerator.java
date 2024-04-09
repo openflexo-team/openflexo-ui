@@ -48,7 +48,7 @@ import org.openflexo.logging.FlexoLogger;
  * Documentation generator for {@link EditionAction}
  * 
  */
-public class MDEditionActionGenerator<EA extends EditionAction> extends EditionActionGenerator<EA> {
+public class MDEditionActionGenerator<EA extends EditionAction> extends EditionActionGenerator<EA> implements AbstractMDGenerator<EA> {
 
 	private static final Logger logger = FlexoLogger.getLogger(MDEditionActionGenerator.class.getPackage().getName());
 
@@ -61,29 +61,9 @@ public class MDEditionActionGenerator<EA extends EditionAction> extends EditionA
 		return (MDMasterGenerator<?>) super.getMasterGenerator();
 	}
 
-	public String toMD(String text) {
-		return getMasterGenerator().toMD(text);
-	}
-
 	@Override
 	public String getTemplateName() {
 		return "EditionAction.md";
-	}
-
-	public String getSmallIconAsHTML() {
-		return getMasterGenerator().getSmallIconAsHTML(getObjectClass());
-	}
-
-	public String getBigIconAsHTML() {
-		return getMasterGenerator().getBigIconAsHTML(getObjectClass());
-	}
-
-	public String getLocalMDPath() {
-		return getMasterGenerator().getLocalMDPath(getObjectClass());
-	}
-
-	public String getJavadocReference() {
-		return getMasterGenerator().getJavadocReference(getObjectClass());
 	}
 
 }

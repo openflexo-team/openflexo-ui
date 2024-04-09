@@ -52,7 +52,7 @@ import org.openflexo.toolbox.FileUtils;
 /**
  * Abstract document generator
  * 
- * This generator is based on a Velocity template declared in the context of master {@link DocumentationMasterGenerator}
+ * This generator is based on a Velocity template declared in the context of master {@link AbstractMasterGenerator}
  * 
  */
 public abstract class VelocityGenerator<O extends FMLObject> extends AbstractGenerator<O> {

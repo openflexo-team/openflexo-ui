@@ -49,7 +49,7 @@ import org.openflexo.logging.FlexoLogger;
  * Documentation generator for {@link ModelSlot}
  * 
  */
-public class MDModelSlotBehaviourListGenerator<MS extends ModelSlot<?>> extends ModelSlotGenerator<MS> {
+public class MDModelSlotBehaviourListGenerator<MS extends ModelSlot<?>> extends ModelSlotGenerator<MS> implements AbstractMDGenerator<MS> {
 
 	private static final Logger logger = FlexoLogger.getLogger(MDModelSlotBehaviourListGenerator.class.getPackage().getName());
 
@@ -70,33 +70,9 @@ public class MDModelSlotBehaviourListGenerator<MS extends ModelSlot<?>> extends 
 		return new File(getMDDir(), getObjectClass().getSimpleName() + "_behaviours.md");
 	}
 
-	public String toMD(String text) {
-		return getMasterGenerator().toMD(text);
-	}
-
-	public File getMDDir() {
-		return getMasterGenerator().getMDDir();
-	}
-
 	@Override
 	public String getTemplateName() {
 		return "ModelSlot_behaviours.md";
-	}
-
-	public String getSmallIconAsHTML() {
-		return getMasterGenerator().getSmallIconAsHTML(getObjectClass());
-	}
-
-	public String getBigIconAsHTML() {
-		return getMasterGenerator().getBigIconAsHTML(getObjectClass());
-	}
-
-	public String getLocalMDPath() {
-		return getMasterGenerator().getLocalMDPath(getObjectClass());
-	}
-
-	public String getJavadocReference() {
-		return getMasterGenerator().getJavadocReference(getObjectClass());
 	}
 
 }
