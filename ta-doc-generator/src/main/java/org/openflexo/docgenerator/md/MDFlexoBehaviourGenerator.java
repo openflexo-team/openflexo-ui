@@ -71,6 +71,18 @@ public class MDFlexoBehaviourGenerator<FB extends FlexoBehaviour> extends FlexoB
 		return "FlexoBehaviour.md";
 	}
 
+	public String getSmallIconAsHTML() {
+		return getMasterGenerator().getSmallIconAsHTML(getObjectClass());
+	}
+
+	public String getBigIconAsHTML() {
+		return getMasterGenerator().getBigIconAsHTML(getObjectClass());
+	}
+
+	public String getLocalMDPath() {
+		return getMasterGenerator().getLocalMDPath(getObjectClass());
+	}
+
 	@Override
 	public String generate() {
 

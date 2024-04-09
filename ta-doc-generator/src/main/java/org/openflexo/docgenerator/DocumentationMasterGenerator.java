@@ -89,12 +89,12 @@ public abstract class DocumentationMasterGenerator<TA extends TechnologyAdapter<
 	private File taDir;
 	private File taSiteDir;
 
-	public DocumentationMasterGenerator(Class<TA> taClass, String repositoryName, String mainProjectName, ApplicationContext applicationContext) {
+	public DocumentationMasterGenerator(Class<TA> taClass, String repositoryName, String mainProjectName,
+			ApplicationContext applicationContext) {
 		this.taClass = taClass;
 		this.applicationContext = applicationContext;
 		this.repositoryName = repositoryName;
 		this.mainProjectName = mainProjectName;
-		// this.mvnArtefactName = mvnArtefactName;
 		technologyAdapterService = applicationContext.getService(TechnologyAdapterService.class);
 		technologyAdapter = technologyAdapterService.getTechnologyAdapter(taClass);
 
@@ -105,7 +105,6 @@ public abstract class DocumentationMasterGenerator<TA extends TechnologyAdapter<
 		try {
 			fmlModelFactory = new FMLModelFactory(null, applicationContext);
 		} catch (ModelDefinitionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -129,8 +128,8 @@ public abstract class DocumentationMasterGenerator<TA extends TechnologyAdapter<
 		globalTADir = new File(globalTASiteDir, "markdown");
 		taDir = new File(root, repositoryName + "/" + mainProjectName);
 		if (!taDir.exists()) {
-			System.out.println("Ca existe pas: " + taDir.getAbsolutePath());
-			System.exit(-1);
+			logger.severe("Repository not present: " + taDir.getAbsolutePath());
+			System.exit(0);
 		}
 		taSiteDir = new File(taDir, "src/site");
 		System.out.println("taDir=" + taDir.getAbsolutePath() + " exists=" + taDir.exists());
@@ -192,11 +191,6 @@ public abstract class DocumentationMasterGenerator<TA extends TechnologyAdapter<
 			AbstractGenerator<?> generator = generators.get(objectClass);
 			generator.generate();
 		}
-
-		// if (!(technologyAdapter instanceof FMLTechnologyAdapter)) {
-		// generateGlobalMenu();
-		// generateLocalMenu();
-		// }
 	}
 
 	private void prepareDocGenerationForModelSlot(Class<? extends ModelSlot<?>> modelSlotClass) {

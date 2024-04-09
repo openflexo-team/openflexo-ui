@@ -35,7 +35,7 @@ where
 | Property        | Type                    | &nbsp;Required&nbsp;  |
 | --------------- |-------------------------| :------:|
 #foreach($fmlProperty in $generator.getFMLProperties())
-| `$fmlProperty.getLabel()` &nbsp; | `$generator.getPropertyTypeAsString($fmlProperty)` &nbsp; | #if ($fmlProperty.isRequired()) yes #else no #end |
+| `$fmlProperty.getLabel()` &nbsp; | `$generator.getPropertyTypeAsString($fmlProperty)` &nbsp; |#if ($fmlProperty.isRequired()) yes #else no #end|
 #end
 
 ---

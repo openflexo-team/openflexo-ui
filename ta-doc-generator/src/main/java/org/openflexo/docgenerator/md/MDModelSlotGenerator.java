@@ -38,7 +38,6 @@
 
 package org.openflexo.docgenerator.md;
 
-import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -89,16 +88,23 @@ public class MDModelSlotGenerator<MS extends ModelSlot<?>> extends ModelSlotGene
 		return "ModelSlot.md";
 	}
 
-	@Override
-	protected Image getIcon() {
-		return getTechnologyAdapterController().getIconForModelSlot(getObjectClass()).getImage();
+	public String getSmallIconAsHTML() {
+		return getMasterGenerator().getSmallIconAsHTML(getObjectClass());
+	}
+
+	public String getBigIconAsHTML() {
+		return getMasterGenerator().getBigIconAsHTML(getObjectClass());
+	}
+
+	public String getLocalMDPath() {
+		return getMasterGenerator().getLocalMDPath(getObjectClass());
 	}
 
 	@Override
 	public String generate() {
 		String returned = super.generate();
 		if (getObjectClass().getName().contains("TypedDiagramModelSlot")) {
-			System.exit(-1);
+			// System.exit(-1);
 		}
 		return returned;
 	}

@@ -80,6 +80,18 @@ public class MDFlexoRoleGenerator<R extends FlexoRole<?>> extends FlexoRoleGener
 		return "FlexoRole.md";
 	}
 
+	public String getSmallIconAsHTML() {
+		return getMasterGenerator().getSmallIconAsHTML(getObjectClass());
+	}
+
+	public String getBigIconAsHTML() {
+		return getMasterGenerator().getBigIconAsHTML(getObjectClass());
+	}
+
+	public String getLocalMDPath() {
+		return getMasterGenerator().getLocalMDPath(getObjectClass());
+	}
+
 	@Override
 	public String generate() {
 

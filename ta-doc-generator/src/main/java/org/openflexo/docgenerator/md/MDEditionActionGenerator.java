@@ -80,6 +80,18 @@ public class MDEditionActionGenerator<EA extends EditionAction> extends EditionA
 		return "EditionAction.md";
 	}
 
+	public String getSmallIconAsHTML() {
+		return getMasterGenerator().getSmallIconAsHTML(getObjectClass());
+	}
+
+	public String getBigIconAsHTML() {
+		return getMasterGenerator().getBigIconAsHTML(getObjectClass());
+	}
+
+	public String getLocalMDPath() {
+		return getMasterGenerator().getLocalMDPath(getObjectClass());
+	}
+
 	@Override
 	public String generate() {
 

@@ -173,4 +173,8 @@ public class MDTADocGenerator<TA extends TechnologyAdapter<TA>> extends Velocity
 				+ "\"/>";
 	}
 
+	public String getLocalMDPath(Class<? extends FMLObject> objectClass) {
+		return objectClass.getSimpleName() + ".md";
+	}
+
 }
