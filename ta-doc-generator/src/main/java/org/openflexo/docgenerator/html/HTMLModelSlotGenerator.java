@@ -54,14 +54,14 @@ public class HTMLModelSlotGenerator<MS extends ModelSlot<?>> extends ModelSlotGe
 
 	private MS ms;
 
-	public HTMLModelSlotGenerator(Class<MS> objectClass, HTMLTADocGenerator<?> taDocGenerator) {
+	public HTMLModelSlotGenerator(Class<MS> objectClass, HTMLMasterGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
 		ms = getFMLModelFactory().newInstance(getObjectClass());
 	}
 
 	@Override
-	public HTMLTADocGenerator<?> getMasterGenerator() {
-		return (HTMLTADocGenerator<?>) super.getMasterGenerator();
+	public HTMLMasterGenerator<?> getMasterGenerator() {
+		return (HTMLMasterGenerator<?>) super.getMasterGenerator();
 	}
 
 	@Override

@@ -53,13 +53,13 @@ public class MDFlexoBehaviourGenerator<FB extends FlexoBehaviour> extends FlexoB
 
 	private static final Logger logger = FlexoLogger.getLogger(MDFlexoBehaviourGenerator.class.getPackage().getName());
 
-	public MDFlexoBehaviourGenerator(Class<FB> objectClass, MDTADocGenerator<?> taDocGenerator) {
+	public MDFlexoBehaviourGenerator(Class<FB> objectClass, MDMasterGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
 	}
 
 	@Override
-	public MDTADocGenerator<?> getMasterGenerator() {
-		return (MDTADocGenerator<?>) super.getMasterGenerator();
+	public MDMasterGenerator<?> getMasterGenerator() {
+		return (MDMasterGenerator<?>) super.getMasterGenerator();
 	}
 
 	public String toMD(String text) {
@@ -81,6 +81,10 @@ public class MDFlexoBehaviourGenerator<FB extends FlexoBehaviour> extends FlexoB
 
 	public String getLocalMDPath() {
 		return getMasterGenerator().getLocalMDPath(getObjectClass());
+	}
+
+	public String getJavadocReference() {
+		return getMasterGenerator().getJavadocReference(getObjectClass());
 	}
 
 	@Override

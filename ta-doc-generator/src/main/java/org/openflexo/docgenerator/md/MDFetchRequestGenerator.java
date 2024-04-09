@@ -53,13 +53,13 @@ public class MDFetchRequestGenerator<FR extends FetchRequest<?, ?, ?>> extends F
 
 	private static final Logger logger = FlexoLogger.getLogger(MDFetchRequestGenerator.class.getPackage().getName());
 
-	public MDFetchRequestGenerator(Class<FR> objectClass, MDTADocGenerator<?> taDocGenerator) {
+	public MDFetchRequestGenerator(Class<FR> objectClass, MDMasterGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
 	}
 
 	@Override
-	public MDTADocGenerator<?> getMasterGenerator() {
-		return (MDTADocGenerator<?>) super.getMasterGenerator();
+	public MDMasterGenerator<?> getMasterGenerator() {
+		return (MDMasterGenerator<?>) super.getMasterGenerator();
 	}
 
 	public String toMD(String text) {
@@ -81,6 +81,10 @@ public class MDFetchRequestGenerator<FR extends FetchRequest<?, ?, ?>> extends F
 
 	public String getLocalMDPath() {
 		return getMasterGenerator().getLocalMDPath(getObjectClass());
+	}
+
+	public String getJavadocReference() {
+		return getMasterGenerator().getJavadocReference(getObjectClass());
 	}
 
 	@Override

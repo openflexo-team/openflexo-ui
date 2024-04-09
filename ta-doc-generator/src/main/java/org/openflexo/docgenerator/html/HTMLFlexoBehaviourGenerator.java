@@ -52,13 +52,13 @@ public class HTMLFlexoBehaviourGenerator<FB extends FlexoBehaviour> extends Flex
 
 	private static final Logger logger = FlexoLogger.getLogger(HTMLFlexoBehaviourGenerator.class.getPackage().getName());
 
-	public HTMLFlexoBehaviourGenerator(Class<FB> objectClass, HTMLTADocGenerator<?> taDocGenerator) {
+	public HTMLFlexoBehaviourGenerator(Class<FB> objectClass, HTMLMasterGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
 	}
 
 	@Override
-	public HTMLTADocGenerator<?> getMasterGenerator() {
-		return (HTMLTADocGenerator<?>) super.getMasterGenerator();
+	public HTMLMasterGenerator<?> getMasterGenerator() {
+		return (HTMLMasterGenerator<?>) super.getMasterGenerator();
 	}
 
 	@Override

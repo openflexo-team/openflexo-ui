@@ -62,13 +62,13 @@ public class MDEditionActionGenerator<EA extends EditionAction> extends EditionA
 
 	private static final Logger logger = FlexoLogger.getLogger(MDEditionActionGenerator.class.getPackage().getName());
 
-	public MDEditionActionGenerator(Class<EA> objectClass, MDTADocGenerator<?> taDocGenerator) {
+	public MDEditionActionGenerator(Class<EA> objectClass, MDMasterGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
 	}
 
 	@Override
-	public MDTADocGenerator<?> getMasterGenerator() {
-		return (MDTADocGenerator<?>) super.getMasterGenerator();
+	public MDMasterGenerator<?> getMasterGenerator() {
+		return (MDMasterGenerator<?>) super.getMasterGenerator();
 	}
 
 	public String toMD(String text) {
@@ -90,6 +90,10 @@ public class MDEditionActionGenerator<EA extends EditionAction> extends EditionA
 
 	public String getLocalMDPath() {
 		return getMasterGenerator().getLocalMDPath(getObjectClass());
+	}
+
+	public String getJavadocReference() {
+		return getMasterGenerator().getJavadocReference(getObjectClass());
 	}
 
 	@Override

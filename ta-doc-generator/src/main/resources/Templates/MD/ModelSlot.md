@@ -112,5 +112,17 @@ $generator.toMD($usageExample.description())
 
 #[[##]]# Javadoc
 
-[org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot](./apidocs/org/openflexo/technologyadapter/diagram/TypedDiagramModelSlot.md)
+$generator.getJavadocReference()
 
+[//]: # --------------------- SEE ALSO
+#set ($references = $generator.getReferences())
+#if ($references.size()>0)
+---
+
+#[[##]]# See also
+
+#foreach($reference in $references)
+#set ($generatorReference = $generator.getReference($reference.value()))
+- $generatorReference.getSmallIconAsHTML() [$generatorReference.getFMLKeyword()]($generatorReference.getLocalMDPath()) : $generator.toMD($generatorReference.getFMLShortDescription())
+#end
+#end

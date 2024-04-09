@@ -61,14 +61,14 @@ import org.openflexo.toolbox.StringUtils;
  * Generate documentation for a {@link TechnologyAdapter}
  * 
  */
-public class MDTADocGenerator<TA extends TechnologyAdapter<TA>> extends VelocityMasterGenerator<TA> {
+public class MDMasterGenerator<TA extends TechnologyAdapter<TA>> extends VelocityMasterGenerator<TA> {
 
-	private static final Logger logger = FlexoLogger.getLogger(MDTADocGenerator.class.getPackage().getName());
+	private static final Logger logger = FlexoLogger.getLogger(MDMasterGenerator.class.getPackage().getName());
 
 	private File mdDir;
 	private File imageDir;
 
-	public MDTADocGenerator(Class<TA> taClass, String repositoryName, String modelProjectName, ApplicationContext applicationContext) {
+	public MDMasterGenerator(Class<TA> taClass, String repositoryName, String modelProjectName, ApplicationContext applicationContext) {
 
 		super(taClass, repositoryName, modelProjectName, applicationContext);
 	}
@@ -175,6 +175,15 @@ public class MDTADocGenerator<TA extends TechnologyAdapter<TA>> extends Velocity
 
 	public String getLocalMDPath(Class<? extends FMLObject> objectClass) {
 		return objectClass.getSimpleName() + ".md";
+	}
+
+	public String getJavadocReference(Class<? extends FMLObject> objectClass) {
+		return "[" + objectClass.getName() + "](./apidocs/" + getJavadocPath(objectClass) + ".md)";
+	}
+
+	private String getJavadocPath(Class<?> clazz) {
+		String className = clazz.getName();
+		return className.replace(".", "/");
 	}
 
 }

@@ -62,13 +62,13 @@ public class MDFlexoRoleGenerator<R extends FlexoRole<?>> extends FlexoRoleGener
 
 	private static final Logger logger = FlexoLogger.getLogger(MDFlexoRoleGenerator.class.getPackage().getName());
 
-	public MDFlexoRoleGenerator(Class<R> objectClass, MDTADocGenerator<?> taDocGenerator) {
+	public MDFlexoRoleGenerator(Class<R> objectClass, MDMasterGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
 	}
 
 	@Override
-	public MDTADocGenerator<?> getMasterGenerator() {
-		return (MDTADocGenerator<?>) super.getMasterGenerator();
+	public MDMasterGenerator<?> getMasterGenerator() {
+		return (MDMasterGenerator<?>) super.getMasterGenerator();
 	}
 
 	public String toMD(String text) {
@@ -90,6 +90,10 @@ public class MDFlexoRoleGenerator<R extends FlexoRole<?>> extends FlexoRoleGener
 
 	public String getLocalMDPath() {
 		return getMasterGenerator().getLocalMDPath(getObjectClass());
+	}
+
+	public String getJavadocReference() {
+		return getMasterGenerator().getJavadocReference(getObjectClass());
 	}
 
 	@Override

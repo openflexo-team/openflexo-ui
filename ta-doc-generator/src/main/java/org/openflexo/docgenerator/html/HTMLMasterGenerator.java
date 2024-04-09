@@ -56,11 +56,11 @@ import org.openflexo.logging.FlexoLogger;
  * HTML documentation generator for a dedicated {@link TechnologyAdapter}
  * 
  */
-public class HTMLTADocGenerator<TA extends TechnologyAdapter<TA>> extends VelocityMasterGenerator<TA> {
+public class HTMLMasterGenerator<TA extends TechnologyAdapter<TA>> extends VelocityMasterGenerator<TA> {
 
-	private static final Logger logger = FlexoLogger.getLogger(HTMLTADocGenerator.class.getPackage().getName());
+	private static final Logger logger = FlexoLogger.getLogger(HTMLMasterGenerator.class.getPackage().getName());
 
-	public HTMLTADocGenerator(Class<TA> taClass, String repositoryName, String mainProjectName, ApplicationContext applicationContext) {
+	public HTMLMasterGenerator(Class<TA> taClass, String repositoryName, String mainProjectName, ApplicationContext applicationContext) {
 		super(taClass, repositoryName, mainProjectName, applicationContext);
 	}
 

@@ -65,14 +65,14 @@ public class MDModelSlotGenerator<MS extends ModelSlot<?>> extends ModelSlotGene
 
 	private MS ms;
 
-	public MDModelSlotGenerator(Class<MS> objectClass, MDTADocGenerator<?> taDocGenerator) {
+	public MDModelSlotGenerator(Class<MS> objectClass, MDMasterGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
 		ms = getFMLModelFactory().newInstance(getObjectClass());
 	}
 
 	@Override
-	public MDTADocGenerator<?> getMasterGenerator() {
-		return (MDTADocGenerator<?>) super.getMasterGenerator();
+	public MDMasterGenerator<?> getMasterGenerator() {
+		return (MDMasterGenerator<?>) super.getMasterGenerator();
 	}
 
 	public String toMD(String text) {
@@ -98,6 +98,10 @@ public class MDModelSlotGenerator<MS extends ModelSlot<?>> extends ModelSlotGene
 
 	public String getLocalMDPath() {
 		return getMasterGenerator().getLocalMDPath(getObjectClass());
+	}
+
+	public String getJavadocReference() {
+		return getMasterGenerator().getJavadocReference(getObjectClass());
 	}
 
 	@Override

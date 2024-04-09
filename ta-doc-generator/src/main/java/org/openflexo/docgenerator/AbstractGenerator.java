@@ -41,6 +41,7 @@ package org.openflexo.docgenerator;
 import java.awt.Image;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.WildcardType;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -127,15 +128,6 @@ public abstract class AbstractGenerator<O extends FMLObject> {
 
 	protected String getLocalFetchRequestsReference() {
 		return "./" + objectClass.getSimpleName() + "_fetch_requests.md";
-	}
-
-	protected String getJavadocReference() {
-		return "[" + getObjectClass().getName() + "](./apidocs/" + getJavadocPath(getObjectClass()) + ".md)" + StringUtils.LINE_SEPARATOR;
-	}
-
-	private String getJavadocPath(Class<?> clazz) {
-		String className = clazz.getName();
-		return className.replace(".", "/");
 	}
 
 	protected abstract Image getIcon();
@@ -341,7 +333,14 @@ public abstract class AbstractGenerator<O extends FMLObject> {
 	 * @return
 	 */
 	public String getPropertyTypeAsString(FMLProperty fmlProperty) {
-		return TypeUtils.simpleRepresentation(getPropertyType(fmlProperty));
+		Type type = getPropertyType(fmlProperty);
+		if (type instanceof WildcardType) {
+			WildcardType t = (WildcardType) type;
+			if (t.getUpperBounds() != null && t.getUpperBounds().length == 1) {
+				return TypeUtils.simpleRepresentation(t.getUpperBounds()[0]);
+			}
+		}
+		return TypeUtils.simpleRepresentation(type);
 	}
 
 }

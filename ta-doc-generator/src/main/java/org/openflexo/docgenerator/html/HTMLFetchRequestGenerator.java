@@ -52,13 +52,13 @@ public class HTMLFetchRequestGenerator<FR extends FetchRequest<?, ?, ?>> extends
 
 	private static final Logger logger = FlexoLogger.getLogger(HTMLFetchRequestGenerator.class.getPackage().getName());
 
-	public HTMLFetchRequestGenerator(Class<FR> objectClass, HTMLTADocGenerator<?> taDocGenerator) {
+	public HTMLFetchRequestGenerator(Class<FR> objectClass, HTMLMasterGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
 	}
 
 	@Override
-	public HTMLTADocGenerator<?> getMasterGenerator() {
-		return (HTMLTADocGenerator<?>) super.getMasterGenerator();
+	public HTMLMasterGenerator<?> getMasterGenerator() {
+		return (HTMLMasterGenerator<?>) super.getMasterGenerator();
 	}
 
 	@Override

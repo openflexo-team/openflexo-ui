@@ -52,13 +52,13 @@ public class HTMLFlexoRoleGenerator<R extends FlexoRole<?>> extends FlexoRoleGen
 
 	private static final Logger logger = FlexoLogger.getLogger(HTMLFlexoRoleGenerator.class.getPackage().getName());
 
-	public HTMLFlexoRoleGenerator(Class<R> objectClass, HTMLTADocGenerator<?> taDocGenerator) {
+	public HTMLFlexoRoleGenerator(Class<R> objectClass, HTMLMasterGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
 	}
 
 	@Override
-	public HTMLTADocGenerator<?> getMasterGenerator() {
-		return (HTMLTADocGenerator<?>) super.getMasterGenerator();
+	public HTMLMasterGenerator<?> getMasterGenerator() {
+		return (HTMLMasterGenerator<?>) super.getMasterGenerator();
 	}
 
 	@Override

@@ -52,13 +52,13 @@ public class HTMLEditionActionGenerator<EA extends EditionAction> extends Editio
 
 	private static final Logger logger = FlexoLogger.getLogger(HTMLEditionActionGenerator.class.getPackage().getName());
 
-	public HTMLEditionActionGenerator(Class<EA> objectClass, HTMLTADocGenerator<?> taDocGenerator) {
+	public HTMLEditionActionGenerator(Class<EA> objectClass, HTMLMasterGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
 	}
 
 	@Override
-	public HTMLTADocGenerator<?> getMasterGenerator() {
-		return (HTMLTADocGenerator<?>) super.getMasterGenerator();
+	public HTMLMasterGenerator<?> getMasterGenerator() {
+		return (HTMLMasterGenerator<?>) super.getMasterGenerator();
 	}
 
 	@Override
