@@ -19,9 +19,6 @@ $generator.toCode($generator.getUsage(true))
 
 where
 
-- `visibility` is default (unspecified), 'public', 'protected' or 'private'
-- `cardinality` is \[0,1\] (unspecified), \[0,\*\] or \[1,\*\]
-- \<identifier\> is the name of declared role variable
 #foreach($fmlProperty in $generator.getFMLProperties())
 #if ($fmlProperty.isRequired())
 - \<$fmlProperty.getPathNameInUsage()\> addresses a `$generator.getPropertyTypeAsString($fmlProperty)`
