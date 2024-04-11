@@ -15,7 +15,6 @@ import org.openflexo.foundation.fml.FMLModelContext.FMLEntity;
 import org.openflexo.foundation.fml.FMLModelContext.FMLProperty;
 import org.openflexo.foundation.fml.FMLObject;
 import org.openflexo.foundation.fml.FlexoProperty;
-import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 
 /**
@@ -62,11 +61,13 @@ public abstract class FMLPropertyDeclarationCompletion<P extends FlexoProperty<?
 
 	@Override
 	public String getSummary() {
-		if (getPropertyClass().getAnnotation(FML.class) != null) {
+		return getServiceManager().getTechnologyAdapterService().getHTMLReferenceDocumentation(getPropertyClass());
+
+		/*if (getPropertyClass().getAnnotation(FML.class) != null) {
 			FML annotation = getPropertyClass().getAnnotation(FML.class);
 			return "<html>" + "<b>" + annotation.value() + "</b>" + "<br>" + annotation.description() + "</html>";
 		}
-		return "No description available";
+		return "No description available";*/
 	}
 
 }

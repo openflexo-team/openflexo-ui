@@ -18,6 +18,7 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.icon.FMLIconLibrary;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
+import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.view.controller.TechnologyAdapterController;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
@@ -40,7 +41,12 @@ public class UseCompletion<MS extends ModelSlot<?>> extends AbstractTemplateComp
 	}
 
 	private static String getDefaultTAId(FMLSourceCompletionProvider provider, Class<? extends ModelSlot<?>> msClass) {
-		return getTechnologyAdapter(provider, msClass).getIdentifier();
+		TechnologyAdapter ta = getTechnologyAdapter(provider, msClass);
+		if (ta.getAvailableModelSlotTypes().size() > 1) {
+			FML annotation = msClass.getAnnotation(FML.class);
+			return JavaUtils.getConstantJavaName(annotation.value());
+		}
+		return ta.getIdentifier();
 	}
 
 	private static TechnologyAdapter<?> getTechnologyAdapter(FMLSourceCompletionProvider provider, Class<? extends ModelSlot<?>> msClass) {
@@ -83,10 +89,11 @@ public class UseCompletion<MS extends ModelSlot<?>> extends AbstractTemplateComp
 
 	@Override
 	public String getSummary() {
-		if (getModelSlotClass().getAnnotation(FML.class) != null) {
+		return getServiceManager().getTechnologyAdapterService().getHTMLReferenceDocumentation(getModelSlotClass());
+		/*if (getModelSlotClass().getAnnotation(FML.class) != null) {
 			FML annotation = getModelSlotClass().getAnnotation(FML.class);
 			return "<html>" + "<b>" + annotation.value() + "</b>" + "<br>" + annotation.description() + "</html>";
 		}
-		return "No description available";
+		return "No description available";*/
 	}
 }
