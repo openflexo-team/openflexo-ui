@@ -50,7 +50,6 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 import org.openflexo.docgenerator.AbstractGenerator;
-import org.openflexo.foundation.fml.FMLObject;
 import org.openflexo.foundation.fml.editionaction.EditionAction;
 import org.openflexo.logging.FlexoLogger;
 
@@ -58,7 +57,7 @@ import org.openflexo.logging.FlexoLogger;
  * Documentation generator for {@link EditionAction}
  * 
  */
-public abstract class IconGenerator<O extends FMLObject> extends AbstractGenerator<O> {
+public abstract class IconGenerator<O> extends AbstractGenerator<O> {
 
 	private static final Logger logger = FlexoLogger.getLogger(IconGenerator.class.getPackage().getName());
 
@@ -74,11 +73,11 @@ public abstract class IconGenerator<O extends FMLObject> extends AbstractGenerat
 		return (IconsMasterGenerator<?>) super.getMasterGenerator();
 	}
 
-	public static String getSmallIconFileName(Class<? extends FMLObject> fmlClass) {
+	public static String getSmallIconFileName(Class<?> fmlClass) {
 		return fmlClass.getSimpleName() + ".png";
 	}
 
-	public static String getBigIconFileName(Class<? extends FMLObject> fmlClass) {
+	public static String getBigIconFileName(Class<?> fmlClass) {
 		return fmlClass.getSimpleName() + "_BIG.png";
 	}
 

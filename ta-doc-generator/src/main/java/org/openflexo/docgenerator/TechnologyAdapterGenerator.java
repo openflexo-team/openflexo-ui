@@ -36,42 +36,45 @@
  * 
  */
 
-package org.openflexo.docgenerator.md;
+package org.openflexo.docgenerator;
 
-import java.io.File;
+import java.awt.Image;
+import java.util.logging.Logger;
+
+import org.openflexo.foundation.fml.annotations.FML;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.logging.FlexoLogger;
 
 /**
- * Abstract MarkDown generator
+ * Documentation generator for {@link TechnologyAdapter}
  * 
  */
-public interface AbstractMDGenerator<O> {
+public abstract class TechnologyAdapterGenerator<TA extends TechnologyAdapter<TA>> extends VelocityGenerator<TA> {
 
-	public MDMasterGenerator<?> getMasterGenerator();
+	private static final Logger logger = FlexoLogger.getLogger(TechnologyAdapterGenerator.class.getPackage().getName());
 
-	public Class<O> getObjectClass();
-
-	default public File getMDDir() {
-		return getMasterGenerator().getMDDir();
+	public TechnologyAdapterGenerator(Class<TA> taClass, VelocityMasterGenerator<?> taDocGenerator) {
+		super(taClass, taDocGenerator);
 	}
 
-	default public String toMD(String text) {
-		return getMasterGenerator().toMD(text);
+	@Override
+	protected Image getIcon() {
+		return getTechnologyAdapterController().getTechnologyIcon().getImage();
 	}
 
-	default public String getSmallIconAsHTML() {
-		return getMasterGenerator().getSmallIconAsHTML(getObjectClass());
+	public String getTechnologyAdapterName() {
+		FML annotation = getObjectClass().getAnnotation(FML.class);
+		if (annotation != null) {
+			return annotation.value();
+		}
+		return getObjectClass().getSimpleName();
 	}
 
-	default public String getBigIconAsHTML() {
-		return getMasterGenerator().getBigIconAsHTML(getObjectClass());
+	public String getTechnologyAdapterDescription() {
+		FML annotation = getObjectClass().getAnnotation(FML.class);
+		if (annotation != null) {
+			return annotation.description();
+		}
+		return "No description available";
 	}
-
-	default public String getLocalMDPath() {
-		return getMasterGenerator().getLocalMDPath(getObjectClass());
-	}
-
-	default public String getJavadocReference() {
-		return getMasterGenerator().getJavadocReference(getObjectClass());
-	}
-
 }

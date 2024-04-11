@@ -1,0 +1,18 @@
+<h2>$generator.getHTMLBigImage()&nbsp;$generator.getTechnologyAdapterName()</h2>
+
+$generator.removeHTMLTags($generator.getTechnologyAdapterDescription())
+
+<br>
+<br>
+
+#set ($availableModelSlotTypes = $generator.getTechnologyAdapter().getAvailableModelSlotTypes())
+
+<b>Available model slots:</b>
+<ul>
+#foreach($msClass in $availableModelSlotTypes)
+#set ($generatorReference = $generator.getReference($msClass))
+<li>$generatorReference.getHTMLLink() : $generatorReference.getFMLShortDescription()</li>
+#end
+</ul>
+
+

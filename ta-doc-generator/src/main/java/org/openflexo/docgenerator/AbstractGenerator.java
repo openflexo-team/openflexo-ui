@@ -67,7 +67,7 @@ import org.openflexo.view.controller.TechnologyAdapterController;
  * Abstract document generator
  * 
  */
-public abstract class AbstractGenerator<O extends FMLObject> {
+public abstract class AbstractGenerator<O> {
 
 	private static final Logger logger = FlexoLogger.getLogger(AbstractGenerator.class.getPackage().getName());
 
@@ -153,7 +153,10 @@ public abstract class AbstractGenerator<O extends FMLObject> {
 	}
 
 	protected FMLEntity<?> getFMLEntity() {
-		return FMLModelContext.getFMLEntity(getObjectClass(), getFMLModelFactory());
+		if (FMLObject.class.isAssignableFrom(getObjectClass())) {
+			return FMLModelContext.getFMLEntity((Class<? extends FMLObject>) getObjectClass(), getFMLModelFactory());
+		}
+		return null;
 	}
 
 	public final String getFMLKeyword() {

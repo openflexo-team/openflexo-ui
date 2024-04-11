@@ -36,42 +36,35 @@
  * 
  */
 
-package org.openflexo.docgenerator.md;
+package org.openflexo.docgenerator.html;
 
-import java.io.File;
+import java.util.logging.Logger;
+
+import org.openflexo.docgenerator.TechnologyAdapterGenerator;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.logging.FlexoLogger;
 
 /**
- * Abstract MarkDown generator
+ * Documentation generator for {@link TechnologyAdapter}
  * 
  */
-public interface AbstractMDGenerator<O> {
+public class HTMLTechnologyAdapterGenerator<TA extends TechnologyAdapter<TA>> extends TechnologyAdapterGenerator<TA>
+		implements AbstractHTMLGenerator<TA> {
 
-	public MDMasterGenerator<?> getMasterGenerator();
+	private static final Logger logger = FlexoLogger.getLogger(HTMLTechnologyAdapterGenerator.class.getPackage().getName());
 
-	public Class<O> getObjectClass();
-
-	default public File getMDDir() {
-		return getMasterGenerator().getMDDir();
+	public HTMLTechnologyAdapterGenerator(Class<TA> objectClass, HTMLMasterGenerator<?> taDocGenerator) {
+		super(objectClass, taDocGenerator);
 	}
 
-	default public String toMD(String text) {
-		return getMasterGenerator().toMD(text);
+	@Override
+	public HTMLMasterGenerator<?> getMasterGenerator() {
+		return (HTMLMasterGenerator<?>) super.getMasterGenerator();
 	}
 
-	default public String getSmallIconAsHTML() {
-		return getMasterGenerator().getSmallIconAsHTML(getObjectClass());
-	}
-
-	default public String getBigIconAsHTML() {
-		return getMasterGenerator().getBigIconAsHTML(getObjectClass());
-	}
-
-	default public String getLocalMDPath() {
-		return getMasterGenerator().getLocalMDPath(getObjectClass());
-	}
-
-	default public String getJavadocReference() {
-		return getMasterGenerator().getJavadocReference(getObjectClass());
+	@Override
+	public String getTemplateName() {
+		return "TechnologyAdapter.html";
 	}
 
 }

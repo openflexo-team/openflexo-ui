@@ -40,13 +40,11 @@ package org.openflexo.docgenerator.html;
 
 import java.io.File;
 
-import org.openflexo.foundation.fml.FMLObject;
-
 /**
  * Abstract HTML generator
  * 
  */
-public interface AbstractHTMLGenerator<O extends FMLObject> {
+public interface AbstractHTMLGenerator<O> {
 
 	public HTMLMasterGenerator<?> getMasterGenerator();
 

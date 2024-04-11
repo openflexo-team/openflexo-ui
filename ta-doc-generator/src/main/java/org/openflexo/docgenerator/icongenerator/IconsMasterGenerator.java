@@ -81,6 +81,21 @@ public class IconsMasterGenerator<TA extends TechnologyAdapter<TA>> extends Abst
 	}
 
 	@Override
+	protected IconGenerator<TA> makeTechnologyAdapterGenerator(Class<TA> taClass) {
+		return new IconGenerator<TA>(taClass, this) {
+			@Override
+			protected Image getIcon() {
+				ImageIcon icon = getTechnologyAdapterController().getTechnologyIcon();
+				if (icon != null) {
+					return icon.getImage();
+				}
+				logger.warning("No icon for " + taClass);
+				return null;
+			}
+		};
+	}
+
+	@Override
 	protected <MS extends ModelSlot<?>> IconGenerator<MS> makeModelSlotGenerator(Class<MS> modelSlotClass) {
 		return new IconGenerator<MS>(modelSlotClass, this) {
 			@Override

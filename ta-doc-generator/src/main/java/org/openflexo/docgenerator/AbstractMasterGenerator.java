@@ -75,6 +75,7 @@ public abstract class AbstractMasterGenerator<TA extends TechnologyAdapter<TA>> 
 	private TA technologyAdapter;
 	private TechnologyAdapterController<TA> technologyAdapterController;
 
+	protected AbstractGenerator<TA> taGenerator;
 	protected Map<Class<? extends FMLObject>, AbstractGenerator> generators;
 
 	private FMLModelFactory fmlModelFactory;
@@ -111,11 +112,10 @@ public abstract class AbstractMasterGenerator<TA extends TechnologyAdapter<TA>> 
 		initFilePaths();
 
 		generators = new HashMap<>();
-
+		taGenerator = makeTechnologyAdapterGenerator(taClass);
 		for (Class<?> modelSlotClass : technologyAdapter.getAvailableModelSlotTypes()) {
 			prepareDocGenerationForModelSlot((Class) modelSlotClass);
 		}
-
 	}
 
 	protected void initFilePaths() {
@@ -187,6 +187,7 @@ public abstract class AbstractMasterGenerator<TA extends TechnologyAdapter<TA>> 
 
 	public void generate() {
 		// System.out.println("Generate doc for " + technologyAdapter);
+		taGenerator.generate();
 		for (Class<? extends FMLObject> objectClass : generators.keySet()) {
 			AbstractGenerator<?> generator = generators.get(objectClass);
 			generator.generate();
@@ -237,6 +238,8 @@ public abstract class AbstractMasterGenerator<TA extends TechnologyAdapter<TA>> 
 		generators.put(fetchRequestClass, generator);
 
 	}
+
+	protected abstract AbstractGenerator<TA> makeTechnologyAdapterGenerator(Class<TA> taClass);
 
 	protected abstract <MS extends ModelSlot<?>> AbstractGenerator<MS> makeModelSlotGenerator(Class<MS> modelSlotClass);
 

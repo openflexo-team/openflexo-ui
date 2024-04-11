@@ -45,9 +45,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.docgenerator.AbstractGenerator;
+import org.openflexo.docgenerator.TechnologyAdapterGenerator;
 import org.openflexo.docgenerator.VelocityMasterGenerator;
 import org.openflexo.docgenerator.icongenerator.IconGenerator;
-import org.openflexo.foundation.fml.FMLObject;
 import org.openflexo.foundation.fml.FlexoBehaviour;
 import org.openflexo.foundation.fml.FlexoRole;
 import org.openflexo.foundation.fml.editionaction.EditionAction;
@@ -97,6 +97,11 @@ public class MDMasterGenerator<TA extends TechnologyAdapter<TA>> extends Velocit
 	}
 
 	@Override
+	protected TechnologyAdapterGenerator<TA> makeTechnologyAdapterGenerator(Class<TA> taClass) {
+		return new MDTechnologyAdapterGenerator<>(taClass, this);
+	}
+
+	@Override
 	protected <MS extends ModelSlot<?>> MDModelSlotGenerator<MS> makeModelSlotGenerator(Class<MS> modelSlotClass) {
 		return new MDModelSlotGenerator<>(modelSlotClass, this);
 	}
@@ -133,10 +138,10 @@ public class MDMasterGenerator<TA extends TechnologyAdapter<TA>> extends Velocit
 		return returned;
 	}
 
-	private Map<Class<? extends FMLObject>, File> smallIconFiles = new HashMap<>();
-	private Map<Class<? extends FMLObject>, File> bigIconFiles = new HashMap<>();
+	private Map<Class<?>, File> smallIconFiles = new HashMap<>();
+	private Map<Class<?>, File> bigIconFiles = new HashMap<>();
 
-	private File getSmallIconFile(Class<? extends FMLObject> objectClass) {
+	private File getSmallIconFile(Class<?> objectClass) {
 		File returned = smallIconFiles.get(objectClass);
 		if (returned == null) {
 			returned = new File(imageDir, IconGenerator.getSmallIconFileName(objectClass));
@@ -145,7 +150,7 @@ public class MDMasterGenerator<TA extends TechnologyAdapter<TA>> extends Velocit
 		return returned;
 	}
 
-	private File getBigIconFile(Class<? extends FMLObject> objectClass) {
+	private File getBigIconFile(Class<?> objectClass) {
 		File returned = bigIconFiles.get(objectClass);
 		if (returned == null) {
 			returned = new File(imageDir, IconGenerator.getBigIconFileName(objectClass));
@@ -154,7 +159,7 @@ public class MDMasterGenerator<TA extends TechnologyAdapter<TA>> extends Velocit
 		return returned;
 	}
 
-	public String getSmallIconAsHTML(Class<? extends FMLObject> objectClass) {
+	public String getSmallIconAsHTML(Class<?> objectClass) {
 		File smallIconFile = getSmallIconFile(objectClass);
 		if (!smallIconFile.exists()) {
 			logger.warning("File not found : " + smallIconFile);
@@ -164,7 +169,7 @@ public class MDMasterGenerator<TA extends TechnologyAdapter<TA>> extends Velocit
 				+ "\"/>";
 	}
 
-	public String getBigIconAsHTML(Class<? extends FMLObject> objectClass) {
+	public String getBigIconAsHTML(Class<?> objectClass) {
 		File bigIconFile = getBigIconFile(objectClass);
 		if (!bigIconFile.exists()) {
 			return "";
@@ -173,11 +178,11 @@ public class MDMasterGenerator<TA extends TechnologyAdapter<TA>> extends Velocit
 				+ "\"/>";
 	}
 
-	public String getLocalMDPath(Class<? extends FMLObject> objectClass) {
+	public String getLocalMDPath(Class<?> objectClass) {
 		return objectClass.getSimpleName() + ".md";
 	}
 
-	public String getJavadocReference(Class<? extends FMLObject> objectClass) {
+	public String getJavadocReference(Class<?> objectClass) {
 		return "[" + objectClass.getName() + "](./apidocs/" + getJavadocPath(objectClass) + ".md)";
 	}
 

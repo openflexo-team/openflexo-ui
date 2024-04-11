@@ -45,7 +45,6 @@ import java.util.logging.Logger;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
-import org.openflexo.foundation.fml.FMLObject;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileUtils;
 
@@ -55,7 +54,7 @@ import org.openflexo.toolbox.FileUtils;
  * This generator is based on a Velocity template declared in the context of master {@link AbstractMasterGenerator}
  * 
  */
-public abstract class VelocityGenerator<O extends FMLObject> extends AbstractGenerator<O> {
+public abstract class VelocityGenerator<O/* extends FMLObject*/> extends AbstractGenerator<O> {
 
 	private static final Logger logger = FlexoLogger.getLogger(VelocityGenerator.class.getPackage().getName());
 
