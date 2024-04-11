@@ -39,11 +39,15 @@
 package org.openflexo.docgenerator.html;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.docgenerator.AbstractGenerator;
 import org.openflexo.docgenerator.VelocityMasterGenerator;
+import org.openflexo.docgenerator.icongenerator.IconGenerator;
+import org.openflexo.foundation.fml.FMLObject;
 import org.openflexo.foundation.fml.FlexoBehaviour;
 import org.openflexo.foundation.fml.FlexoRole;
 import org.openflexo.foundation.fml.editionaction.EditionAction;
@@ -51,6 +55,7 @@ import org.openflexo.foundation.fml.editionaction.FetchRequest;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.toolbox.HTMLUtils;
 
 /**
  * HTML documentation generator for a dedicated {@link TechnologyAdapter}
@@ -60,8 +65,28 @@ public class HTMLMasterGenerator<TA extends TechnologyAdapter<TA>> extends Veloc
 
 	private static final Logger logger = FlexoLogger.getLogger(HTMLMasterGenerator.class.getPackage().getName());
 
+	private File htmlDocDirectory;
+	private File imageDir;
+
 	public HTMLMasterGenerator(Class<TA> taClass, String repositoryName, String mainProjectName, ApplicationContext applicationContext) {
 		super(taClass, repositoryName, mainProjectName, applicationContext);
+	}
+
+	@Override
+	protected void initFilePaths() {
+		super.initFilePaths();
+
+		htmlDocDirectory = new File(getTADir(), "src/main/resources/Documentation/" + getTechnologyAdapter().getIdentifier() + "/HTML");
+		if (!htmlDocDirectory.exists()) {
+			htmlDocDirectory.mkdirs();
+		}
+		logger.info("Will generate HTML in : " + htmlDocDirectory.getAbsolutePath());
+		imageDir = new File(getTASiteDir(), "resources/images");
+		logger.info("Images will be found in =" + imageDir.getAbsolutePath());
+	}
+
+	public File getHTMLDocDirectory() {
+		return htmlDocDirectory;
 	}
 
 	@Override
@@ -71,8 +96,7 @@ public class HTMLMasterGenerator<TA extends TechnologyAdapter<TA>> extends Veloc
 
 	@Override
 	public File getFileToBeGenerated(AbstractGenerator<?> generator) {
-		// Does not generate files
-		return null;
+		return new File(getHTMLDocDirectory(), generator.getObjectClass().getSimpleName() + ".html");
 	}
 
 	@Override
@@ -98,5 +122,57 @@ public class HTMLMasterGenerator<TA extends TechnologyAdapter<TA>> extends Veloc
 	@Override
 	protected <FR extends FetchRequest<?, ?, ?>> HTMLFetchRequestGenerator<FR> makeFetchRequestGenerator(Class<FR> fetchRequestClass) {
 		return new HTMLFetchRequestGenerator<>(fetchRequestClass, this);
+	}
+
+	private Map<Class<? extends FMLObject>, File> smallIconFiles = new HashMap<>();
+	private Map<Class<? extends FMLObject>, File> bigIconFiles = new HashMap<>();
+
+	private File getSmallIconFile(Class<? extends FMLObject> objectClass) {
+		File returned = smallIconFiles.get(objectClass);
+		if (returned == null) {
+			returned = new File(imageDir, IconGenerator.getSmallIconFileName(objectClass));
+			smallIconFiles.put(objectClass, returned);
+		}
+		return returned;
+	}
+
+	private File getBigIconFile(Class<? extends FMLObject> objectClass) {
+		File returned = bigIconFiles.get(objectClass);
+		if (returned == null) {
+			returned = new File(imageDir, IconGenerator.getBigIconFileName(objectClass));
+			bigIconFiles.put(objectClass, returned);
+		}
+		return returned;
+	}
+
+	public String removeHTMLTags(String html) {
+		return HTMLUtils.removeHTMLTags(html);
+	}
+
+	public String toHTML(String text) {
+		return HTMLUtils.toHTML(removeHTMLTags(text));
+	}
+
+	public String getSmallIconAsHTML(Class<? extends FMLObject> objectClass) {
+		File smallIconFile = getSmallIconFile(objectClass);
+		if (!smallIconFile.exists()) {
+			logger.warning("File not found : " + smallIconFile);
+			return "???";
+		}
+		return "<img src=\"" + "/" + getRepositoryName() + "/images/" + smallIconFile.getName() + "\" alt=\"" + objectClass.getSimpleName()
+				+ "\"/>";
+	}
+
+	public String getBigIconAsHTML(Class<? extends FMLObject> objectClass) {
+		File bigIconFile = getBigIconFile(objectClass);
+		if (!bigIconFile.exists()) {
+			return "";
+		}
+		return "<img src=\"" + "/" + getRepositoryName() + "/images/" + bigIconFile.getName() + "\" alt=\"" + objectClass.getSimpleName()
+				+ "\"/>";
+	}
+
+	public String getJavadocReference(Class<? extends FMLObject> objectClass) {
+		return "Prout la javadoc en HTML";
 	}
 }

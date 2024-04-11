@@ -119,7 +119,7 @@ public abstract class AbstractMasterGenerator<TA extends TechnologyAdapter<TA>> 
 	}
 
 	protected void initFilePaths() {
-		System.out.println("Generator for " + technologyAdapter);
+		// logger.info("Generator for " + technologyAdapter);
 		String currentDir = System.getProperty("user.dir");
 		File current = new File(currentDir);
 		File root = current.getParentFile().getParentFile();
@@ -132,13 +132,17 @@ public abstract class AbstractMasterGenerator<TA extends TechnologyAdapter<TA>> 
 			System.exit(0);
 		}
 		taSiteDir = new File(taDir, "src/site");
-		System.out.println("taDir=" + taDir.getAbsolutePath() + " exists=" + taDir.exists());
-		System.out.println("taSiteDir=" + taSiteDir.getAbsolutePath() + " exists=" + taSiteDir.exists());
+		// System.out.println("taDir=" + taDir.getAbsolutePath() + " exists=" + taDir.exists());
+		// System.out.println("taSiteDir=" + taSiteDir.getAbsolutePath() + " exists=" + taSiteDir.exists());
 
 	}
 
 	public String getRepositoryName() {
 		return repositoryName;
+	}
+
+	public String getMainProjectName() {
+		return mainProjectName;
 	}
 
 	public <O extends FMLObject> AbstractGenerator<O> getGenerator(Class<O> objectClass) {
@@ -161,17 +165,13 @@ public abstract class AbstractMasterGenerator<TA extends TechnologyAdapter<TA>> 
 		return mainProjectName;
 	}
 
+	public File getTADir() {
+		return taDir;
+	}
+
 	public File getTASiteDir() {
 		return taSiteDir;
 	}
-
-	/*public File getImageDir() {
-		return imageDir;
-	}*/
-
-	/*public String getMVNArtefactName() {
-		return mvnArtefactName;
-	}*/
 
 	public FMLModelFactory getFMLModelFactory() {
 		return fmlModelFactory;
@@ -186,7 +186,7 @@ public abstract class AbstractMasterGenerator<TA extends TechnologyAdapter<TA>> 
 	}
 
 	public void generate() {
-		System.out.println("Generate doc for " + technologyAdapter);
+		// System.out.println("Generate doc for " + technologyAdapter);
 		for (Class<? extends FMLObject> objectClass : generators.keySet()) {
 			AbstractGenerator<?> generator = generators.get(objectClass);
 			generator.generate();
@@ -194,7 +194,7 @@ public abstract class AbstractMasterGenerator<TA extends TechnologyAdapter<TA>> 
 	}
 
 	private void prepareDocGenerationForModelSlot(Class<? extends ModelSlot<?>> modelSlotClass) {
-		System.out.println("ModelSlot class : " + modelSlotClass);
+		// System.out.println("ModelSlot class : " + modelSlotClass);
 		AbstractGenerator<?> generator = makeModelSlotGenerator(modelSlotClass);
 		generators.put(modelSlotClass, generator);
 		for (Class<? extends FlexoRole<?>> roleClass : technologyAdapterService.getAvailableFlexoRoleTypes(modelSlotClass)) {
@@ -213,26 +213,26 @@ public abstract class AbstractMasterGenerator<TA extends TechnologyAdapter<TA>> 
 	}
 
 	private void prepareDocGenerationForRole(Class<? extends FlexoRole<?>> roleClass) {
-		System.out.println("  > Role: " + roleClass);
+		// System.out.println(" > Role: " + roleClass);
 		AbstractGenerator<?> generator = makeFlexoRoleGenerator(roleClass);
 		generators.put(roleClass, generator);
 	}
 
 	private void prepareDocGenerationForBehaviour(Class<? extends FlexoBehaviour> behaviourClass) {
-		System.out.println("  > Behaviour: " + behaviourClass);
+		// System.out.println(" > Behaviour: " + behaviourClass);
 		AbstractGenerator<?> generator = makeFlexoBehaviourGenerator(behaviourClass);
 		generators.put(behaviourClass, generator);
 	}
 
 	private void prepareDocGenerationForEditionAction(Class<? extends EditionAction> editionActionClass) {
-		System.out.println("  > EditionAction: " + editionActionClass);
+		// System.out.println(" > EditionAction: " + editionActionClass);
 		AbstractGenerator<?> generator = makeEditionActionGenerator(editionActionClass);
 		generators.put(editionActionClass, generator);
 
 	}
 
 	private void prepareDocGenerationForFetchRequest(Class<? extends FetchRequest<?, ?, ?>> fetchRequestClass) {
-		System.out.println("  > FetchRequest: " + fetchRequestClass);
+		// System.out.println(" > FetchRequest: " + fetchRequestClass);
 		AbstractGenerator<?> generator = makeFetchRequestGenerator(fetchRequestClass);
 		generators.put(fetchRequestClass, generator);
 

@@ -64,7 +64,7 @@ public abstract class VelocityGenerator<O extends FMLObject> extends AbstractGen
 	public VelocityGenerator(Class<O> objectClass, VelocityMasterGenerator<?> masterGenerator) {
 		super(objectClass, masterGenerator);
 		generatedFile = getFileToBeGenerated();
-		System.out.println("Will generate: " + generatedFile.getAbsolutePath());
+		// System.out.println("Will generate: " + generatedFile.getAbsolutePath());
 	}
 
 	protected File getFileToBeGenerated() {
@@ -99,11 +99,11 @@ public abstract class VelocityGenerator<O extends FMLObject> extends AbstractGen
 	 */
 	private String generateContents() {
 
-		System.out.println("generateContents() for " + getFMLKeyword());
+		// System.out.println("generateContents() for " + getFMLKeyword());
 
 		Template t = getMasterGenerator().getVelocityEngine().getTemplate(getTemplateName());
 
-		System.out.println("Template: " + t);
+		// System.out.println("Template: " + t);
 
 		VelocityContext context = new VelocityContext();
 		context.put("generator", this);
@@ -121,28 +121,14 @@ public abstract class VelocityGenerator<O extends FMLObject> extends AbstractGen
 		if (generatedFile != null) {
 			try {
 				FileUtils.saveToFile(generatedFile, contents);
-				System.out.println("Generated " + generatedFile.getAbsolutePath());
+				logger.info("Generated " + generatedFile.getName() + " in " + generatedFile.getParentFile().getAbsolutePath());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		System.out.println(contents);
+		// System.out.println(contents);
 		return contents;
-	}
-
-	@Deprecated
-	protected String render(StringBuffer sb) {
-		String returned = sb.toString();
-		try {
-			System.out.println("Generating " + generatedFile.getAbsolutePath() + "...");
-			FileUtils.saveToFile(generatedFile, returned);
-			System.out.println("Generated " + generatedFile.getAbsolutePath());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return returned;
 	}
 
 }

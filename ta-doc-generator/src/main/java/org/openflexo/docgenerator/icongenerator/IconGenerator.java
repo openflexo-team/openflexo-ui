@@ -88,10 +88,10 @@ public abstract class IconGenerator<O extends FMLObject> extends AbstractGenerat
 		if (icon != null) {
 			smallIconFile = new File(getMasterGenerator().getImageDir(), getSmallIconFileName(getObjectClass()));
 			saveImage(getIcon(), smallIconFile);
-			logger.info("Generated " + smallIconFile.getAbsolutePath());
+			logger.info("Generated " + smallIconFile.getName() + " in " + smallIconFile.getParentFile().getAbsolutePath());
 			bigIconFile = new File(getMasterGenerator().getImageDir(), getBigIconFileName(getObjectClass()));
 			saveImage(getIcon(), bigIconFile, 2.0);
-			logger.info("Generated " + bigIconFile.getAbsolutePath());
+			logger.info("Generated " + bigIconFile.getName() + " in " + smallIconFile.getParentFile().getAbsolutePath());
 		}
 		else {
 			logger.warning("Cannot find icon for " + getObjectClass().getSimpleName());

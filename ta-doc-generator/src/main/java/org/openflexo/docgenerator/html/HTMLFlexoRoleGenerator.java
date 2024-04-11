@@ -48,7 +48,7 @@ import org.openflexo.logging.FlexoLogger;
  * Documentation generator for {@link FlexoRole}
  * 
  */
-public class HTMLFlexoRoleGenerator<R extends FlexoRole<?>> extends FlexoRoleGenerator<R> {
+public class HTMLFlexoRoleGenerator<R extends FlexoRole<?>> extends FlexoRoleGenerator<R> implements AbstractHTMLGenerator<R> {
 
 	private static final Logger logger = FlexoLogger.getLogger(HTMLFlexoRoleGenerator.class.getPackage().getName());
 

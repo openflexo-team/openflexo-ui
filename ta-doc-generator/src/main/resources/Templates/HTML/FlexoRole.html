@@ -1,3 +1,54 @@
-FlexoRole $generator.getFMLKeyword()
+<h2>$generator.getHTMLBigImage()&nbsp;$generator.getFMLKeyword()</h2>
 
-$generator.getFMLDescription()
+$generator.removeHTMLTags($generator.getFMLDescription())
+
+<br><br>
+<b>Usage:</b>
+
+<code>
+<pre>
+$generator.toHTML($generator.getUsage(true))
+</pre>
+</code>
+
+<ul>
+#foreach($fmlProperty in $generator.getFMLProperties())
+#if ($fmlProperty.isRequired())
+<li> &lt;$fmlProperty.getPathNameInUsage()&gt; addresses a <code>$generator.toHTML($generator.getPropertyTypeAsString($fmlProperty))</code></li>
+#end
+#end
+</ul>
+
+<b>Configuration:</b>
+<ul>
+#foreach($fmlProperty in $generator.getFMLProperties())
+<li> &lt;$fmlProperty.getPathNameInUsage()&gt; : <code>$generator.toHTML($generator.getPropertyTypeAsString($fmlProperty))</code> #if ($fmlProperty.isRequired())(required)#else(optional)#end - $generator.toHTML($fmlProperty.getDescription())</li>
+#end
+</ul>
+#if ($generator.getFMLExamples().size()>0)
+<b>Examples:</b>
+<br>
+#foreach($usageExample in $generator.getFMLExamples())
+<code>
+<pre>
+$generator.toHTML($usageExample.example())
+</pre>
+</code>
+$generator.toHTML($usageExample.description())
+<br>
+#end
+<br>
+#end
+
+<b>Reference documentation:</b> $generator.getHTMLLink()<br>
+
+#set ($references = $generator.getReferences())
+#if ($references.size()>0)
+<br>
+<b>See also:</b>
+#foreach($reference in $references)
+#set ($generatorReference = $generator.getReference($reference.value()))
+$generatorReference.getHTMLLink()
+#end
+#end
+

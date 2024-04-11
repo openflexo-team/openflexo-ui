@@ -48,7 +48,7 @@ import org.openflexo.logging.FlexoLogger;
  * Documentation generator for {@link EditionAction}
  * 
  */
-public class HTMLEditionActionGenerator<EA extends EditionAction> extends EditionActionGenerator<EA> {
+public class HTMLEditionActionGenerator<EA extends EditionAction> extends EditionActionGenerator<EA> implements AbstractHTMLGenerator<EA> {
 
 	private static final Logger logger = FlexoLogger.getLogger(HTMLEditionActionGenerator.class.getPackage().getName());
 

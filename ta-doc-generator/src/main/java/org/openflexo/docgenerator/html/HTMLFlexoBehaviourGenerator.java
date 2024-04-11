@@ -48,7 +48,8 @@ import org.openflexo.logging.FlexoLogger;
  * Documentation generator for {@link FlexoBehaviour}
  * 
  */
-public class HTMLFlexoBehaviourGenerator<FB extends FlexoBehaviour> extends FlexoBehaviourGenerator<FB> {
+public class HTMLFlexoBehaviourGenerator<FB extends FlexoBehaviour> extends FlexoBehaviourGenerator<FB>
+		implements AbstractHTMLGenerator<FB> {
 
 	private static final Logger logger = FlexoLogger.getLogger(HTMLFlexoBehaviourGenerator.class.getPackage().getName());
 

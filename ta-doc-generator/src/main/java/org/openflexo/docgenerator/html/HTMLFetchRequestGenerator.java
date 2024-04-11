@@ -48,7 +48,8 @@ import org.openflexo.logging.FlexoLogger;
  * Documentation generator for {@link FetchRequest}
  * 
  */
-public class HTMLFetchRequestGenerator<FR extends FetchRequest<?, ?, ?>> extends FetchRequestGenerator<FR> {
+public class HTMLFetchRequestGenerator<FR extends FetchRequest<?, ?, ?>> extends FetchRequestGenerator<FR>
+		implements AbstractHTMLGenerator<FR> {
 
 	private static final Logger logger = FlexoLogger.getLogger(HTMLFetchRequestGenerator.class.getPackage().getName());
 
