@@ -39,6 +39,8 @@
 package org.openflexo.docgenerator.md;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.docgenerator.ModelSlotGenerator;
@@ -54,10 +56,12 @@ public class MDModelSlotRoleListGenerator<MS extends ModelSlot<?>> extends Model
 	private static final Logger logger = FlexoLogger.getLogger(MDModelSlotRoleListGenerator.class.getPackage().getName());
 
 	private MS ms;
+	private MDModelSlotGenerator<?> msGenerator;
 
-	public MDModelSlotRoleListGenerator(Class<MS> objectClass, MDMasterGenerator<?> taDocGenerator) {
+	public MDModelSlotRoleListGenerator(Class<MS> objectClass, MDModelSlotGenerator<?> msGenerator, MDMasterGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
 		ms = getFMLModelFactory().newInstance(getObjectClass());
+		this.msGenerator = msGenerator;
 	}
 
 	@Override
@@ -65,9 +69,14 @@ public class MDModelSlotRoleListGenerator<MS extends ModelSlot<?>> extends Model
 		return (MDMasterGenerator<?>) super.getMasterGenerator();
 	}
 
+	public MDModelSlotGenerator<?> getModelSlotGenerator() {
+		return msGenerator;
+	}
+
 	@Override
-	protected File getFileToBeGenerated() {
-		return new File(getMDDir(), getObjectClass().getSimpleName() + "_roles.md");
+	public List<File> getFilesToBeGenerated() {
+		return Collections
+				.singletonList(new File(getModelSlotGenerator().getRolesDirectory(), getObjectClass().getSimpleName() + "_roles.md"));
 	}
 
 	@Override

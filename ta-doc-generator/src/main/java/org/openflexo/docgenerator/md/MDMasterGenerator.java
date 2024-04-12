@@ -39,7 +39,10 @@
 package org.openflexo.docgenerator.md;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -83,8 +86,56 @@ public class MDMasterGenerator<TA extends TechnologyAdapter<TA>> extends Velocit
 	}
 
 	@Override
-	public File getFileToBeGenerated(AbstractGenerator<?> generator) {
-		return new File(getMDDir(), generator.getObjectClass().getSimpleName() + ".md");
+	public List<File> getFilesToBeGenerated(AbstractGenerator<?> generator) {
+		if (generator instanceof MDModelSlotGenerator) {
+			File msDir = getModelSlotDirectory(((MDModelSlotGenerator<?>) generator).getObjectClass());
+			return Collections.singletonList(new File(msDir, generator.getObjectClass().getSimpleName() + ".md"));
+		}
+		else if (generator instanceof MDFlexoRoleGenerator) {
+			List<File> returned = new ArrayList<>();
+			List<Class<? extends ModelSlot<?>>> msClasses = getTechnologyAdapterService()
+					.getModelSlotClassesForFlexoRole(((MDFlexoRoleGenerator<?>) generator).getObjectClass());
+			for (Class<? extends ModelSlot<?>> msClass : msClasses) {
+				MDModelSlotGenerator<?> msGenerator = (MDModelSlotGenerator<?>) getGenerator(msClass);
+				returned.add(new File(msGenerator.getRolesDirectory(), generator.getObjectClass().getSimpleName() + ".md"));
+			}
+			return returned;
+		}
+		else if (generator instanceof MDFlexoBehaviourGenerator) {
+			List<File> returned = new ArrayList<>();
+			List<Class<? extends ModelSlot<?>>> msClasses = getTechnologyAdapterService()
+					.getModelSlotClassesForFlexoBehaviour(((MDFlexoBehaviourGenerator<?>) generator).getObjectClass());
+			for (Class<? extends ModelSlot<?>> msClass : msClasses) {
+				MDModelSlotGenerator<?> msGenerator = (MDModelSlotGenerator<?>) getGenerator(msClass);
+				returned.add(new File(msGenerator.getBehavioursDirectory(), generator.getObjectClass().getSimpleName() + ".md"));
+			}
+			return returned;
+		}
+		else if (generator instanceof MDEditionActionGenerator) {
+			List<File> returned = new ArrayList<>();
+			List<Class<? extends ModelSlot<?>>> msClasses = getTechnologyAdapterService()
+					.getModelSlotClassesForEditionAction(((MDEditionActionGenerator<?>) generator).getObjectClass());
+			for (Class<? extends ModelSlot<?>> msClass : msClasses) {
+				MDModelSlotGenerator<?> msGenerator = (MDModelSlotGenerator<?>) getGenerator(msClass);
+				returned.add(new File(msGenerator.getEditionActionsDirectory(), generator.getObjectClass().getSimpleName() + ".md"));
+			}
+			return returned;
+		}
+		else if (generator instanceof MDFetchRequestGenerator) {
+			List<File> returned = new ArrayList<>();
+			List<Class<? extends ModelSlot<?>>> msClasses = getTechnologyAdapterService()
+					.getModelSlotClassesForEditionAction(((MDFetchRequestGenerator<?>) generator).getObjectClass());
+			for (Class<? extends ModelSlot<?>> msClass : msClasses) {
+				MDModelSlotGenerator<?> msGenerator = (MDModelSlotGenerator<?>) getGenerator(msClass);
+				returned.add(new File(msGenerator.getFetchRequestsDirectory(), generator.getObjectClass().getSimpleName() + ".md"));
+			}
+			return returned;
+		}
+		return Collections.singletonList(new File(getMDDir(), generator.getObjectClass().getSimpleName() + ".md"));
+	}
+
+	public File getModelSlotDirectory(Class<? extends ModelSlot> msClass) {
+		return new File(getMDDir(), msClass.getSimpleName());
 	}
 
 	public File getMDDir() {

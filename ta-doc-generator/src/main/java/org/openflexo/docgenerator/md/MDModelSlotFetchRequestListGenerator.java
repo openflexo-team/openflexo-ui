@@ -39,6 +39,8 @@
 package org.openflexo.docgenerator.md;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.docgenerator.ModelSlotGenerator;
@@ -55,10 +57,13 @@ public class MDModelSlotFetchRequestListGenerator<MS extends ModelSlot<?>> exten
 	private static final Logger logger = FlexoLogger.getLogger(MDModelSlotFetchRequestListGenerator.class.getPackage().getName());
 
 	private MS ms;
+	private MDModelSlotGenerator<?> msGenerator;
 
-	public MDModelSlotFetchRequestListGenerator(Class<MS> objectClass, MDMasterGenerator<?> taDocGenerator) {
+	public MDModelSlotFetchRequestListGenerator(Class<MS> objectClass, MDModelSlotGenerator<?> msGenerator,
+			MDMasterGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
 		ms = getFMLModelFactory().newInstance(getObjectClass());
+		this.msGenerator = msGenerator;
 	}
 
 	@Override
@@ -66,9 +71,14 @@ public class MDModelSlotFetchRequestListGenerator<MS extends ModelSlot<?>> exten
 		return (MDMasterGenerator<?>) super.getMasterGenerator();
 	}
 
+	public MDModelSlotGenerator<?> getModelSlotGenerator() {
+		return msGenerator;
+	}
+
 	@Override
-	protected File getFileToBeGenerated() {
-		return new File(getMDDir(), getObjectClass().getSimpleName() + "_fetch_requests.md");
+	public List<File> getFilesToBeGenerated() {
+		return Collections.singletonList(
+				new File(getModelSlotGenerator().getFetchRequestsDirectory(), getObjectClass().getSimpleName() + "_fetch_requests.md"));
 	}
 
 	@Override

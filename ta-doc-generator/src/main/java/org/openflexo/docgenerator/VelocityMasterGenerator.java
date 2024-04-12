@@ -39,6 +39,7 @@
 package org.openflexo.docgenerator;
 
 import java.io.File;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.apache.velocity.app.VelocityEngine;
@@ -60,7 +61,8 @@ public abstract class VelocityMasterGenerator<TA extends TechnologyAdapter<TA>> 
 	// The VelocityEngine to use for all generators whose master generator is this
 	private VelocityEngine velocityEngine;
 
-	public VelocityMasterGenerator(Class<TA> taClass, String repositoryName, String mainProjectName, ApplicationContext applicationContext) {
+	public VelocityMasterGenerator(Class<TA> taClass, String repositoryName, String mainProjectName,
+			ApplicationContext applicationContext) {
 
 		super(taClass, repositoryName, mainProjectName, applicationContext);
 		velocityEngine = new VelocityEngine();
@@ -87,6 +89,6 @@ public abstract class VelocityMasterGenerator<TA extends TechnologyAdapter<TA>> 
 	 * @param generator
 	 * @return
 	 */
-	public abstract File getFileToBeGenerated(AbstractGenerator<?> generator);
+	public abstract List<File> getFilesToBeGenerated(AbstractGenerator<?> generator);
 
 }

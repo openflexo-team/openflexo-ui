@@ -41,6 +41,7 @@ package org.openflexo.docgenerator;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.apache.velocity.Template;
@@ -58,16 +59,16 @@ public abstract class VelocityGenerator<O/* extends FMLObject*/> extends Abstrac
 
 	private static final Logger logger = FlexoLogger.getLogger(VelocityGenerator.class.getPackage().getName());
 
-	private File generatedFile;
+	// private List<File> generatedFiles;
 
 	public VelocityGenerator(Class<O> objectClass, VelocityMasterGenerator<?> masterGenerator) {
 		super(objectClass, masterGenerator);
-		generatedFile = getFileToBeGenerated();
+		// generatedFiles = getFilesToBeGenerated();
 		// System.out.println("Will generate: " + generatedFile.getAbsolutePath());
 	}
 
-	protected File getFileToBeGenerated() {
-		return getMasterGenerator().getFileToBeGenerated(this);
+	public List<File> getFilesToBeGenerated() {
+		return getMasterGenerator().getFilesToBeGenerated(this);
 	}
 
 	@Override
@@ -87,9 +88,9 @@ public abstract class VelocityGenerator<O/* extends FMLObject*/> extends Abstrac
 	 * 
 	 * @return
 	 */
-	public File getGeneratedFile() {
-		return generatedFile;
-	}
+	/*public List<File> getGeneratedFiles() {
+		return generatedFiles;
+	}*/
 
 	/**
 	 * Applies Velocity template to generate contents
@@ -117,13 +118,16 @@ public abstract class VelocityGenerator<O/* extends FMLObject*/> extends Abstrac
 	@Override
 	public String generate() {
 		String contents = generateContents();
-		if (generatedFile != null) {
-			try {
-				FileUtils.saveToFile(generatedFile, contents);
-				logger.info("Generated " + generatedFile.getName() + " in " + generatedFile.getParentFile().getAbsolutePath());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		List<File> generatedFiles = getFilesToBeGenerated();
+		if (generatedFiles != null) {
+			for (File generatedFile : generatedFiles) {
+				try {
+					FileUtils.saveToFile(generatedFile, contents);
+					logger.info("Generated " + generatedFile.getName() + " in " + generatedFile.getParentFile().getAbsolutePath());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		// System.out.println(contents);

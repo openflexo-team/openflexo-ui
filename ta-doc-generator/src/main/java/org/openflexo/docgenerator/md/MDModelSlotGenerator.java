@@ -63,10 +63,10 @@ public class MDModelSlotGenerator<MS extends ModelSlot<?>> extends ModelSlotGene
 	public MDModelSlotGenerator(Class<MS> objectClass, MDMasterGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
 		ms = getFMLModelFactory().newInstance(getObjectClass());
-		roleListGenerator = new MDModelSlotRoleListGenerator<>(objectClass, taDocGenerator);
-		behaviourListGenerator = new MDModelSlotBehaviourListGenerator<>(objectClass, taDocGenerator);
-		editionActionListGenerator = new MDModelSlotEditionActionListGenerator<>(objectClass, taDocGenerator);
-		fetchRequestListGenerator = new MDModelSlotFetchRequestListGenerator<>(objectClass, taDocGenerator);
+		roleListGenerator = new MDModelSlotRoleListGenerator<>(objectClass, this, taDocGenerator);
+		behaviourListGenerator = new MDModelSlotBehaviourListGenerator<>(objectClass, this, taDocGenerator);
+		editionActionListGenerator = new MDModelSlotEditionActionListGenerator<>(objectClass, this, taDocGenerator);
+		fetchRequestListGenerator = new MDModelSlotFetchRequestListGenerator<>(objectClass, this, taDocGenerator);
 	}
 
 	@Override
@@ -74,6 +74,7 @@ public class MDModelSlotGenerator<MS extends ModelSlot<?>> extends ModelSlotGene
 		return (MDMasterGenerator<?>) super.getMasterGenerator();
 	}
 
+	@Override
 	public File getMDDir() {
 		return getMasterGenerator().getMDDir();
 	}
@@ -91,6 +92,22 @@ public class MDModelSlotGenerator<MS extends ModelSlot<?>> extends ModelSlotGene
 		editionActionListGenerator.generate();
 		fetchRequestListGenerator.generate();
 		return returned;
+	}
+
+	public File getRolesDirectory() {
+		return new File(getMasterGenerator().getModelSlotDirectory(getObjectClass()), "Roles");
+	}
+
+	public File getBehavioursDirectory() {
+		return new File(getMasterGenerator().getModelSlotDirectory(getObjectClass()), "Behaviours");
+	}
+
+	public File getEditionActionsDirectory() {
+		return new File(getMasterGenerator().getModelSlotDirectory(getObjectClass()), "EditionActions");
+	}
+
+	public File getFetchRequestsDirectory() {
+		return new File(getMasterGenerator().getModelSlotDirectory(getObjectClass()), "FetchRequests");
 	}
 
 }

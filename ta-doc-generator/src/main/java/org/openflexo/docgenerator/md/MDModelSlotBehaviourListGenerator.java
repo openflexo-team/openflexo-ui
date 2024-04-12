@@ -39,6 +39,8 @@
 package org.openflexo.docgenerator.md;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.docgenerator.ModelSlotGenerator;
@@ -54,10 +56,13 @@ public class MDModelSlotBehaviourListGenerator<MS extends ModelSlot<?>> extends 
 	private static final Logger logger = FlexoLogger.getLogger(MDModelSlotBehaviourListGenerator.class.getPackage().getName());
 
 	private MS ms;
+	private MDModelSlotGenerator<?> msGenerator;
 
-	public MDModelSlotBehaviourListGenerator(Class<MS> objectClass, MDMasterGenerator<?> taDocGenerator) {
+	public MDModelSlotBehaviourListGenerator(Class<MS> objectClass, MDModelSlotGenerator<?> msGenerator,
+			MDMasterGenerator<?> taDocGenerator) {
 		super(objectClass, taDocGenerator);
 		ms = getFMLModelFactory().newInstance(getObjectClass());
+		this.msGenerator = msGenerator;
 	}
 
 	@Override
@@ -65,9 +70,14 @@ public class MDModelSlotBehaviourListGenerator<MS extends ModelSlot<?>> extends 
 		return (MDMasterGenerator<?>) super.getMasterGenerator();
 	}
 
+	public MDModelSlotGenerator<?> getModelSlotGenerator() {
+		return msGenerator;
+	}
+
 	@Override
-	protected File getFileToBeGenerated() {
-		return new File(getMDDir(), getObjectClass().getSimpleName() + "_behaviours.md");
+	public List<File> getFilesToBeGenerated() {
+		return Collections.singletonList(
+				new File(getModelSlotGenerator().getBehavioursDirectory(), getObjectClass().getSimpleName() + "_behaviours.md"));
 	}
 
 	@Override

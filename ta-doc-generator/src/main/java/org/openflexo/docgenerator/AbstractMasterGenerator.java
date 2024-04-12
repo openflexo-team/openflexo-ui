@@ -114,8 +114,12 @@ public abstract class AbstractMasterGenerator<TA extends TechnologyAdapter<TA>> 
 		generators = new HashMap<>();
 		taGenerator = makeTechnologyAdapterGenerator(taClass);
 		for (Class<?> modelSlotClass : technologyAdapter.getAvailableModelSlotTypes()) {
-			prepareDocGenerationForModelSlot((Class) modelSlotClass);
+			declareChild(taGenerator, prepareDocGenerationForModelSlot((Class) modelSlotClass));
 		}
+	}
+
+	private void declareChild(AbstractGenerator<?> parent, AbstractGenerator<?> child) {
+		System.out.println("Parent: " + parent.getObjectClass() + " child: " + child.getObjectClass());
 	}
 
 	protected void initFilePaths() {
@@ -194,49 +198,52 @@ public abstract class AbstractMasterGenerator<TA extends TechnologyAdapter<TA>> 
 		}
 	}
 
-	private void prepareDocGenerationForModelSlot(Class<? extends ModelSlot<?>> modelSlotClass) {
+	private AbstractGenerator<?> prepareDocGenerationForModelSlot(Class<? extends ModelSlot<?>> modelSlotClass) {
 		// System.out.println("ModelSlot class : " + modelSlotClass);
 		AbstractGenerator<?> generator = makeModelSlotGenerator(modelSlotClass);
 		generators.put(modelSlotClass, generator);
 		for (Class<? extends FlexoRole<?>> roleClass : technologyAdapterService.getAvailableFlexoRoleTypes(modelSlotClass)) {
-			prepareDocGenerationForRole(roleClass);
+			declareChild(generator, prepareDocGenerationForRole(roleClass));
 		}
 		for (Class<? extends FlexoBehaviour> behaviourClass : technologyAdapterService.getAvailableFlexoBehaviourTypes(modelSlotClass)) {
-			prepareDocGenerationForBehaviour(behaviourClass);
+			declareChild(generator, prepareDocGenerationForBehaviour(behaviourClass));
 		}
 		for (Class<? extends EditionAction> editionActionClass : technologyAdapterService.getAvailableEditionActionTypes(modelSlotClass)) {
-			prepareDocGenerationForEditionAction(editionActionClass);
+			declareChild(generator, prepareDocGenerationForEditionAction(editionActionClass));
 		}
 		for (Class<? extends FetchRequest<?, ?, ?>> fetchRequestClass : technologyAdapterService
 				.getAvailableFetchRequestActionTypes(modelSlotClass)) {
-			prepareDocGenerationForFetchRequest(fetchRequestClass);
+			declareChild(generator, prepareDocGenerationForFetchRequest(fetchRequestClass));
 		}
+		return generator;
 	}
 
-	private void prepareDocGenerationForRole(Class<? extends FlexoRole<?>> roleClass) {
+	private AbstractGenerator<?> prepareDocGenerationForRole(Class<? extends FlexoRole<?>> roleClass) {
 		// System.out.println(" > Role: " + roleClass);
 		AbstractGenerator<?> generator = makeFlexoRoleGenerator(roleClass);
 		generators.put(roleClass, generator);
+		return generator;
 	}
 
-	private void prepareDocGenerationForBehaviour(Class<? extends FlexoBehaviour> behaviourClass) {
+	private AbstractGenerator<?> prepareDocGenerationForBehaviour(Class<? extends FlexoBehaviour> behaviourClass) {
 		// System.out.println(" > Behaviour: " + behaviourClass);
 		AbstractGenerator<?> generator = makeFlexoBehaviourGenerator(behaviourClass);
 		generators.put(behaviourClass, generator);
+		return generator;
 	}
 
-	private void prepareDocGenerationForEditionAction(Class<? extends EditionAction> editionActionClass) {
+	private AbstractGenerator<?> prepareDocGenerationForEditionAction(Class<? extends EditionAction> editionActionClass) {
 		// System.out.println(" > EditionAction: " + editionActionClass);
 		AbstractGenerator<?> generator = makeEditionActionGenerator(editionActionClass);
 		generators.put(editionActionClass, generator);
-
+		return generator;
 	}
 
-	private void prepareDocGenerationForFetchRequest(Class<? extends FetchRequest<?, ?, ?>> fetchRequestClass) {
+	private AbstractGenerator<?> prepareDocGenerationForFetchRequest(Class<? extends FetchRequest<?, ?, ?>> fetchRequestClass) {
 		// System.out.println(" > FetchRequest: " + fetchRequestClass);
 		AbstractGenerator<?> generator = makeFetchRequestGenerator(fetchRequestClass);
 		generators.put(fetchRequestClass, generator);
-
+		return generator;
 	}
 
 	protected abstract AbstractGenerator<TA> makeTechnologyAdapterGenerator(Class<TA> taClass);

@@ -39,7 +39,9 @@
 package org.openflexo.docgenerator.html;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -95,8 +97,9 @@ public class HTMLMasterGenerator<TA extends TechnologyAdapter<TA>> extends Veloc
 	}
 
 	@Override
-	public File getFileToBeGenerated(AbstractGenerator<?> generator) {
-		return new File(getHTMLDocDirectory(), generator.getObjectClass().getSimpleName() + ".html");
+	public List<File> getFilesToBeGenerated(AbstractGenerator<?> generator) {
+
+		return Collections.singletonList(new File(getHTMLDocDirectory(), generator.getObjectClass().getSimpleName() + ".html"));
 	}
 
 	@Override
