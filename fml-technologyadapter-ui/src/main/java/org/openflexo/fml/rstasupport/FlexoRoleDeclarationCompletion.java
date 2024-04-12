@@ -41,7 +41,8 @@ public class FlexoRoleDeclarationCompletion<FR extends FlexoRole<?>> extends FML
 
 	private static TechnologyAdapter<?> getTechnologyAdapter(FMLSourceCompletionProvider provider,
 			Class<? extends FlexoRole<?>> roleClass) {
-		Class<? extends ModelSlot<?>> msClass = provider.getServiceManager().getTechnologyAdapterService().getModelSlotClass(roleClass);
+		Class<? extends ModelSlot<?>> msClass = provider.getServiceManager().getTechnologyAdapterService()
+				.getModelSlotClassesForFlexoRole(roleClass).get(0);
 		return provider.getServiceManager().getTechnologyAdapterService().getTechnologyAdapterForModelSlot(msClass);
 	}
 
