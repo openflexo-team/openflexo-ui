@@ -1,0 +1,121 @@
+\subsection[\textsf{$generator.getFMLKeyword()}]{$generator.getBigIconReference() \textsf{$generator.getFMLKeyword()}}
+\label{ta:$generator.getFMLKeyword()}
+
+%\begin{tabular}{l b{14cm}}
+%	$generator.getBigIconReference() & 
+%	$generator.toLatex($generator.getFMLShortDescription())\\
+%\end{tabular}
+%$generator.toLatex($generator.getFMLRemainingDescription())
+
+$generator.toLatex($generator.getFMLDescription())
+
+\subsubsection{Usage}
+
+\begin{lstlisting}
+$generator.toCode($generator.getUsage(false))
+\end{lstlisting}
+or
+\begin{lstlisting}
+$generator.toCode($generator.getUsage(true))
+\end{lstlisting}
+where
+\begin{itemize}
+	\item \texttt{visibility} is default (unspecified), \texttt{public}, \texttt{protected} or \texttt{private}
+	\item \texttt{cardinality} is [0,1] (unspecified), [0,*] or [1,*]
+	\item $<$\texttt{identifier}$>$ is the name of declared model slot variable
+#foreach($fmlProperty in $generator.getFMLProperties())
+#if ($fmlProperty.isRequired())
+	\item $<$\texttt{$generator.toLatex($fmlProperty.getPathNameInUsage())}$>$ addresses a \texttt{$generator.toLatex($generator.getPropertyTypeAsString($fmlProperty))}
+#end
+#end
+\end{itemize}
+
+\textbf{Configuration :}
+
+\begin{tabular}{|l|l|l|}
+	\hline
+	Property & Type & Required \\
+	\hline
+	#foreach($fmlProperty in $generator.getFMLProperties())
+	\texttt{$generator.toLatex($fmlProperty.getLabel())} & \texttt{$generator.toLatex($generator.getPropertyTypeAsString($fmlProperty))} & #if ($fmlProperty.isRequired()) yes #else no #end \\
+	#end
+	\hline
+\end{tabular}
+
+\begin{itemize}
+#foreach($fmlProperty in $generator.getFMLProperties())
+	\item \texttt{$generator.toLatex($fmlProperty.getLabel())} : $generator.toLatex($fmlProperty.getDescription())
+#end
+\end{itemize}
+
+\textbf{Examples :}
+
+#foreach($usageExample in $generator.getFMLExamples())
+\begin{lstlisting}
+$generator.toCode($usageExample.example())
+\end{lstlisting}
+
+$generator.toLatex($usageExample.description())
+#end
+
+#set ($availableFlexoRoleTypes = $generator.getTechnologyAdapterService().getAvailableFlexoRoleTypes($generator.getObjectClass()))
+#if ($availableFlexoRoleTypes.size()>0)
+\textbf{Roles :}
+\begin{itemize}
+#foreach($roleClass in $availableFlexoRoleTypes)
+#set ($generatorReference = $generator.getReference($roleClass))
+	\item $generatorReference.getSmallIconReference() \textsf{$generatorReference.getFMLKeyword()} (section \ref{ta:$generatorReference.getFMLKeyword()}) : $generator.toLatex($generatorReference.getFMLShortDescription())
+#end
+\end{itemize}
+#end
+
+#set ($availableFlexoBehaviourTypes = $generator.getTechnologyAdapterService().getAvailableFlexoBehaviourTypes($generator.getObjectClass()))
+#if ($availableFlexoBehaviourTypes.size()>0)
+\textbf{Behaviours :}
+\begin{itemize}
+#foreach($behaviourClass in $availableFlexoBehaviourTypes)
+#set ($generatorReference = $generator.getReference($behaviourClass))
+	\item $generatorReference.getSmallIconReference() \textsf{$generatorReference.getFMLKeyword()} (section \ref{ta:$generatorReference.getFMLKeyword()}) : $generator.toLatex($generatorReference.getFMLShortDescription())
+#end
+\end{itemize}
+#end
+
+#set ($availableEditionActionTypes = $generator.getTechnologyAdapterService().getAvailableEditionActionTypes($generator.getObjectClass()))
+#if ($availableEditionActionTypes.size()>0)
+\textbf{Edition actions :}
+\begin{itemize}
+#foreach($editionActionClass in $availableEditionActionTypes)
+#set ($generatorReference = $generator.getReference($editionActionClass))
+	\item $generatorReference.getSmallIconReference() \textsf{$generatorReference.getFMLKeyword()} (section \ref{ta:$generatorReference.getFMLKeyword()}) : $generator.toLatex($generatorReference.getFMLShortDescription())
+#end
+\end{itemize}
+#end
+
+#set ($availableFetchRequestsTypes = $generator.getTechnologyAdapterService().getAvailableFetchRequestTypes($generator.getObjectClass()))
+#if ($availableFetchRequestsTypes.size()>0)
+\textbf{Fetch requests :}
+\begin{itemize}
+#foreach($fetchRequestClass in $availableFetchRequestsTypes)
+#set ($generatorReference = $generator.getReference($fetchRequestClass))
+	\item $generatorReference.getSmallIconReference() \textsf{$generatorReference.getFMLKeyword()} (section \ref{ta:$generatorReference.getFMLKeyword()}) : $generator.toLatex($generatorReference.getFMLShortDescription())
+#end
+\end{itemize}
+#end
+
+#set ($references = $generator.getReferences())
+#if ($references.size()>0)
+\textbf{See also :}
+
+\begin{itemize}
+#foreach($reference in $references)
+#set ($generatorReference = $generator.getReference($reference.value()))
+	\item $generatorReference.getSmallIconReference() \textsf{$generatorReference.getFMLKeyword()} (section \ref{ta:$generatorReference.getFMLKeyword()}) : $generator.toLatex($generatorReference.getFMLShortDescription())
+#end
+\end{itemize}
+#end
+
+
+
+
+
+

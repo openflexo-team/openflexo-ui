@@ -1,0 +1,71 @@
+\subsubsection[\textsf{$generator.getFMLKeyword()}]{$generator.getBigIconReference() \textsf{$generator.getFMLKeyword()}}
+\label{ta:$generator.getFMLKeyword()}
+
+$generator.toLatex($generator.getFMLDescription())
+
+\textbf{Usage :}
+
+\begin{lstlisting}
+$generator.toCode($generator.getUsage(false))
+\end{lstlisting}
+or
+\begin{lstlisting}
+$generator.toCode($generator.getUsage(true))
+\end{lstlisting}
+where
+\begin{itemize}
+	\item \texttt{visibility} is default (unspecified), \texttt{public}, \texttt{protected} or \texttt{private}
+	\item \texttt{cardinality} is [0,1] (unspecified), [0,*] or [1,*]
+	\item $<$\texttt{identifier}$>$ is the name of declared role variable
+#foreach($fmlProperty in $generator.getFMLProperties())
+#if ($fmlProperty.isRequired())
+	\item $<$\texttt{$generator.toLatex($fmlProperty.getPathNameInUsage())}$>$ addresses a \texttt{$generator.toLatex($generator.getPropertyTypeAsString($fmlProperty))}
+#end
+#end
+\end{itemize}
+
+\textbf{Configuration :}
+
+\begin{tabular}{|l|l|l|}
+	\hline
+	Property & Type & Required \\
+	\hline
+	#foreach($fmlProperty in $generator.getFMLProperties())
+	\texttt{$generator.toLatex($fmlProperty.getLabel())} & \texttt{$generator.toLatex($generator.getPropertyTypeAsString($fmlProperty))} & #if ($fmlProperty.isRequired()) yes #else no #end \\
+	#end
+	\hline
+\end{tabular}
+
+\begin{itemize}
+#foreach($fmlProperty in $generator.getFMLProperties())
+	\item \texttt{$generator.toLatex($fmlProperty.getLabel())} : $generator.toLatex($fmlProperty.getDescription())
+#end
+\end{itemize}
+
+\textbf{Examples :}
+
+#foreach($usageExample in $generator.getFMLExamples())
+\begin{lstlisting}
+$generator.toCode($usageExample.example())
+\end{lstlisting}
+
+$generator.toLatex($usageExample.description())
+#end
+
+#set ($references = $generator.getReferences())
+#if ($references.size()>0)
+\textbf{See also :}
+
+\begin{itemize}
+#foreach($reference in $references)
+#set ($generatorReference = $generator.getReference($reference.value()))
+	\item $generatorReference.getSmallIconReference() \textsf{$generatorReference.getFMLKeyword()} (section \ref{ta:$generatorReference.getFMLKeyword()}) : $generator.toLatex($generatorReference.getFMLShortDescription())
+#end
+\end{itemize}
+#end
+
+
+
+
+
+

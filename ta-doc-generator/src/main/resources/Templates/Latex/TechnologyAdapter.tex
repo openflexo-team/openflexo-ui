@@ -1,0 +1,39 @@
+\section{$generator.getTechnologyAdapterName()}
+\label{ta:$generator.getTechnologyAdapter().getIdentifier()}
+
+%$generator.getHTMLBigImage()
+
+$generator.toLatex($generator.getTechnologyAdapterDescription())
+
+
+#set ($availableModelSlotTypes = $generator.getTechnologyAdapter().getAvailableModelSlotTypes())
+
+#foreach($msClass in $availableModelSlotTypes)
+#set ($msGeneratorReference = $generator.getReference($msClass))
+\input{$msGeneratorReference.getLocalFileName()}
+
+#set ($availableFlexoRoleTypes = $generator.getTechnologyAdapterService().getAvailableFlexoRoleTypes($msGeneratorReference.getObjectClass()))
+#foreach($roleClass in $availableFlexoRoleTypes)
+#set ($generatorReference = $generator.getReference($roleClass))
+\input{$generatorReference.getLocalFileName()}
+#end
+
+#set ($availableFlexoBehaviourTypes = $generator.getTechnologyAdapterService().getAvailableFlexoBehaviourTypes($msGeneratorReference.getObjectClass()))
+#foreach($behaviourClass in $availableFlexoBehaviourTypes)
+#set ($generatorReference = $generator.getReference($behaviourClass))
+\input{$generatorReference.getLocalFileName()}
+#end
+
+#set ($availableEditionActionTypes = $generator.getTechnologyAdapterService().getAvailableEditionActionTypes($msGeneratorReference.getObjectClass()))
+#foreach($editionActionClass in $availableEditionActionTypes)
+#set ($generatorReference = $generator.getReference($editionActionClass))
+\input{$generatorReference.getLocalFileName()}
+#end
+
+#set ($availableFetchRequestsTypes = $generator.getTechnologyAdapterService().getAvailableFetchRequestTypes($msGeneratorReference.getObjectClass()))
+#foreach($fetchRequestClass in $availableFetchRequestsTypes)
+#set ($generatorReference = $generator.getReference($fetchRequestClass))
+\input{$generatorReference.getLocalFileName()}
+#end
+
+#end

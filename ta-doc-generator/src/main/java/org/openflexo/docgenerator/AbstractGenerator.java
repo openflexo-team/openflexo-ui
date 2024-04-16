@@ -201,6 +201,25 @@ public abstract class AbstractGenerator<O> {
 		return "No documentation yet";
 	}
 
+	/**
+	 * Return short description of represented FML class : short description is the first paragraph
+	 * 
+	 * @return
+	 */
+	public final String getFMLRemainingDescription() {
+		if (getFMLEntity() != null) {
+			String returned = getFMLEntity().getFmlAnnotation().description();
+			if (StringUtils.isEmpty(returned)) {
+				return "";
+			}
+			if (returned.contains("<br>")) {
+				returned = returned.substring(returned.indexOf("<br>") + 4);
+			}
+			return returned;
+		}
+		return "No documentation yet";
+	}
+
 	public List<UsageExample> getFMLExamples() {
 		if (getFMLEntity() != null) {
 			return Arrays.asList(getFMLEntity().getFmlAnnotation().examples());
