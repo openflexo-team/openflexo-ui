@@ -88,6 +88,8 @@ import org.openflexo.foundation.fml.rt.editionaction.SelectUniqueVirtualModelIns
 import org.openflexo.foundation.fml.rt.editionaction.SelectVirtualModelInstance;
 import org.openflexo.foundation.nature.ProjectNature;
 import org.openflexo.foundation.nature.ProjectNatureService;
+import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
@@ -734,6 +736,44 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<T
 
 	public Class<? extends TechnologyAdapterPreferences<TA>> getPreferencesClass() {
 		return null;
+	}
+
+	/**
+	 * Implement a technology-specific policy for displaying resource folders
+	 * 
+	 * Return boolean indicating if supplied folder should be displayed in this technology, asserting this folder contains some resources of
+	 * this technology
+	 * 
+	 * @param folder
+	 * @return
+	 */
+	public boolean shouldBeDisplayed(RepositoryFolder<?, ?> folder) {
+
+		if (folder.isRootFolder()) {
+			return true;
+		}
+		if (folder.getResources().size() == 0) {
+			if (folder.getChildren().size() == 0) {
+				return false;
+			}
+			for (RepositoryFolder<?, ?> childFolder : new ArrayList<>(folder.getChildren())) {
+				if (shouldBeDisplayed(childFolder)) {
+					return true;
+				}
+			}
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Returns boolean indicating whether contents of this resource should be displayed
+	 * 
+	 * @param resource
+	 * @return
+	 */
+	public boolean shouldDisplayContents(FlexoResource<?> resource) {
+		return resource.isLoaded();
 	}
 
 }

@@ -44,8 +44,10 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -86,6 +88,7 @@ import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.gina.controller.FIBController;
 import org.openflexo.gina.controller.FIBSelectable;
@@ -569,8 +572,37 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 		return presPref.hideEmptyFolders();
 	}
 
+	/**
+	 * Implements display policy for folder
+	 * 
+	 * @param folder
+	 * @return
+	 */
 	@NotificationUnsafe
 	public boolean shouldBeDisplayed(RepositoryFolder<?, ?> folder) {
+
+		// First look if the technology adapters may handle this
+		Set<TechnologyAdapter<?>> concernedTechnologyAdapters = getConcernedTechnologyAdapters(folder);
+		if (concernedTechnologyAdapters != null && concernedTechnologyAdapters.size() > 0) {
+			// OK, we delegate this decision to the technology adapters
+			boolean hideThisFolder = false;
+			for (TechnologyAdapter technologyAdapter : concernedTechnologyAdapters) {
+				TechnologyAdapterController tac = getServiceManager().getTechnologyAdapterControllerService()
+						.getTechnologyAdapterController(technologyAdapter);
+				if (tac != null) {
+					if (tac.shouldBeDisplayed(folder)) {
+						return true;
+					}
+					else {
+						hideThisFolder = true;
+					}
+				}
+			}
+			if (hideThisFolder) {
+				return false;
+			}
+		}
+
 		// Folders representing a VirtualModel should not be displayed here
 		if (folder.getName().endsWith(CompilationUnitResourceFactory.FML_SUFFIX)) {
 			return false;
@@ -593,6 +625,53 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 			return false;
 		}
 		return true;
+	}
+
+	@NotificationUnsafe
+	public boolean shouldDisplayContents(FlexoResource<?> resource) {
+		if (resource instanceof TechnologyAdapterResource) {
+			TechnologyAdapter ta = ((TechnologyAdapterResource) resource).getTechnologyAdapter();
+			TechnologyAdapterController tac = getServiceManager().getTechnologyAdapterControllerService()
+					.getTechnologyAdapterController(ta);
+			if (tac != null) {
+				return tac.shouldDisplayContents(resource);
+			}
+		}
+		return resource.isLoaded();
+	}
+
+	/**
+	 * Internaly used to compute TAs which are involved in a folder
+	 * 
+	 * @param folder
+	 * @return
+	 */
+	private Set<TechnologyAdapter<?>> getConcernedTechnologyAdapters(RepositoryFolder<?, ?> folder) {
+		Set<TechnologyAdapter<?>> returned = null;
+		if (folder.getResources() != null && folder.getResources().size() > 0) {
+			returned = new HashSet<>();
+			for (FlexoResource<?> resource : folder.getResources()) {
+				if (resource instanceof TechnologyAdapterResource) {
+					returned.add(((TechnologyAdapterResource) resource).getTechnologyAdapter());
+				}
+			}
+		}
+		if (folder.getChildren() != null && folder.getChildren().size() > 0) {
+			for (RepositoryFolder<?, ?> child : folder.getChildren()) {
+				Set<TechnologyAdapter<?>> childSet = getConcernedTechnologyAdapters(child);
+				if (childSet != null) {
+					if (returned == null) {
+						returned = childSet;
+					}
+					else if (!returned.equals(childSet)) {
+						returned = new HashSet<>(returned);
+						returned.addAll(childSet);
+					}
+				}
+			}
+		}
+		return returned;
+
 	}
 
 	private SelectionManager localSelectionManager;
