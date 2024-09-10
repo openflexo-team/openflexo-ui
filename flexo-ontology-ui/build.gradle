@@ -8,5 +8,6 @@ dependencies {
   // external dep
 
   // testing dep
-   testImplementation flexoUiTest()
+  testImplementation project(':flexo-ui-test')
+  //testImplementation flexoUiTest()
 }
