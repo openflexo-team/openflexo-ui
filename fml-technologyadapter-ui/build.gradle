@@ -2,9 +2,11 @@ dependencies {
   // openflexo dep
   implementation flexoFoundation()
   implementation fmlParser()
-  implementation flexoUi()
+  implementation project(':flexo-ui')
+  //implementation flexoUi()
   implementation flexoOntology()
-  implementation flexoOntologyUi()
+  implementation project(':flexo-ontology-ui')
+  //implementation flexoOntologyUi()
   implementation flexoP2PP();
   // external dep
 
@@ -18,8 +20,9 @@ dependencies {
   //testImplementation project(':flexo-foundation-test')
 
   implementation ginaTest()
-  implementation flexoUiTest()
-  implementation flexoOntologyUi()
+  testImplementation project(':flexo-ui-test')
+  //implementation flexoUiTest()
+  //implementation flexoOntologyUi()
   implementation flexoTestResources()
   implementation flexoFoundationTest()
 //  implementation project(':flexo-ui-test')
