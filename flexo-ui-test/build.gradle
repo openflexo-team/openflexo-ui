@@ -1,7 +1,8 @@
 dependencies {
   // openflexo dep
   implementation flexoFoundation()
-  implementation flexoUi()
+  implementation project(':flexo-ui')
+  //implementation flexoUi()
   implementation testUtils()
   // external dep
 
