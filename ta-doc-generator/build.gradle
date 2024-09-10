@@ -3,5 +3,6 @@ dependencies {
 	api group: 'org.apache.velocity', name: 'velocity-tools', version: '2.0'
 	
     implementation flexoFoundation()
-    implementation flexoUi()
+    implementation project(':flexo-ui')
+    //implementation flexoUi()
 }
