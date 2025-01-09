@@ -1896,7 +1896,12 @@ public abstract class FlexoController implements PropertyChangeListener, HasProp
 				return tac.getIconForTechnologyObject(object);
 			}
 			else {
-				logger.warning("Could not find TechnologyAdapterController for technology " + object.getTechnologyAdapter());
+				if (object.getTechnologyAdapter() == null) {
+					logger.warning("Could not find TechnologyAdapter for object " + object);
+				}
+				else {
+					logger.warning("Could not find TechnologyAdapterController for technology " + object.getTechnologyAdapter());
+				}
 			}
 		}
 		return null;
