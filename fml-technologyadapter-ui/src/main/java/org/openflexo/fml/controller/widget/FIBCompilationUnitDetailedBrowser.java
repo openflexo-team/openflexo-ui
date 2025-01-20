@@ -83,7 +83,7 @@ public class FIBCompilationUnitDetailedBrowser extends FIBBrowserView<FMLCompila
 		SwingUtilities.invokeLater(() -> {
 			if (getFIBView("browser") instanceof JFIBBrowserWidget) {
 				JFIBBrowserWidget<FMLObject> browser = (JFIBBrowserWidget<FMLObject>) getFIBView("browser");
-				browser.performSelect(object, true);
+				browser.performSelect(object, false /* Do not force if it is already selected */);
 			}
 		});
 	}

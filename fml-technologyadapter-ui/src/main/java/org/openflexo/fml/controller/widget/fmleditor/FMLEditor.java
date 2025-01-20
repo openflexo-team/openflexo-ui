@@ -96,14 +96,13 @@ import org.openflexo.foundation.fml.rm.CompilationUnitResource;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.localization.LocalizedDelegate;
-import org.openflexo.p2pp.RawSource.RawSourcePosition;
 import org.openflexo.swing.layout.JXMultiSplitPane;
-import org.openflexo.swing.layout.MultiSplitLayout;
-import org.openflexo.swing.layout.MultiSplitLayoutFactory;
 import org.openflexo.swing.layout.JXMultiSplitPane.DividerPainter;
+import org.openflexo.swing.layout.MultiSplitLayout;
 import org.openflexo.swing.layout.MultiSplitLayout.Divider;
 import org.openflexo.swing.layout.MultiSplitLayout.Leaf;
 import org.openflexo.swing.layout.MultiSplitLayout.Split;
+import org.openflexo.swing.layout.MultiSplitLayoutFactory;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
@@ -210,7 +209,8 @@ public class FMLEditor extends JPanel implements PropertyChangeListener, Hyperli
 				if (e.getClickCount() == 1) {
 					clearHighlights();
 				}
-				if (e.getClickCount() == 2) {
+				// Double-click generates a bad user experience
+				if (e.getClickCount() == 3) {
 					// System.out.println("Open the browser at the right position !!!");
 					// System.out.println("Position: " + textArea.getCaretPosition());
 					// System.out.println("Line number: " + textArea.getCaretLineNumber());
