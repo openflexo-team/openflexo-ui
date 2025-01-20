@@ -44,7 +44,9 @@ public class UseCompletion<MS extends ModelSlot<?>> extends AbstractTemplateComp
 		TechnologyAdapter ta = getTechnologyAdapter(provider, msClass);
 		if (ta.getAvailableModelSlotTypes().size() > 1) {
 			FML annotation = msClass.getAnnotation(FML.class);
-			return JavaUtils.getConstantJavaName(annotation.value());
+			if (annotation != null) {
+				return JavaUtils.getConstantJavaName(annotation.value());
+			}
 		}
 		return ta.getIdentifier();
 	}
