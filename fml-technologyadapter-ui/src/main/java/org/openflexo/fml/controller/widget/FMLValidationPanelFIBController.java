@@ -111,5 +111,6 @@ public class FMLValidationPanelFIBController extends FMLFIBController {
 	@Override
 	public void fixIssue(ValidationIssue<?, ?> issue) {
 		super.fixIssue(issue);
+		parseImmediately();
 	}
 }
