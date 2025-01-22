@@ -396,6 +396,11 @@ public class FlexoConceptTypeEditor extends FMLCustomTypeEditor<FlexoConceptType
 		return new FlexoConceptTypeEditorFIBController(component, this, controller);
 	}
 
+	@Override
+	public void updateEditedType(FlexoConceptType type) {
+		// TODO Auto-generated method stub
+	}
+
 	public static class FlexoConceptTypeEditorFIBController extends SelectorFIBController {
 		// Unused private DefaultCustomTypeEditorImpl<?> editor;
 

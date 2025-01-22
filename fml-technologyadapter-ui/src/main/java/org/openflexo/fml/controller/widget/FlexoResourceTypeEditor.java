@@ -124,6 +124,11 @@ public class FlexoResourceTypeEditor extends DefaultCustomTypeEditorImpl<FlexoRe
 		return new ResourceTypeSelectorFIBController(component, this, controller);
 	}
 
+	@Override
+	public void updateEditedType(FlexoResourceType type) {
+		// TODO Auto-generated method stub
+	}
+
 	public static class ResourceTypeSelectorFIBController extends SelectorFIBController {
 		public ResourceTypeSelectorFIBController(FIBComponent component, GinaViewFactory<?> viewFactory) {
 			super(component, viewFactory);

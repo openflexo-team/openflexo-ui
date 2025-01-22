@@ -88,4 +88,9 @@ public class FlexoEnumTypeEditor extends FMLCustomTypeEditor<FlexoEnumType> {
 	public FlexoEnumType getEditedType() {
 		return FlexoEnumType.getFlexoEnumType(getSelectedFlexoEnum());
 	}
+
+	@Override
+	public void updateEditedType(FlexoEnumType type) {
+		// TODO Auto-generated method stub
+	}
 }

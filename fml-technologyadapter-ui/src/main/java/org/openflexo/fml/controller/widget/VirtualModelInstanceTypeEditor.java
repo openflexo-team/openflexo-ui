@@ -90,4 +90,9 @@ public class VirtualModelInstanceTypeEditor extends FMLCustomTypeEditor<VirtualM
 		}
 		return VirtualModelInstanceType.UNDEFINED_VIRTUAL_MODEL_INSTANCE_TYPE;
 	}
+
+	@Override
+	public void updateEditedType(VirtualModelInstanceType type) {
+		// TODO Auto-generated method stub
+	}
 }

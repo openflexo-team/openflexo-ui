@@ -86,4 +86,10 @@ public class FlexoConceptInstanceTypeEditor extends FMLCustomTypeEditor<FlexoCon
 	public FlexoConceptInstanceType getEditedType() {
 		return FlexoConceptInstanceType.getFlexoConceptInstanceType(getSelectedFlexoConcept());
 	}
+
+	@Override
+	public void updateEditedType(FlexoConceptInstanceType type) {
+		// TODO Auto-generated method stub
+	}
+
 }

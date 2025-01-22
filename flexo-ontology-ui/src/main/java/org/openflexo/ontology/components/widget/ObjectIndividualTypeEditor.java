@@ -321,4 +321,9 @@ public class ObjectIndividualTypeEditor<TA extends TechnologyAdapter<TA>, I exte
 		return o != null && StringUtils.isNotEmpty(o.getName()) && (o.getName()).toUpperCase().indexOf(filteredName.toUpperCase()) > -1;
 	}
 
+	@Override
+	public void updateEditedType(IC type) {
+		// TODO Auto-generated method stub
+	}
+
 }
