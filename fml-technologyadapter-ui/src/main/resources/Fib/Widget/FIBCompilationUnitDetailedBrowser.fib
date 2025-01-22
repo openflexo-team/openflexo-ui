@@ -27,6 +27,7 @@
 				<Children data="compilationUnit.useDeclarations" name="useDeclarations" />
 				<Children data="compilationUnit.javaImports" name="javaImports" />
 				<Children data="compilationUnit.elementImports" name="elementImports" />
+				<Children data="compilationUnit.typeDeclarations" name="typeDeclarations" />
 				<Children data="compilationUnit.virtualModel" name="virtuaModel" />
 			</BrowserElement>
 			<BrowserElement
@@ -44,6 +45,11 @@
 				label="&quot;import &quot;+elementImport.abbrev" 
 				icon="controller.iconForObject(elementImport)"
 				isEditable="false" name="elementImport" />
+			<BrowserElement
+				dataClassName="org.openflexo.foundation.fml.TypeDeclaration"
+				label="&quot;typedef &quot;+typedef.abbrev" 
+				icon="controller.iconForObject(typedef)"
+				isEditable="false" name="typedef" />
 			<BrowserElement id="7"
 				dataClassName="org.openflexo.foundation.fml.VirtualModel"
 				icon="controller.iconForObject(virtualModel)"

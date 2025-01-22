@@ -69,6 +69,7 @@ import org.openflexo.foundation.fml.NavigationScheme;
 import org.openflexo.foundation.fml.PrimitiveRole;
 import org.openflexo.foundation.fml.SynchronizationScheme;
 import org.openflexo.foundation.fml.TechnologySpecificFlexoBehaviour;
+import org.openflexo.foundation.fml.TypeDeclaration;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.controlgraph.ConditionalAction;
 import org.openflexo.foundation.fml.controlgraph.ExpressionIterationAction;
@@ -263,6 +264,13 @@ public class FMLIconLibrary extends IconLibrary {
 	public static final ImageIconResource DATA_BINDING_ICON = new ImageIconResource(
 			ResourceLocator.locateResource("Icons/Model/VPM/LinkIcon_16x16.png"));
 
+	public static final ImageIconResource TYPEDEF_ICON = new ImageIconResource(
+			ResourceLocator.locateResource("Icons/Model/VPM/TypeDef_16x16.png"));
+	public static final ImageIconResource TYPEDEF_MEDIUM_ICON = new ImageIconResource(
+			ResourceLocator.locateResource("Icons/Model/VPM/TypeDef_32x32.png"));
+	public static final ImageIconResource TYPEDEF_BIG_ICON = new ImageIconResource(
+			ResourceLocator.locateResource("Icons/Model/VPM/TypeDef_64x64.png"));
+
 	// Markers
 	public static final IconMarker ABSTRACT_MARKER = new IconMarker(
 			new ImageIconResource(ResourceLocator.locateResource("Icons/Model/VPM/Markers/Abstract.png")), 14, 0);
@@ -313,6 +321,9 @@ public class FMLIconLibrary extends IconLibrary {
 
 		if (object instanceof FMLCompilationUnit) {
 			return FML_ICON;
+		}
+		else if (object instanceof TypeDeclaration) {
+			return TYPEDEF_ICON;
 		}
 		else if (object instanceof VirtualModel) {
 			return VIRTUAL_MODEL_ICON;
