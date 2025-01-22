@@ -10,7 +10,7 @@
 			horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED"
 			verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
 			<Label label="ontologic_type" index="8"
-				constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)"
+				constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;location=left)"
 				localize="true" />
 			<Custom componentClassName="org.openflexo.ontology.components.widget.FIBClassSelector"
 				localize="true" manageDynamicModel="true" index="9" data="data.ontologicType" name="ClassSelector"
