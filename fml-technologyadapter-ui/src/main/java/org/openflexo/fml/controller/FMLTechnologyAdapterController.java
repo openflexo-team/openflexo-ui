@@ -78,6 +78,7 @@ import org.openflexo.fml.controller.action.CreateModelSlotInitializer;
 import org.openflexo.fml.controller.action.CreatePrimitiveRoleInitializer;
 import org.openflexo.fml.controller.action.CreateTechnologyRoleInitializer;
 import org.openflexo.fml.controller.action.CreateTopLevelVirtualModelInitializer;
+import org.openflexo.fml.controller.action.CreateTypeDeclarationInitializer;
 import org.openflexo.fml.controller.action.DeclareNewVariableActionInitializer;
 import org.openflexo.fml.controller.action.DeleteCompilationUnitInitializer;
 import org.openflexo.fml.controller.action.DeleteFlexoConceptObjectsInitializer;
@@ -272,6 +273,7 @@ public class FMLTechnologyAdapterController extends TechnologyAdapterController<
 		new DeleteCompilationUnitInitializer(actionInitializer);
 
 		new AddUseDeclarationInitializer(actionInitializer);
+		new CreateTypeDeclarationInitializer(actionInitializer);
 
 		new CreateTechnologyRoleInitializer(actionInitializer);
 		new CreatePrimitiveRoleInitializer(actionInitializer);
