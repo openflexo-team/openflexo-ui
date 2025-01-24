@@ -44,8 +44,8 @@ import org.openflexo.components.wizard.Wizard;
 import org.openflexo.components.wizard.WizardDialog;
 import org.openflexo.foundation.action.FlexoActionFactory;
 import org.openflexo.foundation.action.FlexoActionRunnable;
+import org.openflexo.foundation.fml.FMLCompilationUnit;
 import org.openflexo.foundation.fml.FMLObject;
-import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.action.AddUseDeclaration;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
@@ -54,13 +54,13 @@ import org.openflexo.icon.FMLIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-public class AddUseDeclarationInitializer extends ActionInitializer<AddUseDeclaration, VirtualModel, FMLObject> {
+public class AddUseDeclarationInitializer extends ActionInitializer<AddUseDeclaration, FMLCompilationUnit, FMLObject> {
 	public AddUseDeclarationInitializer(ControllerActionInitializer actionInitializer) {
 		super(AddUseDeclaration.actionType, actionInitializer);
 	}
 
 	@Override
-	protected FlexoActionRunnable<AddUseDeclaration, VirtualModel, FMLObject> getDefaultInitializer() {
+	protected FlexoActionRunnable<AddUseDeclaration, FMLCompilationUnit, FMLObject> getDefaultInitializer() {
 		return (e, action) -> {
 			Wizard wizard = new AddUseDeclarationWizard(action, getController());
 			WizardDialog dialog = new WizardDialog(wizard, getController());
@@ -74,7 +74,7 @@ public class AddUseDeclarationInitializer extends ActionInitializer<AddUseDeclar
 	}
 
 	@Override
-	protected FlexoActionRunnable<AddUseDeclaration, VirtualModel, FMLObject> getDefaultFinalizer() {
+	protected FlexoActionRunnable<AddUseDeclaration, FMLCompilationUnit, FMLObject> getDefaultFinalizer() {
 		return (e, action) -> {
 			if (action.getModelSlotTechnologyAdapter() != null) {
 				TechnologyAdapterService taService = getController().getApplicationContext().getTechnologyAdapterService();
@@ -86,7 +86,7 @@ public class AddUseDeclarationInitializer extends ActionInitializer<AddUseDeclar
 	}
 
 	@Override
-	protected Icon getEnabledIcon(FlexoActionFactory<AddUseDeclaration, VirtualModel, FMLObject> actionType) {
+	protected Icon getEnabledIcon(FlexoActionFactory<AddUseDeclaration, FMLCompilationUnit, FMLObject> actionType) {
 		return FMLIconLibrary.MODEL_SLOT_ICON;
 	}
 

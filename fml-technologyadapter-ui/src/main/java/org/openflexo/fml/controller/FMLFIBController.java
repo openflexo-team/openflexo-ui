@@ -74,6 +74,7 @@ import org.openflexo.foundation.fml.GetProperty;
 import org.openflexo.foundation.fml.GetSetProperty;
 import org.openflexo.foundation.fml.PrimitiveRole;
 import org.openflexo.foundation.fml.SynchronizationScheme;
+import org.openflexo.foundation.fml.TypeDeclaration;
 import org.openflexo.foundation.fml.UseModelSlotDeclaration;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.action.AddParentFlexoConcept;
@@ -93,6 +94,7 @@ import org.openflexo.foundation.fml.action.CreateModelSlot;
 import org.openflexo.foundation.fml.action.CreatePrimitiveRole;
 import org.openflexo.foundation.fml.action.CreateTechnologyRole;
 import org.openflexo.foundation.fml.action.CreateTopLevelVirtualModel;
+import org.openflexo.foundation.fml.action.CreateTypeDeclaration;
 import org.openflexo.foundation.fml.action.DeleteCompilationUnit;
 import org.openflexo.foundation.fml.action.DeleteFlexoConceptObjects;
 import org.openflexo.foundation.fml.action.RenameCompilationUnit;
@@ -167,10 +169,16 @@ public class FMLFIBController extends FlexoFIBController {
 		modelSlot.delete();
 	}
 
-	public UseModelSlotDeclaration addToUseDeclarations(VirtualModel virtualModel) {
-		AddUseDeclaration addToUseDeclarations = AddUseDeclaration.actionType.makeNewAction(virtualModel, null, getEditor());
+	public UseModelSlotDeclaration addToUseDeclarations(FMLCompilationUnit cu) {
+		AddUseDeclaration addToUseDeclarations = AddUseDeclaration.actionType.makeNewAction(cu, null, getEditor());
 		addToUseDeclarations.doAction();
 		return addToUseDeclarations.getNewUseDeclaration();
+	}
+
+	public TypeDeclaration createTypeDeclaration(FMLCompilationUnit cu) {
+		CreateTypeDeclaration createTypeDeclaration = CreateTypeDeclaration.actionType.makeNewAction(cu, null, getEditor());
+		createTypeDeclaration.doAction();
+		return createTypeDeclaration.getNewTypeDeclaration();
 	}
 
 	public FlexoConcept addParentFlexoConcept(FlexoConcept flexoConcept) {
