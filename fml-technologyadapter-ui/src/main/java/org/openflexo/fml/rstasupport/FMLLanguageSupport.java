@@ -578,6 +578,9 @@ public class FMLLanguageSupport extends AbstractLanguageSupport {
 			// Highlight the line range of the behaviour or concept being edited in the gutter.
 			if (cu != null) { // Should always be true
 				FMLCompilationUnitNode cuNode = (FMLCompilationUnitNode) cu.getPrettyPrintDelegate();
+				if (cuNode == null) {
+					return;
+				}
 				RawSourceFragment fragment = null;
 				FMLObjectNode<?, ?, ?> focusedObjectNode = cuNode.getFMLObjectNodeAtLocation(textArea.getCaretLineNumber() + 1,
 						textArea.getCaretOffsetFromLineStart(), FlexoBehaviour.class);
