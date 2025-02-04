@@ -79,6 +79,7 @@ import org.openflexo.foundation.fml.controlgraph.WhileAction;
 import org.openflexo.foundation.fml.editionaction.AbstractAssignationAction;
 import org.openflexo.foundation.fml.editionaction.AddClassInstance;
 import org.openflexo.foundation.fml.editionaction.AddToListAction;
+import org.openflexo.foundation.fml.editionaction.ConnectAction;
 import org.openflexo.foundation.fml.editionaction.DeleteAction;
 import org.openflexo.foundation.fml.editionaction.EditionAction;
 import org.openflexo.foundation.fml.editionaction.ExpressionAction;
@@ -240,6 +241,8 @@ public class FMLIconLibrary extends IconLibrary {
 			ResourceLocator.locateResource("Icons/Model/VPM/ExpressionActionIcon.png"));
 	public static final ImageIconResource LOG_ACTION_ICON = new ImageIconResource(
 			ResourceLocator.locateResource("Icons/Model/VPM/LogActionIcon.png"));
+	public static final ImageIconResource CONNECT_ACTION_ICON = new ImageIconResource(
+			ResourceLocator.locateResource("Icons/Model/VPM/ConnectActionIcon.gif"));
 	public static final ImageIconResource NOTIFY_PROGRESS_ACTION_ICON = new ImageIconResource(
 			ResourceLocator.locateResource("Icons/Model/VPM/NotifyProgressActionIcon.png"));
 	public static final ImageIconResource NOTIFY_PROPERTY_CHANGED_ACTION_ICON = new ImageIconResource(
@@ -432,6 +435,9 @@ public class FMLIconLibrary extends IconLibrary {
 			}
 			else if (object instanceof LogAction) {
 				return LOG_ACTION_ICON;
+			}
+			else if (object instanceof ConnectAction) {
+				return CONNECT_ACTION_ICON;
 			}
 			else if (object instanceof NotifyProgressAction) {
 				return NOTIFY_PROGRESS_ACTION_ICON;

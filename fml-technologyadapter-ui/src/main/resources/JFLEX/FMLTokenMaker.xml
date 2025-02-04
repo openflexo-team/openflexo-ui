@@ -19,6 +19,7 @@
     <keyword>assert</keyword>
     <keyword>begin</keyword>
     <keyword>concept</keyword>
+    <keyword>connect</keyword>
     <keyword>define</keyword>
     <keyword>do</keyword>
     <keyword>else</keyword>
@@ -51,6 +52,7 @@
     <keyword>typedef</keyword>
     <keyword>unique</keyword>
     <keyword>use</keyword>
+    <keyword>using</keyword>
     <keyword>values</keyword>
     <keyword>where</keyword>
     <keyword>while</keyword>

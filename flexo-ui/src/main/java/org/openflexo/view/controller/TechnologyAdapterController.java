@@ -67,6 +67,7 @@ import org.openflexo.foundation.fml.controlgraph.IterationAction;
 import org.openflexo.foundation.fml.controlgraph.WhileAction;
 import org.openflexo.foundation.fml.editionaction.AddClassInstance;
 import org.openflexo.foundation.fml.editionaction.AddToListAction;
+import org.openflexo.foundation.fml.editionaction.ConnectAction;
 import org.openflexo.foundation.fml.editionaction.DeleteAction;
 import org.openflexo.foundation.fml.editionaction.EditionAction;
 import org.openflexo.foundation.fml.editionaction.ExpressionAction;
@@ -433,6 +434,9 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<T
 		}
 		else if (LogAction.class.isAssignableFrom(editionActionClass)) {
 			return FMLIconLibrary.LOG_ACTION_ICON;
+		}
+		else if (ConnectAction.class.isAssignableFrom(editionActionClass)) {
+			return FMLIconLibrary.CONNECT_ACTION_ICON;
 		}
 		else if (NotifyProgressAction.class.isAssignableFrom(editionActionClass)) {
 			return FMLIconLibrary.NOTIFY_PROGRESS_ACTION_ICON;
