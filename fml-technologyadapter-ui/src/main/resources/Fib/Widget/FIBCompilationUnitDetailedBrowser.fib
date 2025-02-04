@@ -42,7 +42,7 @@
 				isEditable="false" name="javaImport" />
 			<BrowserElement
 				dataClassName="org.openflexo.foundation.fml.ElementImportDeclaration"
-				label="&quot;import &quot;+elementImport.abbrev" 
+				label="elementImport.stringRepresentation" 
 				icon="controller.iconForObject(elementImport)"
 				isEditable="false" name="elementImport" />
 			<BrowserElement
