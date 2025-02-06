@@ -65,7 +65,7 @@ import org.openflexo.foundation.fml.FlexoConceptBehaviouralFacet;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.VirtualModelLibrary;
 import org.openflexo.foundation.fml.rm.CompilationUnitResource;
-import org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
+import org.openflexo.foundation.fml.rt.FMLRTModelSlot;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.gina.ApplicationFIBLibrary.ApplicationFIBLibraryImpl;
 import org.openflexo.gina.swing.utils.FIBJPanel;
@@ -189,7 +189,7 @@ public class TestFMLEditor2 extends OpenflexoFIBTestCase {
 		log("testAddFLMRTVirtualModelInstanceModelSlotFromText");
 
 		// @formatter:off
-		String fml = "use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot as FMLRT;\n\n"
+		String fml = "use org.openflexo.foundation.fml.rt.FMLRTModelSlot as FMLRT;\n\n"
 				+ "@URI(\"http://openflexo.org/test/TestResourceCenter/TestVirtualModelA.fml\")\n" 
 				+ "@Version(\"0.1\")\n"
 				+ "model TestVirtualModelA {\n" 
@@ -205,7 +205,7 @@ public class TestFMLEditor2 extends OpenflexoFIBTestCase {
 		assertEquals(1, cu.getVirtualModel().getFlexoProperties().size());
 		assertEquals(0, cu.getVirtualModel().getFlexoBehaviours().size());
 
-		FMLRTVirtualModelInstanceModelSlot ms = (FMLRTVirtualModelInstanceModelSlot) cu.getVirtualModel().getAccessibleProperty("myModel");
+		FMLRTModelSlot ms = (FMLRTModelSlot) cu.getVirtualModel().getAccessibleProperty("myModel");
 
 		System.out.println(cu.getFMLPrettyPrint());
 
@@ -254,7 +254,7 @@ public class TestFMLEditor2 extends OpenflexoFIBTestCase {
 		assertSame(virtualModel, cu2.getVirtualModel());
 		assertSame(behaviouralFacet, cu2.getVirtualModel().getBehaviouralFacet());
 
-		FMLRTVirtualModelInstanceModelSlot ms2 = (FMLRTVirtualModelInstanceModelSlot) cu2.getVirtualModel()
+		FMLRTModelSlot ms2 = (FMLRTModelSlot) cu2.getVirtualModel()
 				.getAccessibleProperty("myModel");
 		assertSame(cu2.getVirtualModel(), ms2.getAccessedVirtualModel());
 	}

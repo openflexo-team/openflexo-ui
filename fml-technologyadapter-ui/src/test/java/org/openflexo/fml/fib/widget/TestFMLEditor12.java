@@ -189,7 +189,7 @@ public class TestFMLEditor12 extends OpenflexoFIBTestCase {
 		log("testSetInitialTextContent");
 
 		// @formatter:off
-		String fml = "use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot as FMLRT;\n\n"
+		String fml = "use org.openflexo.foundation.fml.rt.FMLRTModelSlot as FMLRT;\n\n"
 				+ "@URI(\"http://openflexo.org/test/TestResourceCenter/TestVirtualModelA.fml\")\n" 
 				+ "@Version(\"0.1\")\n"
 				+ "model TestVirtualModelA {\n" 
@@ -240,7 +240,7 @@ public class TestFMLEditor12 extends OpenflexoFIBTestCase {
 		log("testModifyTextContentWithInvalidType");
 
 		// @formatter:off
-		String fml = "use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot as FMLRT;\n\n"
+		String fml = "use org.openflexo.foundation.fml.rt.FMLRTModelSlot as FMLRT;\n\n"
 				+ "@URI(\"http://openflexo.org/test/TestResourceCenter/TestVirtualModelA.fml\")\n" 
 				+ "@Version(\"0.1\")\n"
 				+ "model TestVirtualModelA {\n" 
@@ -290,7 +290,7 @@ public class TestFMLEditor12 extends OpenflexoFIBTestCase {
 		log("testBacktrackToInitialText");
 
 		// @formatter:off
-		String fml = "use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot as FMLRT;\n\n"
+		String fml = "use org.openflexo.foundation.fml.rt.FMLRTModelSlot as FMLRT;\n\n"
 				+ "@URI(\"http://openflexo.org/test/TestResourceCenter/TestVirtualModelA.fml\")\n" 
 				+ "@Version(\"0.1\")\n"
 				+ "model TestVirtualModelA {\n" 
@@ -340,7 +340,7 @@ public class TestFMLEditor12 extends OpenflexoFIBTestCase {
 		log("testRenamedConceptInvalidType");
 
 		// @formatter:off
-		String fml = "use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot as FMLRT;\n\n"
+		String fml = "use org.openflexo.foundation.fml.rt.FMLRTModelSlot as FMLRT;\n\n"
 				+ "@URI(\"http://openflexo.org/test/TestResourceCenter/TestVirtualModelA.fml\")\n" 
 				+ "@Version(\"0.1\")\n"
 				+ "model TestVirtualModelA {\n" 

@@ -187,7 +187,7 @@ public class TestFMLEditor5 extends OpenflexoFIBTestCase {
 		log("performSomeAssignations");
 
 		// @formatter:off
-		String fml = "use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot as FMLRT;\n\n"
+		String fml = "use org.openflexo.foundation.fml.rt.FMLRTModelSlot as FMLRT;\n\n"
 				+ "@URI(\"http://openflexo.org/test/TestResourceCenter/TestVirtualModelA.fml\")\n" 
 				+ "@Version(\"0.1\")\n"
 				+ "model TestVirtualModelA {\n" 

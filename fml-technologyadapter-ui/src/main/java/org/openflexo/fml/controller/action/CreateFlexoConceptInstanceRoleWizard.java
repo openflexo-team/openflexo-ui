@@ -45,7 +45,7 @@ import org.openflexo.connie.DataBinding;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.action.CreateFlexoConceptInstanceRole;
-import org.openflexo.foundation.fml.rt.FMLRTModelSlot;
+import org.openflexo.foundation.fml.rt.AbstractFMLRTModelSlot;
 import org.openflexo.foundation.fml.rt.VirtualModelInstance;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.gina.annotation.FIBPanel;
@@ -54,7 +54,7 @@ import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.FlexoController;
 
-public class CreateFlexoConceptInstanceRoleWizard extends AbstractCreateFlexoRoleWizard<CreateFlexoConceptInstanceRole, FMLRTModelSlot> {
+public class CreateFlexoConceptInstanceRoleWizard extends AbstractCreateFlexoRoleWizard<CreateFlexoConceptInstanceRole, AbstractFMLRTModelSlot> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CreateFlexoConceptInstanceRoleWizard.class.getPackage().getName());
@@ -113,7 +113,7 @@ public class CreateFlexoConceptInstanceRoleWizard extends AbstractCreateFlexoRol
 		}
 
 		/*@Override
-		public void setModelSlot(FMLRTModelSlot modelSlot) {
+		public void setModelSlot(AbstractFMLRTModelSlot modelSlot) {
 			super.setModelSlot(modelSlot);
 		}*/
 

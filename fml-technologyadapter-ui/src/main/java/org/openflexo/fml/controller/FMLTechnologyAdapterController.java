@@ -130,7 +130,7 @@ import org.openflexo.foundation.fml.action.DeleteFlexoConceptObjects;
 import org.openflexo.foundation.fml.editionaction.EditionAction;
 import org.openflexo.foundation.fml.rm.CompilationUnitResource;
 import org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstance;
-import org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
+import org.openflexo.foundation.fml.rt.FMLRTModelSlot;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
 import org.openflexo.foundation.fml.rt.action.FlexoBehaviourAction;
 import org.openflexo.foundation.fml.ta.CreateContainedVirtualModel;
@@ -400,7 +400,7 @@ public class FMLTechnologyAdapterController extends TechnologyAdapterController<
 	 */
 	@Override
 	public ImageIcon getIconForModelSlot(Class<? extends ModelSlot<?>> modelSlotClass) {
-		if (FMLRTVirtualModelInstanceModelSlot.class.isAssignableFrom(modelSlotClass)) {
+		if (FMLRTModelSlot.class.isAssignableFrom(modelSlotClass)) {
 			return FMLRTIconLibrary.VIRTUAL_MODEL_INSTANCE_ICON;
 		}
 		return super.getIconForModelSlot(modelSlotClass);

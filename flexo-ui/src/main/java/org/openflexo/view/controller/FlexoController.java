@@ -117,7 +117,7 @@ import org.openflexo.foundation.fml.action.AbstractCreateVirtualModel.ModelSlotE
 import org.openflexo.foundation.fml.action.CreateFlexoBehaviour.BehaviourParameterEntry;
 import org.openflexo.foundation.fml.rm.CompilationUnitResource;
 import org.openflexo.foundation.fml.rt.FMLRTTechnologyAdapter;
-import org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
+import org.openflexo.foundation.fml.rt.FMLRTModelSlot;
 import org.openflexo.foundation.fml.rt.VirtualModelInstanceObject;
 import org.openflexo.foundation.fml.rt.action.FlexoBehaviourAction;
 import org.openflexo.foundation.fml.rt.rm.FMLRTVirtualModelInstanceResource;
@@ -2031,7 +2031,7 @@ public abstract class FlexoController implements PropertyChangeListener, HasProp
 				if (useDeclaration.getModelSlotClass().equals(FMLModelSlot.class)) {
 					return IconFactory.getImageIcon(FMLIconLibrary.VIRTUAL_MODEL_ICON, IconLibrary.IMPORT);
 				}
-				if (useDeclaration.getModelSlotClass().equals(FMLRTVirtualModelInstanceModelSlot.class)) {
+				if (useDeclaration.getModelSlotClass().equals(FMLRTModelSlot.class)) {
 					return IconFactory.getImageIcon(FMLRTIconLibrary.VIRTUAL_MODEL_INSTANCE_ICON, IconLibrary.IMPORT);
 				}
 			}

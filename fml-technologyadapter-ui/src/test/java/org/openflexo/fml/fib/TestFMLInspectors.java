@@ -387,12 +387,12 @@ public class TestFMLInspectors extends GenericFIBInspectorTestCase {
 
 	@Test
 	public void testFMLRTModelSlotInspector() {
-		validateFIB("Inspectors/FML/ModelSlot/FMLRTModelSlot.inspector");
+		validateFIB("Inspectors/FML/ModelSlot/AbstractFMLRTModelSlot.inspector");
 	}
 
 	@Test
 	public void testFMLRTVirtualModelInstanceModelSlotInspector() {
-		validateFIB("Inspectors/FML/ModelSlot/FMLRTVirtualModelInstanceModelSlot.inspector");
+		validateFIB("Inspectors/FML/ModelSlot/FMLRTModelSlot.inspector");
 	}
 
 	@Test

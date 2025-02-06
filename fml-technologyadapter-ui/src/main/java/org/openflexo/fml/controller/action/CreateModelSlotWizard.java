@@ -52,7 +52,7 @@ import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.VirtualModelLibrary;
 import org.openflexo.foundation.fml.action.CreateModelSlot;
 import org.openflexo.foundation.fml.rm.CompilationUnitResource;
-import org.openflexo.foundation.fml.rt.FMLRTModelSlot;
+import org.openflexo.foundation.fml.rt.AbstractFMLRTModelSlot;
 import org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstance;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
@@ -300,7 +300,7 @@ public class CreateModelSlotWizard extends AbstractCreateFMLElementWizard<Create
 		}
 
 		public boolean isVirtualModelModelSlot() {
-			return getModelSlotClass() != null && FMLRTModelSlot.class.isAssignableFrom(getModelSlotClass());
+			return getModelSlotClass() != null && AbstractFMLRTModelSlot.class.isAssignableFrom(getModelSlotClass());
 		}
 
 	}

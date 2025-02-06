@@ -64,7 +64,7 @@ import org.openflexo.foundation.fml.PrimitiveRole;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.VirtualModelLibrary;
 import org.openflexo.foundation.fml.rm.CompilationUnitResource;
-import org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
+import org.openflexo.foundation.fml.rt.FMLRTModelSlot;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.gina.ApplicationFIBLibrary.ApplicationFIBLibraryImpl;
 import org.openflexo.gina.swing.utils.FIBJPanel;
@@ -179,7 +179,7 @@ public class TestFMLEditor7 extends OpenflexoFIBTestCase {
 	private static PrimitiveRole<Integer> aRole;
 	private static FlexoConceptInstanceRole aFooRole;
 	private static FlexoConceptInstanceRole allARole;
-	private static FMLRTVirtualModelInstanceModelSlot vmDModelSlot;
+	private static FMLRTModelSlot vmDModelSlot;
 	private static GetProperty<?> sequencingListProperty;
 
 	@Test
@@ -200,7 +200,7 @@ public class TestFMLEditor7 extends OpenflexoFIBTestCase {
 		assertNotNull(aRole = (PrimitiveRole<Integer>) compilationUnit.getVirtualModel().getAccessibleProperty("a"));
 		assertNotNull(aFooRole = (FlexoConceptInstanceRole) compilationUnit.getVirtualModel().getAccessibleProperty("aFoo"));
 		assertNotNull(allARole = (FlexoConceptInstanceRole) compilationUnit.getVirtualModel().getAccessibleProperty("allA"));
-		assertNotNull(vmDModelSlot = (FMLRTVirtualModelInstanceModelSlot) compilationUnit.getVirtualModel().getAccessibleProperty("vmD"));
+		assertNotNull(vmDModelSlot = (FMLRTModelSlot) compilationUnit.getVirtualModel().getAccessibleProperty("vmD"));
 		assertNotNull(sequencingListProperty = (GetProperty<?>) compilationUnit.getVirtualModel().getAccessibleProperty("sequencingList"));
 
 		ValidationReport validation = validate(compilationUnit);
