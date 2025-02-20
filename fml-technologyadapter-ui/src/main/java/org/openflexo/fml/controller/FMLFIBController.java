@@ -158,13 +158,13 @@ public class FMLFIBController extends FlexoFIBController {
 		deleteRepositoryFolder.doAction();
 	}
 
-	public ModelSlot<?> createModelSlot(FlexoConcept concept) {
+	public ModelSlot<?,?> createModelSlot(FlexoConcept concept) {
 		CreateModelSlot createModelSlot = CreateModelSlot.actionType.makeNewAction(concept, null, getEditor());
 		createModelSlot.doAction();
 		return createModelSlot.getNewModelSlot();
 	}
 
-	public void deleteModelSlot(FlexoConcept concept, ModelSlot<?> modelSlot) {
+	public void deleteModelSlot(FlexoConcept concept, ModelSlot<?,?> modelSlot) {
 		concept.removeFromModelSlots(modelSlot);
 		modelSlot.delete();
 	}

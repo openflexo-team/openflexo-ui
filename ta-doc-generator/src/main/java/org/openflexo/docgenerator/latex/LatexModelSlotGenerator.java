@@ -48,7 +48,7 @@ import org.openflexo.logging.FlexoLogger;
  * Documentation generator for {@link ModelSlot}
  * 
  */
-public class LatexModelSlotGenerator<MS extends ModelSlot<?>> extends ModelSlotGenerator<MS> implements AbstractLatexGenerator<MS> {
+public class LatexModelSlotGenerator<MS extends ModelSlot<?,?>> extends ModelSlotGenerator<MS> implements AbstractLatexGenerator<MS> {
 
 	private static final Logger logger = FlexoLogger.getLogger(LatexModelSlotGenerator.class.getPackage().getName());
 

@@ -335,7 +335,7 @@ public class FMLIconLibrary extends IconLibrary {
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((ModelSlot) object).getModelSlotTechnologyAdapter());
 			if (tac != null) {
 				// return IconFactory.getImageIcon(tac.getTechnologyIcon(), MODEL_SLOT_ICON_MARKER);
-				return IconFactory.getImageIcon(tac.getIconForModelSlot((Class<? extends ModelSlot<?>>) object.getClass()),
+				return IconFactory.getImageIcon(tac.getIconForModelSlot((Class<? extends ModelSlot<?,?>>) object.getClass()),
 						MODEL_SLOT_ICON_MARKER);
 			}
 			return MODEL_SLOT_ICON;

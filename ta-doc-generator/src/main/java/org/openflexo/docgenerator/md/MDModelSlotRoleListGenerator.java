@@ -51,7 +51,7 @@ import org.openflexo.logging.FlexoLogger;
  * Documentation generator for {@link ModelSlot}
  * 
  */
-public class MDModelSlotRoleListGenerator<MS extends ModelSlot<?>> extends ModelSlotGenerator<MS> implements AbstractMDGenerator<MS> {
+public class MDModelSlotRoleListGenerator<MS extends ModelSlot<?,?>> extends ModelSlotGenerator<MS> implements AbstractMDGenerator<MS> {
 
 	private static final Logger logger = FlexoLogger.getLogger(MDModelSlotRoleListGenerator.class.getPackage().getName());
 

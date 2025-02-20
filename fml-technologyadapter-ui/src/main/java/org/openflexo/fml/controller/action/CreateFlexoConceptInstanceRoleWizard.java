@@ -118,7 +118,7 @@ public class CreateFlexoConceptInstanceRoleWizard extends AbstractCreateFlexoRol
 		}*/
 
 		@Override
-		protected void fireModelSlotChanged(ModelSlot<?> oldValue, ModelSlot<?> newValue) {
+		protected void fireModelSlotChanged(ModelSlot<?,?> oldValue, ModelSlot<?,?> newValue) {
 			super.fireModelSlotChanged(oldValue, newValue);
 			getPropertyChangeSupport().firePropertyChange("modelSlotVirtualModel", null, getModelSlotVirtualModel());
 		}

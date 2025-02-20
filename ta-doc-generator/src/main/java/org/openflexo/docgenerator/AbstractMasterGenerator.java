@@ -181,11 +181,11 @@ public abstract class AbstractMasterGenerator<TA extends TechnologyAdapter<TA>> 
 		return fmlModelFactory;
 	}
 
-	private FMLEntity<?> getFMLEntityForModelSlotClass(Class<? extends ModelSlot<?>> modelSlotClass) {
+	private FMLEntity<?> getFMLEntityForModelSlotClass(Class<? extends ModelSlot<?,?>> modelSlotClass) {
 		return FMLModelContext.getFMLEntity(modelSlotClass, getFMLModelFactory());
 	}
 
-	private String getFMLKeywordForModelSlotClass(Class<? extends ModelSlot<?>> modelSlotClass) {
+	private String getFMLKeywordForModelSlotClass(Class<? extends ModelSlot<?,?>> modelSlotClass) {
 		return getFMLEntityForModelSlotClass(modelSlotClass).getFmlAnnotation().value();
 	}
 
@@ -198,7 +198,7 @@ public abstract class AbstractMasterGenerator<TA extends TechnologyAdapter<TA>> 
 		}
 	}
 
-	private AbstractGenerator<?> prepareDocGenerationForModelSlot(Class<? extends ModelSlot<?>> modelSlotClass) {
+	private AbstractGenerator<?> prepareDocGenerationForModelSlot(Class<? extends ModelSlot<?,?>> modelSlotClass) {
 		// System.out.println("ModelSlot class : " + modelSlotClass);
 		AbstractGenerator<?> generator = makeModelSlotGenerator(modelSlotClass);
 		generators.put(modelSlotClass, generator);
@@ -248,7 +248,7 @@ public abstract class AbstractMasterGenerator<TA extends TechnologyAdapter<TA>> 
 
 	protected abstract AbstractGenerator<TA> makeTechnologyAdapterGenerator(Class<TA> taClass);
 
-	protected abstract <MS extends ModelSlot<?>> AbstractGenerator<MS> makeModelSlotGenerator(Class<MS> modelSlotClass);
+	protected abstract <MS extends ModelSlot<?,?>> AbstractGenerator<MS> makeModelSlotGenerator(Class<MS> modelSlotClass);
 
 	protected abstract <R extends FlexoRole<?>> AbstractGenerator<R> makeFlexoRoleGenerator(Class<R> roleClass);
 

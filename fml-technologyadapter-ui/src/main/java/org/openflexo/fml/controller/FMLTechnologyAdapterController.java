@@ -399,7 +399,7 @@ public class FMLTechnologyAdapterController extends TechnologyAdapterController<
 	 * @return
 	 */
 	@Override
-	public ImageIcon getIconForModelSlot(Class<? extends ModelSlot<?>> modelSlotClass) {
+	public ImageIcon getIconForModelSlot(Class<? extends ModelSlot<?,?>> modelSlotClass) {
 		if (FMLRTModelSlot.class.isAssignableFrom(modelSlotClass)) {
 			return FMLRTIconLibrary.VIRTUAL_MODEL_INSTANCE_ICON;
 		}

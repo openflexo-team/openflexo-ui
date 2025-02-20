@@ -108,7 +108,7 @@ public class HTMLMasterGenerator<TA extends TechnologyAdapter<TA>> extends Veloc
 	}
 
 	@Override
-	protected <MS extends ModelSlot<?>> HTMLModelSlotGenerator<MS> makeModelSlotGenerator(Class<MS> modelSlotClass) {
+	protected <MS extends ModelSlot<?,?>> HTMLModelSlotGenerator<MS> makeModelSlotGenerator(Class<MS> modelSlotClass) {
 		return new HTMLModelSlotGenerator<>(modelSlotClass, this);
 	}
 

@@ -129,7 +129,7 @@ public class LatexMasterGenerator<TA extends TechnologyAdapter<TA>> extends Velo
 	}
 
 	@Override
-	protected <MS extends ModelSlot<?>> LatexModelSlotGenerator<MS> makeModelSlotGenerator(Class<MS> modelSlotClass) {
+	protected <MS extends ModelSlot<?,?>> LatexModelSlotGenerator<MS> makeModelSlotGenerator(Class<MS> modelSlotClass) {
 		return new LatexModelSlotGenerator<>(modelSlotClass, this);
 	}
 

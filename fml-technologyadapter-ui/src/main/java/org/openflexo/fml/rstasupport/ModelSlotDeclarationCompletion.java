@@ -26,19 +26,19 @@ import org.openflexo.view.controller.TechnologyAdapterControllerService;
  *
  * @author sylvain
  */
-public class ModelSlotDeclarationCompletion<MS extends ModelSlot<?>> extends FMLPropertyDeclarationCompletion<MS> {
+public class ModelSlotDeclarationCompletion<MS extends ModelSlot<?,?>> extends FMLPropertyDeclarationCompletion<MS> {
 
-	private static String getTemplate(FMLSourceCompletionProvider provider, Class<? extends ModelSlot<?>> msClass) {
+	private static String getTemplate(FMLSourceCompletionProvider provider, Class<? extends ModelSlot<?,?>> msClass) {
 		String dataType = TypeUtils.simpleRepresentation(getModelSlotDataType(msClass));
 		String parametersTemplate = getParametersTemplate(provider, msClass);
 		return "${" + dataType + "} ${modelSlot} with " + msClass.getSimpleName() + "(" + parametersTemplate + ");";
 	}
 
-	private static Type getModelSlotDataType(Class<? extends ModelSlot<?>> msClass) {
+	private static Type getModelSlotDataType(Class<? extends ModelSlot<?,?>> msClass) {
 		return TypeUtils.getTypeArgument(msClass, ModelSlot.class, 0);
 	}
 
-	private static TechnologyAdapter<?> getTechnologyAdapter(FMLSourceCompletionProvider provider, Class<? extends ModelSlot<?>> msClass) {
+	private static TechnologyAdapter<?> getTechnologyAdapter(FMLSourceCompletionProvider provider, Class<? extends ModelSlot<?,?>> msClass) {
 		return provider.getServiceManager().getTechnologyAdapterService().getTechnologyAdapterForModelSlot(msClass);
 	}
 

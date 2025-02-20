@@ -363,13 +363,13 @@ public class FIBPropertySelector<TA extends TechnologyAdapter<TA>> extends FIBFl
 		this.technologyAdapter = technologyAdapter;
 	}
 
-	private ModelSlot<?> modelSlot;
+	private ModelSlot<?,?> modelSlot;
 
-	public ModelSlot<?> getModelSlot() {
+	public ModelSlot<?,?> getModelSlot() {
 		return modelSlot;
 	}
 
-	public void setModelSlot(ModelSlot<?> modelSlot) {
+	public void setModelSlot(ModelSlot<?,?> modelSlot) {
 		this.modelSlot = modelSlot;
 	}
 
@@ -380,7 +380,7 @@ public class FIBPropertySelector<TA extends TechnologyAdapter<TA>> extends FIBFl
 	 */
 	public FlexoMetaModel<?> getAdressedFlexoMetaModel() {
 		if (modelSlot instanceof TypeAwareModelSlot) {
-			TypeAwareModelSlot<?, ?> typeAwareModelSlot = (TypeAwareModelSlot<?, ?>) modelSlot;
+			TypeAwareModelSlot<?, ?, ?> typeAwareModelSlot = (TypeAwareModelSlot<?, ?, ?>) modelSlot;
 			return typeAwareModelSlot.getMetaModelResource().getMetaModelData();
 		}
 		return null;

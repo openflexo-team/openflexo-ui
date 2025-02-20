@@ -93,9 +93,9 @@ public class MDMasterGenerator<TA extends TechnologyAdapter<TA>> extends Velocit
 		}
 		else if (generator instanceof MDFlexoRoleGenerator) {
 			List<File> returned = new ArrayList<>();
-			List<Class<? extends ModelSlot<?>>> msClasses = getTechnologyAdapterService()
+			List<Class<? extends ModelSlot<?,?>>> msClasses = getTechnologyAdapterService()
 					.getModelSlotClassesForFlexoRole(((MDFlexoRoleGenerator<?>) generator).getObjectClass());
-			for (Class<? extends ModelSlot<?>> msClass : msClasses) {
+			for (Class<? extends ModelSlot<?,?>> msClass : msClasses) {
 				MDModelSlotGenerator<?> msGenerator = (MDModelSlotGenerator<?>) getGenerator(msClass);
 				returned.add(new File(msGenerator.getRolesDirectory(), generator.getObjectClass().getSimpleName() + ".md"));
 			}
@@ -103,9 +103,9 @@ public class MDMasterGenerator<TA extends TechnologyAdapter<TA>> extends Velocit
 		}
 		else if (generator instanceof MDFlexoBehaviourGenerator) {
 			List<File> returned = new ArrayList<>();
-			List<Class<? extends ModelSlot<?>>> msClasses = getTechnologyAdapterService()
+			List<Class<? extends ModelSlot<?,?>>> msClasses = getTechnologyAdapterService()
 					.getModelSlotClassesForFlexoBehaviour(((MDFlexoBehaviourGenerator<?>) generator).getObjectClass());
-			for (Class<? extends ModelSlot<?>> msClass : msClasses) {
+			for (Class<? extends ModelSlot<?,?>> msClass : msClasses) {
 				MDModelSlotGenerator<?> msGenerator = (MDModelSlotGenerator<?>) getGenerator(msClass);
 				returned.add(new File(msGenerator.getBehavioursDirectory(), generator.getObjectClass().getSimpleName() + ".md"));
 			}
@@ -113,9 +113,9 @@ public class MDMasterGenerator<TA extends TechnologyAdapter<TA>> extends Velocit
 		}
 		else if (generator instanceof MDEditionActionGenerator) {
 			List<File> returned = new ArrayList<>();
-			List<Class<? extends ModelSlot<?>>> msClasses = getTechnologyAdapterService()
+			List<Class<? extends ModelSlot<?,?>>> msClasses = getTechnologyAdapterService()
 					.getModelSlotClassesForEditionAction(((MDEditionActionGenerator<?>) generator).getObjectClass());
-			for (Class<? extends ModelSlot<?>> msClass : msClasses) {
+			for (Class<? extends ModelSlot<?,?>> msClass : msClasses) {
 				MDModelSlotGenerator<?> msGenerator = (MDModelSlotGenerator<?>) getGenerator(msClass);
 				returned.add(new File(msGenerator.getEditionActionsDirectory(), generator.getObjectClass().getSimpleName() + ".md"));
 			}
@@ -123,9 +123,9 @@ public class MDMasterGenerator<TA extends TechnologyAdapter<TA>> extends Velocit
 		}
 		else if (generator instanceof MDFetchRequestGenerator) {
 			List<File> returned = new ArrayList<>();
-			List<Class<? extends ModelSlot<?>>> msClasses = getTechnologyAdapterService()
+			List<Class<? extends ModelSlot<?,?>>> msClasses = getTechnologyAdapterService()
 					.getModelSlotClassesForEditionAction(((MDFetchRequestGenerator<?>) generator).getObjectClass());
-			for (Class<? extends ModelSlot<?>> msClass : msClasses) {
+			for (Class<? extends ModelSlot<?,?>> msClass : msClasses) {
 				MDModelSlotGenerator<?> msGenerator = (MDModelSlotGenerator<?>) getGenerator(msClass);
 				returned.add(new File(msGenerator.getFetchRequestsDirectory(), generator.getObjectClass().getSimpleName() + ".md"));
 			}
@@ -153,7 +153,7 @@ public class MDMasterGenerator<TA extends TechnologyAdapter<TA>> extends Velocit
 	}
 
 	@Override
-	protected <MS extends ModelSlot<?>> MDModelSlotGenerator<MS> makeModelSlotGenerator(Class<MS> modelSlotClass) {
+	protected <MS extends ModelSlot<?,?>> MDModelSlotGenerator<MS> makeModelSlotGenerator(Class<MS> modelSlotClass) {
 		return new MDModelSlotGenerator<>(modelSlotClass, this);
 	}
 

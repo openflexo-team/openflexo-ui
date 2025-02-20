@@ -352,7 +352,7 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<T
 	 * @param object
 	 * @return
 	 */
-	public ImageIcon getIconForModelSlot(Class<? extends ModelSlot<?>> modelSlotClass) {
+	public ImageIcon getIconForModelSlot(Class<? extends ModelSlot<?,?>> modelSlotClass) {
 		return getTechnologyIcon();
 	}
 

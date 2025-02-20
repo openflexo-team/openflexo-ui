@@ -51,7 +51,7 @@ import org.openflexo.toolbox.StringUtils;
  * Abstract documentation generator for {@link ModelSlot}
  * 
  */
-public abstract class ModelSlotGenerator<MS extends ModelSlot<?>> extends VelocityGenerator<MS> {
+public abstract class ModelSlotGenerator<MS extends ModelSlot<?,?>> extends VelocityGenerator<MS> {
 
 	private static final Logger logger = FlexoLogger.getLogger(ModelSlotGenerator.class.getPackage().getName());
 

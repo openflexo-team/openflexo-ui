@@ -145,20 +145,20 @@ public class AddUseDeclarationWizard extends FlexoActionWizard<AddUseDeclaration
 			}
 		}
 
-		public List<Class<? extends ModelSlot<?>>> getAvailableModelSlotTypes() {
+		public List<Class<? extends ModelSlot<?,?>>> getAvailableModelSlotTypes() {
 			if (getTechnologyAdapter() != null) {
 				return getTechnologyAdapter().getAvailableModelSlotTypes();
 			}
 			return null;
 		}
 
-		public Class<? extends ModelSlot<?>> getModelSlotClass() {
+		public Class<? extends ModelSlot<?,?>> getModelSlotClass() {
 			return getAction().getModelSlotClass();
 		}
 
-		public void setModelSlotClass(Class<? extends ModelSlot<?>> modelSlotClass) {
+		public void setModelSlotClass(Class<? extends ModelSlot<?,?>> modelSlotClass) {
 			if (getModelSlotClass() != modelSlotClass) {
-				Class<? extends ModelSlot<?>> oldValue = getModelSlotClass();
+				Class<? extends ModelSlot<?,?>> oldValue = getModelSlotClass();
 				getAction().setModelSlotClass(modelSlotClass);
 				getPropertyChangeSupport().firePropertyChange("modelSlotClass", oldValue, modelSlotClass);
 				checkValidity();

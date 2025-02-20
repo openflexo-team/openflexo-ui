@@ -96,7 +96,7 @@ public class IconsMasterGenerator<TA extends TechnologyAdapter<TA>> extends Abst
 	}
 
 	@Override
-	protected <MS extends ModelSlot<?>> IconGenerator<MS> makeModelSlotGenerator(Class<MS> modelSlotClass) {
+	protected <MS extends ModelSlot<?,?>> IconGenerator<MS> makeModelSlotGenerator(Class<MS> modelSlotClass) {
 		return new IconGenerator<MS>(modelSlotClass, this) {
 			@Override
 			protected Image getIcon() {

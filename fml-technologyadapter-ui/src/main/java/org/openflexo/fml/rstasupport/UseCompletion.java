@@ -27,7 +27,7 @@ import org.openflexo.view.controller.TechnologyAdapterControllerService;
  *
  * @author sylvain
  */
-public class UseCompletion<MS extends ModelSlot<?>> extends AbstractTemplateCompletion {
+public class UseCompletion<MS extends ModelSlot<?,?>> extends AbstractTemplateCompletion {
 
 	private Class<MS> msClass;
 
@@ -36,11 +36,11 @@ public class UseCompletion<MS extends ModelSlot<?>> extends AbstractTemplateComp
 	 */
 	private static final int RELEVANCE = 4;
 
-	private static String getTemplate(FMLSourceCompletionProvider provider, Class<? extends ModelSlot<?>> msClass) {
+	private static String getTemplate(FMLSourceCompletionProvider provider, Class<? extends ModelSlot<?,?>> msClass) {
 		return "use " + msClass.getCanonicalName() + " as ${" + getDefaultTAId(provider, msClass) + "};";
 	}
 
-	private static String getDefaultTAId(FMLSourceCompletionProvider provider, Class<? extends ModelSlot<?>> msClass) {
+	private static String getDefaultTAId(FMLSourceCompletionProvider provider, Class<? extends ModelSlot<?,?>> msClass) {
 		TechnologyAdapter ta = getTechnologyAdapter(provider, msClass);
 		if (ta.getAvailableModelSlotTypes().size() > 1) {
 			FML annotation = msClass.getAnnotation(FML.class);
@@ -51,7 +51,7 @@ public class UseCompletion<MS extends ModelSlot<?>> extends AbstractTemplateComp
 		return ta.getIdentifier();
 	}
 
-	private static TechnologyAdapter<?> getTechnologyAdapter(FMLSourceCompletionProvider provider, Class<? extends ModelSlot<?>> msClass) {
+	private static TechnologyAdapter<?> getTechnologyAdapter(FMLSourceCompletionProvider provider, Class<? extends ModelSlot<?,?>> msClass) {
 		return provider.getServiceManager().getTechnologyAdapterService().getTechnologyAdapterForModelSlot(msClass);
 	}
 

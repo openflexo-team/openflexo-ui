@@ -150,9 +150,9 @@ public class MenuItemAction<A extends FlexoAction<A, T1, T2>, T1 extends FlexoOb
 
 	}
 
-	public Class<? extends ModelSlot<?>> getModelSlotClass() {
+	public Class<? extends ModelSlot<?,?>> getModelSlotClass() {
 		if (TechnologySpecificAction.class.isAssignableFrom(getEditionActionClass())) {
-			return (Class<? extends ModelSlot<?>>) TypeUtils
+			return (Class<? extends ModelSlot<?,?>>) TypeUtils
 					.getBaseClass(TypeUtils.getTypeArgument(getEditionActionClass(), TechnologySpecificAction.class, 0));
 		}
 		return null;

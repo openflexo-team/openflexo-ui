@@ -133,13 +133,13 @@ public abstract class AbstractCreateFlexoRoleWizard<A extends AbstractCreateFlex
 
 		public void setModelSlot(MS modelSlot) {
 			if (getModelSlot() != modelSlot) {
-				ModelSlot<?> oldValue = getModelSlot();
+				ModelSlot<?,?> oldValue = getModelSlot();
 				getAction().setModelSlot(modelSlot);
 				fireModelSlotChanged(oldValue, modelSlot);
 			}
 		}
 
-		protected void fireModelSlotChanged(ModelSlot<?> oldValue, ModelSlot<?> newValue) {
+		protected void fireModelSlotChanged(ModelSlot<?,?> oldValue, ModelSlot<?,?> newValue) {
 			getPropertyChangeSupport().firePropertyChange("modelSlot", oldValue, newValue);
 			getPropertyChangeSupport().firePropertyChange("adressedFlexoMetaModel", null, getAdressedFlexoMetaModel());
 			getPropertyChangeSupport().firePropertyChange("flexoRoleClass", null, getModelSlot());

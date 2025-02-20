@@ -49,7 +49,7 @@ import org.openflexo.foundation.ontology.technologyadapter.FlexoOntologyModelSlo
 import org.openflexo.gina.annotation.FIBPanel;
 import org.openflexo.view.controller.FlexoController;
 
-public class CreateIndividualRoleWizard extends AbstractCreateFlexoRoleWizard<CreateIndividualRole, FlexoOntologyModelSlot<?, ?, ?>> {
+public class CreateIndividualRoleWizard extends AbstractCreateFlexoRoleWizard<CreateIndividualRole, FlexoOntologyModelSlot<?, ?, ?, ?>> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CreateIndividualRoleWizard.class.getPackage().getName());
@@ -105,7 +105,7 @@ public class CreateIndividualRoleWizard extends AbstractCreateFlexoRoleWizard<Cr
 		}
 
 		@Override
-		public void setModelSlot(FlexoOntologyModelSlot<?, ?, ?> modelSlot) {
+		public void setModelSlot(FlexoOntologyModelSlot<?, ?, ?, ?> modelSlot) {
 			super.setModelSlot(modelSlot);
 			getPropertyChangeSupport().firePropertyChange("availableFlexoRoleTypes", null, getAvailableFlexoRoleTypes());
 			checkValidity();

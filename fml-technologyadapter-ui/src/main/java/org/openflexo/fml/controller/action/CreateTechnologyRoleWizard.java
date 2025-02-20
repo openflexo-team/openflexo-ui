@@ -53,7 +53,7 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.gina.annotation.FIBPanel;
 import org.openflexo.view.controller.FlexoController;
 
-public class CreateTechnologyRoleWizard extends AbstractCreateFlexoRoleWizard<CreateTechnologyRole, ModelSlot<?>> {
+public class CreateTechnologyRoleWizard extends AbstractCreateFlexoRoleWizard<CreateTechnologyRole, ModelSlot<?,?>> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CreateTechnologyRoleWizard.class.getPackage().getName());
@@ -108,7 +108,7 @@ public class CreateTechnologyRoleWizard extends AbstractCreateFlexoRoleWizard<Cr
 		}
 
 		@Override
-		protected void fireModelSlotChanged(ModelSlot<?> oldValue, ModelSlot<?> newValue) {
+		protected void fireModelSlotChanged(ModelSlot<?,?> oldValue, ModelSlot<?,?> newValue) {
 			super.fireModelSlotChanged(oldValue, newValue);
 			getPropertyChangeSupport().firePropertyChange("availableFlexoRoleTypes", null, getAvailableFlexoRoleTypes());
 			checkValidity();
@@ -147,9 +147,9 @@ public class CreateTechnologyRoleWizard extends AbstractCreateFlexoRoleWizard<Cr
 			}
 		}
 
-		public Class<? extends ModelSlot<?>> getModelSlotClass() {
+		public Class<? extends ModelSlot<?,?>> getModelSlotClass() {
 			if (getTechnologyAdapter() != null) {
-				for (Class<? extends ModelSlot<?>> msClass : technologyAdapter.getAvailableModelSlotTypes()) {
+				for (Class<? extends ModelSlot<?,?>> msClass : technologyAdapter.getAvailableModelSlotTypes()) {
 					if (getTechnologyAdapter().getTechnologyAdapterService().getAvailableFlexoRoleTypes(msClass)
 							.contains(getFlexoRoleClass())) {
 						return msClass;
@@ -230,7 +230,7 @@ public class CreateTechnologyRoleWizard extends AbstractCreateFlexoRoleWizard<Cr
 
 		private List<Class<? extends FlexoRole<?>>> buildAvailableFlexoRoleTypes(TechnologyAdapter<?> ta) {
 			List<Class<? extends FlexoRole<?>>> returned = new ArrayList<>();
-			for (Class<? extends ModelSlot<?>> modelSlotClass : ta.getAvailableModelSlotTypes()) {
+			for (Class<? extends ModelSlot<?,?>> modelSlotClass : ta.getAvailableModelSlotTypes()) {
 				for (Class<? extends FlexoRole<?>> flexoRoleClass : ta.getTechnologyAdapterService()
 						.getAvailableFlexoRoleTypes(modelSlotClass)) {
 					if (!returned.contains(flexoRoleClass)) {

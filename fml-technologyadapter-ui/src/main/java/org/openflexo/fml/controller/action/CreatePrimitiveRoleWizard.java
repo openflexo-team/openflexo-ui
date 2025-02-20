@@ -46,7 +46,7 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.gina.annotation.FIBPanel;
 import org.openflexo.view.controller.FlexoController;
 
-public class CreatePrimitiveRoleWizard extends AbstractCreateFlexoRoleWizard<CreatePrimitiveRole, ModelSlot<?>> {
+public class CreatePrimitiveRoleWizard extends AbstractCreateFlexoRoleWizard<CreatePrimitiveRole, ModelSlot<?,?>> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CreatePrimitiveRoleWizard.class.getPackage().getName());

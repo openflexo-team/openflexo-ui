@@ -1028,7 +1028,7 @@ public class FMLSourceCompletionProvider extends DefaultCompletionProvider {
 		if (cu.getTechnologyAdapterService() != null) {
 			TechnologyAdapterService taService = cu.getTechnologyAdapterService();
 			for (TechnologyAdapter<?> ta : taService.getTechnologyAdapters()) {
-				for (Class<? extends ModelSlot<?>> msType : ta.getAvailableModelSlotTypes()) {
+				for (Class<? extends ModelSlot<?,?>> msType : ta.getAvailableModelSlotTypes()) {
 					if (!cu.uses(msType)) {
 						// System.out.println(" >>>> " + msType);
 						retVal.add(new UseCompletion<>(this, alreadyEntered, msType));
