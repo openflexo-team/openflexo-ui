@@ -219,10 +219,12 @@ public class FMLEditor extends JPanel implements PropertyChangeListener, Hyperli
 					FMLCompilationUnitNode cuNode = (FMLCompilationUnitNode) cu.getPrettyPrintDelegate();
 					// System.out.println("cuNode=" + cuNode);
 
-					FMLObject focusedObject = cuNode.getFMLObjectAtLocation(textArea.getCaretLineNumber() + 1,
-							textArea.getCaretOffsetFromLineStart());
-					logger.info("select and focus object = " + focusedObject);
-					browser.makeVisible(focusedObject);
+					if (cuNode != null) {
+						FMLObject focusedObject = cuNode.getFMLObjectAtLocation(textArea.getCaretLineNumber() + 1,
+								textArea.getCaretOffsetFromLineStart());
+						logger.info("select and focus object = " + focusedObject);
+						browser.makeVisible(focusedObject);
+					}
 				}
 			}
 		});
