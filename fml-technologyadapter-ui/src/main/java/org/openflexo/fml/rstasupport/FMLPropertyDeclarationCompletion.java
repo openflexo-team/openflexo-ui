@@ -37,10 +37,12 @@ public abstract class FMLPropertyDeclarationCompletion<P extends FlexoProperty<?
 		FMLEntity<I> fmlEntity = getFMLEntity(provider, objectClass);
 		StringBuffer params = new StringBuffer();
 		int index = 0;
-		for (FMLProperty<?, ?> fmlProperty : fmlEntity.getProperties()) {
-			if (fmlProperty.isRequired()) {
-				params.append((index == 0 ? "" : ",") + fmlProperty.getName() + "=${value}");
-				index++;
+		if (fmlEntity != null) {
+			for (FMLProperty<?, ?> fmlProperty : fmlEntity.getProperties()) {
+				if (fmlProperty.isRequired()) {
+					params.append((index == 0 ? "" : ",") + fmlProperty.getName() + "=${value}");
+					index++;
+				}
 			}
 		}
 		return params.toString();
