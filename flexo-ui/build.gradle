@@ -3,7 +3,6 @@ dependencies {
   api flexoFoundation()
   //implementation project(':flexo-foundation-rm')
   implementation flexoFoundationRm()
-  //implementation 'org.openflexo:flexo-foundation-rm:2.99-SNAPSHOT}'
   //api project(':flexodocresourcemanager')
   implementation fmlCli()
   //implementation project(':fml-cli')
