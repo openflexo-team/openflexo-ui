@@ -13,27 +13,17 @@ package org.openflexo.fml.rstasupport.buildpath;
 import java.io.File;
 import java.io.IOException;
 
-import org.openflexo.fml.rstasupport.buildpath.ClasspathLibraryInfo;
-import org.openflexo.fml.rstasupport.buildpath.DirLibraryInfo;
-import org.openflexo.fml.rstasupport.buildpath.JarLibraryInfo;
-import org.openflexo.fml.rstasupport.buildpath.LibraryInfo;
-import org.openflexo.fml.rstasupport.buildpath.SourceLocation;
-import org.openflexo.fml.rstasupport.buildpath.ZipSourceLocation;
 import org.openflexo.fml.rstasupport.JarManager;
 import org.openflexo.fml.rstasupport.PackageMapNode;
 import org.openflexo.fml.rstasupport.classreader.ClassFile;
 
-
 /**
- * Information about a jar, compiled class folder, or other source of classes
- * to add to the "build path" for Java completion.  Instances of this class are
- * added to a {@link JarManager} for each library that should be on the build
- * path.<p>
+ * Information about a jar, compiled class folder, or other source of classes to add to the "build path" for Java completion. Instances of
+ * this class are added to a {@link JarManager} for each library that should be on the build path.
+ * <p>
  *
- * This class also keeps track of an optional source location, such as a zip
- * file or source folder.  If defined, this location is used to find the .java
- * source corresponding to the library's classes, which is used to display
- * Javadoc comments during code completion.
+ * This class also keeps track of an optional source location, such as a zip file or source folder. If defined, this location is used to
+ * find the .java source corresponding to the library's classes, which is used to display Javadoc comments during code completion.
  *
  * @author Robert Futrell
  * @version 1.0
@@ -41,32 +31,26 @@ import org.openflexo.fml.rstasupport.classreader.ClassFile;
  * @see JarLibraryInfo
  * @see ClasspathLibraryInfo
  */
-public abstract class LibraryInfo implements Comparable<LibraryInfo>,
-		Cloneable {
+public abstract class LibraryInfo implements Comparable<LibraryInfo>, Cloneable {
 
 	/**
-	 * The location of the source files corresponding to this library.  This
-	 * may be <code>null</code>.
+	 * The location of the source files corresponding to this library. This may be <code>null</code>.
 	 */
 	private SourceLocation sourceLoc;
 
-
 	/**
-	 * Does any cleanup necessary after a call to
-	 * {@link #bulkClassFileCreationStart()}.
+	 * Does any cleanup necessary after a call to {@link #bulkClassFileCreationStart()}.
 	 *
-	 * @throws IOException If an IO error occurs.
+	 * @throws IOException
+	 *             If an IO error occurs.
 	 * @see #bulkClassFileCreationStart()
 	 * @see #createClassFileBulk(String)
 	 */
 	public abstract void bulkClassFileCreationEnd() throws IOException;
 
-
 	/**
-	 * Readies this library for many class files being fetched via
-	 * {@link #createClassFileBulk(String)}.  After calling this method,
-	 * the actual class file fetching should be done in a try/finally block
-	 * that ensures a call to {@link #bulkClassFileCreationEnd()}; e.g.
+	 * Readies this library for many class files being fetched via {@link #createClassFileBulk(String)}. After calling this method, the
+	 * actual class file fetching should be done in a try/finally block that ensures a call to {@link #bulkClassFileCreationEnd()}; e.g.
 	 *
 	 * <pre>
 	 * libInfo.bulkClassFileCreationStart();
@@ -79,12 +63,12 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 	 * }
 	 * </pre>
 	 *
-	 * @throws IOException If an IO error occurs.
+	 * @throws IOException
+	 *             If an IO error occurs.
 	 * @see #bulkClassFileCreationEnd()
 	 * @see #createClassFileBulk(String)
 	 */
 	public abstract void bulkClassFileCreationStart() throws IOException;
-
 
 	/**
 	 * Returns a deep copy of this library.
@@ -96,92 +80,89 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 		try {
 			return super.clone();
 		} catch (CloneNotSupportedException cnse) { // Never happens
-			throw new IllegalStateException(
-			"Doesn't support cloning, but should! - " + getClass().getName());
+			throw new IllegalStateException("Doesn't support cloning, but should! - " + getClass().getName());
 		}
 	}
 
-
 	/**
-	 * Returns the class file information for the specified class.  Instances
-	 * of <code>JarReader</code> can call this method to lazily load
+	 * Returns the class file information for the specified class. Instances of <code>JarReader</code> can call this method to lazily load
 	 * information on individual classes and shove it into their package maps.
 	 * <p>
-	 * If many class files will be fetched at a time, you should prefer using
-	 * {@link #bulkClassFileCreationStart()} and
-	 * {@link #createClassFileBulk(String)} over this method, for performance
-	 * reasons.
+	 * If many class files will be fetched at a time, you should prefer using {@link #bulkClassFileCreationStart()} and
+	 * {@link #createClassFileBulk(String)} over this method, for performance reasons.
 	 *
-	 * @param entryName The fully qualified name of the class file.
-	 * @return The class file, or <code>null</code> if it isn't found in this
-	 *         library.
-	 * @throws IOException If an IO error occurs.
+	 * @param entryName
+	 *            The fully qualified name of the class file.
+	 * @return The class file, or <code>null</code> if it isn't found in this library.
+	 * @throws IOException
+	 *             If an IO error occurs.
 	 * @see #createClassFileBulk(String)
 	 */
 	public abstract ClassFile createClassFile(String entryName) throws IOException;
 
-
 	/**
-	 * Returns the class file information for the specified class.  Instances
-	 * of <code>JarReader</code> can call this method to lazily load
+	 * Returns the class file information for the specified class. Instances of <code>JarReader</code> can call this method to lazily load
 	 * information on individual classes and shove it into their package maps.
 	 * <p>
-	 * This method should be used when multiple classes will be fetched from
-	 * this library at the same time.  It should only be called after a call to
-	 * {@link #bulkClassFileCreationStart()}.  If only a single class file is
-	 * being fetched, it is simpler to call {@link #createClassFile(String)}.
+	 * This method should be used when multiple classes will be fetched from this library at the same time. It should only be called after a
+	 * call to {@link #bulkClassFileCreationStart()}. If only a single class file is being fetched, it is simpler to call
+	 * {@link #createClassFile(String)}.
 	 *
-	 * @param entryName The fully qualified name of the class file.
-	 * @return The class file, or <code>null</code> if it isn't found in this
-	 *         library.
-	 * @throws IOException If an IO error occurs.
+	 * @param entryName
+	 *            The fully qualified name of the class file.
+	 * @return The class file, or <code>null</code> if it isn't found in this library.
+	 * @throws IOException
+	 *             If an IO error occurs.
 	 * @see #createClassFile(String)
 	 */
-	public abstract ClassFile createClassFileBulk(String entryName)
-			throws IOException;
-
+	public abstract ClassFile createClassFileBulk(String entryName) throws IOException;
 
 	/**
-	 * Creates and returns a map of maps representing the hierarchical package
-	 * structure in this library.
+	 * Creates and returns a map of maps representing the hierarchical package structure in this library.
 	 *
 	 * @return The package structure in this library.
-	 * @throws IOException If an IO error occurs.
+	 * @throws IOException
+	 *             If an IO error occurs.
 	 */
 	public abstract PackageMapNode createPackageMap() throws IOException;
 
-
 	/**
-	 * Two <code>LibraryInfo</code>s are considered equal if they represent
-	 * the same class file location.  Source attachment is irrelevant.
+	 * Two <code>LibraryInfo</code>s are considered equal if they represent the same class file location. Source attachment is irrelevant.
 	 *
-	 * @return Whether the specified instance represents the same class
-	 *         source as this one.
+	 * @return Whether the specified instance represents the same class source as this one.
 	 */
 	@Override
 	public boolean equals(Object o) {
-		return o instanceof LibraryInfo &&
-				compareTo((LibraryInfo)o)==0;
+		return o instanceof LibraryInfo && compareTo((LibraryInfo) o) == 0;
 	}
 
-
 	/**
-	 * Returns information on the "main" jar for a JRE.  This will be
-	 * <tt>rt.jar</tt> everywhere except OS X, where it will be
-	 * <tt>classes.jar</tt>.  The associated source zip/jar file is also
-	 * checked for.
+	 * Returns information on the "main" jar for a JRE. This will be <tt>rt.jar</tt> everywhere except OS X, where it will be
+	 * <tt>classes.jar</tt>. The associated source zip/jar file is also checked for.
 	 *
-	 * @param jreHome The location of the JRE.
-	 * @return The information, or <code>null</code> if there is not a JRE in
-	 *         the specified directory.
+	 * @param jreHome
+	 *            The location of the JRE.
+	 * @return The information, or <code>null</code> if there is not a JRE in the specified directory.
 	 * @see #getMainJreJarInfo()
 	 */
 	public static LibraryInfo getJreJarInfo(File jreHome) {
 
 		LibraryInfo info = null;
-
-		File mainJar = new File(jreHome, "lib/rt.jar"); // Sun JRE's
 		File sourceZip;
+
+		// Is it a "modern" (modularized, >=1.9) java ?
+		File jmodsDirectory = new File(jreHome, "jmods");
+		if (jmodsDirectory.exists()) {
+			info = new ModulesLibraryInfo(jmodsDirectory);
+			sourceZip = new File(jreHome, "lib/src.zip");
+			if (sourceZip.isFile()) { // Make sure our last guess actually exists
+				info.setSourceLocation(new ZipSourceLocation(sourceZip));
+			}
+			return info;
+		}
+
+		// Old java
+		File mainJar = new File(jreHome, "lib/rt.jar"); // Sun JRE's
 
 		if (mainJar.isFile()) { // Sun JRE's
 			sourceZip = new File(jreHome, "src.zip");
@@ -204,8 +185,7 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 			}
 		}
 		else {
-			System.err.println("[ERROR]: Cannot locate JRE jar in " +
-								jreHome.getAbsolutePath());
+			System.err.println("[ERROR]: Cannot locate JRE jar in " + jreHome.getAbsolutePath());
 			mainJar = null;
 		}
 
@@ -213,13 +193,11 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 
 	}
 
-
 	/**
-	 * Returns the time this library was last modified.  For jar files, this
-	 * would be the modified date of the file.  For directories, this would be
-	 * the time a file in the directory was most recently modified.  This
-	 * information is used to determine whether callers should clear their
-	 * cached package map information and load it anew.<p>
+	 * Returns the time this library was last modified. For jar files, this would be the modified date of the file. For directories, this
+	 * would be the time a file in the directory was most recently modified. This information is used to determine whether callers should
+	 * clear their cached package map information and load it anew.
+	 * <p>
 	 *
 	 * This API may change in the future.
 	 *
@@ -227,23 +205,18 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 	 */
 	public abstract long getLastModified();
 
-
 	/**
-	 * Returns the location of this library, as a string.  If this library
-	 * is contained in a single jar file, this will be the full path to that
-	 * jar.  If it is a directory containing classes, it will be the full path
-	 * of the directory.  Otherwise, this value will be <code>null</code>.
+	 * Returns the location of this library, as a string. If this library is contained in a single jar file, this will be the full path to
+	 * that jar. If it is a directory containing classes, it will be the full path of the directory. Otherwise, this value will be
+	 * <code>null</code>.
 	 *
 	 * @return The location of this library.
 	 */
 	public abstract String getLocationAsString();
 
-
 	/**
-	 * Returns information on the JRE running this application.  This will be
-	 * <tt>rt.jar</tt> everywhere except OS X, where it will be
-	 * <tt>classes.jar</tt>.  The associated source zip/jar file is also
-	 * checked for.
+	 * Returns information on the JRE running this application. This will be <tt>rt.jar</tt> everywhere except OS X, where it will be
+	 * <tt>classes.jar</tt>. The associated source zip/jar file is also checked for.
 	 *
 	 * @return The information, or <code>null</code> if an error occurs.
 	 * @see #getJreJarInfo(File)
@@ -252,7 +225,6 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 		String javaHome = System.getProperty("java.home");
 		return getJreJarInfo(new File(javaHome));
 	}
-
 
 	/**
 	 * Returns the location of the source corresponding to this library.
@@ -264,33 +236,28 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 		return sourceLoc;
 	}
 
-
 	@Override
 	public int hashCode() {
 		return hashCodeImpl();
 	}
 
-
 	/**
-	 * Subclasses should override this method since {@link #equals(Object)} is
-	 * overridden.  Instances of <code>LibraryInfo</code> aren't typically
-	 * stored in maps, so the hash value isn't necessarily important to
-	 * <code>RSTALanguageSupport</code>.
+	 * Subclasses should override this method since {@link #equals(Object)} is overridden. Instances of <code>LibraryInfo</code> aren't
+	 * typically stored in maps, so the hash value isn't necessarily important to <code>RSTALanguageSupport</code>.
 	 *
 	 * @return The hash code for this library.
 	 */
 	public abstract int hashCodeImpl();
 
-
 	/**
 	 * Sets the location of the source corresponding to this library.
 	 *
-	 * @param sourceLoc The source location.  This may be <code>null</code>.
+	 * @param sourceLoc
+	 *            The source location. This may be <code>null</code>.
 	 * @see #getSourceLocation()
 	 */
 	public void setSourceLocation(SourceLocation sourceLoc) {
 		this.sourceLoc = sourceLoc;
 	}
-
 
 }
