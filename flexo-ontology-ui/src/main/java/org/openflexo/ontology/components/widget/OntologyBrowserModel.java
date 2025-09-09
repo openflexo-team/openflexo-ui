@@ -471,9 +471,10 @@ public class OntologyBrowserModel<TA extends TechnologyAdapter<TA>> implements H
 
 		if (object instanceof IFlexoOntologyDataProperty && getDataType() != null) {
 			IFlexoOntologyDataProperty<TA> p = (IFlexoOntologyDataProperty<TA>) object;
-			if (p.getRange() != getDataType()) {
-				return false;
-			}
+			// TODO: check this ???
+			// if (p.getRange() != getDataType()) {
+			return false;
+			// }
 		}
 
 		return true;
