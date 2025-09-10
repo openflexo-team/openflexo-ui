@@ -69,7 +69,7 @@ public class IconLibrary {
 			ResourceLocator.locateResource("Icons/Panels/ProgressBackground.jpg"));
 	public static final ImageIcon WELCOME_BACKGROUND = new ImageIconResource(
 			ResourceLocator.locateResource("Icons/Panels/WelcomeBackground.jpg"));
-	public static final ImageIcon SPLASH_IMAGE = new ImageIconResource(ResourceLocator.locateResource("Icons/Panels/SplashPanel.jpg"));
+	public static final ImageIcon SPLASH_IMAGE = new ImageIconResource(ResourceLocator.locateResource("Icons/Panels/SplashPanel.png"));
 
 	// Flexo icons
 	public static final ImageIcon BUSINESS_PLUS_32_ICON = new ImageIconResource(

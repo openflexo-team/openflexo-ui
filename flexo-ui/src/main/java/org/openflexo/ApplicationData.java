@@ -75,7 +75,7 @@ public class ApplicationData extends PropertyChangedSupportDefaultImplementation
 
 	// TODO: handle this
 	public String getBusinessName() {
-		return "Diatomée infrastructure";
+		return ApplicationVersion.DISTRIBUTION;
 	}
 
 	public String getVersion() {
