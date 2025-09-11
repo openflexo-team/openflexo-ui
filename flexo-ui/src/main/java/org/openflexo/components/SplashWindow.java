@@ -78,20 +78,20 @@ public class SplashWindow extends JDialog {
 		flexoLabel.setBackground(Color.RED);
 		flexoLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
 		getContentPane().add(flexoLabel);
-		flexoLabel.setBounds(190, 82, 280, 59);
+		flexoLabel.setBounds(190, 30, 280, 59);
 
 		JLabel businessLabel = new JLabel(ApplicationVersion.DISTRIBUTION, SwingConstants.LEFT);
 		businessLabel.setForeground(FlexoCst.WELCOME_FLEXO_COLOR);
 		businessLabel.setFont(new Font("SansSerif", Font.ITALIC, 15));
 		getContentPane().add(businessLabel);
-		businessLabel.setBounds(200, 155, 280, 15);
+		businessLabel.setBounds(200, 95, 280, 15);
 
 		JLabel versionLabel = new JLabel(
 				"Version " + FlexoCst.BUSINESS_APPLICATION_VERSION + " (build " + ApplicationVersion.BUILD_ID + ")", SwingConstants.LEFT);
 		versionLabel.setForeground(Color.DARK_GRAY);
 		versionLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
 		getContentPane().add(versionLabel);
-		versionLabel.setBounds(202, 175, 280, 15);
+		versionLabel.setBounds(202, 115, 280, 15);
 
 		JLabel urlLabel = new JLabel("<html><u>www.openflexo.org</u></html>", SwingConstants.RIGHT);
 		urlLabel.addMouseListener(new MouseAdapter() {
@@ -129,13 +129,13 @@ public class SplashWindow extends JDialog {
 		urlLabel.setForeground(new Color(180, 150, 200));
 		urlLabel.setFont(new Font("SansSerif", Font.PLAIN, 10));
 		getContentPane().add(urlLabel);
-		urlLabel.setBounds(270, 263, 280, 12);
+		urlLabel.setBounds(140, 165, 280, 12);
 
-		JLabel copyrightLabel = new JLabel("(c) Copyright Openflexo, 2013-2025, all rights reserved", SwingConstants.RIGHT);
+		JLabel copyrightLabel = new JLabel("(c) Copyright Openflexo, 2013-2018, Lab-STICC 2018-2025", SwingConstants.RIGHT);
 		copyrightLabel.setForeground(Color.DARK_GRAY);
 		copyrightLabel.setFont(new Font("SansSerif", Font.PLAIN, 9));
 		getContentPane().add(copyrightLabel);
-		copyrightLabel.setBounds(270, 277, 280, 12);
+		copyrightLabel.setBounds(140, 180, 280, 12);
 
 		getContentPane().add(splash);
 		splash.setBounds(0, 0, imageDim.width, imageDim.height);
