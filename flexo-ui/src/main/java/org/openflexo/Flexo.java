@@ -39,17 +39,16 @@
 
 package org.openflexo;
 
+import java.awt.Desktop;
 import java.awt.Frame;
+import java.awt.Taskbar;
 import java.awt.Window;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
@@ -71,8 +70,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.openflexo.application.FlexoApplication;
 import org.openflexo.application.Platform;
 import org.openflexo.application.PlatformHook;
-import org.openflexo.application.PlatformHook.NativeOsCallback;
-import org.openflexo.components.AboutDialog;
 import org.openflexo.components.RequestLoginDialog;
 import org.openflexo.components.SplashWindow;
 import org.openflexo.components.WelcomeDialog;
@@ -81,11 +78,11 @@ import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.gina.controller.FIBController.Status;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.logging.FlexoLoggingFormatter;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.logging.FlexoLoggingManager.LoggingManagerDelegate;
 import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.project.LoadProjectTask;
 import org.openflexo.replay.ScenarioPlayer;
@@ -125,42 +122,6 @@ public class Flexo {
 
 	public static boolean isDemoMode() {
 		return demoMode;
-	}
-
-	protected static String getResourcePath() {
-		if (ToolBox.isMacOS()) {
-
-			try {
-				Class<?> fileManager = Class.forName("com.apple.eio.FileManager");
-				if (fileManager == null) {
-					return null;
-				}
-				Method m = fileManager.getDeclaredMethod("getResource", new Class[] { String.class, String.class });
-				String s = (String) m.invoke(null, "English.dict", "Localized");
-				s = s.substring(System.getProperty("user.dir").length() + 1);
-				s = s.substring(0, s.length() - "Localized/English.dict".length());
-				return s;
-			} catch (SecurityException e) {
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (NoSuchMethodException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				if (e.getCause() instanceof FileNotFoundException) {
-					return System.getProperty("user.dir");
-				}
-				e.printStackTrace();
-			}
-			return System.getProperty("user.dir");
-		}
-		else {
-			return System.getProperty("user.dir");
-		}
 	}
 
 	protected static void registerShutdownHook() {
@@ -221,16 +182,13 @@ public class Flexo {
 		// Pre-initialization of logging
 		FlexoLoggingManager.initialize(-1, false, null, Level.INFO, null);
 
+		// We first determine the platform we are currently using
 		platform = Platform.determinePlatform();
 		logger.info("Platform=" + platform);
 
+		// We build the platform hook for this platform
 		platformHook = Platform.determinePlatform().accept(PlatformHook.CONSTRUCT_FROM_PLATFORM);
 		logger.info("platformHook=" + platformHook);
-
-		DefaultNativeOsCallback osCallback = new DefaultNativeOsCallback();
-
-		platformHook.setNativeOsCallback(osCallback);
-		// call the really early hook before we do anything else
 		platformHook.preStartupHook();
 
 		FlexoApplication.installEventQueue();
@@ -243,10 +201,39 @@ public class Flexo {
 			new ScenarioPlayer();
 		}
 
-		platformHook.startupHook(Flexo::askUpdateJava);
+		if (Taskbar.isTaskbarSupported()) {
+			Taskbar taskbar = Taskbar.getTaskbar();
+
+			if (taskbar.isSupported(Taskbar.Feature.ICON_IMAGE)) {
+				try {
+					taskbar.setIconImage(IconLibrary.OPENFLEXO_NOTEXT_128.getImage());
+				} catch (UnsupportedOperationException e) {
+					logger.warning("Unable to set icon image : " + e.getMessage());
+				}
+			}
+		}
+
+		Desktop desktop = Desktop.getDesktop();
+		if (desktop.isSupported(Desktop.Action.APP_QUIT_HANDLER)) {
+			desktop.setQuitHandler(platformHook);
+		}
+		if (desktop.isSupported(Desktop.Action.APP_ABOUT)) {
+			desktop.setAboutHandler(platformHook);
+		}
+		if (desktop.isSupported(Desktop.Action.APP_PREFERENCES)) {
+			desktop.setPreferencesHandler(platformHook);
+		}
+		if (desktop.isSupported(Desktop.Action.APP_OPEN_FILE)) {
+			desktop.setOpenFileHandler(platformHook);
+		}
+		if (desktop.isSupported(Desktop.Action.APP_PRINT_FILE)) {
+			desktop.setPrintFileHandler(platformHook);
+		}
+
+		platformHook.startupHook();
 
 		// 1. Very important to initiate first the ResourceLocator. Nothing else. See also issue 463.
-		String resourcepath = getResourcePath();
+		String resourcepath = System.getProperty("user.dir"); // getResourcePath();
 
 		// TODO : XtoF, Check if this is necessary.... now that Resources are located in classpath
 
@@ -269,50 +256,11 @@ public class Flexo {
 
 		remapStandardOuputs(isDev, applicationContext);
 
-		osCallback.setApplicationContext(applicationContext);
+		platformHook.registerApplicationContext(applicationContext);
 
 		// Real initialization of logging
 		initializeLoggingManager(applicationContext);
 
-		/*final ApplicationContext applicationContext = new ApplicationContext() {
-		
-			@Override
-			public FlexoEditor makeFlexoEditor(FlexoProject project) {
-				return new InteractiveFlexoEditor(this, project);
-			}
-		
-			@Override
-			protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
-				return new InteractiveFlexoProjectReferenceLoader(this);
-			}
-		
-			@Override
-			protected FlexoEditor createApplicationEditor() {
-				return new InteractiveFlexoEditor(this, null);
-			}
-		
-			@Override
-			protected FlexoResourceCenterService createResourceCenterService() {
-				return DefaultResourceCenterService.getNewInstance(GeneralPreferences.getLocalResourceCenterDirectory());
-			}
-		
-			@Override
-			public ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory) {
-				if (UserType.isCustomerRelease() || UserType.isAnalystRelease()) {
-					return new BasicInteractiveProjectLoadingHandler(projectDirectory);
-				} else {
-					return new FullInteractiveProjectLoadingHandler(projectDirectory);
-				}
-			}
-		
-			@Override
-			protected TechnologyAdapterControllerService createTechnologyAdapterService(FlexoResourceCenterService resourceCenterService) {
-				TechnologyAdapterControllerService returned = DefaultTechnologyAdapterControllerService.getNewInstance();
-				returned.setFlexoResourceCenterService(resourceCenterService);
-				returned.loadAvailableTechnologyAdapters();
-				return returned;
-			}
-		};*/
 		// Before starting the UI, we need to initialize localization
 		FlexoApplication.initialize(applicationContext);
 		SwingUtilities.invokeLater(() -> initFlexo(applicationContext, splashWindow2));
@@ -751,97 +699,6 @@ public class Flexo {
 
 	public static void setFileNameToOpen(String filename) {
 		Flexo.fileNameToOpen = filename;
-	}
-
-	private static class DefaultNativeOsCallback implements NativeOsCallback {
-
-		private ApplicationContext applicationContext;
-
-		@Override
-		public void openFiles(List<File> files) {
-			logger.info("Not implemented: open " + files);
-		}
-
-		@Override
-		public boolean handleQuitRequest() {
-			try {
-				getModuleLoader().quit(true);
-				return true;
-			} catch (OperationCancelledException e) {
-				return false;
-			}
-		}
-
-		@Override
-		public void handleAbout() {
-			new AboutDialog();
-		}
-
-		@Override
-		public void handlePreferences() {
-			getApplicationContext().getPreferencesService().showPreferences();
-		}
-
-		public ApplicationContext getApplicationContext() {
-			return applicationContext;
-		}
-
-		public void setApplicationContext(ApplicationContext applicationContext) {
-			this.applicationContext = applicationContext;
-		}
-
-		public ModuleLoader getModuleLoader() {
-			return applicationContext.getModuleLoader();
-		}
-
-	}
-
-	/**
-	 * Asks user to update its version of Java.
-	 * 
-	 * @param updVersion
-	 *            target update version
-	 * @param url
-	 *            download URL
-	 * @param major
-	 *            true for a migration towards a major version of Java (8:9), false otherwise
-	 * @param eolDate
-	 *            the EOL/expiration date
-	 * @since 12270
-	 */
-	public static void askUpdateJava(String updVersion, String url, String eolDate, boolean major) {
-		// TODO one day if required
-		/*ExtendedDialog ed = new ExtendedDialog(
-		        Main.parent,
-		        tr("Outdated Java version"),
-		        tr("OK"), tr("Update Java"), tr("Cancel"));
-		// Check if the dialog has not already been permanently hidden by user
-		if (!ed.toggleEnable("askUpdateJava"+updVersion).toggleCheckState()) {
-		    ed.setButtonIcons("ok", "java", "cancel").setCancelButton(3);
-		    ed.setMinimumSize(new Dimension(480, 300));
-		    ed.setIcon(JOptionPane.WARNING_MESSAGE);
-		    StringBuilder content = new StringBuilder(tr("You are running version {0} of Java.",
-		            "<b>"+System.getProperty("java.version")+"</b>")).append("<br><br>");
-		    if ("Sun Microsystems Inc.".equals(System.getProperty("java.vendor")) && !platform.isOpenJDK()) {
-		        content.append("<b>").append(tr("This version is no longer supported by {0} since {1} and is not recommended for use.",
-		                "Oracle", eolDate)).append("</b><br><br>");
-		    }
-		    content.append("<b>")
-		           .append(major ?
-		                tr("JOSM will soon stop working with this version; we highly recommend you to update to Java {0}.", updVersion) :
-		                tr("You may face critical Java bugs; we highly recommend you to update to Java {0}.", updVersion))
-		           .append("</b><br><br>")
-		           .append(tr("Would you like to update now ?"));
-		    ed.setContent(content.toString());
-		
-		    if (ed.showDialog().getValue() == 2) {
-		        try {
-		            platform.openUrl(url);
-		        } catch (IOException e) {
-		            Logging.warn(e);
-		        }
-		    }
-		}*/
 	}
 
 }

@@ -1,27 +1,17 @@
 // License: GPL. For details, see LICENSE file.
 package org.openflexo.application;
 
-import java.awt.Desktop;
-import java.awt.Image;
 import java.awt.Window;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.net.URISyntaxException;
 import java.util.logging.Logger;
 
 import javax.swing.UIManager;
 
-import org.openflexo.icon.IconLibrary;
 import org.openflexo.toolbox.CheckParameterUtil;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.view.FlexoFrame;
 
 /**
  * {@code PlatformHook} implementation for Apple Mac OS X systems.
@@ -31,13 +21,11 @@ import org.openflexo.view.FlexoFrame;
  *
  * @since 1023
  */
-public class PlatformHookOsx implements PlatformHook, InvocationHandler {
+public class PlatformHookOsx extends PlatformHook /*implements InvocationHandler*/ {
 
 	protected static final Logger logger = Logger.getLogger(PlatformHookOsx.class.getPackage().getName());
 
 	private String oSBuildNumber;
-
-	private NativeOsCallback osCallback;
 
 	@Override
 	public Platform getPlatform() {
@@ -50,108 +38,21 @@ public class PlatformHookOsx implements PlatformHook, InvocationHandler {
 		// MUST be set before Swing is initialized!
 		// And will not work when one of the system independent LAFs is used.
 		// They just insist on painting themselves...
-
-		// logger.info("preStartupHook()");
-
+		super.preStartupHook();
 		ToolBox.updateSystemProperty("apple.laf.useScreenMenuBar", "true");
 		ToolBox.updateSystemProperty("apple.awt.application.name", "Openflexo");
 	}
 
 	@Override
-	public void startupHook(JavaExpirationCallback callback) {
+	public void startupHook() {
 
 		logger.info("startupHook() with Java Version=" + ToolBox.getJavaVersion());
 
-		// Here we register callbacks for the menu entries in the system menu and file opening through double-click
-		// http://openjdk.java.net/jeps/272
-		// https://bugs.openjdk.java.net/browse/JDK-8048731
-		// http://cr.openjdk.java.net/~azvegint/jdk/9/8143227/10/jdk/
-		// This method must be cleaned up after we switch to Java 9
-		try {
-			Class<?> eawtApplication = Class.forName("com.apple.eawt.Application");
-			Class<?> quitHandler = findHandlerClass("QuitHandler");
-			Class<?> aboutHandler = findHandlerClass("AboutHandler");
-			Class<?> openFilesHandler = findHandlerClass("OpenFilesHandler");
-			Class<?> preferencesHandler = findHandlerClass("PreferencesHandler");
-			Object proxy = Proxy.newProxyInstance(PlatformHookOsx.class.getClassLoader(),
-					new Class<?>[] { quitHandler, aboutHandler, openFilesHandler, preferencesHandler }, this);
-			Object appli = eawtApplication.getConstructor((Class[]) null).newInstance((Object[]) null);
-			if (ToolBox.getJavaVersion() >= 9) {
-				setHandlers(Desktop.class, quitHandler, aboutHandler, openFilesHandler, preferencesHandler, proxy, Desktop.getDesktop());
-			}
-			else {
-				setHandlers(eawtApplication, quitHandler, aboutHandler, openFilesHandler, preferencesHandler, proxy, appli);
-				// this method has been deprecated, but without replacement. To remove with Java 9 migration
-				eawtApplication.getDeclaredMethod("setEnabledPreferencesMenu", boolean.class).invoke(appli, Boolean.TRUE);
-			}
-			// setup the dock icon. It is automatically set with application bundle and Web start but we need
-			// to do it manually if run with `java -jar``
-			eawtApplication.getDeclaredMethod("setDockIconImage", Image.class).invoke(appli, IconLibrary.OPENFLEXO_NOTEXT_128.getImage());
-			// enable full screen
-			enableOSXFullscreen(FlexoFrame.getActiveFrame());
-		} catch (ReflectiveOperationException | SecurityException | IllegalArgumentException ex) {
-			// We'll just ignore this for now. The user will still be able to close Openflexo by closing all its windows.
-			logger.warning("Failed to register with OSX: " + ex);
-		}
-		// Unused checkExpiredJava(callback);
 	}
 
 	@Override
 	public int getMenuShortcutKeyMaskEx() {
 		return KeyEvent.META_DOWN_MASK;
-	}
-
-	/**
-	 * Registers Apple handlers.
-	 * 
-	 * @param appClass
-	 *            application class
-	 * @param quitHandler
-	 *            quit handler class
-	 * @param aboutHandler
-	 *            about handler class
-	 * @param openFilesHandler
-	 *            open file handler class
-	 * @param preferencesHandler
-	 *            preferences handler class
-	 * @param proxy
-	 *            proxy
-	 * @param appInstance
-	 *            application instance (instance of {@code appClass})
-	 * @throws IllegalAccessException
-	 *             in case of reflection error
-	 * @throws InvocationTargetException
-	 *             in case of reflection error
-	 * @throws NoSuchMethodException
-	 *             if any {@code set*Handler} method cannot be found
-	 */
-	protected void setHandlers(Class<?> appClass, Class<?> quitHandler, Class<?> aboutHandler, Class<?> openFilesHandler,
-			Class<?> preferencesHandler, Object proxy, Object appInstance)
-			throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-		appClass.getDeclaredMethod("setQuitHandler", quitHandler).invoke(appInstance, proxy);
-		appClass.getDeclaredMethod("setAboutHandler", aboutHandler).invoke(appInstance, proxy);
-		appClass.getDeclaredMethod("setOpenFileHandler", openFilesHandler).invoke(appInstance, proxy);
-		appClass.getDeclaredMethod("setPreferencesHandler", preferencesHandler).invoke(appInstance, proxy);
-	}
-
-	/**
-	 * Find Apple handler class in {@code com.apple.eawt} or {@code java.awt.desktop} packages.
-	 * 
-	 * @param className
-	 *            simple class name
-	 * @return class
-	 * @throws ClassNotFoundException
-	 *             if the handler class cannot be found
-	 */
-	protected Class<?> findHandlerClass(String className) throws ClassNotFoundException {
-		try {
-			// Java 8 handlers
-			return Class.forName("com.apple.eawt." + className);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			// Java 9 handlers
-			return Class.forName("java.awt.desktop." + className);
-		}
 	}
 
 	/**
@@ -174,56 +75,16 @@ public class PlatformHookOsx implements PlatformHook, InvocationHandler {
 	}
 
 	@Override
-	public void setNativeOsCallback(NativeOsCallback callback) {
-		osCallback = Objects.requireNonNull(callback);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-		logger.info("OSX handler: " + method.getName() + " args=" + Arrays.toString(args));
-		switch (method.getName()) {
-			case "openFiles":
-				if (args[0] != null) {
-					try {
-						Object oFiles = args[0].getClass().getMethod("getFiles").invoke(args[0]);
-						if (oFiles instanceof List) {
-							osCallback.openFiles((List<File>) oFiles);
-						}
-					} catch (ReflectiveOperationException | SecurityException | IllegalArgumentException ex) {
-						logger.warning("Failed to access open files event: " + ex);
-					}
-				}
-				break;
-			case "handleQuitRequestWith":
-				boolean closed = osCallback.handleQuitRequest();
-				if (args[1] != null) {
-					try {
-						args[1].getClass().getDeclaredMethod(closed ? "performQuit" : "cancelQuit").invoke(args[1]);
-					} catch (IllegalAccessException e) {
-						e.printStackTrace();
-						// with Java 9, module java.desktop does not export com.apple.eawt, use new Desktop API instead
-						Class.forName("java.awt.desktop.QuitResponse").getMethod(closed ? "performQuit" : "cancelQuit").invoke(args[1]);
-					}
-				}
-				break;
-			case "handleAbout":
-				osCallback.handleAbout();
-				break;
-			case "handlePreferences":
-				osCallback.handlePreferences();
-				break;
-			default:
-				logger.warning("OSX unsupported method: " + method.getName());
+	public boolean openUrl(String url) throws IOException, URISyntaxException {
+		if (!super.openUrl(url)) {
+			Runtime.getRuntime().exec("open " + url);
 		}
-		return null;
+		return true;
 	}
 
-	@Override
-	public void openUrl(String url) throws IOException {
-		Runtime.getRuntime().exec("open " + url);
-	}
-
+	/**
+	 *
+	 */
 	@Override
 	public void initSystemShortcuts() {
 		// CHECKSTYLE.OFF: LineLength

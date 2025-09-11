@@ -30,6 +30,7 @@ import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -67,7 +68,7 @@ import org.openflexo.view.FlexoFrame;
  *
  * @since 1023
  */
-public class PlatformHookWindows implements PlatformHook {
+public class PlatformHookWindows extends PlatformHook {
 
 	protected static final Logger logger = Logger.getLogger(PlatformHookWindows.class.getPackage().getName());
 
@@ -164,13 +165,15 @@ public class PlatformHookWindows implements PlatformHook {
 	}
 
 	@Override
-	public void startupHook(JavaExpirationCallback callback) {
-		// Unused checkExpiredJava(callback);
+	public void startupHook() {
 	}
 
 	@Override
-	public void openUrl(String url) throws IOException {
-		Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + url);
+	public boolean openUrl(String url) throws IOException, URISyntaxException {
+		if (!super.openUrl(url)) {
+			Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + url);
+		}
+		return true;
 	}
 
 	@Override
@@ -327,8 +330,9 @@ public class PlatformHookWindows implements PlatformHook {
 
 	@Override
 	public boolean rename(File from, File to) {
-		if (to.exists())
+		if (to.exists()) {
 			FileUtils.deleteFile(to);
+		}
 		return from.renameTo(to);
 	}
 

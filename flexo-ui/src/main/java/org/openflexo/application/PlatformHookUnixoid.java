@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,7 +25,7 @@ import org.openflexo.toolbox.ToolBox;
  *
  * @since 1023
  */
-public class PlatformHookUnixoid implements PlatformHook {
+public class PlatformHookUnixoid extends PlatformHook {
 
 	private static String DIR_BASE_NAME = "Openflexo";
 
@@ -44,7 +45,8 @@ public class PlatformHookUnixoid implements PlatformHook {
 	}
 
 	@Override
-	public void openUrl(String url) throws IOException {
+	public boolean openUrl(String url) throws IOException, URISyntaxException {
+		return super.openUrl(url);
 		/*for (String program : Config.getPref().getList("browser.unix",
 		        Arrays.asList("xdg-open", "#DESKTOP#", "$BROWSER", "gnome-open", "kfmclient openURL", "firefox"))) {
 		    try {
@@ -210,10 +212,12 @@ public class PlatformHookUnixoid implements PlatformHook {
 				if (line != null && !line.isEmpty()) {
 					line = line.replaceAll("\"+", "");
 					line = line.replaceAll("NAME=", ""); // strange code for some Gentoo's
-					if (line.startsWith("Linux ")) // e.g. Linux Mint
+					if (line.startsWith("Linux ")) { // e.g. Linux Mint
 						return line;
-					else if (!line.isEmpty())
+					}
+					else if (!line.isEmpty()) {
 						return "Linux " + line;
+					}
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -327,8 +331,9 @@ public class PlatformHookUnixoid implements PlatformHook {
 			if (result != null && !result.isEmpty() && prefix != null && !prefix.isEmpty()) {
 				result = prefix + result;
 			}
-			if (result != null)
+			if (result != null) {
 				result = result.replaceAll("\"+", "");
+			}
 			return result;
 		}
 	}
