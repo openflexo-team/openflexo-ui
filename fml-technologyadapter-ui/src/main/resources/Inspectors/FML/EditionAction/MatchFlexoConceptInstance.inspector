@@ -96,14 +96,14 @@
 				<Dependancy componentName="AddFlexoConceptActionPanel" />
 				<Dependancy componentName="AddFlexoConceptPatternRoleDropDown" />
 			</DropDown>
-			<Label label="parameters" index="20"
+			<Label label="arguments" index="20"
 				constraints="twocols(expandHorizontally=true;expandVertically=false;index=14;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)"
 				visible="" format="" icon="" tooltip="" localize="true" enable=""
 				clickAction="" doubleClickAction="" rightClickAction=""
 				enterPressedAction="" valueChangedAction="" valueTransform=""
 				valueValidator="" />
 			<Table
-				iteratorClassName="org.openflexo.foundation.fml.rt.editionaction.CreateFlexoConceptInstanceParameter"
+				iteratorClassName="org.openflexo.foundation.fml.FlexoBehaviourParameter"
 				visibleRowCount="4" rowHeight="18" autoSelectFirstRow="false"
 				createNewRowOnClick="false" boundToSelectionManager="false"
 				showFooter="false" selectionMode="MultipleIntervalSelection"
@@ -115,19 +115,19 @@
 				clickAction="" doubleClickAction="" rightClickAction=""
 				enterPressedAction="" valueChangedAction="" valueTransform=""
 				valueValidator="" name="MatchParametersTable" index="21"
-				data="data.parameters"
+				data="data.newInstanceArguments"
 				constraints="twocols(expandHorizontally=true;expandVertically=true;index=15;insetsBottom=0;insetsLeft=5;insetsRight=5;insetsTop=0;location=right)"
 				visible="">
-				<IconColumn data="controller.iconForObject(iterator.param)"
+				<IconColumn data="controller.iconForObject(iterator)"
 					format="" title="icon" columnWidth="25" resizable="false"
 					displayTitle="false" color="" bgColor="" tooltip=""
 					valueChangedAction="" name="icon" />
-				<LabelColumn data="iterator.param.name" format=""
+				<LabelColumn data="iterator.name" format=""
 					title="parameter" columnWidth="80" resizable="true" displayTitle="true"
 					color="" bgColor="" tooltip="" valueChangedAction="" name="label" />
 				<CustomColumn componentClassName="org.openflexo.gina.swing.utils.JavaBindingSelector"
 					customRendering="false" disableTerminateEditOnFocusLost="false"
-					data="iterator.value" format="" title="value" columnWidth="200"
+					data="data.getNewInstanceArgumentValue(iterator)" format="" title="value" columnWidth="200"
 					resizable="true" displayTitle="true" color="" bgColor="" tooltip=""
 					valueChangedAction="" name="value">
 					<ColumnAssignment variable="component.bindable"
