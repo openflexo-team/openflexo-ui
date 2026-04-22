@@ -14,7 +14,7 @@
 		manageDynamicModel="true" clickAction="controller.selectedObjectChanged()"
 		doubleClickAction="controller.apply()" enterPressedAction="controller.apply()"
 		list="data.matchingValues" showIcon="true"
-		iteratorClassName="org.openflexo.foundation.fml.rt.rm.AbstractVirtualModelInstanceResource"
+		iteratorClassName="org.openflexo.foundation.fml.rt.rm.FMLRTVirtualModelInstanceResource"
 		autoSelectFirstRow="true" />
 	<Panel layout="gridbag" borderTitle="Panel" darkLevel="0" index="1"
 		constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)"
@@ -26,7 +26,7 @@
 			name="MatchesLabel" localize="false" />
 	</Panel>
 	<Browser root="data.rootObject"
-		iteratorClassName="org.openflexo.foundation.fml.rt.rm.AbstractVirtualModelInstanceResource"
+		iteratorClassName="org.openflexo.foundation.fml.rt.rm.FMLRTVirtualModelInstanceResource"
 		visibleRowCount="5" rowHeight="18" boundToSelectionManager="false"
 		selectionMode="DiscontiguousTreeSelection" selected="data.selectedValue"
 		showFooter="true" rootVisible="true" showRootsHandle="true" localize="true"
@@ -59,7 +59,7 @@
 				name="views" />
 		</BrowserElement>
 		<BrowserElement
-			dataClassName="org.openflexo.foundation.fml.rt.rm.AbstractVirtualModelInstanceResource"
+			dataClassName="org.openflexo.foundation.fml.rt.rm.FMLRTVirtualModelInstanceResource"
 			label="virtualModelInstanceResource.name" icon="controller.iconForObject(virtualModelInstanceResource)"
 			enabled="(virtualModelInstanceResource.isLoaded) &amp;&amp;(data.isAcceptableValue(virtualModelInstanceResource))"
 			isEditable="false" filtered="false" defaultVisible="true"
