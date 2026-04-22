@@ -85,7 +85,7 @@ import org.openflexo.foundation.fml.rt.editionaction.ExecuteFML;
 import org.openflexo.foundation.fml.rt.editionaction.ExecuteFlexoBehaviour;
 import org.openflexo.foundation.fml.rt.editionaction.SelectFlexoConceptInstance;
 import org.openflexo.foundation.fml.rt.editionaction.SelectVirtualModelInstance;
-import org.openflexo.foundation.fml.rt.rm.AbstractVirtualModelInstanceResource;
+import org.openflexo.foundation.fml.rt.rm.FMLRTVirtualModelInstanceResource;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.task.Progress;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
@@ -301,13 +301,13 @@ public class FMLRTTechnologyAdapterController extends TechnologyAdapterControlle
 	/*@Override
 	public boolean hasModuleViewForObject(TechnologyObject<FMLRTTechnologyAdapter> object, FlexoController controller,
 			FlexoPerspective perspective) {
-
+	
 		for (TechnologyAdapterPluginController<?> plugin : getTechnologyAdapterControllerService().getActivatedPlugins()) {
 			if (plugin.hasModuleViewForObject(object)) {
 				return true;
 			}
 		}
-
+	
 		if (object instanceof FMLRTVirtualModelInstance) {
 			return true;
 		}
@@ -316,7 +316,7 @@ public class FMLRTTechnologyAdapterController extends TechnologyAdapterControlle
 
 	@Override
 	public boolean isRepresentableInModuleView(TechnologyObject<FMLRTTechnologyAdapter> object) {
-		
+
 		for (TechnologyAdapterPluginController<?> plugin : getTechnologyAdapterControllerService().getActivatedPlugins()) {
 			if (plugin.isRepresentableInModuleView(object)) {
 				return true;
@@ -328,7 +328,7 @@ public class FMLRTTechnologyAdapterController extends TechnologyAdapterControlle
 		}
 		return false;
 	}
-	
+
 	@Override
 	public FlexoObject getRepresentableMasterObject(TechnologyObject<FMLRTTechnologyAdapter> object) {
 		for (TechnologyAdapterPluginController<?> plugin : getTechnologyAdapterControllerService().getActivatedPlugins()) {
@@ -342,7 +342,7 @@ public class FMLRTTechnologyAdapterController extends TechnologyAdapterControlle
 		}
 		return null;
 	}
-	
+
 	@Override
 	public String getWindowTitleforObject(TechnologyObject<FMLRTTechnologyAdapter> object, FlexoController controller) {
 		if (object instanceof FMLRTVirtualModelInstanceRepository) {
@@ -446,8 +446,8 @@ public class FMLRTTechnologyAdapterController extends TechnologyAdapterControlle
 	public void resourceLoading(TechnologyAdapterResource<?, FMLRTTechnologyAdapter> resource) {
 		// logger.info("RESOURCE LOADED: " + resource);
 
-		if (resource instanceof AbstractVirtualModelInstanceResource) {
-			VirtualModelInstance vmi = (VirtualModelInstance) ((AbstractVirtualModelInstanceResource) resource).getLoadedResourceData();
+		if (resource instanceof FMLRTVirtualModelInstanceResource) {
+			VirtualModelInstance vmi = ((FMLRTVirtualModelInstanceResource) resource).getLoadedResourceData();
 			if (vmi != null) {
 				makeValidationReport(vmi);
 			}
@@ -458,8 +458,8 @@ public class FMLRTTechnologyAdapterController extends TechnologyAdapterControlle
 	public void resourceUnloaded(TechnologyAdapterResource<?, FMLRTTechnologyAdapter> resource) {
 		logger.warning("RESOURCE UNLOADED not fully implemented: " + resource);
 
-		if (resource instanceof AbstractVirtualModelInstanceResource) {
-			VirtualModelInstance vmi = (VirtualModelInstance) ((AbstractVirtualModelInstanceResource) resource).getLoadedResourceData();
+		if (resource instanceof FMLRTVirtualModelInstanceResource) {
+			VirtualModelInstance vmi = ((FMLRTVirtualModelInstanceResource) resource).getLoadedResourceData();
 			if (vmi != null) {
 				validationReports.remove(vmi);
 			}

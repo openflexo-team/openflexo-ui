@@ -45,7 +45,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.openflexo.ApplicationContext;
 import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceImpl;
-import org.openflexo.foundation.fml.rt.rm.AbstractVirtualModelInstanceResource;
+import org.openflexo.foundation.fml.rt.rm.FMLRTVirtualModelInstanceResource;
 import org.openflexo.foundation.fml.rt.rm.FMLRTVirtualModelInstanceResourceImpl;
 import org.openflexo.foundation.resource.FileIODelegate;
 import org.openflexo.foundation.resource.FlexoResource;
@@ -67,7 +67,7 @@ public class ResourceConsistencyService extends FlexoServiceImpl {
 	// The whole set of conflicts
 	private List<ConflictedResourceSet> conflictedResourceSets;
 
-	private List<AbstractVirtualModelInstanceResource<?, ?>> vmiWithoutVM;
+	private List<FMLRTVirtualModelInstanceResource> vmiWithoutVM;
 
 	private int skip = 1;
 

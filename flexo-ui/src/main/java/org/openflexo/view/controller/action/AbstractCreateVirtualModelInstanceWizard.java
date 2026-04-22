@@ -51,7 +51,7 @@ import org.openflexo.foundation.fml.FlexoBehaviourParameter;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.rm.CompilationUnitResource;
 import org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstance;
-import org.openflexo.foundation.fml.rt.action.AbstractCreateVirtualModelInstance;
+import org.openflexo.foundation.fml.rt.action.CreateFMLRTVirtualModelInstance;
 import org.openflexo.foundation.fml.rt.action.CreationSchemeAction;
 import org.openflexo.foundation.fml.rt.action.FlexoBehaviourAction;
 import org.openflexo.gina.annotation.FIBPanel;
@@ -59,8 +59,7 @@ import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.view.controller.FlexoController;
 
-public abstract class AbstractCreateVirtualModelInstanceWizard<A extends AbstractCreateVirtualModelInstance<?, ?, ?, ?>>
-		extends FlexoActionWizard<A> {
+public abstract class AbstractCreateVirtualModelInstanceWizard<A extends CreateFMLRTVirtualModelInstance<?>> extends FlexoActionWizard<A> {
 
 	private static final Logger logger = Logger.getLogger(AbstractCreateVirtualModelInstanceWizard.class.getPackage().getName());
 
@@ -173,7 +172,7 @@ public abstract class AbstractCreateVirtualModelInstanceWizard<A extends Abstrac
 		public void setVirtualModel(VirtualModel virtualModel) {
 			if (virtualModel != getVirtualModel()) {
 				VirtualModel oldValue = getVirtualModel();
-				((AbstractCreateVirtualModelInstance) getAction()).setVirtualModel(virtualModel);
+				((CreateFMLRTVirtualModelInstance) getAction()).setVirtualModel(virtualModel);
 				getPropertyChangeSupport().firePropertyChange("virtualModel", oldValue, virtualModel);
 				getPropertyChangeSupport().firePropertyChange("creationScheme", null, getCreationScheme());
 				checkValidity();
@@ -182,7 +181,7 @@ public abstract class AbstractCreateVirtualModelInstanceWizard<A extends Abstrac
 
 		public CompilationUnitResource getVirtualModelResource() {
 			if (getAction().getVirtualModel() != null) {
-				return (CompilationUnitResource) getAction().getVirtualModel().getResource();
+				return getAction().getVirtualModel().getResource();
 			}
 			return null;
 		}
@@ -191,7 +190,8 @@ public abstract class AbstractCreateVirtualModelInstanceWizard<A extends Abstrac
 			if (getVirtualModelResource() != virtualModelResource) {
 				CompilationUnitResource oldValue = getVirtualModelResource();
 				if (virtualModelResource != null) {
-					((AbstractCreateVirtualModelInstance) getAction()).setVirtualModel(virtualModelResource.getCompilationUnit().getVirtualModel());
+					((CreateFMLRTVirtualModelInstance) getAction())
+							.setVirtualModel(virtualModelResource.getCompilationUnit().getVirtualModel());
 				}
 				else {
 					getAction().setVirtualModel(null);
