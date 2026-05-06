@@ -20,337 +20,37 @@
 
 package org.openflexo.br.ui;
 
-import java.awt.Dialog;
-import java.awt.Frame;
-import java.awt.Window;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
-import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.zip.Deflater;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.ApplicationVersion;
 import org.openflexo.Flexo;
+import org.openflexo.br.BugReportSubmission;
 import org.openflexo.br.github.GitHubClient;
-import org.openflexo.br.github.GitHubException;
-import org.openflexo.br.github.UnauthorizedGitHubAccessException;
 import org.openflexo.br.github.model.GitHubIssue;
 import org.openflexo.br.github.model.GitHubMilestone;
 import org.openflexo.br.github.model.GitHubRepository;
-import org.openflexo.br.github.model.GitHubResult;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.FlexoServiceManager;
-import org.openflexo.foundation.task.Progress;
-import org.openflexo.gina.swing.utils.JFIBDialog;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.LocalizedDelegate;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.rm.Resource;
 import org.openflexo.rm.ResourceLocator;
-import org.openflexo.swing.ImageUtils;
-import org.openflexo.swing.ImageUtils.ImageType;
-import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.PropertyChangedSupportDefaultImplementation;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.toolbox.ZipUtils;
-import org.openflexo.view.FlexoDialog;
-import org.openflexo.view.FlexoFrame;
-import org.openflexo.view.controller.FlexoController;
 
 /**
- * Data model for the GitHub issue report dialog. Replaces JIRAIssueReportDialog.
+ * Pure data model for the GitHub issue report dialog (FIB).
  *
- * The user fills in a title, description, selects the target repository and optionally a milestone. Logs, screenshots, and other
- * attachments are either uploaded as Gists (text) or saved locally (binary).
+ * Holds the form fields filled in by the user. Call {@link #toBugReportSubmission()} to
+ * build the submission DTO that is passed to {@link org.openflexo.br.BugReportServiceImpl#submitIssue}.
  */
 public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplementation {
-
-	// -----------------------------------------------------------------------
-	// Inner class: submission result
-	// -----------------------------------------------------------------------
-
-	public static class SubmitIssueReport {
-
-		private String issueLink;
-		private final List<String> errors = new ArrayList<>();
-		private final List<String> warnings = new ArrayList<>();
-
-		public boolean hasErrors() {
-			return !errors.isEmpty();
-		}
-
-		public boolean hasWarnings() {
-			return !warnings.isEmpty();
-		}
-
-		public String getIssueLink() {
-			return issueLink;
-		}
-
-		public void setIssueLink(String issueLink) {
-			this.issueLink = issueLink;
-		}
-
-		public List<String> getErrors() {
-			return errors;
-		}
-
-		public List<String> getWarnings() {
-			return warnings;
-		}
-
-		public void addToErrors(String error) {
-			errors.add(error);
-		}
-
-		public void addToWarning(String warning) {
-			warnings.add(warning);
-		}
-
-		public String errorsToString() {
-			return String.join("\n", errors);
-		}
-
-		public String warningsToString() {
-			return String.join("\n", warnings);
-		}
-
-		public String issueLinkHyperlink() {
-			return "<html><a href=\"" + issueLink + "\">" + issueLink + "</a></html>";
-		}
-
-		public void openIssueLink() {
-			ToolBox.openURL(issueLink);
-		}
-	}
-
-	// -----------------------------------------------------------------------
-	// Inner class: async submission
-	// -----------------------------------------------------------------------
-
-	private class SubmitIssueToGitHub implements Runnable {
-
-		private final SubmitIssueReport report;
-		private final GitHubClient client;
-		private Exception exception;
-
-		protected SubmitIssueToGitHub(GitHubClient client, SubmitIssueReport report) {
-			this.client = client;
-			this.report = report;
-		}
-
-		public Exception getException() {
-			return exception;
-		}
-
-		@Override
-		public void run() {
-			try {
-				// Capture screenshots and zip project before creating the issue
-				List<File> screenshotFiles = new ArrayList<>();
-				if (sendScreenshots) {
-					screenshotFiles = captureAllScreenshots(report);
-				}
-
-				File projectZipFile = null;
-				if (sendProject && flexoProject != null) {
-					projectZipFile = buildProjectZip(report);
-				}
-
-				Progress.progress(getLocales().localizedForKey("creating_issue"));
-
-				String body = buildIssueBody(client, report);
-				issue.setBody(body);
-
-				if (milestone != null) {
-					issue.setMilestone(milestone.getNumber());
-				}
-
-				issue.setLabels(Collections.singletonList("bug"));
-
-				GitHubResult result = client.createIssue(repository, issue);
-
-				if (result == null || !result.isSuccess()) {
-					report.addToErrors(getLocales().localizedForKey("could_not_send_bug_report"));
-					return;
-				}
-
-				// Upload screenshots and project archive then update the issue body
-				StringBuilder appendix = new StringBuilder();
-
-				if (!screenshotFiles.isEmpty()) {
-					Progress.progress(getLocales().localizedForKey("sending_screenshots"));
-					StringBuilder section = new StringBuilder("\n\n## Screenshots\n\n");
-					boolean any = false;
-					for (File f : screenshotFiles) {
-						try {
-							String rawUrl = client.uploadFileToRepo(repository.getName(), "bug-report-screenshots", f.getName(),
-									Files.readAllBytes(f.toPath()));
-							if (rawUrl != null) {
-								section.append("![").append(f.getName()).append("](").append(rawUrl).append(")\n\n");
-								any = true;
-							}
-						} catch (Exception e) {
-							report.addToWarning(
-									getLocales().localizedForKey("could_not_attach_screenshot") + " " + f.getName() + "\n\t" + e.getMessage());
-							logger.log(Level.WARNING, "Could not upload screenshot: " + f.getName(), e);
-						}
-					}
-					if (any) {
-						appendix.append(section);
-					}
-				}
-
-				if (projectZipFile != null && projectZipFile.exists()) {
-					Progress.progress(getLocales().localizedForKey("sending_project"));
-					try {
-						String rawUrl = client.uploadFileToRepo(repository.getName(), "bug-report-archives", projectZipFile.getName(),
-								Files.readAllBytes(projectZipFile.toPath()));
-						if (rawUrl != null) {
-							appendix.append("\n\n## Project Archive\n\n[").append(projectZipFile.getName()).append("](").append(rawUrl)
-									.append(")\n\n");
-						}
-					} catch (Exception e) {
-						report.addToWarning(
-								getLocales().localizedForKey("could_not_zip_project") + " " + projectZipFile.getName() + "\n\t" + e.getMessage());
-						logger.log(Level.WARNING, "Could not upload project archive: " + projectZipFile.getName(), e);
-					}
-				}
-
-				if (appendix.length() > 0) {
-					client.updateIssueBody(repository.getName(), result.getNumber(), body + appendix);
-				}
-
-				report.setIssueLink(result.getHtmlUrl());
-
-			} catch (UnauthorizedGitHubAccessException e) {
-				this.exception = e;
-			} catch (UnknownHostException e) {
-				logger.severe("Cannot connect to GitHub. Check internet connection.");
-				this.exception = e;
-			} catch (IOException | GitHubException e) {
-				e.printStackTrace();
-				this.exception = e;
-			}
-		}
-
-		private String buildIssueBody(GitHubClient client, SubmitIssueReport report) {
-			StringBuilder body = new StringBuilder();
-
-			// Description
-			if (StringUtils.isNotEmpty(issue.getDescription())) {
-				body.append("## Description\n\n").append(issue.getDescription()).append("\n\n");
-			}
-
-			// Build info + system properties
-			String buildInfo = "- Build: `" + ApplicationVersion.BUILD_ID + "`\n" + "- Commit: `" + ApplicationVersion.COMMIT_ID + "`";
-			if (sendSystemProperties) {
-				buildInfo += "\n\n```\n" + ToolBox.getSystemProperties(true) + "\n```";
-			}
-			body.append("## Environment\n\n").append(buildInfo).append("\n\n");
-
-			// Stack trace (embedded directly – always compact enough)
-			if (StringUtils.isNotEmpty(issue.getStacktrace())) {
-				body.append("## Stack Trace\n\n```\n").append(issue.getStacktrace()).append("\n```\n\n");
-			}
-
-			// Log file – upload as Gist
-			if (sendLogs) {
-				File logFile = Flexo.getErrLogFile();
-				if (logFile != null && logFile.exists()) {
-					Progress.progress(getLocales().localizedForKey("sending_logs"));
-					try {
-						String logContent = readFileWithTruncation(logFile, 512 * 1024); // 512 KB max
-						String gistUrl = client.createGist("OpenFlexo error log", logFile.getName(), logContent);
-						if (gistUrl != null) {
-							body.append("## Log File\n\n").append(gistUrl).append("\n\n");
-						}
-					} catch (Exception e) {
-						report.addToWarning(
-								getLocales().localizedForKey("could_not_attach_file") + " " + logFile.getName() + "\n\t" + e.getMessage());
-					}
-				}
-			}
-
-			// Attached file – upload as Gist if readable as text
-			if (attachFile != null && attachFile.exists()) {
-				Progress.progress(getLocales().localizedForKey("sending_file") + " " + attachFile.getName());
-				try {
-					String content = readFileWithTruncation(attachFile, 512 * 1024);
-					String gistUrl = client.createGist("Attached: " + attachFile.getName(), attachFile.getName(), content);
-					body.append("## Attached File\n\n").append(gistUrl != null ? gistUrl : attachFile.getAbsolutePath()).append("\n\n");
-				} catch (Exception e) {
-					body.append("## Attached File\n\nLocal path: ").append(attachFile.getAbsolutePath()).append("\n\n");
-				}
-			}
-
-			return body.toString();
-		}
-
-		private File buildProjectZip(SubmitIssueReport report) {
-			Progress.progress(getLocales().localizedForKey("compressing_project"));
-			File projectDir = (File) flexoProject.getProjectDirectory();
-			String dirName = projectDir.getName();
-			String zipName = dirName.endsWith(".prj") ? dirName.substring(0, dirName.length() - 4) + ".zip" : dirName + ".zip";
-			File zipFile = new File(System.getProperty("java.io.tmpdir"), zipName);
-			try {
-				ZipUtils.makeZip(zipFile, projectDir, f -> !f.getName().endsWith("~"), Deflater.BEST_COMPRESSION);
-				return zipFile;
-			} catch (IOException e) {
-				report.addToWarning(getLocales().localizedForKey("could_not_zip_project") + " " + e.getMessage());
-				return null;
-			}
-		}
-
-		private List<File> captureAllScreenshots(SubmitIssueReport report) {
-			List<File> files = new ArrayList<>();
-			for (Frame frame : Frame.getFrames()) {
-				if (frame instanceof FlexoFrame && frame.isVisible() && frame.getWidth() > 0 && frame.getHeight() > 0) {
-					File f = captureWindow(frame, frame.getTitle(), report);
-					if (f != null) {
-						files.add(f);
-					}
-					for (Window w : frame.getOwnedWindows()) {
-						if ((w instanceof FlexoDialog || w instanceof JFIBDialog) && w.isVisible()) {
-							File wf = captureWindow(w, ((Dialog) w).getTitle(), report);
-							if (wf != null) {
-								files.add(wf);
-							}
-						}
-					}
-				}
-			}
-			return files;
-		}
-
-		private File captureWindow(Window window, String title, SubmitIssueReport report) {
-			if (window.isVisible() && window.getWidth() > 0 && window.getHeight() > 0) {
-				try {
-					File file = new File(System.getProperty("java.io.tmpdir"), FileUtils.getValidFileName(title + ".png"));
-					ImageUtils.saveImageToFile(ImageUtils.createImageFromComponent(window), file, ImageType.PNG);
-					return file;
-				} catch (Exception e) {
-					report.addToWarning(
-							getLocales().localizedForKey("could_not_attach_screenshot") + " " + title + "\n\t" + e.getMessage());
-					logger.log(Level.SEVERE, "Error capturing screenshot: " + title, e);
-				}
-			}
-			return null;
-		}
-	}
-
-	// -----------------------------------------------------------------------
-	// State
-	// -----------------------------------------------------------------------
 
 	private static final Logger logger = FlexoLogger.getLogger(GitHubIssueReportDialog.class.getPackage().getName());
 
@@ -371,10 +71,6 @@ public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplem
 	private ApplicationContext serviceManager;
 	private FlexoProject<?> flexoProject;
 
-	// -----------------------------------------------------------------------
-	// Constructor
-	// -----------------------------------------------------------------------
-
 	public GitHubIssueReportDialog(Exception e, ApplicationContext serviceManager) {
 		this.serviceManager = serviceManager;
 		this.issue = new GitHubIssue();
@@ -390,6 +86,31 @@ public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplem
 		if (e != null) {
 			issue.setStacktrace(e.getClass().getName() + ": " + e.getMessage() + "\n" + ToolBox.getStackTraceAsString(e));
 		}
+	}
+
+	// -----------------------------------------------------------------------
+	// DTO factory
+	// -----------------------------------------------------------------------
+
+	/**
+	 * Builds a {@link BugReportSubmission} from the current form state.
+	 * Called by {@link SendBugReportServiceTask} before delegating to the service.
+	 */
+	public BugReportSubmission toBugReportSubmission() {
+		BugReportSubmission s = new BugReportSubmission();
+		s.setIssue(issue);
+		s.setRepository(repository);
+		s.setMilestone(milestone);
+		s.setSendLogs(sendLogs);
+		s.setSendScreenshots(sendScreenshots);
+		s.setSendSystemProperties(sendSystemProperties);
+		s.setSendProject(sendProject);
+		s.setLogFile(Flexo.getErrLogFile());
+		s.setAttachFile(attachFile);
+		s.setProjectDirectory(flexoProject != null ? (File) flexoProject.getProjectDirectory() : null);
+		s.setBuildId(ApplicationVersion.BUILD_ID);
+		s.setCommitId(ApplicationVersion.COMMIT_ID);
+		return s;
 	}
 
 	// -----------------------------------------------------------------------
@@ -444,7 +165,6 @@ public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplem
 		}
 		List<GitHubMilestone> ms = repository.getMilestones();
 		if (ms.isEmpty()) {
-			// Lazy-load milestones for the selected repository
 			String token = serviceManager.getBugReportPreferences().getGithubToken();
 			if (StringUtils.isNotEmpty(token)) {
 				try {
@@ -518,74 +238,5 @@ public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplem
 	public boolean isValid() {
 		return issue != null && repository != null && StringUtils.isNotEmpty(issue.getTitle())
 				&& StringUtils.isNotEmpty(issue.getDescription());
-	}
-
-	// -----------------------------------------------------------------------
-	// Submission
-	// -----------------------------------------------------------------------
-
-	public boolean send() throws Exception {
-		String token = serviceManager.getBugReportPreferences().getGithubToken();
-		GitHubClient client = new GitHubClient(token);
-		SubmitIssueReport report = new SubmitIssueReport();
-		SubmitIssueToGitHub submitter = new SubmitIssueToGitHub(client, report);
-
-		boolean retry = true;
-		while (retry) {
-			submitter.run();
-			if (submitter.getException() != null) {
-				if (submitter.getException() instanceof SocketTimeoutException) {
-					retry = FlexoController.confirm(getLocales().localizedForKey("could_not_send_incident_so_far_keep_trying") + "? ");
-					if (retry) {
-						client.setTimeout(client.getTimeout() * 2);
-					}
-				}
-				else if (submitter.getException() instanceof UnknownHostException) {
-					retry = FlexoController
-							.confirm(getLocales().localizedForKey("could_not_send_to_host_check_internet_connection_and_try_again") + "? ");
-					if (!retry) {
-						throw submitter.getException();
-					}
-				}
-				else {
-					throw submitter.getException();
-				}
-			}
-			else {
-				retry = false;
-			}
-		}
-
-		Progress.hideTaskBar();
-		JFIBDialog.instanciateAndShowDialog(REPORT_FIB_FILE, report,
-				serviceManager.getApplicationFIBLibraryService().getApplicationFIBLibrary(), FlexoFrame.getActiveFrame(), true,
-				FlexoLocalization.getMainLocalizer());
-		return !report.hasErrors();
-	}
-
-	// -----------------------------------------------------------------------
-	// Utilities
-	// -----------------------------------------------------------------------
-
-	/**
-	 * Reads a text file, truncating from the beginning if it exceeds maxBytes, so that we always include the most recent content (tail).
-	 */
-	private static String readFileWithTruncation(File file, int maxBytes) throws IOException {
-		long length = file.length();
-		try (FileInputStream fis = new FileInputStream(file)) {
-			byte[] buf;
-			if (length <= maxBytes) {
-				buf = new byte[(int) length];
-				fis.read(buf);
-			}
-			else {
-				// Skip the beginning, keep the last maxBytes
-				long skip = length - maxBytes;
-				fis.skip(skip);
-				buf = new byte[maxBytes];
-				fis.read(buf);
-			}
-			return new String(buf, "UTF-8");
-		}
 	}
 }

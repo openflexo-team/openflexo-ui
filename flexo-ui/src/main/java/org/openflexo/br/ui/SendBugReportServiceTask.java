@@ -39,10 +39,14 @@
 package org.openflexo.br.ui;
 
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.br.BugReportServiceImpl;
+import org.openflexo.br.BugReportSubmission;
+import org.openflexo.br.SubmitIssueReport;
+import org.openflexo.br.github.GitHubClient;
 import org.openflexo.br.github.UnauthorizedGitHubAccessException;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.task.Progress;
@@ -56,7 +60,9 @@ import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
 
 /**
- * A task used to initiate and send a bug report to GitHub Issues. Replaces the former JIRA-based implementation.
+ * Task that opens the bug report form and, once validated, delegates submission to
+ * {@link BugReportServiceImpl#submitIssue(BugReportSubmission)}.
+ * Handles user-facing retry logic for network timeouts and token re-prompting.
  */
 public class SendBugReportServiceTask extends FlexoApplicationTask {
 
@@ -109,49 +115,72 @@ public class SendBugReportServiceTask extends FlexoApplicationTask {
 
 		ApplicationContext serviceManager = (ApplicationContext) getServiceManager();
 
-		boolean ok = false;
-		while (!ok) {
+		while (true) {
 			if (dialog == null || dialog.getStatus() != Status.VALIDATED) {
 				break;
 			}
 
-			// Ensure a GitHub token is available
 			while (StringUtils.isEmpty(serviceManager.getBugReportPreferences().getGithubToken())) {
 				if (!GitHubTokenDialog.askToken(serviceManager)) {
 					return;
 				}
 			}
 
+			BugReportSubmission submission = dialog.getData().toBugReportSubmission();
+			SubmitIssueReport result = null;
+
 			try {
 				Progress.progress("sending...");
-				ok = dialog.getData().send();
-			} catch (MalformedURLException e1) {
-				FlexoController
-						.showError(serviceManager.getLocalizationService().getFlexoLocalizer().localizedForKey("could_not_send_bug_report")
-								+ " " + e1.getMessage());
-			} catch (UnknownHostException e1) {
-				FlexoController
-						.showError(serviceManager.getLocalizationService().getFlexoLocalizer().localizedForKey("could_not_send_bug_report")
-								+ " " + e1.getMessage());
-				ok = true;
-			} catch (UnauthorizedGitHubAccessException e1) {
+				result = bugReportService.submitIssue(submission);
+
+			} catch (SocketTimeoutException e) {
+				boolean retry = FlexoController
+						.confirm(serviceManager.getLocalizationService().getFlexoLocalizer()
+								.localizedForKey("could_not_send_incident_so_far_keep_trying") + "? ");
+				if (retry) {
+					continue;
+				}
+				break;
+
+			} catch (UnknownHostException e) {
+				boolean retry = FlexoController.confirm(serviceManager.getLocalizationService().getFlexoLocalizer()
+						.localizedForKey("could_not_send_to_host_check_internet_connection_and_try_again") + "? ");
+				if (!retry) {
+					break;
+				}
+				continue;
+
+			} catch (UnauthorizedGitHubAccessException e) {
 				Progress.progress("ask_token");
 				if (GitHubTokenDialog.askToken(serviceManager)) {
 					continue;
 				}
-				else {
-					break;
-				}
-			} catch (Exception e1) {
-				e1.printStackTrace();
-				FlexoController
-						.showError(serviceManager.getLocalizationService().getFlexoLocalizer().localizedForKey("could_not_send_bug_report")
-								+ ":\n" + e1.getMessage());
+				break;
+
+			} catch (MalformedURLException e) {
+				FlexoController.showError(
+						serviceManager.getLocalizationService().getFlexoLocalizer().localizedForKey("could_not_send_bug_report") + " "
+								+ e.getMessage());
+				break;
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				FlexoController.showError(
+						serviceManager.getLocalizationService().getFlexoLocalizer().localizedForKey("could_not_send_bug_report") + ":\n"
+								+ e.getMessage());
+				break;
 			}
 
-			if (!ok) {
-				dialog.setVisible(true);
+			// Show result dialog
+			Progress.hideTaskBar();
+			JFIBDialog.instanciateAndShowDialog(GitHubIssueReportDialog.REPORT_FIB_FILE, result,
+					serviceManager.getApplicationFIBLibraryService().getApplicationFIBLibrary(), FlexoFrame.getActiveFrame(), true,
+					FlexoLocalization.getMainLocalizer());
+
+			if (!result.hasErrors()) {
+				break;
 			}
+			dialog.setVisible(true);
 		}
 	}
 
