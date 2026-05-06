@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel id="0" borderLeft="0" height="620" sizeAdjustment="OriginalSize" opaque="false" controllerClassName="org.openflexo.gina.controller.FIBController" borderRight="0" border="empty" trackViewPortWidth="true" align="left" width="620" borderBottom="0" borderTop="0" trackViewPortHeight="true" layout="border">
+  <Parameter id="1" name="title" value="Submit bug report" />
+  <Panel id="2" borderLeft="5" sizeAdjustment="OriginalSize" opaque="false" borderRight="5" border="empty" trackViewPortWidth="true" index="0" align="left" constraints="border(index=0;location=center)" borderBottom="5" borderTop="5" trackViewPortHeight="true" layout="twocols" name="MainPanel">
+
+    <!-- Header -->
+    <Panel id="3" backgroundColor="255,255,255" borderLeft="0" height="60" sizeAdjustment="OriginalSize" opaque="true" borderRight="0" border="empty" trackViewPortWidth="true" align="left" width="100" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=15;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" borderBottom="0" borderTop="0" trackViewPortHeight="true" layout="twocols" name="HeaderPanel">
+      <Label id="4" name="HeaderLabel" localize="true" font="SansSerif,0,16" align="left" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=20;insetsRight=0;insetsTop=0;location=left)" label="submit_bug_report_or_feature_request" />
+      <Image id="5" sizeAdjustment="OriginalSize" name="Image" imageFile="../Icons/Common/BugReportService_64x64.png" imageHeight="46" align="right" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;location=right)" imageWidth="80" />
+    </Panel>
+
+    <!-- Summary / Title -->
+    <Label id="6" name="TitleLabel" index="0" localize="true" align="left" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=5;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" label="summary" />
+    <TextField id="7" columns="7" name="TitleTF" data="data.issue.title" text="TextField" index="1" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=5;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
+
+    <!-- Description -->
+    <Label id="8" name="DescriptionLabel" index="2" localize="true" align="left" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" label="description" />
+    <TextArea id="9" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" useScrollBar="true" columns="8" name="DescriptionTA" data="data.issue.description" text="TextArea" index="3" constraints="twocols(expandHorizontally=true;expandVertically=true;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=right)" rows="5" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" />
+    <Label id="10" name="HintLabel" localize="true" font="SansSerif,2,11" align="left" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=5;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" label="please_provide_a_precise_and_reproducible_scenario" />
+
+    <!-- Repository -->
+    <Label id="11" name="RepoLabel" localize="true" align="left" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" label="repository" />
+    <DropDown id="12" data="data.repository" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=right)" format="object.name" showText="true" iteratorClassName="org.openflexo.ws.github.model.GitHubRepository" showIcon="false" staticList="" autoSelectFirstRow="true" name="repositoryDD" list="data.repositories" />
+    <Label id="13" name="RepoDescLabel" data="((&quot;&lt;html&gt;&lt;i&gt;&quot; + data.repository.description) + &quot;&lt;/i&gt;&lt;/html&gt;&quot;)" font="SansSerif,2,11" align="left" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=5;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" label="label" />
+
+    <!-- Milestone (optional) -->
+    <Label id="14" name="MilestoneLabel" visible="(data.milestones.size &gt; 0)" localize="true" align="left" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" label="milestone" />
+    <DropDown id="15" visible="(data.milestones.size &gt; 0)" data="data.milestone" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" format="object.title" showText="true" iteratorClassName="org.openflexo.ws.github.model.GitHubMilestone" showIcon="false" autoSelectFirstRow="false" name="milestoneDD" list="data.milestones" />
+
+    <!-- Attachments -->
+    <Label id="16" name="SendLogsLabel" index="10" localize="true" align="left" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" label="send_logs" />
+    <CheckBox id="17" name="sendLogs" data="data.isSendLogs" index="11" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=right)" />
+
+    <Label id="18" name="SendSystemPropertiesLabel" index="12" localize="true" align="left" constraints="twocols(expandHorizontally=true;expandVertically=false;index=12;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" label="send_system_properties" />
+    <CheckBox id="19" name="sendSystemProperties" data="data.isSendSystemProperties" index="13" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
+
+    <Label id="20" name="SendScreenshotsLabel" index="14" localize="true" align="left" constraints="twocols(expandHorizontally=true;expandVertically=false;index=14;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" label="send_screenshots" />
+    <CheckBox id="21" name="sendScreenshot" data="data.isSendScreenshots" index="15" constraints="twocols(expandHorizontally=true;expandVertically=false;index=15;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
+
+    <Label id="22" name="SendCurrentProjectLabel" index="16" localize="true" align="left" constraints="twocols(expandHorizontally=true;expandVertically=false;index=16;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" label="send_current_project" />
+    <CheckBox id="23" name="sendCurrentProject" data="data.isSendProject" index="17" constraints="twocols(expandHorizontally=true;expandVertically=false;index=17;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
+
+    <Label id="24" name="AttachFileLabel" index="18" localize="true" align="left" constraints="twocols(expandHorizontally=true;expandVertically=false;index=18;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" label="attach_file" />
+    <File id="25" mode="OpenMode" name="attachFile" data="data.attachFile" index="19" constraints="twocols(expandHorizontally=true;expandVertically=false;index=19;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
+
+    <!-- Buttons -->
+    <Panel id="26" vGap="5" borderLeft="0" hGap="5" sizeAdjustment="OriginalSize" opaque="false" borderRight="0" border="empty" trackViewPortWidth="true" index="20" align="left" constraints="twocols(expandHorizontally=true;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=10;location=center)" borderBottom="0" borderTop="10" trackViewPortHeight="true" layout="flow" name="ButtonPanel" flowAlignment="CENTER">
+      <Button id="27" enable="data.isValid" buttonType="Trigger" name="Send" action="controller.validateAndDispose()" index="0" localize="true" constraints="flow(index=0;x=0;y=0)" label="send_bug_report" />
+      <Button id="28" buttonType="Trigger" name="Cancel" action="controller.cancelAndDispose()" index="1" localize="true" constraints="flow(index=1;x=1;y=0)" label="cancel" />
+    </Panel>
+  </Panel>
+
+  <FIBVariable id="29" name="data" type="org.openflexo.br.view.GitHubIssueReportDialog" />
+
+  <LocalizedDictionary id="30">
+    <Localized id="31" value="Summary" lang="English" key="summary" />
+    <Localized id="32" value="Résumé" lang="French" key="summary" />
+    <Localized id="33" value="Description" lang="English" key="description" />
+    <Localized id="34" value="Description" lang="French" key="description" />
+    <Localized id="35" value="Repository" lang="English" key="repository" />
+    <Localized id="36" value="Dépôt GitHub" lang="French" key="repository" />
+    <Localized id="37" value="Milestone" lang="English" key="milestone" />
+    <Localized id="38" value="Jalon" lang="French" key="milestone" />
+    <Localized id="39" value="Send logs" lang="English" key="send_logs" />
+    <Localized id="40" value="Envoyer les logs" lang="French" key="send_logs" />
+    <Localized id="41" value="Send system properties" lang="English" key="send_system_properties" />
+    <Localized id="42" value="Envoyer les propriétés du système" lang="French" key="send_system_properties" />
+    <Localized id="43" value="Send screenshots" lang="English" key="send_screenshots" />
+    <Localized id="44" value="Envoyer des screenshots" lang="French" key="send_screenshots" />
+    <Localized id="45" value="Send current project" lang="English" key="send_current_project" />
+    <Localized id="46" value="Envoyer le projet courant" lang="French" key="send_current_project" />
+    <Localized id="47" value="Attach file" lang="English" key="attach_file" />
+    <Localized id="48" value="Attacher un fichier" lang="French" key="attach_file" />
+    <Localized id="49" value="Send bug report" lang="English" key="send_bug_report" />
+    <Localized id="50" value="Envoyer le rapport d'anomalie" lang="French" key="send_bug_report" />
+    <Localized id="51" value="Cancel" lang="English" key="cancel" />
+    <Localized id="52" value="Annuler" lang="French" key="cancel" />
+    <Localized id="53" value="Submit bug report or feature request" lang="English" key="submit_bug_report_or_feature_request" />
+    <Localized id="54" value="Soumettre un rapport d'anomalie ou une demande d'évolution" lang="French" key="submit_bug_report_or_feature_request" />
+    <Localized id="55" value="Please provide a precise and reproducible scenario" lang="English" key="please_provide_a_precise_and_reproducible_scenario" />
+    <Localized id="56" value="Veuillez fournir un scénario précis et reproductible" lang="French" key="please_provide_a_precise_and_reproducible_scenario" />
+  </LocalizedDictionary>
+</Panel>

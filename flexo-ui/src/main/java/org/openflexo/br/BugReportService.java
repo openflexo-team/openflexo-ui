@@ -1,107 +1,69 @@
 /**
- * 
+ *
  * Copyright (c) 2014, Openflexo
- * 
- * This file is part of Flexo-ui, a component of the software infrastructure 
+ *
+ * This file is part of Flexo-ui, a component of the software infrastructure
  * developed at Openflexo.
- * 
- * 
- * Openflexo is dual-licensed under the European Union Public License (EUPL, either 
- * version 1.1 of the License, or any later version ), which is available at 
+ *
+ *
+ * Openflexo is dual-licensed under the European Union Public License (EUPL, either
+ * version 1.1 of the License, or any later version ), which is available at
  * https://joinup.ec.europa.eu/software/page/eupl/licence-eupl
- * and the GNU General Public License (GPL, either version 3 of the License, or any 
+ * and the GNU General Public License (GPL, either version 3 of the License, or any
  * later version), which is available at http://www.gnu.org/licenses/gpl.html .
- * 
+ *
  * You can redistribute it and/or modify under the terms of either of these licenses
- * 
+ *
  * If you choose to redistribute it and/or modify under the terms of the GNU GPL, you
  * must include the following additional permission.
  *
  *          Additional permission under GNU GPL version 3 section 7
  *
- *          If you modify this Program, or any covered work, by linking or 
- *          combining it with software containing parts covered by the terms 
+ *          If you modify this Program, or any covered work, by linking or
+ *          combining it with software containing parts covered by the terms
  *          of EPL 1.0, the licensors of this Program grant you additional permission
- *          to convey the resulting work. * 
- * 
- * This software is distributed in the hope that it will be useful, but WITHOUT ANY 
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
- * PARTICULAR PURPOSE. 
+ *          to convey the resulting work. *
+ *
+ * This software is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE.
  *
  * See http://www.openflexo.org/license.html for details.
- * 
- * 
+ *
+ *
  * Please contact Openflexo (openflexo-contacts@openflexo.org)
  * or visit www.openflexo.org if you need additional information.
- * 
+ *
  */
 
 package org.openflexo.br;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.codec.binary.Base64;
 import org.openflexo.ApplicationContext;
-import org.openflexo.br.view.JIRAURLCredentialsDialog;
+import org.openflexo.br.view.GitHubTokenDialog;
 import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.task.Progress;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.toolbox.StringUtils;
-import org.openflexo.view.controller.FlexoController;
-import org.openflexo.ws.jira.JIRAClient;
-import org.openflexo.ws.jira.JIRAGson;
-import org.openflexo.ws.jira.model.JIRAComponent;
-import org.openflexo.ws.jira.model.JIRAProject;
-import org.openflexo.ws.jira.model.JIRAProjectList;
+import org.openflexo.ws.github.GitHubClient;
+import org.openflexo.ws.github.GitHubException;
+import org.openflexo.ws.github.model.GitHubRepository;
 
+/**
+ * Service responsible for fetching GitHub repositories from the openflexo-team
+ * organization and providing them for bug report submission.
+ *
+ * Replaces the former JIRA-based implementation.
+ */
 public class BugReportService extends FlexoServiceImpl {
 
-	private static final String JIRA_URL = "https://bugs.openflexo.org/rest/api/2/project";
-
-	/*private static final Resource MODULES_FILE = ResourceLocator.locateResource("Config/jira_modules_project.json");
-	private static final Resource CONNIE_FILE = ResourceLocator.locateResource("Config/jira_connie_project.json");
-	private static final Resource TA_FILE = ResourceLocator.locateResource("Config/jira_ta_project.json");
-	private static final Resource DIANA_FILE = ResourceLocator.locateResource("Config/jira_diana_project.json");
-	private static final Resource PAMELA_FILE = ResourceLocator.locateResource("Config/jira_pamela_project.json");
-	private static final Resource CORE_FILE = ResourceLocator.locateResource("Config/jira_core_project.json");
-	private static final Resource GINA_FILE = ResourceLocator.locateResource("Config/jira_gina_project.json");
-	
-	private FlexoVersion ginaVersion;
-	private FlexoVersion dianaVersion;
-	private FlexoVersion pamelaVersion;
-	private FlexoVersion connieVersion;
-	private FlexoVersion distributionVersion;*/
-
-	/*private static final String MODULES_KEY = "MODULES";
-	private static final String TA_KEY = "TA";
-	private static final String DIANA_KEY = "DIANA";
-	private static final String CONNIE_KEY = "CONNIE";
-	private static final String PAMELA_KEY = "PAMELA";
-	private static final String CORE_KEY = "CORE";
-	private static final String GINA_KEY = "GINA";*/
-
-	// private HashMap<String, Resource> userProjectFiles;
-	// private File userProjectFile;
-	private List<JIRAProject> projects;
+	private List<GitHubRepository> repositories;
 
 	public BugReportService() {
-	}
-
-	public List<JIRAProject> getProjects() {
-		return projects;
 	}
 
 	@Override
@@ -114,246 +76,124 @@ public class BugReportService extends FlexoServiceImpl {
 		return (ApplicationContext) super.getServiceManager();
 	}
 
-	public JIRAProject getJIRAProjectWithKey(String projectKey) {
-		for (JIRAProject jp : projects) {
-			if (jp.getKey().equals(projectKey))
-				return jp;
+	public List<GitHubRepository> getRepositories() {
+		return repositories;
+	}
+
+	/**
+	 * @deprecated Use {@link #getRepositories()} instead.
+	 *             Kept for compilation compatibility with legacy JIRA code.
+	 */
+	@Deprecated
+	public List<?> getProjects() {
+		return repositories;
+	}
+
+	public GitHubRepository getRepositoryByName(String name) {
+		if (repositories == null || name == null) {
+			return null;
+		}
+		for (GitHubRepository repo : repositories) {
+			if (name.equals(repo.getName())) {
+				return repo;
+			}
 		}
 		return null;
 	}
 
-	public JIRAProject getJIRAProjectWithId(String id) {
-		for (JIRAProject jp : projects) {
-			if (jp.getId().equals(id))
-				return jp;
+	/**
+	 * Tries to find the most relevant repository for the active module using
+	 * a simple name-based heuristic. Returns the first repository as a fallback.
+	 */
+	public GitHubRepository getMostProbableRepository(Exception e, FlexoModule<?> activeModule) {
+		if (repositories == null || repositories.isEmpty()) {
+			return null;
 		}
-		return null;
+		if (activeModule != null) {
+			String moduleName = activeModule.getModule().getName().toLowerCase().replace(" ", "-");
+			for (GitHubRepository repo : repositories) {
+				if (repo.getName().toLowerCase().contains(moduleName)) {
+					return repo;
+				}
+			}
+			// Try with the short name
+			String shortName = activeModule.getModule().getShortName().toLowerCase();
+			for (GitHubRepository repo : repositories) {
+				if (repo.getName().toLowerCase().contains(shortName)) {
+					return repo;
+				}
+			}
+		}
+		// Default to openflexo-modules if present, otherwise first repo
+		GitHubRepository modules = getRepositoryByName("openflexo-modules");
+		return modules != null ? modules : repositories.get(0);
 	}
 
-	public JIRAProject getMostProbableProject(Exception e, FlexoModule<?> activeModule) {
-		for (JIRAProject project : getProjects()) {
-			if (project.getId().equals(activeModule.getModule().getJiraComponentID())) {
-				return project;
-			}
-		}
-		return getJIRAProjectWithKey("MODULES");
-	}
-
-	public JIRAComponent getMostProbableProjectComponent(JIRAProject project, Exception e, FlexoModule<?> activeModule) {
-		if (project != null && project.getComponents() != null && project.getComponents().size() > 0) {
-			return project.getComponents().get(0);
-		}
-		return null;
-	}
-
-	/*public void loadProjectsFromFile(Resource file) {
-		try {
-			InputStreamReader is = new InputStreamReader(file.openInputStream());
-			JIRAProjectList projects = JIRAGson.getInstance().fromJson(is, JIRAProjectList.class);
-			if (this.projects == null) {
-				logger.warning("INVESTIGATE : projects list is empty!! ");
-				this.projects = new ArrayList<JIRAProject>();
-			}
-	
-			for (JIRAProject p : projects) {
-				if (p.getKey().equals(MODULES_KEY)) {
-					this.projects.add(p);
-				}
-				if (p.getKey().equals(TA_KEY)) {
-					this.projects.add(p);
-				}
-				if (p.getKey().equals(DIANA_KEY)) {
-					this.projects.add(p);
-				}
-				if (p.getKey().equals(CONNIE_KEY)) {
-					this.projects.add(p);
-				}
-				if (p.getKey().equals(PAMELA_KEY)) {
-					this.projects.add(p);
-				}
-				if (p.getKey().equals(CORE_KEY)) {
-					this.projects.add(p);
-				}
-				if (p.getKey().equals(GINA_KEY)) {
-					this.projects.add(p);
-				}
-			}
-		} catch (JsonSyntaxException e) {
-			e.printStackTrace();
-		} catch (JsonIOException e) {
-			e.printStackTrace();
-		}
-	}*/
-
-	private boolean testJIRAConnection() {
-		if (StringUtils.isNotEmpty(getServiceManager().getBugReportPreferences().getBugReportUser())
-				&& StringUtils.isNotEmpty(getServiceManager().getBugReportPreferences().getBugReportPassword())) {
-			URL url;
-			try {
-				url = new URL(JIRA_URL);
-				HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-				urlc.addRequestProperty(JIRAClient.BASIC_AUTH_HEADER, "Basic " + getBase64EncodedAuthentication());
-				InputStream is = urlc.getInputStream();
-				is.close();
-				return true;
-			} catch (IOException e) {
-				logger.warning("IOException: " + e.getMessage());
-				return false;
-			}
+	private boolean testGitHubConnection() {
+		String token = getServiceManager().getBugReportPreferences().getGithubToken();
+		if (StringUtils.isNotEmpty(token)) {
+			GitHubClient client = new GitHubClient(token);
+			return client.testConnection();
 		}
 		return false;
-
 	}
 
-	private String askCredentialsWhenRequired() throws UnsupportedEncodingException {
+	/**
+	 * Ensures a valid GitHub token is available, prompting the user if needed.
+	 * Returns the token, or null if the user cancels.
+	 */
+	public String askTokenWhenRequired() {
+		boolean valid = testGitHubConnection();
 
-		boolean validCredentials = testJIRAConnection();
-
-		while (getServiceManager().getBugReportPreferences().getBugReportUser() == null
-				|| getServiceManager().getBugReportPreferences().getBugReportUser().trim().length() == 0
-				|| getServiceManager().getBugReportPreferences().getBugReportPassword() == null
-				|| getServiceManager().getBugReportPreferences().getBugReportPassword().trim().length() == 0 || !validCredentials) {
+		while (!valid) {
 			Progress.forceHideTaskBar();
-			if (!JIRAURLCredentialsDialog.askLoginPassword(getServiceManager())) {
+			if (!GitHubTokenDialog.askToken(getServiceManager())) {
 				Progress.stopForceHideTaskBar();
 				return null;
 			}
-
-			validCredentials = testJIRAConnection();
-
+			valid = testGitHubConnection();
 		}
 
 		Progress.stopForceHideTaskBar();
-		return getBase64EncodedAuthentication();
-	}
-
-	private String getBase64EncodedAuthentication() throws UnsupportedEncodingException {
-
-		String username = getServiceManager().getBugReportPreferences().getBugReportUser().trim();
-		String password = getServiceManager().getBugReportPreferences().getBugReportPassword().trim();
-		// Ok, it took me a while to find out but ISO-8859-1 is the one used by JIRA
-		return Base64.encodeBase64String((username + ":" + password).getBytes("ISO-8859-1"));
-	}
-
-	@Override
-	public void initialize() {
-		logger.info("Initialized BugReportService");
-
-		projects = new ArrayList<>();
-
-		try {
-
-			if (FlexoLocalization.getMainLocalizer() != null) {
-				Progress.progress(FlexoLocalization.getMainLocalizer().localizedForKey("contacting") + " " + JIRA_URL);
-			}
-
-			URL url = new URL(JIRA_URL);
-			HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-			urlc.addRequestProperty(JIRAClient.BASIC_AUTH_HEADER, "Basic " + askCredentialsWhenRequired());
-
-			BufferedReader bfr = null;
-			try {
-				bfr = new BufferedReader(new InputStreamReader(urlc.getInputStream()));
-			} catch (UnknownHostException e) {
-				if (FlexoLocalization.getMainLocalizer() != null) {
-					FlexoController.showError(FlexoLocalization.getMainLocalizer().localizedForKey("cannot_contact") + " " + JIRA_URL);
-				}
-				return;
-			}
-			JIRAProjectList projects = JIRAGson.getInstance().fromJson(bfr, JIRAProjectList.class);
-			// System.out.println("projects=" + projects);
-
-			for (JIRAProject p : projects) {
-				JIRAProject detailedProject = parseProject(p);
-				this.projects.add(detailedProject);
-				/*System.out.println("******** Project " + detailedProject);
-				System.out.println("Id=" + detailedProject.getId());
-				System.out.println("Lead=" + detailedProject.getLead());
-				for (JIRAComponent component : detailedProject.getComponents()) {
-					System.out.println("Component " + component.getName() + " " + component);
-				}
-				for (JIRAVersion version : detailedProject.getVersions()) {
-					System.out.println("Version " + version.getName() + " " + version);
-				}
-				System.out.println("IssueTypes=" + detailedProject.getIssueTypes());
-				System.out.println("Last released version: "
-						+ (detailedProject.getLastReleasedVersion() != null ? detailedProject.getLastReleasedVersion().getName() : "none"));
-				 */
-			}
-		} catch (Exception e) {
-			System.out.println("exception: " + e);
-			e.printStackTrace();
-		}
-
-		status = Status.Started;
-
-		// loadProjectVersions();
-
-		try {
-			Map<String, String> headers = new HashMap<String, String>();
-			if (getServiceManager() != null && getServiceManager().getBugReportPreferences().getBugReportUser() != null
-					&& getServiceManager().getBugReportPreferences().getBugReportUser().trim().length() > 0
-					&& getServiceManager().getBugReportPreferences().getBugReportPassword() != null
-					&& getServiceManager().getBugReportPreferences().getBugReportPassword().trim().length() > 0) {
-				headers.put("Authorization",
-						"Basic " + Base64.encodeBase64String((getServiceManager().getBugReportPreferences().getBugReportUser() + ":"
-								+ getServiceManager().getBugReportPreferences().getBugReportPassword()).getBytes("ISO-8859-1")));
-			}
-
-			/*for (Entry<String, Resource> entry : userProjectFiles.entrySet()) {
-				String key = entry.getKey();
-				Resource file = entry.getValue();
-				// Do not execute update if anonymous login, as it will not work!
-				if (file != null && file instanceof FileResourceImpl && headers.size() > 0) {
-					FileUtils.createOrUpdateFileFromURL(
-							new URL(getServiceManager().getBugReportPreferences().getBugReportUrl()
-									+ "/rest/api/2/issue/createmeta?expand=projects.issuetypes.fields&projectKeys=" + key),
-							((FileResourceImpl) file).getFile(), headers);
-				}
-				else {
-					logger.severe("Unable to create File for Bug");
-				}
-			}*/
-
-		} /*catch (MalformedURLException e) {
-			e.printStackTrace();
-			}*/ catch (UnsupportedEncodingException e) {
-			logger.warning("Encoding error in a bug service request.");
-		}
-		/*if (!userProjectFiles.isEmpty()) {
-			for (Entry<String, Resource> entry : userProjectFiles.entrySet()) {
-				Resource file = entry.getValue();
-				loadProjectsFromFile(file);
-			}
-		}*/
-
+		return getServiceManager().getBugReportPreferences().getGithubToken();
 	}
 
 	public boolean isInitialized() {
 		return status == Status.Started;
 	}
 
-	private JIRAProject parseProject(JIRAProject p) {
+	@Override
+	public void initialize() {
+		logger.info("Initializing BugReportService (GitHub)");
 
-		if (FlexoLocalization.getMainLocalizer() != null) {
-			Progress.progress(FlexoLocalization.getMainLocalizer().localizedForKey("getting_informations_for") + " " + p.getSelf());
+		repositories = new ArrayList<>();
+
+		String token = askTokenWhenRequired();
+		if (token == null) {
+			logger.warning("No GitHub token provided — BugReportService initialization aborted");
+			status = Status.Started;
+			return;
 		}
+
+		GitHubClient client = new GitHubClient(token);
+
 		try {
-			URL url = new URL(p.getSelf());
-			URLConnection urlc = url.openConnection();
-			urlc.addRequestProperty(JIRAClient.BASIC_AUTH_HEADER, "Basic " + askCredentialsWhenRequired());
-			BufferedReader bfr = new BufferedReader(new InputStreamReader(urlc.getInputStream()));
-			return JIRAGson.getInstance().fromJson(bfr, JIRAProject.class);
-		} catch (Exception e) {
-			System.out.println("exception: " + e);
-			e.printStackTrace();
-			return null;
+			if (FlexoLocalization.getMainLocalizer() != null) {
+				Progress.progress(FlexoLocalization.getMainLocalizer().localizedForKey("contacting") + " GitHub");
+			}
+
+			List<GitHubRepository> fetched = client.listRepositories();
+			if (fetched != null) {
+				repositories.addAll(fetched);
+			}
+			logger.info("Loaded " + repositories.size() + " repositories from " + GitHubClient.ORG);
+
+		} catch (IOException e) {
+			logger.warning("Network error while fetching GitHub repositories: " + e.getMessage());
+		} catch (GitHubException e) {
+			logger.warning("GitHub API error while fetching repositories: " + e.getMessage());
 		}
-	}
 
-	public static void main(String[] args) {
-		BugReportService service = new BugReportService();
-		service.initialize();
+		status = Status.Started;
 	}
-
 }

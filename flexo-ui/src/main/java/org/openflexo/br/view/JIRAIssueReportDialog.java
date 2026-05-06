@@ -262,8 +262,10 @@ public class JIRAIssueReportDialog extends PropertyChangedSupportDefaultImplemen
 		return getLocales(getServiceManager());
 	}
 
+	/** @deprecated Bug reporting has migrated to GitHub. This always returns an empty list. */
+	@Deprecated
 	public List<JIRAProject> getProjects() {
-		return serviceManager.getBugReportService().getProjects();
+		return new ArrayList<>(0);
 	}
 
 	public JIRAProject getProject() {
