@@ -20,12 +20,12 @@
 
     <!-- Repository -->
     <Label id="11" name="RepoLabel" localize="true" align="left" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" label="repository" />
-    <DropDown id="12" data="data.repository" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=right)" format="object.name" showText="true" iteratorClassName="org.openflexo.ws.github.model.GitHubRepository" showIcon="false" staticList="" autoSelectFirstRow="true" name="repositoryDD" list="data.repositories" />
+    <DropDown id="12" data="data.repository" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=right)" format="object.name" showText="true" iteratorClassName="org.openflexo.br.github.model.GitHubRepository" showIcon="false" staticList="" autoSelectFirstRow="true" name="repositoryDD" list="data.repositories" />
     <Label id="13" name="RepoDescLabel" data="((&quot;&lt;html&gt;&lt;i&gt;&quot; + data.repository.description) + &quot;&lt;/i&gt;&lt;/html&gt;&quot;)" font="SansSerif,2,11" align="left" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=5;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" label="label" />
 
     <!-- Milestone (optional) -->
     <Label id="14" name="MilestoneLabel" visible="(data.milestones.size &gt; 0)" localize="true" align="left" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" label="milestone" />
-    <DropDown id="15" visible="(data.milestones.size &gt; 0)" data="data.milestone" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" format="object.title" showText="true" iteratorClassName="org.openflexo.ws.github.model.GitHubMilestone" showIcon="false" autoSelectFirstRow="false" name="milestoneDD" list="data.milestones" />
+    <DropDown id="15" visible="(data.milestones.size &gt; 0)" data="data.milestone" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" format="object.title" showText="true" iteratorClassName="org.openflexo.br.github.model.GitHubMilestone" showIcon="false" autoSelectFirstRow="false" name="milestoneDD" list="data.milestones" />
 
     <!-- Attachments -->
     <Label id="16" name="SendLogsLabel" index="10" localize="true" align="left" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" label="send_logs" />
@@ -50,7 +50,7 @@
     </Panel>
   </Panel>
 
-  <FIBVariable id="29" name="data" type="org.openflexo.br.view.GitHubIssueReportDialog" />
+  <FIBVariable id="29" name="data" type="org.openflexo.br.ui.GitHubIssueReportDialog" />
 
   <LocalizedDictionary id="30">
     <Localized id="31" value="Summary" lang="English" key="summary" />

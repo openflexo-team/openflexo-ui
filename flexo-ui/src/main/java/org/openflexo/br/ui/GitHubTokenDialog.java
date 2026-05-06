@@ -18,7 +18,7 @@
  *
  */
 
-package org.openflexo.br.view;
+package org.openflexo.br.ui;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.gina.controller.FIBController.Status;

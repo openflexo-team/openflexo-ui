@@ -43,7 +43,9 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.ApplicationContext;
+import org.openflexo.br.ui.BugReportPreferences;
 import org.openflexo.components.PreferencesDialog;
+import org.openflexo.foundation.BugReportService;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceImpl;
@@ -160,6 +162,9 @@ public class PreferencesService extends FlexoServiceImpl implements HasPropertyC
 		}
 		else if (service instanceof ModuleLoader) {
 			return (Class) ModuleLoaderPreferences.class;
+		}
+		else if (service instanceof BugReportService) {
+			return (Class) BugReportPreferences.class;
 		}
 		return null;
 	}

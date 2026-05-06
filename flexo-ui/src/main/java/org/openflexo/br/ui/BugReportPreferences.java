@@ -37,16 +37,20 @@
  *
  */
 
-package org.openflexo.prefs;
+package org.openflexo.br.ui;
 
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.BugReportService;
 import org.openflexo.pamela.annotations.Getter;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.pamela.annotations.XMLAttribute;
 import org.openflexo.pamela.annotations.XMLElement;
+import org.openflexo.prefs.Preferences;
+import org.openflexo.prefs.PreferencesContainer.PreferencesContainerImpl;
+import org.openflexo.prefs.ServicePreferences;
 
 /**
  * Preferences for the GitHub bug reporting service.
@@ -60,7 +64,7 @@ import org.openflexo.pamela.annotations.XMLElement;
 		FIBPanel = "Fib/Prefs/BugReportPreferences.fib",
 		smallIcon = "Icons/Common/BugReportService.png",
 		bigIcon = "Icons/Common/BugReportService_64x64.png")
-public interface BugReportPreferences extends PreferencesContainer {
+public interface BugReportPreferences extends ServicePreferences<BugReportService> {
 
 	public static final String GITHUB_TOKEN_KEY = "github_token";
 

@@ -18,7 +18,7 @@
  *
  */
 
-package org.openflexo.br.view;
+package org.openflexo.br.ui;
 
 import java.awt.Dialog;
 import java.awt.Frame;
@@ -38,6 +38,13 @@ import java.util.zip.Deflater;
 import org.openflexo.ApplicationContext;
 import org.openflexo.ApplicationVersion;
 import org.openflexo.Flexo;
+import org.openflexo.br.github.GitHubClient;
+import org.openflexo.br.github.GitHubException;
+import org.openflexo.br.github.UnauthorizedGitHubAccessException;
+import org.openflexo.br.github.model.GitHubIssue;
+import org.openflexo.br.github.model.GitHubMilestone;
+import org.openflexo.br.github.model.GitHubRepository;
+import org.openflexo.br.github.model.GitHubResult;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.task.Progress;
@@ -57,21 +64,12 @@ import org.openflexo.toolbox.ZipUtils;
 import org.openflexo.view.FlexoDialog;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.ws.github.GitHubClient;
-import org.openflexo.ws.github.GitHubException;
-import org.openflexo.ws.github.UnauthorizedGitHubAccessException;
-import org.openflexo.ws.github.model.GitHubIssue;
-import org.openflexo.ws.github.model.GitHubMilestone;
-import org.openflexo.ws.github.model.GitHubRepository;
-import org.openflexo.ws.github.model.GitHubResult;
 
 /**
- * Data model for the GitHub issue report dialog.
- * Replaces JIRAIssueReportDialog.
+ * Data model for the GitHub issue report dialog. Replaces JIRAIssueReportDialog.
  *
- * The user fills in a title, description, selects the target repository and
- * optionally a milestone. Logs, screenshots, and other attachments are either
- * uploaded as Gists (text) or saved locally (binary).
+ * The user fills in a title, description, selects the target repository and optionally a milestone. Logs, screenshots, and other
+ * attachments are either uploaded as Gists (text) or saved locally (binary).
  */
 public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplementation {
 
@@ -196,8 +194,7 @@ public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplem
 			}
 
 			// Build info + system properties
-			String buildInfo = "- Build: `" + ApplicationVersion.BUILD_ID + "`\n"
-					+ "- Commit: `" + ApplicationVersion.COMMIT_ID + "`";
+			String buildInfo = "- Build: `" + ApplicationVersion.BUILD_ID + "`\n" + "- Commit: `" + ApplicationVersion.COMMIT_ID + "`";
 			if (sendSystemProperties) {
 				buildInfo += "\n\n```\n" + ToolBox.getSystemProperties(true) + "\n```";
 			}
@@ -220,8 +217,8 @@ public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplem
 							body.append("## Log File\n\n").append(gistUrl).append("\n\n");
 						}
 					} catch (Exception e) {
-						report.addToWarning(getLocales().localizedForKey("could_not_attach_file") + " " + logFile.getName()
-								+ "\n\t" + e.getMessage());
+						report.addToWarning(
+								getLocales().localizedForKey("could_not_attach_file") + " " + logFile.getName() + "\n\t" + e.getMessage());
 					}
 				}
 			}
@@ -242,8 +239,7 @@ public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplem
 			if (sendScreenshots) {
 				List<String> captured = new ArrayList<>();
 				for (Frame frame : Frame.getFrames()) {
-					if (frame instanceof FlexoFrame && frame.isVisible()
-							&& frame.getWidth() > 0 && frame.getHeight() > 0) {
+					if (frame instanceof FlexoFrame && frame.isVisible() && frame.getWidth() > 0 && frame.getHeight() > 0) {
 						captured.addAll(captureWindow(frame, frame.getTitle(), report));
 						for (Window w : frame.getOwnedWindows()) {
 							if ((w instanceof FlexoDialog || w instanceof JFIBDialog) && w.isVisible()) {
@@ -266,9 +262,7 @@ public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplem
 				Progress.progress(getLocales().localizedForKey("compressing_project"));
 				File projectDir = (File) flexoProject.getProjectDirectory();
 				String dirName = projectDir.getName();
-				String zipName = dirName.endsWith(".prj")
-						? dirName.substring(0, dirName.length() - 4) + ".zip"
-						: dirName + ".zip";
+				String zipName = dirName.endsWith(".prj") ? dirName.substring(0, dirName.length() - 4) + ".zip" : dirName + ".zip";
 				File zipFile = new File(System.getProperty("java.io.tmpdir"), zipName);
 				try {
 					ZipUtils.makeZip(zipFile, projectDir, f -> !f.getName().endsWith("~"), Deflater.BEST_COMPRESSION);
@@ -285,13 +279,12 @@ public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplem
 			List<String> paths = new ArrayList<>();
 			if (window.isVisible() && window.getWidth() > 0 && window.getHeight() > 0) {
 				try {
-					File file = new File(System.getProperty("java.io.tmpdir"),
-							FileUtils.getValidFileName(title + ".png"));
+					File file = new File(System.getProperty("java.io.tmpdir"), FileUtils.getValidFileName(title + ".png"));
 					ImageUtils.saveImageToFile(ImageUtils.createImageFromComponent(window), file, ImageType.PNG);
 					paths.add(file.getAbsolutePath());
 				} catch (Exception e) {
-					report.addToWarning(getLocales().localizedForKey("could_not_attach_screenshot") + " " + title
-							+ "\n\t" + e.getMessage());
+					report.addToWarning(
+							getLocales().localizedForKey("could_not_attach_screenshot") + " " + title + "\n\t" + e.getMessage());
 					logger.log(Level.SEVERE, "Error capturing screenshot: " + title, e);
 				}
 			}
@@ -330,8 +323,8 @@ public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplem
 		this.serviceManager = serviceManager;
 		this.issue = new GitHubIssue();
 
-		issue.getPropertyChangeSupport().addPropertyChangeListener(
-				evt -> getPropertyChangeSupport().firePropertyChange("isValid", !isValid(), isValid()));
+		issue.getPropertyChangeSupport()
+				.addPropertyChangeListener(evt -> getPropertyChangeSupport().firePropertyChange("isValid", !isValid(), isValid()));
 
 		sendLogs = true;
 		sendScreenshots = false;
@@ -467,9 +460,7 @@ public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplem
 	}
 
 	public boolean isValid() {
-		return issue != null
-				&& repository != null
-				&& StringUtils.isNotEmpty(issue.getTitle())
+		return issue != null && repository != null && StringUtils.isNotEmpty(issue.getTitle())
 				&& StringUtils.isNotEmpty(issue.getDescription());
 	}
 
@@ -488,29 +479,31 @@ public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplem
 			submitter.run();
 			if (submitter.getException() != null) {
 				if (submitter.getException() instanceof SocketTimeoutException) {
-					retry = FlexoController.confirm(
-							getLocales().localizedForKey("could_not_send_incident_so_far_keep_trying") + "? ");
+					retry = FlexoController.confirm(getLocales().localizedForKey("could_not_send_incident_so_far_keep_trying") + "? ");
 					if (retry) {
 						client.setTimeout(client.getTimeout() * 2);
 					}
-				} else if (submitter.getException() instanceof UnknownHostException) {
-					retry = FlexoController.confirm(
-							getLocales().localizedForKey("could_not_send_to_host_check_internet_connection_and_try_again") + "? ");
+				}
+				else if (submitter.getException() instanceof UnknownHostException) {
+					retry = FlexoController
+							.confirm(getLocales().localizedForKey("could_not_send_to_host_check_internet_connection_and_try_again") + "? ");
 					if (!retry) {
 						throw submitter.getException();
 					}
-				} else {
+				}
+				else {
 					throw submitter.getException();
 				}
-			} else {
+			}
+			else {
 				retry = false;
 			}
 		}
 
 		Progress.hideTaskBar();
 		JFIBDialog.instanciateAndShowDialog(REPORT_FIB_FILE, report,
-				serviceManager.getApplicationFIBLibraryService().getApplicationFIBLibrary(),
-				FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
+				serviceManager.getApplicationFIBLibraryService().getApplicationFIBLibrary(), FlexoFrame.getActiveFrame(), true,
+				FlexoLocalization.getMainLocalizer());
 		return !report.hasErrors();
 	}
 
@@ -519,8 +512,7 @@ public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplem
 	// -----------------------------------------------------------------------
 
 	/**
-	 * Reads a text file, truncating from the beginning if it exceeds maxBytes,
-	 * so that we always include the most recent content (tail).
+	 * Reads a text file, truncating from the beginning if it exceeds maxBytes, so that we always include the most recent content (tail).
 	 */
 	private static String readFileWithTruncation(File file, int maxBytes) throws IOException {
 		long length = file.length();
@@ -529,7 +521,8 @@ public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplem
 			if (length <= maxBytes) {
 				buf = new byte[(int) length];
 				fis.read(buf);
-			} else {
+			}
+			else {
 				// Skip the beginning, keep the last maxBytes
 				long skip = length - maxBytes;
 				fis.skip(skip);

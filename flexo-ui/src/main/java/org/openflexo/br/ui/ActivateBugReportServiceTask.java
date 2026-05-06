@@ -1,7 +1,6 @@
 /**
  * 
- * Copyright (c) 2013-2014, Openflexo
- * Copyright (c) 2012-2012, AgileBirds
+ * Copyright (c) 2014, Openflexo
  * 
  * This file is part of Flexo-ui, a component of the software infrastructure 
  * developed at Openflexo.
@@ -37,11 +36,56 @@
  * 
  */
 
-package org.openflexo.ws.jira.action;
+package org.openflexo.br.ui;
 
-import org.openflexo.ws.jira.result.JIRAResult;
+import org.openflexo.ApplicationContext;
+import org.openflexo.foundation.BugReportService;
+import org.openflexo.foundation.task.Progress;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.task.FlexoApplicationTask;
 
-public abstract class JIRAAction<R extends JIRAResult> {
+/**
+ * A task used to activate {@link BugReportService}
+ * 
+ * @author sylvain
+ *
+ */
+public class ActivateBugReportServiceTask extends FlexoApplicationTask {
 
-	public abstract Class<R> getResultClass();
+	private BugReportServiceInUIContextImpl bugReportService;
+
+	public ActivateBugReportServiceTask(ApplicationContext applicationContext) {
+		super("ActivateBugReportService", FlexoLocalization.getMainLocalizer().localizedForKey("activate_bug_report_service"),
+				applicationContext);
+
+		/*for (FlexoTask task : getServiceManager().getTaskManager().getScheduledTasks()) {
+			if (task instanceof AddResourceCenterTask) {
+				addToDependantTasks(task);
+			}
+		}*/
+	}
+
+	@Override
+	public void performTask() {
+
+		Progress.setExpectedProgressSteps(20);
+
+		bugReportService = ((ApplicationContext) getServiceManager()).createBugReportService();
+		getServiceManager().registerService(bugReportService);
+
+	}
+
+	public BugReportServiceInUIContextImpl getBugReportService() {
+		return bugReportService;
+	}
+
+	@Override
+	public boolean isCancellable() {
+		return true;
+	}
+
+	@Override
+	protected synchronized void finishedExecution() {
+		super.finishedExecution();
+	}
 }

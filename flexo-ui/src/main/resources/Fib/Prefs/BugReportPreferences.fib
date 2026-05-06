@@ -9,5 +9,5 @@
   <Label id="2" name="TokenLabel" localize="true" align="left" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" label="github_token" />
   <TextField id="3" data="data.githubToken" columns="7" name="TokenField" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" />
   <Label id="4" name="HintLabel" localize="true" font="SansSerif,2,11" align="left" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=center)" label="github_token_hint" />
-  <FIBVariable id="5" name="data" type="org.openflexo.prefs.BugReportPreferences" />
+  <FIBVariable id="5" name="data" type="org.openflexo.br.ui.BugReportPreferences" />
 </Panel>

@@ -41,7 +41,7 @@ package org.openflexo;
 
 import java.io.File;
 
-import org.openflexo.br.BugReportService;
+import org.openflexo.foundation.BugReportService;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.fml.VirtualModelLibrary;
@@ -132,11 +132,6 @@ public class InteractiveApplicationContext extends ApplicationContext {
 	@Override
 	protected VirtualModelLibrary createViewPointLibraryService() {
 		return new VirtualModelLibrary();
-	}
-
-	@Override
-	public BugReportService createBugReportService() {
-		return new BugReportService();
 	}
 
 	@Override

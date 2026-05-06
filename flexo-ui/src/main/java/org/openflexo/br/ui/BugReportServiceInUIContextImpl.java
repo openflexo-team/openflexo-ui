@@ -36,39 +36,28 @@
  *
  */
 
-package org.openflexo.br;
+package org.openflexo.br.ui;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.openflexo.ApplicationContext;
-import org.openflexo.br.view.GitHubTokenDialog;
-import org.openflexo.foundation.FlexoServiceImpl;
+import org.openflexo.br.BugReportServiceImpl;
+import org.openflexo.br.github.GitHubClient;
+import org.openflexo.br.github.model.GitHubRepository;
 import org.openflexo.foundation.task.Progress;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.toolbox.StringUtils;
-import org.openflexo.ws.github.GitHubClient;
-import org.openflexo.ws.github.GitHubException;
-import org.openflexo.ws.github.model.GitHubRepository;
 
 /**
- * Service responsible for fetching GitHub repositories from the openflexo-team
- * organization and providing them for bug report submission.
+ * Service responsible for fetching GitHub repositories from the openflexo-team organization and providing them for bug report submission.
  *
  * Replaces the former JIRA-based implementation.
  */
-public class BugReportService extends FlexoServiceImpl {
+public class BugReportServiceInUIContextImpl extends BugReportServiceImpl {
 
 	private List<GitHubRepository> repositories;
 
-	public BugReportService() {
-	}
-
-	@Override
-	public String getServiceName() {
-		return "BugReportService";
+	public BugReportServiceInUIContextImpl() {
 	}
 
 	@Override
@@ -76,34 +65,9 @@ public class BugReportService extends FlexoServiceImpl {
 		return (ApplicationContext) super.getServiceManager();
 	}
 
-	public List<GitHubRepository> getRepositories() {
-		return repositories;
-	}
-
 	/**
-	 * @deprecated Use {@link #getRepositories()} instead.
-	 *             Kept for compilation compatibility with legacy JIRA code.
-	 */
-	@Deprecated
-	public List<?> getProjects() {
-		return repositories;
-	}
-
-	public GitHubRepository getRepositoryByName(String name) {
-		if (repositories == null || name == null) {
-			return null;
-		}
-		for (GitHubRepository repo : repositories) {
-			if (name.equals(repo.getName())) {
-				return repo;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Tries to find the most relevant repository for the active module using
-	 * a simple name-based heuristic. Returns the first repository as a fallback.
+	 * Tries to find the most relevant repository for the active module using a simple name-based heuristic. Returns the first repository as
+	 * a fallback.
 	 */
 	public GitHubRepository getMostProbableRepository(Exception e, FlexoModule<?> activeModule) {
 		if (repositories == null || repositories.isEmpty()) {
@@ -139,9 +103,9 @@ public class BugReportService extends FlexoServiceImpl {
 	}
 
 	/**
-	 * Ensures a valid GitHub token is available, prompting the user if needed.
-	 * Returns the token, or null if the user cancels.
+	 * Ensures a valid GitHub token is available, prompting the user if needed. Returns the token, or null if the user cancels.
 	 */
+	@Override
 	public String askTokenWhenRequired() {
 		boolean valid = testGitHubConnection();
 
@@ -158,42 +122,4 @@ public class BugReportService extends FlexoServiceImpl {
 		return getServiceManager().getBugReportPreferences().getGithubToken();
 	}
 
-	public boolean isInitialized() {
-		return status == Status.Started;
-	}
-
-	@Override
-	public void initialize() {
-		logger.info("Initializing BugReportService (GitHub)");
-
-		repositories = new ArrayList<>();
-
-		String token = askTokenWhenRequired();
-		if (token == null) {
-			logger.warning("No GitHub token provided — BugReportService initialization aborted");
-			status = Status.Started;
-			return;
-		}
-
-		GitHubClient client = new GitHubClient(token);
-
-		try {
-			if (FlexoLocalization.getMainLocalizer() != null) {
-				Progress.progress(FlexoLocalization.getMainLocalizer().localizedForKey("contacting") + " GitHub");
-			}
-
-			List<GitHubRepository> fetched = client.listRepositories();
-			if (fetched != null) {
-				repositories.addAll(fetched);
-			}
-			logger.info("Loaded " + repositories.size() + " repositories from " + GitHubClient.ORG);
-
-		} catch (IOException e) {
-			logger.warning("Network error while fetching GitHub repositories: " + e.getMessage());
-		} catch (GitHubException e) {
-			logger.warning("GitHub API error while fetching repositories: " + e.getMessage());
-		}
-
-		status = Status.Started;
-	}
 }

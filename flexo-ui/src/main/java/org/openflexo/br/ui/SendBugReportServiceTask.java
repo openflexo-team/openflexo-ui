@@ -36,14 +36,14 @@
  *
  */
 
-package org.openflexo.br;
+package org.openflexo.br.ui;
 
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 
 import org.openflexo.ApplicationContext;
-import org.openflexo.br.view.GitHubIssueReportDialog;
-import org.openflexo.br.view.GitHubTokenDialog;
+import org.openflexo.br.BugReportServiceImpl;
+import org.openflexo.br.github.UnauthorizedGitHubAccessException;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.task.Progress;
 import org.openflexo.gina.controller.FIBController.Status;
@@ -54,15 +54,13 @@ import org.openflexo.task.FlexoApplicationTask;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.ws.github.UnauthorizedGitHubAccessException;
 
 /**
- * A task used to initiate and send a bug report to GitHub Issues.
- * Replaces the former JIRA-based implementation.
+ * A task used to initiate and send a bug report to GitHub Issues. Replaces the former JIRA-based implementation.
  */
 public class SendBugReportServiceTask extends FlexoApplicationTask {
 
-	private final BugReportService bugReportService;
+	private final BugReportServiceImpl bugReportService;
 
 	private final Exception causeException;
 	private final FlexoProject<?> project;
@@ -71,11 +69,8 @@ public class SendBugReportServiceTask extends FlexoApplicationTask {
 	private GitHubIssueReportDialog report;
 	private JFIBDialog<GitHubIssueReportDialog> dialog;
 
-	public SendBugReportServiceTask(Exception e, FlexoModule<?> module, FlexoProject<?> project,
-			ApplicationContext applicationContext) {
-		super("SendBugReport",
-				FlexoLocalization.getMainLocalizer().localizedForKey("send_issue"),
-				applicationContext);
+	public SendBugReportServiceTask(Exception e, FlexoModule<?> module, FlexoProject<?> project, ApplicationContext applicationContext) {
+		super("SendBugReport", FlexoLocalization.getMainLocalizer().localizedForKey("send_issue"), applicationContext);
 		this.bugReportService = applicationContext.getBugReportService();
 		this.module = module;
 		this.project = project;
@@ -90,24 +85,21 @@ public class SendBugReportServiceTask extends FlexoApplicationTask {
 			report = new GitHubIssueReportDialog(causeException, serviceManager);
 
 			if (module != null) {
-				report.setRepository(
-						serviceManager.getBugReportService().getMostProbableRepository(causeException, module));
+				report.setRepository(serviceManager.getBugReportService().getMostProbableRepository(causeException, module));
 			}
 
 			report.setFlexoProject(project);
 			report.setServiceManager(serviceManager);
 
-			dialog = JFIBDialog.instanciateAndShowDialog(
-					GitHubIssueReportDialog.FIB_FILE, report,
-					serviceManager.getApplicationFIBLibraryService().getApplicationFIBLibrary(),
-					FlexoFrame.getActiveFrame(), true,
+			dialog = JFIBDialog.instanciateAndShowDialog(GitHubIssueReportDialog.FIB_FILE, report,
+					serviceManager.getApplicationFIBLibraryService().getApplicationFIBLibrary(), FlexoFrame.getActiveFrame(), true,
 					FlexoLocalization.getMainLocalizer());
 
 		} catch (Exception e1) {
 			e1.printStackTrace();
-			FlexoController.showError(
-					serviceManager.getLocalizationService().getFlexoLocalizer()
-							.localizedForKey("cannot_open_bug_report_dialog") + ": " + e1.getMessage());
+			FlexoController
+					.showError(serviceManager.getLocalizationService().getFlexoLocalizer().localizedForKey("cannot_open_bug_report_dialog")
+							+ ": " + e1.getMessage());
 		}
 	}
 
@@ -134,26 +126,27 @@ public class SendBugReportServiceTask extends FlexoApplicationTask {
 				Progress.progress("sending...");
 				ok = dialog.getData().send();
 			} catch (MalformedURLException e1) {
-				FlexoController.showError(
-						serviceManager.getLocalizationService().getFlexoLocalizer()
-								.localizedForKey("could_not_send_bug_report") + " " + e1.getMessage());
+				FlexoController
+						.showError(serviceManager.getLocalizationService().getFlexoLocalizer().localizedForKey("could_not_send_bug_report")
+								+ " " + e1.getMessage());
 			} catch (UnknownHostException e1) {
-				FlexoController.showError(
-						serviceManager.getLocalizationService().getFlexoLocalizer()
-								.localizedForKey("could_not_send_bug_report") + " " + e1.getMessage());
+				FlexoController
+						.showError(serviceManager.getLocalizationService().getFlexoLocalizer().localizedForKey("could_not_send_bug_report")
+								+ " " + e1.getMessage());
 				ok = true;
 			} catch (UnauthorizedGitHubAccessException e1) {
 				Progress.progress("ask_token");
 				if (GitHubTokenDialog.askToken(serviceManager)) {
 					continue;
-				} else {
+				}
+				else {
 					break;
 				}
 			} catch (Exception e1) {
 				e1.printStackTrace();
-				FlexoController.showError(
-						serviceManager.getLocalizationService().getFlexoLocalizer()
-								.localizedForKey("could_not_send_bug_report") + ":\n" + e1.getMessage());
+				FlexoController
+						.showError(serviceManager.getLocalizationService().getFlexoLocalizer().localizedForKey("could_not_send_bug_report")
+								+ ":\n" + e1.getMessage());
 			}
 
 			if (!ok) {
@@ -162,7 +155,7 @@ public class SendBugReportServiceTask extends FlexoApplicationTask {
 		}
 	}
 
-	public BugReportService getBugReportService() {
+	public BugReportServiceImpl getBugReportService() {
 		return bugReportService;
 	}
 
