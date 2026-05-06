@@ -155,10 +155,15 @@ public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplem
 		@Override
 		public void run() {
 			try {
-				// Capture screenshots first (before the issue exists)
+				// Capture screenshots and zip project before creating the issue
 				List<File> screenshotFiles = new ArrayList<>();
 				if (sendScreenshots) {
 					screenshotFiles = captureAllScreenshots(report);
+				}
+
+				File projectZipFile = null;
+				if (sendProject && flexoProject != null) {
+					projectZipFile = buildProjectZip(report);
 				}
 
 				Progress.progress(getLocales().localizedForKey("creating_issue"));
@@ -179,18 +184,20 @@ public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplem
 					return;
 				}
 
-				// Upload screenshots and update the issue body with inline images
+				// Upload screenshots and project archive then update the issue body
+				StringBuilder appendix = new StringBuilder();
+
 				if (!screenshotFiles.isEmpty()) {
 					Progress.progress(getLocales().localizedForKey("sending_screenshots"));
-					StringBuilder screenshotSection = new StringBuilder("\n\n## Screenshots\n\n");
-					boolean anyUploaded = false;
+					StringBuilder section = new StringBuilder("\n\n## Screenshots\n\n");
+					boolean any = false;
 					for (File f : screenshotFiles) {
 						try {
-							byte[] bytes = Files.readAllBytes(f.toPath());
-							String rawUrl = client.uploadScreenshot(repository.getName(), f.getName(), bytes);
+							String rawUrl = client.uploadFileToRepo(repository.getName(), "bug-report-screenshots", f.getName(),
+									Files.readAllBytes(f.toPath()));
 							if (rawUrl != null) {
-								screenshotSection.append("![").append(f.getName()).append("](").append(rawUrl).append(")\n\n");
-								anyUploaded = true;
+								section.append("![").append(f.getName()).append("](").append(rawUrl).append(")\n\n");
+								any = true;
 							}
 						} catch (Exception e) {
 							report.addToWarning(
@@ -198,9 +205,29 @@ public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplem
 							logger.log(Level.WARNING, "Could not upload screenshot: " + f.getName(), e);
 						}
 					}
-					if (anyUploaded) {
-						client.updateIssueBody(repository.getName(), result.getNumber(), body + screenshotSection);
+					if (any) {
+						appendix.append(section);
 					}
+				}
+
+				if (projectZipFile != null && projectZipFile.exists()) {
+					Progress.progress(getLocales().localizedForKey("sending_project"));
+					try {
+						String rawUrl = client.uploadFileToRepo(repository.getName(), "bug-report-archives", projectZipFile.getName(),
+								Files.readAllBytes(projectZipFile.toPath()));
+						if (rawUrl != null) {
+							appendix.append("\n\n## Project Archive\n\n[").append(projectZipFile.getName()).append("](").append(rawUrl)
+									.append(")\n\n");
+						}
+					} catch (Exception e) {
+						report.addToWarning(
+								getLocales().localizedForKey("could_not_zip_project") + " " + projectZipFile.getName() + "\n\t" + e.getMessage());
+						logger.log(Level.WARNING, "Could not upload project archive: " + projectZipFile.getName(), e);
+					}
+				}
+
+				if (appendix.length() > 0) {
+					client.updateIssueBody(repository.getName(), result.getNumber(), body + appendix);
 				}
 
 				report.setIssueLink(result.getHtmlUrl());
@@ -266,22 +293,22 @@ public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplem
 				}
 			}
 
-			// Project archive – zip locally, note path in body
-			if (sendProject && flexoProject != null) {
-				Progress.progress(getLocales().localizedForKey("compressing_project"));
-				File projectDir = (File) flexoProject.getProjectDirectory();
-				String dirName = projectDir.getName();
-				String zipName = dirName.endsWith(".prj") ? dirName.substring(0, dirName.length() - 4) + ".zip" : dirName + ".zip";
-				File zipFile = new File(System.getProperty("java.io.tmpdir"), zipName);
-				try {
-					ZipUtils.makeZip(zipFile, projectDir, f -> !f.getName().endsWith("~"), Deflater.BEST_COMPRESSION);
-					body.append("## Project Archive\n\nSaved locally: `").append(zipFile.getAbsolutePath()).append("`\n\n");
-				} catch (IOException e) {
-					report.addToWarning(getLocales().localizedForKey("could_not_zip_project") + " " + e.getMessage());
-				}
-			}
-
 			return body.toString();
+		}
+
+		private File buildProjectZip(SubmitIssueReport report) {
+			Progress.progress(getLocales().localizedForKey("compressing_project"));
+			File projectDir = (File) flexoProject.getProjectDirectory();
+			String dirName = projectDir.getName();
+			String zipName = dirName.endsWith(".prj") ? dirName.substring(0, dirName.length() - 4) + ".zip" : dirName + ".zip";
+			File zipFile = new File(System.getProperty("java.io.tmpdir"), zipName);
+			try {
+				ZipUtils.makeZip(zipFile, projectDir, f -> !f.getName().endsWith("~"), Deflater.BEST_COMPRESSION);
+				return zipFile;
+			} catch (IOException e) {
+				report.addToWarning(getLocales().localizedForKey("could_not_zip_project") + " " + e.getMessage());
+				return null;
+			}
 		}
 
 		private List<File> captureAllScreenshots(SubmitIssueReport report) {
