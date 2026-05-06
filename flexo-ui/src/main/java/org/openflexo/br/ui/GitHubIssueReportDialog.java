@@ -28,6 +28,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -154,6 +155,12 @@ public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplem
 		@Override
 		public void run() {
 			try {
+				// Capture screenshots first (before the issue exists)
+				List<File> screenshotFiles = new ArrayList<>();
+				if (sendScreenshots) {
+					screenshotFiles = captureAllScreenshots(report);
+				}
+
 				Progress.progress(getLocales().localizedForKey("creating_issue"));
 
 				String body = buildIssueBody(client, report);
@@ -170,6 +177,30 @@ public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplem
 				if (result == null || !result.isSuccess()) {
 					report.addToErrors(getLocales().localizedForKey("could_not_send_bug_report"));
 					return;
+				}
+
+				// Upload screenshots and update the issue body with inline images
+				if (!screenshotFiles.isEmpty()) {
+					Progress.progress(getLocales().localizedForKey("sending_screenshots"));
+					StringBuilder screenshotSection = new StringBuilder("\n\n## Screenshots\n\n");
+					boolean anyUploaded = false;
+					for (File f : screenshotFiles) {
+						try {
+							byte[] bytes = Files.readAllBytes(f.toPath());
+							String rawUrl = client.uploadScreenshot(repository.getName(), f.getName(), bytes);
+							if (rawUrl != null) {
+								screenshotSection.append("![").append(f.getName()).append("](").append(rawUrl).append(")\n\n");
+								anyUploaded = true;
+							}
+						} catch (Exception e) {
+							report.addToWarning(
+									getLocales().localizedForKey("could_not_attach_screenshot") + " " + f.getName() + "\n\t" + e.getMessage());
+							logger.log(Level.WARNING, "Could not upload screenshot: " + f.getName(), e);
+						}
+					}
+					if (anyUploaded) {
+						client.updateIssueBody(repository.getName(), result.getNumber(), body + screenshotSection);
+					}
 				}
 
 				report.setIssueLink(result.getHtmlUrl());
@@ -235,28 +266,6 @@ public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplem
 				}
 			}
 
-			// Screenshots – capture as PNG, save locally, list paths in body
-			if (sendScreenshots) {
-				List<String> captured = new ArrayList<>();
-				for (Frame frame : Frame.getFrames()) {
-					if (frame instanceof FlexoFrame && frame.isVisible() && frame.getWidth() > 0 && frame.getHeight() > 0) {
-						captured.addAll(captureWindow(frame, frame.getTitle(), report));
-						for (Window w : frame.getOwnedWindows()) {
-							if ((w instanceof FlexoDialog || w instanceof JFIBDialog) && w.isVisible()) {
-								captured.addAll(captureWindow(w, ((Dialog) w).getTitle(), report));
-							}
-						}
-					}
-				}
-				if (!captured.isEmpty()) {
-					body.append("## Screenshots\n\nSaved locally:\n");
-					for (String path : captured) {
-						body.append("- `").append(path).append("`\n");
-					}
-					body.append("\n");
-				}
-			}
-
 			// Project archive – zip locally, note path in body
 			if (sendProject && flexoProject != null) {
 				Progress.progress(getLocales().localizedForKey("compressing_project"));
@@ -275,20 +284,40 @@ public class GitHubIssueReportDialog extends PropertyChangedSupportDefaultImplem
 			return body.toString();
 		}
 
-		private List<String> captureWindow(Window window, String title, SubmitIssueReport report) {
-			List<String> paths = new ArrayList<>();
+		private List<File> captureAllScreenshots(SubmitIssueReport report) {
+			List<File> files = new ArrayList<>();
+			for (Frame frame : Frame.getFrames()) {
+				if (frame instanceof FlexoFrame && frame.isVisible() && frame.getWidth() > 0 && frame.getHeight() > 0) {
+					File f = captureWindow(frame, frame.getTitle(), report);
+					if (f != null) {
+						files.add(f);
+					}
+					for (Window w : frame.getOwnedWindows()) {
+						if ((w instanceof FlexoDialog || w instanceof JFIBDialog) && w.isVisible()) {
+							File wf = captureWindow(w, ((Dialog) w).getTitle(), report);
+							if (wf != null) {
+								files.add(wf);
+							}
+						}
+					}
+				}
+			}
+			return files;
+		}
+
+		private File captureWindow(Window window, String title, SubmitIssueReport report) {
 			if (window.isVisible() && window.getWidth() > 0 && window.getHeight() > 0) {
 				try {
 					File file = new File(System.getProperty("java.io.tmpdir"), FileUtils.getValidFileName(title + ".png"));
 					ImageUtils.saveImageToFile(ImageUtils.createImageFromComponent(window), file, ImageType.PNG);
-					paths.add(file.getAbsolutePath());
+					return file;
 				} catch (Exception e) {
 					report.addToWarning(
 							getLocales().localizedForKey("could_not_attach_screenshot") + " " + title + "\n\t" + e.getMessage());
 					logger.log(Level.SEVERE, "Error capturing screenshot: " + title, e);
 				}
 			}
-			return paths;
+			return null;
 		}
 	}
 
