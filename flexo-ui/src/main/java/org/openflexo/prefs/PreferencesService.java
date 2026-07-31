@@ -57,6 +57,7 @@ import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenter.ResourceCenterEntry;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.SaveResourceException;
+import org.openflexo.foundation.secrets.SecretsService;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.module.Module;
@@ -165,6 +166,9 @@ public class PreferencesService extends FlexoServiceImpl implements HasPropertyC
 		}
 		else if (service instanceof BugReportService) {
 			return (Class) BugReportPreferences.class;
+		}
+		else if (service instanceof SecretsService) {
+			return (Class) SecretsPreferences.class;
 		}
 		return null;
 	}
