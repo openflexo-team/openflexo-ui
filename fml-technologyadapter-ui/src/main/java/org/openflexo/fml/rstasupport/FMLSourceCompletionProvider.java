@@ -172,7 +172,7 @@ public class FMLSourceCompletionProvider extends DefaultCompletionProvider {
 			this.enclosingObjectNode = getEnclosingFMLObjectNode(cu, textArea);
 			if (enclosingObjectNode != null) {
 				FMLPrettyPrintable enclosingObject = enclosingObjectNode.getModelObject();
-				System.out.println("enclosingObject=" + enclosingObject);
+				// System.out.println("enclosingObject=" + enclosingObject);
 				if (enclosingObject instanceof Sequence) {
 					// System.out.println("Returning FML:\n" + (((Sequence) enclosingObject).getControlGraph1()).getFMLPrettyPrint());
 					context = ((Sequence) enclosingObject).getControlGraph1();
@@ -242,7 +242,7 @@ public class FMLSourceCompletionProvider extends DefaultCompletionProvider {
 			else {
 				context = null;
 			}
-			System.out.println("context=" + context);
+			// System.out.println("context=" + context);
 		}
 
 		/**
