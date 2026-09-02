@@ -102,11 +102,11 @@
 				visibleRowCount="5" backgroundNonSelectionColor="255,255,255"
 				textSelectionColor="255,255,255"
 				backgroundSecondarySelectionColor="173,215,255"
-				iteratorClassName="org.openflexo.foundation.fml.rt.ActorReference"
+				iteratorClassName="org.openflexo.foundation.fml.FlexoProperty"
 				showFooter="true" textNonSelectionColor="0,0,0"
 				selectionMode="MultipleIntervalSelection" rowHeight="18"
 				localize="true" manageDynamicModel="true"
-				data="flexoConceptInstanceBrowser.selected.actors" opaque="false"
+				data="flexoConceptInstanceBrowser.selected.flexoConcept.accessibleProperties" opaque="false"
 				boundToSelectionManager="true"
 				rightClickAction="controller.rightClick(table.selected,event)"
 				doubleClickAction="controller.doubleClick(table.selected)"
@@ -116,13 +116,13 @@
 				width="200" height="200" name="table">
     			<RemoveAction name="delete" method="controller.deleteActorReference(data, selected)" />
 				<IconColumn id="25"
-					data="controller.iconForObject(iterator.flexoRole)"
+					data="controller.iconForObject(iterator)"
 					resizable="false" title="icon" displayTitle="false"
 					columnWidth="20" showIcon="false" name="icon" />
-				<LabelColumn id="26" data="iterator.roleName"
+				<LabelColumn id="26" data="iterator.name"
 					resizable="true" title="property" displayTitle="true"
 					columnWidth="100" showIcon="false" name="property" />
-				<LabelColumn id="27" data="iterator.stringRepresentation"
+				<LabelColumn id="27" data="flexoConceptInstanceBrowser.selected.getFlexoPropertyValue(iterator).toString"
 					resizable="true" title="value" displayTitle="true"
 					columnWidth="300" showIcon="false" name="value" />
 				<LocalizedDictionary id="28" />
