@@ -90,7 +90,6 @@ import org.openflexo.fml.controller.action.MoveVirtualModelToDirectoryInitialize
 import org.openflexo.fml.controller.action.RenameCompilationUnitInitializer;
 import org.openflexo.fml.controller.action.RenameFlexoConceptInitializer;
 import org.openflexo.fml.controller.validation.ValidateActionizer;
-import org.openflexo.fml.controller.view.FIBComponentModuleView;
 import org.openflexo.fml.controller.view.StandardCompilationUnitView;
 import org.openflexo.fml.controller.widget.FIBCompilationUnitBrowser;
 import org.openflexo.fml.controller.widget.FIBVirtualModelLibraryBrowser;
@@ -110,12 +109,8 @@ import org.openflexo.foundation.fml.EventListener;
 import org.openflexo.foundation.fml.FMLCompilationUnit;
 import org.openflexo.foundation.fml.FMLObject;
 import org.openflexo.foundation.fml.rm.FMLFIBComponent;
-import org.openflexo.foundation.task.FlexoTask;
 import org.openflexo.foundation.task.Progress;
-import org.openflexo.gina.FIBLibrary.FIBLibraryImpl;
-import org.openflexo.gina.swing.editor.FIBEditor;
 import org.openflexo.gina.swing.editor.controller.FIBEditorIconLibrary;
-import org.openflexo.gina.swing.utils.FIBEditorLoadingProgress;
 import org.openflexo.foundation.fml.FMLTechnologyAdapter;
 import org.openflexo.foundation.fml.FMLValidationModel;
 import org.openflexo.foundation.fml.FMLValidationReport;
@@ -178,6 +173,7 @@ import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.TechnologyAdapterController;
+import org.openflexo.view.controller.TechnologyAdapterPluginController;
 import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
@@ -524,19 +520,25 @@ public class FMLTechnologyAdapterController extends TechnologyAdapterController<
 
 	@Override
 	public boolean isRepresentableInModuleView(TechnologyObject<FMLTechnologyAdapter> object) {
-		if (object instanceof FMLFIBComponent) {
-			// A GINA component of a Xxx.fml/ container is edited in the FIB editor
-			return true;
+
+		for (TechnologyAdapterPluginController<?> plugin : getTechnologyAdapterControllerService().getActivatedPlugins()) {
+			if (plugin.isRepresentableInModuleView(object)) {
+				return true;
+			}
 		}
+
 		return (object instanceof FMLObject && ((FMLObject) object).getDeclaringCompilationUnit() != null);
 	}
 
 	@Override
 	public FlexoObject getRepresentableMasterObject(TechnologyObject<FMLTechnologyAdapter> object) {
-		if (object instanceof FMLFIBComponent) {
-			// The component is its own master object: it is edited on its own, not as part of its compilation unit
-			return (FMLFIBComponent) object;
+
+		for (TechnologyAdapterPluginController<?> plugin : getTechnologyAdapterControllerService().getActivatedPlugins()) {
+			if (plugin.isRepresentableInModuleView(object)) {
+				return plugin.getRepresentableMasterObject(object);
+			}
 		}
+
 		if (object instanceof FMLObject) {
 			return ((FMLObject) object).getDeclaringCompilationUnit();
 		}
@@ -553,11 +555,15 @@ public class FMLTechnologyAdapterController extends TechnologyAdapterController<
 	@Override
 	public ModuleView<?> createModuleViewForMasterObject(TechnologyObject<FMLTechnologyAdapter> object, FlexoController controller,
 			FlexoPerspective perspective) {
+
+		for (TechnologyAdapterPluginController<?> plugin : getTechnologyAdapterControllerService().getActivatedPlugins()) {
+			if (plugin.isRepresentableInModuleView(object)) {
+				return plugin.createModuleViewForMasterObject(object, controller, perspective);
+			}
+		}
+
 		if (object instanceof FMLCompilationUnit) {
 			return new StandardCompilationUnitView((FMLCompilationUnit) object, controller, perspective);
-		}
-		if (object instanceof FMLFIBComponent) {
-			return new FIBComponentModuleView((FMLFIBComponent) object, controller, perspective, getLocales());
 		}
 		/*if (object instanceof FlexoConcept) {
 			FlexoConcept ep = (FlexoConcept) object;
@@ -570,64 +576,6 @@ public class FMLTechnologyAdapterController extends TechnologyAdapterController<
 	@Override
 	protected FIBTechnologyBrowser<FMLTechnologyAdapter> buildTechnologyBrowser(FlexoController controller) {
 		return new FIBVirtualModelLibraryBrowser(getTechnologyAdapter(), controller);
-	}
-
-	private FIBEditor fibEditor;
-
-	/**
-	 * The GINA component editor of this module, built on first use.
-	 *
-	 * <p>
-	 * It is held here rather than by the view, because it is a heavy, application-wide object: its palettes and inspectors are shared by
-	 * every component being edited. Ported from <code>gina-ta-ui</code>'s <code>GINAAdapterController</code>, which held it for the model
-	 * slot era.
-	 *
-	 * @param launchInTask
-	 *            build it through the task manager, so the user sees the loading progress. <b>Only ever pass true from a context that holds
-	 *            no AWT lock</b> - typically module activation. A module view is created inside
-	 *            <code>synchronized (flexoFrame.getTreeLock())</code>, and this builds Swing widgets needing that same lock, so waiting on a
-	 *            task from there freezes the application.
-	 */
-	public FIBEditor getFIBEditor(boolean launchInTask) {
-
-		if (fibEditor != null) {
-			return fibEditor;
-		}
-
-		if (launchInTask && getServiceManager() != null && getServiceManager().getTaskManager() != null) {
-			FlexoTask loadEditor = new FlexoTask("LoadFIBEditor", getLocales().localizedForKey("loading_fib_editor")) {
-				@Override
-				public void performTask() throws InterruptedException {
-					setExpectedProgressSteps(20);
-					fibEditor = makeFIBEditor();
-				}
-			};
-			getServiceManager().getTaskManager().scheduleExecution(loadEditor);
-			getServiceManager().getTaskManager().waitTask(loadEditor);
-		}
-		else {
-			fibEditor = makeFIBEditor();
-		}
-
-		return fibEditor;
-	}
-
-	private FIBEditor makeFIBEditor() {
-
-		FIBEditor editor = new FIBEditor(FIBLibraryImpl.createInstance(getTechnologyAdapter().getTechnologyAdapterService()),
-				new FIBEditorLoadingProgress() {
-					@Override
-					public void progress(String stepName) {
-						Progress.progress(stepName);
-					}
-				});
-
-		// The palette and the widget inspectors are shared by every component being edited, and are what
-		// FIBComponentModuleView hands to the perspective. getPalettes()/getInspectors() answer null until made.
-		editor.makePalette();
-		editor.makeInspectors();
-
-		return editor;
 	}
 
 	@Override

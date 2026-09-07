@@ -78,7 +78,14 @@ public class FMLControlledComponent {
 	 * Load the user interface component of supplied concept, bound and ready to be shown, or null when its container ships none.
 	 */
 	public static FIBComponent loadUIComponent(FlexoConcept concept, CustomTypeEditorProvider customTypeEditorProvider) {
-		return load(concept, concept.getUIComponentFlexoResource(), customTypeEditorProvider);
+		return loadUIComponent(concept, FlexoConcept.DEFAULT_VARIANT, customTypeEditorProvider);
+	}
+
+	/**
+	 * Load a named <b>variant</b> of the user interface of supplied concept - see {@link FlexoConcept#getUIComponentResource(String)}.
+	 */
+	public static FIBComponent loadUIComponent(FlexoConcept concept, String variant, CustomTypeEditorProvider customTypeEditorProvider) {
+		return load(concept, concept != null ? concept.getUIComponentFlexoResource(variant) : null, customTypeEditorProvider);
 	}
 
 	/**

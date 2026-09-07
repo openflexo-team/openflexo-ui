@@ -55,7 +55,6 @@ import org.openflexo.fml.rt.controller.action.NavigationSchemeActionInitializer;
 import org.openflexo.fml.rt.controller.action.OpenVirtualModelInstanceInitializer;
 import org.openflexo.fml.rt.controller.action.SynchronizationSchemeActionInitializer;
 import org.openflexo.fml.rt.controller.validation.FMLRTValidateActionizer;
-import org.openflexo.fml.rt.controller.view.FMLControlledFIBModuleView;
 import org.openflexo.fml.rt.controller.view.VirtualModelInstanceView;
 import org.openflexo.fml.rt.controller.widget.FIBVirtualModelInstanceRepositoriesBrowser;
 import org.openflexo.foundation.FlexoObject;
@@ -372,23 +371,15 @@ public class FMLRTTechnologyAdapterController extends TechnologyAdapterControlle
 			}
 		}
 
-		// A user interface stored in the Xxx.fml/ container of the VirtualModel wins over the generic views: this is the
-		// replacement of the gina-ta bridge, and it applies to a VirtualModelInstance and to a plain FlexoConceptInstance
-		// alike, since a VirtualModel is itself a FlexoConcept. See FlexoConcept.getUIComponentResource().
-		if (object instanceof FlexoConceptInstance) {
-			ModuleView<?> containerDrivenView = FMLControlledFIBModuleView.viewFor((FlexoConceptInstance) object, controller, perspective,
-					getTechnologyAdapter().getLocales());
-			if (containerDrivenView != null) {
-				return containerDrivenView;
-			}
-		}
+		// A user interface stored in the Xxx.fml/ container of the VirtualModel wins over the generic views. That is
+		// served by the FML/GINA extension, through the plugin loop above - see FMLGINAPlugin.
 
 		if (object instanceof FMLRTVirtualModelInstance) {
 			FMLRTVirtualModelInstance vmi = (FMLRTVirtualModelInstance) object;
 			return new VirtualModelInstanceView(vmi, controller, perspective);
 		}
 		else if (object instanceof FlexoConceptInstance) {
-			// No container-driven view, and no generic one for a FlexoConceptInstance yet
+			// No generic module view for a FlexoConceptInstance
 		}
 
 		return new EmptyPanel<>(controller, perspective, object);

@@ -1,0 +1,25 @@
+// FML/GINA extension - the container-based user interfaces of FML.
+//
+// A .fib / .inspector stored in the Xxx.fml/ container of a VirtualModel drives the user interface
+// of its instances, and is edited in the GINA component editor. The RESOURCE side of that mechanism
+// lives in flexo-foundation (FIBComponentResource & co, declared by FMLTechnologyAdapter), because a
+// TechnologyAdapterPluginController is a purely UI extension point and cannot contribute a resource
+// factory. Everything else - the module views, the editor, the binding of a component to the concept
+// that drives it - lives here.
+//
+// Modelled on openflexo-diagram/fml-diagramming-extension, the reference plugin: discovered through
+// META-INF/services/org.openflexo.view.controller.TechnologyAdapterPluginController, activated by
+// TechnologyAdapterController.activateActivablePlugins(). A module gets the feature by declaring a
+// dependency on this project - see openflexo-modeller/om-module.
+
+dependencies {
+  // openflexo dep
+  implementation flexoFoundation()
+  implementation project(':flexo-ui')
+  implementation project(':fml-technologyadapter-ui')
+  implementation project(':fml-rt-technologyadapter-ui')
+
+  // testing dep
+  testImplementation ginaTest()
+  testImplementation project(':flexo-ui-test')
+}

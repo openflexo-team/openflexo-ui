@@ -63,7 +63,7 @@ public class TestContainerInspectors extends OpenflexoTestCase {
 		virtualModel = resource.getCompilationUnit().getVirtualModel();
 		assertNotNull(virtualModel);
 		// A failed parse leaves an EMPTY compilation unit behind, which validates with zero errors
-		assertEquals("The fixture did not parse", 7, virtualModel.getFlexoConcepts().size());
+		assertEquals("The fixture did not parse", 10, virtualModel.getFlexoConcepts().size());
 
 	}
 
