@@ -1,8 +1,8 @@
 /**
  * 
- * Copyright (c) 2014, Openflexo
+ * Copyright (c) 2014-2026, Openflexo
  * 
- * This file is part of Gina-core, a component of the software infrastructure 
+ * This file is part of openflexo-ui, a component of the software infrastructure 
  * developed at Openflexo.
  * 
  * 
@@ -64,8 +64,8 @@ import org.openflexo.gina.model.bindings.FIBVariablePathElement;
  *
  * <p>
  * One consequence is easy to misdiagnose: expressions are parsed by the <b>FML</b> parser, under which a path element starting with a
- * capital is read as a type name. <b>Name the widgets of a driven component in lowerCamelCase</b>, or every binding going through them fails
- * to parse.
+ * capital is read as a type name. <b>Name the widgets of a driven component in lowerCamelCase</b>, or every binding going through them
+ * fails to parse.
  *
  * <p>
  * A copy of this class still lives in <code>gina-ta</code>, which sits below this module and cannot depend on it. That copy goes away with
