@@ -606,7 +606,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 	 * @return a freshly loaded component - the caller owns it and may merge it into another inspector
 	 */
 	private FIBComponent loadContainerInspector(FlexoConcept concept) {
-		return FMLControlledComponent.loadInspectorComponent(concept, getInspectorsFIBLibrary(),
+		return FMLControlledComponent.loadInspectorComponent(concept,
 				getFlexoController() != null && getFlexoController().getApplicationContext() != null
 						? getFlexoController().getApplicationContext().getTechnologyAdapterControllerService()
 						: null);

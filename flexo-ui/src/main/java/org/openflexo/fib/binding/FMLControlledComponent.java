@@ -37,21 +37,16 @@
  */
 package org.openflexo.fib.binding;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.type.CustomTypeManager;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.VirtualModel;
-import org.openflexo.gina.FIBLibrary;
+import org.openflexo.foundation.fml.rm.FIBComponentResource;
 import org.openflexo.gina.controller.CustomTypeEditorProvider;
 import org.openflexo.gina.model.FIBComponent;
 import org.openflexo.gina.model.FIBModelFactory;
 import org.openflexo.gina.model.FIBVariable;
-import org.openflexo.gina.utils.FIBInspector;
-import org.openflexo.pamela.exceptions.ModelDefinitionException;
-import org.openflexo.rm.Resource;
 
 /**
  * Loads and binds the GINA components a {@link FlexoConcept} drives - the <code>.fib</code> and <code>.inspector</code> stored in the
@@ -82,44 +77,28 @@ public class FMLControlledComponent {
 	/**
 	 * Load the user interface component of supplied concept, bound and ready to be shown, or null when its container ships none.
 	 */
-	public static FIBComponent loadUIComponent(FlexoConcept concept, FIBLibrary fibLibrary,
-			CustomTypeEditorProvider customTypeEditorProvider) {
-		return load(concept, concept.getUIComponentResource(), fibLibrary, customTypeEditorProvider);
+	public static FIBComponent loadUIComponent(FlexoConcept concept, CustomTypeEditorProvider customTypeEditorProvider) {
+		return load(concept, concept.getUIComponentFlexoResource(), customTypeEditorProvider);
 	}
 
 	/**
 	 * Load the inspector component of supplied concept, bound and ready to be shown, or null when its container ships none.
 	 */
-	public static FIBComponent loadInspectorComponent(FlexoConcept concept, FIBLibrary fibLibrary,
-			CustomTypeEditorProvider customTypeEditorProvider) {
-		return load(concept, concept.getInspectorComponentResource(), fibLibrary, customTypeEditorProvider);
+	public static FIBComponent loadInspectorComponent(FlexoConcept concept, CustomTypeEditorProvider customTypeEditorProvider) {
+		return load(concept, concept.getInspectorComponentFlexoResource(), customTypeEditorProvider);
 	}
 
-	private static FIBComponent load(FlexoConcept concept, Resource componentResource, FIBLibrary fibLibrary,
+	private static FIBComponent load(FlexoConcept concept, FIBComponentResource componentResource,
 			CustomTypeEditorProvider customTypeEditorProvider) {
 
 		if (concept == null || componentResource == null) {
 			return null;
 		}
 
-		FIBModelFactory factory;
-		try {
-			// Rooted at the container of the component, so that a relative reference it carries (an icon, a referenced
-			// component) resolves inside the Xxx.fml/ container rather than wherever the caller's own factory points.
-			// FIBInspector.class is what lets a .inspector deserialize as an inspector rather than a plain panel.
-			// The custom type manager MUST be the technology adapter service: a driven component declares FML types
-			// (VirtualModelInstanceType<...>, FlexoConceptInstanceType<...>) on its variables and browser iterators, and
-			// the FIBLibrary's own manager knows none of them - deserialization then dies with
-			// "No custom type factories found while deserializing ...".
-			factory = new FIBModelFactory(componentResource.getContainer(), customTypeManagerFor(concept, fibLibrary), FIBInspector.class);
-		} catch (ModelDefinitionException e) {
-			logger.log(Level.WARNING, "Could not build a model factory for " + componentResource.getURI(), e);
-			return null;
-		}
-
-		// Deliberately NOT served from the FIBLibrary cache: what is returned here is bound to one concept's typing
-		// space, and may then be merged into another component, so it must not be shared between concepts.
-		FIBComponent returned = fibLibrary.retrieveFIBComponent(componentResource, false, factory);
+		// The resource owns the deserialization: it roots the model factory at the Xxx.fml/ container, declares
+		// FIBInspector, and - the one that fails obscurely when missing - builds the type converter from the technology
+		// adapter service, without which the FML types a driven component declares do not resolve.
+		FIBComponent returned = componentResource.getComponent();
 
 		if (returned == null) {
 			logger.warning("Could not load component " + componentResource.getURI() + " driven by " + concept);
@@ -168,27 +147,29 @@ public class FMLControlledComponent {
 			component.setCustomTypeEditorProvider(customTypeEditorProvider);
 		}
 
+		// The component is shown on an instance of THIS concept, so that is what 'data' is - not the bare
+		// FlexoConceptInstance its dataClassName declares. This is what the model slot's assignments used to do, and
+		// what makes a binding like 'data.someRole' resolve, in the editor as well as at runtime.
+		FIBVariable<?> dataVariable = component.getVariable(FIBComponent.DEFAULT_DATA_VARIABLE);
+		if (dataVariable == null) {
+			dataVariable = factoryOf(component).newFIBVariable(component, FIBComponent.DEFAULT_DATA_VARIABLE, concept.getInstanceType());
+			component.addToVariables(dataVariable);
+		}
+		else {
+			dataVariable.setType(concept.getInstanceType());
+		}
+
+		// Kept beside 'data', and pointing at it: the inspector tabs the platform generates from the deprecated
+		// FlexoConceptInspector declare 'fci', so an inspector translated into a container component keeps its bindings.
 		if (component.getVariable(CONCEPT_INSTANCE_VARIABLE) == null) {
 			FIBVariable<?> conceptInstanceVariable = factoryOf(component).newFIBVariable(component, CONCEPT_INSTANCE_VARIABLE,
 					concept.getInstanceType());
-			conceptInstanceVariable.setValue(new DataBinding<>("data"));
+			conceptInstanceVariable.setValue(new DataBinding<>(FIBComponent.DEFAULT_DATA_VARIABLE));
 			component.addToVariables(conceptInstanceVariable);
 		}
 
 		// Types have changed, so every binding has to be revalidated against them
 		component.revalidateBindings();
-	}
-
-	/**
-	 * The manager able to resolve the FML custom types a driven component declares. Falls back on the FIBLibrary's own manager, which only
-	 * knows the Java ones, when the concept is not attached to a service manager.
-	 */
-	private static CustomTypeManager customTypeManagerFor(FlexoConcept concept, FIBLibrary fibLibrary) {
-		if (concept.getServiceManager() != null && concept.getServiceManager().getTechnologyAdapterService() != null) {
-			return concept.getServiceManager().getTechnologyAdapterService();
-		}
-		logger.warning("No technology adapter service for " + concept + ": the FML types of its component will not resolve");
-		return fibLibrary.getCustomTypeManager();
 	}
 
 	private static FIBModelFactory factoryOf(FIBComponent component) {

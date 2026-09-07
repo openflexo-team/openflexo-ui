@@ -53,7 +53,6 @@ public class FMLControlledFIBModuleView extends FIBModuleView<FlexoConceptInstan
 		}
 
 		FIBComponent component = FMLControlledComponent.loadUIComponent(instance.getFlexoConcept(),
-				controller.getApplicationFIBLibraryService().getApplicationFIBLibrary(),
 				controller.getApplicationContext() != null ? controller.getApplicationContext().getTechnologyAdapterControllerService()
 						: null);
 

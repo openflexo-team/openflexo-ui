@@ -19,8 +19,6 @@ import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.rm.CompilationUnitResource;
 import org.openflexo.foundation.test.OpenflexoTestCase;
-import org.openflexo.gina.ApplicationFIBLibrary.ApplicationFIBLibraryImpl;
-import org.openflexo.gina.FIBLibrary;
 import org.openflexo.gina.model.FIBComponent;
 import org.openflexo.gina.model.FIBContainer;
 import org.openflexo.gina.model.FIBModelFactory;
@@ -51,7 +49,6 @@ public class TestContainerInspectors extends OpenflexoTestCase {
 	private static final String FIXTURE_URI = "http://openflexo.org/test/TestResourceCenter/TestContainerUI.fml";
 
 	private static VirtualModel virtualModel;
-	private static FIBLibrary fibLibrary;
 
 	@Test
 	@TestOrder(1)
@@ -68,7 +65,6 @@ public class TestContainerInspectors extends OpenflexoTestCase {
 		// A failed parse leaves an EMPTY compilation unit behind, which validates with zero errors
 		assertEquals("The fixture did not parse", 7, virtualModel.getFlexoConcepts().size());
 
-		fibLibrary = ApplicationFIBLibraryImpl.instance();
 	}
 
 	/** The inspector of a concept is loaded from the container, and is a genuine FIBInspector. */
@@ -78,7 +74,7 @@ public class TestContainerInspectors extends OpenflexoTestCase {
 
 		FlexoConcept simple = concept("Simple");
 
-		FIBComponent component = FMLControlledComponent.loadInspectorComponent(simple, fibLibrary, null);
+		FIBComponent component = FMLControlledComponent.loadInspectorComponent(simple, null);
 
 		assertNotNull("No inspector loaded for " + simple, component);
 		assertTrue("Expected a FIBInspector, got " + component.getClass(), component instanceof FIBInspector);
@@ -92,7 +88,7 @@ public class TestContainerInspectors extends OpenflexoTestCase {
 
 		FlexoConcept simple = concept("Simple");
 
-		FIBComponent component = FMLControlledComponent.loadInspectorComponent(simple, fibLibrary, null);
+		FIBComponent component = FMLControlledComponent.loadInspectorComponent(simple, null);
 
 		FIBVariable<?> conceptInstance = component.getVariable(FMLControlledComponent.CONCEPT_INSTANCE_VARIABLE);
 		assertNotNull("No '" + FMLControlledComponent.CONCEPT_INSTANCE_VARIABLE + "' variable on the loaded component", conceptInstance);
@@ -104,6 +100,38 @@ public class TestContainerInspectors extends OpenflexoTestCase {
 				component.getBindingFactory() instanceof org.openflexo.fib.binding.FMLFIBBindingFactory);
 	}
 
+	/**
+	 * <code>data</code> is typed by the concept that drives the component, not by the bare FlexoConceptInstance its <code>dataClassName</code>
+	 * declares. This is what the model slot's assignments used to do, and it is what makes <code>data.someRole</code> resolve - in the FIB
+	 * editor as well as at runtime.
+	 */
+	@Test
+	@TestOrder(4)
+	public void test2bDataIsTypedByTheDrivingConcept() {
+
+		FlexoConcept simple = concept("Simple");
+
+		FIBComponent component = FMLControlledComponent.loadInspectorComponent(simple, null);
+
+		FIBVariable<?> data = component.getVariable(org.openflexo.gina.model.FIBComponent.DEFAULT_DATA_VARIABLE);
+		assertNotNull("No 'data' variable on the loaded component", data);
+		assertEquals(simple.getInstanceType(), data.getType());
+	}
+
+	/** And the reverse resolution, which is what the editor uses to know what it is editing. */
+	@Test
+	@TestOrder(5)
+	public void test2cResourceKnowsTheConceptDrivingIt() {
+
+		FlexoConcept simple = concept("Simple");
+
+		assertEquals(simple, simple.getInspectorComponentFlexoResource().getDrivingConcept());
+		assertEquals(simple, simple.getUIComponentFlexoResource().getDrivingConcept());
+
+		// A VirtualModel is a FlexoConcept, and Xxx.fml/Xxx.fib is its own component
+		assertEquals(virtualModel, virtualModel.getUIComponentFlexoResource().getDrivingConcept());
+	}
+
 	/** Every binding of a container component is valid, in the context it will be shown in. */
 	@Test
 	@TestOrder(4)
@@ -111,7 +139,7 @@ public class TestContainerInspectors extends OpenflexoTestCase {
 
 		for (FlexoConcept concept : virtualModel.getFlexoConcepts()) {
 
-			FIBComponent component = FMLControlledComponent.loadInspectorComponent(concept, fibLibrary, null);
+			FIBComponent component = FMLControlledComponent.loadInspectorComponent(concept, null);
 			if (component == null) {
 				continue;
 			}
@@ -130,9 +158,9 @@ public class TestContainerInspectors extends OpenflexoTestCase {
 	@TestOrder(5)
 	public void test4VirtualModelGetsItsOwnComponents() {
 
-		assertNotNull(FMLControlledComponent.loadInspectorComponent(virtualModel, fibLibrary, null));
+		assertNotNull(FMLControlledComponent.loadInspectorComponent(virtualModel, null));
 
-		FIBComponent ui = FMLControlledComponent.loadUIComponent(virtualModel, fibLibrary, null);
+		FIBComponent ui = FMLControlledComponent.loadUIComponent(virtualModel, null);
 		assertNotNull(ui);
 		assertEquals("TestContainerUI", ui.getName());
 	}
@@ -142,8 +170,8 @@ public class TestContainerInspectors extends OpenflexoTestCase {
 	@TestOrder(6)
 	public void test5ConceptWithoutComponentLoadsNothing() {
 
-		assertNull(FMLControlledComponent.loadInspectorComponent(concept("WithoutAnyComponent"), fibLibrary, null));
-		assertNull(FMLControlledComponent.loadUIComponent(concept("WithoutAnyComponent"), fibLibrary, null));
+		assertNull(FMLControlledComponent.loadInspectorComponent(concept("WithoutAnyComponent"), null));
+		assertNull(FMLControlledComponent.loadUIComponent(concept("WithoutAnyComponent"), null));
 	}
 
 	/** An @UI annotation is honoured all the way to the loaded component. */
@@ -151,7 +179,7 @@ public class TestContainerInspectors extends OpenflexoTestCase {
 	@TestOrder(7)
 	public void test6AnnotatedConceptLoadsTheDeclaredComponent() {
 
-		FIBComponent component = FMLControlledComponent.loadUIComponent(concept("Annotated"), fibLibrary, null);
+		FIBComponent component = FMLControlledComponent.loadUIComponent(concept("Annotated"), null);
 		assertNotNull(component);
 		assertEquals("CustomScreen", component.getName());
 	}
@@ -168,7 +196,7 @@ public class TestContainerInspectors extends OpenflexoTestCase {
 	@TestOrder(8)
 	public void test7ContainerInspectorMergesIntoAClassInspector() throws Exception {
 
-		FIBComponent containerInspector = FMLControlledComponent.loadInspectorComponent(concept("Simple"), fibLibrary, null);
+		FIBComponent containerInspector = FMLControlledComponent.loadInspectorComponent(concept("Simple"), null);
 		assertTrue(containerInspector instanceof FIBContainer);
 
 		// The merge key: without a TabPanel named "Tab", the tabs would be appended beside the platform ones, not into them
@@ -177,7 +205,7 @@ public class TestContainerInspectors extends OpenflexoTestCase {
 		assertNotNull(((FIBContainer) tabPanel).getSubComponentNamed("SimpleInspectorTab"));
 
 		// A stand-in for the platform inspector of the FlexoConceptInstance class: a TabPanel named "Tab" holding one tab
-		FIBModelFactory factory = new FIBModelFactory(null, fibLibrary.getCustomTypeManager(), FIBInspector.class);
+		FIBModelFactory factory = new FIBModelFactory(null, serviceManager.getTechnologyAdapterService(), FIBInspector.class);
 		FIBPanel classInspector = factory.newFIBPanel();
 		FIBTabPanel classTabPanel = factory.newInstance(FIBTabPanel.class);
 		classTabPanel.setName("Tab");
