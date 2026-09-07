@@ -62,6 +62,7 @@ import org.openflexo.connie.expr.Expression;
 import org.openflexo.connie.expr.ExpressionTransformer;
 import org.openflexo.connie.expr.UnresolvedBindingVariable;
 import org.openflexo.connie.type.TypeUtils;
+import org.openflexo.fib.binding.FMLControlledComponent;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.inspector.FlexoConceptInspector;
 import org.openflexo.foundation.fml.inspector.InspectorEntry;
@@ -390,6 +391,20 @@ public class ModuleInspectorController extends Observable implements Observer {
 			// Clone it
 			returned = (FIBInspector) returned.cloneObject();
 			returned.setLocales(getFlexoController().getModuleLocales());
+
+			// A .inspector shipped by the container of the concept wins over the tab generated from the deprecated
+			// FlexoConceptInspector entries. append() merges by component name, so its <TabPanel name="Tab"> lands in
+			// the TabPanel this inspector already has - the same way a super inspector is merged in.
+			FIBComponent containerInspector = loadContainerInspector(concept);
+
+			if (containerInspector instanceof FIBContainer) {
+				returned.append((FIBContainer) containerInspector);
+				flexoConceptInspectors.put(concept, returned);
+				// No FlexoConceptInstanceInspectorUpdater here: there are no InspectorEntry to listen to, and asking
+				// for concept.getInspector() would lazily create an empty one.
+				return returned;
+			}
+
 			// And append tab matching FlexoConceptInspector
 			appendFlexoConceptInspector(concept, returned);
 			flexoConceptInspectors.put(concept, returned);
@@ -579,6 +594,24 @@ public class ModuleInspectorController extends Observable implements Observer {
 		currentInspector = null;
 	}
 
+	/**
+	 * Load the <code>.inspector</code> component that the container of supplied {@link FlexoConcept} ships, bound to the typing space of the
+	 * VirtualModel declaring that concept, or null when the container ships none.
+	 *
+	 * <p>
+	 * This is the replacement for the tab generated from the deprecated {@link FlexoConceptInspector} entries: rather than being built
+	 * widget by widget from the FML model, the inspector of a concept is an ordinary GINA component stored beside the FML source, in the
+	 * <code>Xxx.fml/</code> container. See {@link FlexoConcept#getInspectorComponentResource()} for how it is named and found.
+	 *
+	 * @return a freshly loaded component - the caller owns it and may merge it into another inspector
+	 */
+	private FIBComponent loadContainerInspector(FlexoConcept concept) {
+		return FMLControlledComponent.loadInspectorComponent(concept, getInspectorsFIBLibrary(),
+				getFlexoController() != null && getFlexoController().getApplicationContext() != null
+						? getFlexoController().getApplicationContext().getTechnologyAdapterControllerService()
+						: null);
+	}
+
 	private FIBTab appendFlexoConceptInspector(FlexoConcept concept, FIBInspector inspector) {
 		FIBTab newTab = makeFIBTab(concept);
 		// TODO: we have to set the parent first, otherwise in FIBViewImpl.java
@@ -624,6 +657,20 @@ public class ModuleInspectorController extends Observable implements Observer {
 	}
 
 	private FIBPanel makeFIBInspectorPanel(FlexoConcept flexoConcept, Class<? extends FlexoFIBController> controllerClass) {
+
+		// A .inspector shipped by the container of the concept is used as-is: it IS the panel, and needs no generation.
+		// This is what makes a container inspector show up in the standard FML-RT VirtualModelInstanceView, whose
+		// FIBReferencedComponent renders controller.inspectorForFlexoConceptInstance(browser.selected).
+		FIBComponent containerInspector = loadContainerInspector(flexoConcept);
+		if (containerInspector instanceof FIBPanel) {
+			FIBPanel returned = (FIBPanel) containerInspector;
+			if (returned.getControllerClass() == null) {
+				returned.setControllerClass(controllerClass);
+			}
+			returned.finalizeDeserialization();
+			return returned;
+		}
+
 		FIBPanel inspector = getFactory().newFIBPanel();
 		inspector.setLayout(Layout.twocols);
 		inspector.setUseScrollBar(true);
