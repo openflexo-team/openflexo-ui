@@ -43,12 +43,12 @@ import javax.swing.Icon;
 
 import org.openflexo.components.wizard.Wizard;
 import org.openflexo.components.wizard.WizardDialog;
+import org.openflexo.fml.gina.FMLGINAIconLibrary;
 import org.openflexo.fml.gina.action.CreateInspector;
 import org.openflexo.foundation.action.FlexoActionFactory;
 import org.openflexo.foundation.action.FlexoActionRunnable;
 import org.openflexo.foundation.fml.FMLObject;
 import org.openflexo.gina.controller.FIBController.Status;
-import org.openflexo.gina.swing.editor.controller.FIBEditorIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
@@ -80,12 +80,20 @@ public class CreateInspectorInitializer extends ActionInitializer<CreateInspecto
 		};
 	}
 
-	/** Open the freshly created component in the editor, which is where the user carries on. */
+	/**
+	 * Open the freshly created component in the GINA editor, which is where the user carries on.
+	 *
+	 * <p>
+	 * The object to switch to is the resource DATA, not the resource: the module view is registered for
+	 * {@link org.openflexo.foundation.fml.rm.FMLFIBComponent}, and <code>setCurrentEditedObject</code> switches to the view representing it.
+	 * The data is already loaded at this point - the action set the component on it - so
+	 * {@link org.openflexo.foundation.resource.FlexoResource#getLoadedResourceData()} is enough and raises nothing.
+	 */
 	@Override
 	protected FlexoActionRunnable<CreateInspector, FMLObject, FMLObject> getDefaultFinalizer() {
 		return (e, action) -> {
-			if (action.getNewInspectorResource() != null) {
-				getController().selectAndFocusObject(action.getNewInspectorResource());
+			if (action.getNewInspectorResource() != null && action.getNewInspectorResource().getLoadedResourceData() != null) {
+				getController().setCurrentEditedObject(action.getNewInspectorResource().getLoadedResourceData());
 			}
 			return true;
 		};
@@ -93,6 +101,6 @@ public class CreateInspectorInitializer extends ActionInitializer<CreateInspecto
 
 	@Override
 	protected Icon getEnabledIcon(FlexoActionFactory<CreateInspector, FMLObject, FMLObject> actionType) {
-		return FIBEditorIconLibrary.ROOT_COMPONENT_ICON;
+		return FMLGINAIconLibrary.FIB_COMPONENT_ICON;
 	}
 }

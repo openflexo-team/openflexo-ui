@@ -136,8 +136,12 @@ public class FMLControlledFIBModuleView extends FIBModuleView<FlexoConceptInstan
 	 * Switching rebuilds the view rather than swapping the component in place: a {@link FIBModuleView} is built around one component and does
 	 * not support exchanging it. Dropping the cached view and re-selecting the instance is what the framework offers.
 	 */
+	/**
+	 * Deliberately in show() rather than willShow(): <code>FlexoMainPane.setModuleView</code> calls willShow() BEFORE adding the view to its
+	 * container, and show() after - the same ordering that matters for the component editor.
+	 */
 	@Override
-	public void willShow() {
+	public void show(FlexoController controller, FlexoPerspective perspective) {
 
 		List<String> variants = getRepresentedObject().getFlexoConcept().getUIComponentVariants();
 

@@ -67,6 +67,20 @@ public class TestFMLGINAPluginIsRegistered {
 		assertNotNull("FMLGINAPlugin is not declared in META-INF/services/" + TechnologyAdapterPluginController.class.getName(), found);
 	}
 
+	/**
+	 * The icons resolve. A ResourceLocator that finds nothing yields an empty icon with nothing logged, so the wizard would simply show a
+	 * blank where its image belongs.
+	 */
+	@Test
+	public void testIconsResolve() {
+		assertNotNull("Icons/FIBComponent.png not found", FMLGINAIconLibrary.FIB_COMPONENT_VERY_BIG_ICON.getImage());
+		assertNotNull("Icons/FIBComponent64x64.png not found", FMLGINAIconLibrary.FIB_COMPONENT_BIG_ICON.getImage());
+		assertNotNull("Icons/FIBComponent16x16.png not found", FMLGINAIconLibrary.FIB_COMPONENT_ICON.getImage());
+		assertNotNull("Icons/GinaLogo64x64.png not found", FMLGINAIconLibrary.GINA_LOGO_BIG_ICON.getImage());
+		assertNotNull("Icons/GinaLogo32x32.png not found", FMLGINAIconLibrary.GINA_LOGO_MEDIUM_ICON.getImage());
+		assertNotNull("Icons/VariableAssignment_16x16.png not found", FMLGINAIconLibrary.VARIABLE_ASSIGNMENT_ICON.getImage());
+	}
+
 	/** It must target the FML adapter, or it is registered on a controller that is never asked. */
 	@Test
 	public void testPluginTargetsTheFMLTechnologyAdapter() {

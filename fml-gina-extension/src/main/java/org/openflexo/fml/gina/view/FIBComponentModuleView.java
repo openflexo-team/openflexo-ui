@@ -136,7 +136,10 @@ public class FIBComponentModuleView extends JPanel implements ModuleView<FMLFIBC
 
 		JPanel southPanel = new JPanel(new BorderLayout());
 
-		validationPanel = new ValidationPanel(editorController, editor.getFIBLibrary(), FIBEditor.EDITOR_LOCALIZATION) {
+		// Built with a null controller, then wired: ValidationPanel's constructor runs super(...) - which evaluates its
+		// bindings, among them 'controller.editorController.selectedObject' - BEFORE the line that sets the editor
+		// controller. Passing it here raises NullReferenceException. This is what MainPanel does, for the same reason.
+		validationPanel = new ValidationPanel(null, editor.getFIBLibrary(), FIBEditor.EDITOR_LOCALIZATION) {
 			@Override
 			protected void performSelect(ValidationIssue<?, ?> validationIssue) {
 				if (validationIssue != null && validationIssue.getValidable() instanceof org.openflexo.gina.model.FIBModelObject) {
@@ -144,6 +147,7 @@ public class FIBComponentModuleView extends JPanel implements ModuleView<FMLFIBC
 				}
 			}
 		};
+		validationPanel.setEditorController(editorController);
 		southPanel.add(validationPanel, BorderLayout.CENTER);
 
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -214,9 +218,34 @@ public class FIBComponentModuleView extends JPanel implements ModuleView<FMLFIBC
 		controller.removeModuleView(this);
 	}
 
+	/**
+	 * Wire the editor's tooling into the perspective.
+	 *
+	 * <p>
+	 * Deliberately here rather than in {@link #willShow()}: <code>FlexoMainPane.setModuleView</code> calls
+	 * <code>willShow()</code> BEFORE adding the view to its container, and <code>show(...)</code> after. The editor
+	 * tracks focus and selection through Swing delegates that need a realised component hierarchy, so activating it
+	 * too early leaves the central view unable to take focus or to render a selection. Every view of the former
+	 * gina-ta did it here, for this reason.
+	 */
 	@Override
 	public void show(FlexoController controller, FlexoPerspective perspective) {
-		// Nothing specific: the editor panel is already this view's content
+
+		FIBEditor editor = getFIBEditor();
+		if (editor == null || editorController == null) {
+			return;
+		}
+
+		perspective.setBottomLeftView(editorController.getEditorBrowser());
+		perspective.setTopRightView(editor.getPalettes());
+		perspective.setBottomRightView(editor.getInspectors() != null ? editor.getInspectors().getPanelGroup() : null);
+
+		editor.activate(editorController);
+
+		// Filling the slots is not enough: FlexoMainPane hides a whole column according to the controller model, and
+		// the FML views one navigates here from all turn the right column OFF in their own willShow().
+		controller.getControllerModel().setLeftViewVisible(true);
+		controller.getControllerModel().setRightViewVisible(true);
 	}
 
 	@Override
@@ -226,29 +255,12 @@ public class FIBComponentModuleView extends JPanel implements ModuleView<FMLFIBC
 
 	@Override
 	public void willShow() {
-
-		FIBEditor editor = getFIBEditor();
-		if (editor == null || editorController == null) {
-			return;
-		}
-
-		// The editor is shared between components; re-point its widgets at the one being shown
-		editor.activate(editorController);
-
-		perspective.setBottomLeftView(editorController.getEditorBrowser());
-		perspective.setTopRightView(editor.getPalettes());
-		perspective.setBottomRightView(editor.getInspectors() != null ? editor.getInspectors().getPanelGroup() : null);
-
-		// Filling the slots is not enough: FlexoMainPane hides a whole column when the controller model says so, and
-		// the FML views one navigates here from - StandardCompilationUnitView, VirtualModelInstanceView - all turn the
-		// right column OFF in their own willShow(). Without this the palette and the inspectors are built, attached,
-		// and invisible.
-		controller.getControllerModel().setLeftViewVisible(true);
-		controller.getControllerModel().setRightViewVisible(true);
+		setVisible(true);
 	}
 
 	@Override
 	public void willHide() {
+		setVisible(false);
 		perspective.setBottomLeftView(null);
 		perspective.setTopRightView(null);
 		perspective.setBottomRightView(null);

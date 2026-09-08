@@ -40,15 +40,16 @@ package org.openflexo.fml.gina.controller;
 import java.awt.Image;
 import java.util.List;
 
-import javax.swing.ImageIcon;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.components.wizard.FlexoActionWizard;
 import org.openflexo.components.wizard.WizardStep;
+import org.openflexo.fml.gina.FMLGINAIconLibrary;
 import org.openflexo.fml.gina.action.CreateInspector;
 import org.openflexo.fml.gina.action.InspectorEntryConfiguration;
 import org.openflexo.gina.annotation.FIBPanel;
-import org.openflexo.icon.FMLIconLibrary;
+import org.openflexo.icon.IconFactory;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.FlexoController;
 
 /**
@@ -73,7 +74,8 @@ public class CreateInspectorWizard extends FlexoActionWizard<CreateInspector> {
 
 	@Override
 	public Image getDefaultPageImage() {
-		return FMLIconLibrary.FML_BIG_ICON.getImage();
+		// The GINA component icon, at the size a wizard page expects
+		return IconFactory.getImageIcon(FMLGINAIconLibrary.FIB_COMPONENT_BIG_ICON, IconLibrary.BIG_NEW_MARKER).getImage();
 	}
 
 	public DescribeInspector getDescribeInspector() {
