@@ -324,7 +324,14 @@ public class CreateInspector extends FlexoAction<CreateInspector, FMLObject, FML
 		}
 
 		content.setLayout(Layout.twocols);
-		content.setUseScrollBar(true);
+
+		// Deliberately NO useScrollBar on the ROOT: the module view showing this component is already wrapped in a
+		// JScrollPane by FlexoMainPane. Worse, a scrolling root makes SwingRenderingAdapter.getResultingJComponent()
+		// build a JScrollPane around the root and REPARENT it, which pulls the whole component out of the editor panel
+		// the first time focus or selection is painted. A tab may scroll: it is not the root.
+		if (getUseTabbedPanel()) {
+			content.setUseScrollBar(true);
+		}
 
 		// Declared on the ROOT, and typed by the concept rather than by the bare FlexoConceptInstance the dataClassName
 		// names: this is what makes 'data.someRole' resolve, and it makes the file self-describing rather than relying on

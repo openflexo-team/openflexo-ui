@@ -52,6 +52,7 @@ import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.rm.FMLFIBComponent;
 import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.resource.StreamIODelegate;
+import org.openflexo.gina.model.FIBComponent;
 import org.openflexo.gina.swing.editor.FIBEditor;
 import org.openflexo.gina.swing.editor.controller.FIBEditorController;
 import org.openflexo.gina.swing.editor.validation.ValidationPanel;
@@ -124,6 +125,7 @@ public class FIBComponentModuleView extends JPanel implements ModuleView<FMLFIBC
 
 		editorController = editor.openFIBComponent(representedObject.getResource().getIODelegate().getSerializationArtefactAsResource(),
 				representedObject.getComponent(), null, controller.getFlexoFrame());
+
 
 		add(editorController.getEditorPanel(), BorderLayout.CENTER);
 		add(makeSouthPanel(editor), BorderLayout.SOUTH);
@@ -198,7 +200,6 @@ public class FIBComponentModuleView extends JPanel implements ModuleView<FMLFIBC
 		FMLGINAPlugin plugin = controller.getApplicationContext().getTechnologyAdapterControllerService().getPlugin(FMLGINAPlugin.class);
 		return plugin != null ? plugin.getFIBEditor(false) : null;
 	}
-
 	@Override
 	public FMLFIBComponent getRepresentedObject() {
 		return representedObject;
@@ -222,11 +223,9 @@ public class FIBComponentModuleView extends JPanel implements ModuleView<FMLFIBC
 	 * Wire the editor's tooling into the perspective.
 	 *
 	 * <p>
-	 * Deliberately here rather than in {@link #willShow()}: <code>FlexoMainPane.setModuleView</code> calls
-	 * <code>willShow()</code> BEFORE adding the view to its container, and <code>show(...)</code> after. The editor
-	 * tracks focus and selection through Swing delegates that need a realised component hierarchy, so activating it
-	 * too early leaves the central view unable to take focus or to render a selection. Every view of the former
-	 * gina-ta did it here, for this reason.
+	 * Deliberately here rather than in {@link #willShow()}: <code>FlexoMainPane.setModuleView</code> calls <code>willShow()</code> BEFORE
+	 * adding the view to its container, and <code>show(...)</code> after. The editor tracks focus and selection through Swing delegates that
+	 * need a realised component hierarchy. Every view of the former gina-ta did it here, for this reason.
 	 */
 	@Override
 	public void show(FlexoController controller, FlexoPerspective perspective) {
@@ -242,8 +241,8 @@ public class FIBComponentModuleView extends JPanel implements ModuleView<FMLFIBC
 
 		editor.activate(editorController);
 
-		// Filling the slots is not enough: FlexoMainPane hides a whole column according to the controller model, and
-		// the FML views one navigates here from all turn the right column OFF in their own willShow().
+		// Filling the slots is not enough: FlexoMainPane hides a whole column according to the controller model, and the
+		// FML views one navigates here from all turn the right column OFF in their own willShow().
 		controller.getControllerModel().setLeftViewVisible(true);
 		controller.getControllerModel().setRightViewVisible(true);
 	}
