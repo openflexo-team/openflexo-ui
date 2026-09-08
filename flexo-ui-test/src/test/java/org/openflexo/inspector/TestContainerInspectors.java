@@ -90,10 +90,15 @@ public class TestContainerInspectors extends OpenflexoTestCase {
 
 		FIBComponent component = FMLControlledComponent.loadInspectorComponent(simple, null);
 
-		FIBVariable<?> conceptInstance = component.getVariable(FMLControlledComponent.CONCEPT_INSTANCE_VARIABLE);
-		assertNotNull("No '" + FMLControlledComponent.CONCEPT_INSTANCE_VARIABLE + "' variable on the loaded component", conceptInstance);
-		assertEquals(simple.getInstanceType(), conceptInstance.getType());
-		assertEquals("data", conceptInstance.getValue().toString());
+		// A single variable, 'data', typed by the concept - not the bare FlexoConceptInstance the dataClassName names
+		FIBVariable<?> data = component.getVariable(org.openflexo.gina.model.FIBComponent.DEFAULT_DATA_VARIABLE);
+		assertNotNull("No 'data' variable on the loaded component", data);
+		assertEquals(simple.getInstanceType(), data.getType());
+
+		// ONE variable for one object. 'fci' used to be declared beside 'data' back when 'data' was left as the bare
+		// FlexoConceptInstance; now that 'data' carries the concept's type, a second name for the same thing is just a
+		// duplicate.
+		assertNull("'fci' duplicates 'data' and must not be declared any more", component.getVariable("fci"));
 
 		// Bindings are parsed by the FML parser, not by the Java one
 		assertTrue("The component did not get the FML binding factory",

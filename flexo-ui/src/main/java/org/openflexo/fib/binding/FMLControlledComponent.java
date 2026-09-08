@@ -68,13 +68,6 @@ public class FMLControlledComponent {
 	private static final Logger logger = Logger.getLogger(FMLControlledComponent.class.getPackage().getName());
 
 	/**
-	 * Name of the variable giving the bindings of a driven component typed access to the inspected FlexoConceptInstance.<br>
-	 * Same name and same meaning as the variable the generated inspector tabs declare, so that a legacy inspector translated into a
-	 * container component keeps its bindings unchanged.
-	 */
-	public static final String CONCEPT_INSTANCE_VARIABLE = "fci";
-
-	/**
 	 * Load the user interface component of supplied concept, bound and ready to be shown, or null when its container ships none.
 	 */
 	public static FIBComponent loadUIComponent(FlexoConcept concept, CustomTypeEditorProvider customTypeEditorProvider) {
@@ -119,7 +112,8 @@ public class FMLControlledComponent {
 
 	/**
 	 * Make supplied component speak FML about supplied concept: its bindings are parsed against the VirtualModel declaring that concept,
-	 * and a <code>fci</code> variable typed by the concept gives them typed access to the inspected FlexoConceptInstance.
+	 * and its <code>data</code> variable is typed by the concept rather than by the bare FlexoConceptInstance its <code>dataClassName</code>
+	 * names - which is what makes a binding such as <code>data.someRole</code> resolve.
 	 *
 	 * <p>
 	 * One consequence is easy to misdiagnose: expressions are then parsed by the <b>FML</b> parser, under which a path element starting
@@ -164,15 +158,6 @@ public class FMLControlledComponent {
 		}
 		else {
 			dataVariable.setType(concept.getInstanceType());
-		}
-
-		// Kept beside 'data', and pointing at it: the inspector tabs the platform generates from the deprecated
-		// FlexoConceptInspector declare 'fci', so an inspector translated into a container component keeps its bindings.
-		if (component.getVariable(CONCEPT_INSTANCE_VARIABLE) == null) {
-			FIBVariable<?> conceptInstanceVariable = factoryOf(component).newFIBVariable(component, CONCEPT_INSTANCE_VARIABLE,
-					concept.getInstanceType());
-			conceptInstanceVariable.setValue(new DataBinding<>(FIBComponent.DEFAULT_DATA_VARIABLE));
-			component.addToVariables(conceptInstanceVariable);
 		}
 
 		// Types have changed, so every binding has to be revalidated against them
