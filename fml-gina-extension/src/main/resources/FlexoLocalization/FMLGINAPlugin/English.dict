@@ -1,5 +1,11 @@
+a_component_of_this_name_already_exists=A component of this name already exists in the container
 could_not_save_component=Could not save component
+create_inspector=Create inspector
+describe_inspector=Describe the inspector to create
+inspector=Inspector
 loading_fib_editor=Loading component editor
 localize=Localize
+no_entry_selected_the_inspector_will_be_empty=No entry selected: the inspector will be empty
+please_supply_a_valid_inspector_name=Please supply a valid inspector name, ending with .inspector
 save=Save
 user_interface=User interface

@@ -22,4 +22,6 @@ dependencies {
   // testing dep
   testImplementation ginaTest()
   testImplementation project(':flexo-ui-test')
+  testImplementation flexoFoundationTest()
+  testImplementation flexoTestResources()
 }

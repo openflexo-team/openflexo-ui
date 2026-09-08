@@ -1,5 +1,11 @@
+a_component_of_this_name_already_exists=Er bestaat al een component met deze naam in de container
 could_not_save_component=Kan component niet opslaan
+create_inspector=Inspector maken
+describe_inspector=Beschrijf de te maken inspector
+inspector=Inspector
 loading_fib_editor=Component-editor laden
 localize=Lokaliseren
+no_entry_selected_the_inspector_will_be_empty=Geen enkele regel geselecteerd: de inspector blijft leeg
+please_supply_a_valid_inspector_name=Geef een geldige inspectornaam op, eindigend op .inspector
 save=Opslaan
 user_interface=Gebruikersinterface

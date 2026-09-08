@@ -1,5 +1,11 @@
+a_component_of_this_name_already_exists=Un composant de ce nom existe déjà dans le conteneur
 could_not_save_component=Impossible de sauvegarder le composant
+create_inspector=Créer un inspecteur
+describe_inspector=Décrire l'inspecteur à créer
+inspector=Inspecteur
 loading_fib_editor=Chargement de l'éditeur de composants
 localize=Localiser
+no_entry_selected_the_inspector_will_be_empty=Aucune entrée sélectionnée : l'inspecteur sera vide
+please_supply_a_valid_inspector_name=Veuillez fournir un nom d'inspecteur valide, terminé par .inspector
 save=Sauvegarder
 user_interface=Interface graphique

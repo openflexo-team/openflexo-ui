@@ -41,6 +41,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.openflexo.fml.gina.controller.CreateInspectorInitializer;
 import org.openflexo.fml.gina.view.FIBComponentModuleView;
 import org.openflexo.fml.gina.view.FMLControlledFIBModuleView;
 import org.openflexo.foundation.FlexoObject;
@@ -100,9 +101,13 @@ public class FMLGINAPlugin extends TechnologyAdapterPluginController<FMLTechnolo
 		return true;
 	}
 
+	/**
+	 * Instantiating the initializer is also what LOADS the action class, whose static block registers it on FlexoConcept and
+	 * FMLCompilationUnit - the mechanism by which a plugin contributes an action.
+	 */
 	@Override
 	protected void initializeActions(ControllerActionInitializer actionInitializer) {
-		// No FlexoAction contributed: a component is created by dropping a file in the container, and edited in place
+		new CreateInspectorInitializer(actionInitializer);
 	}
 
 	/**

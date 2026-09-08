@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Wizard step of CreateInspector: the name of the component, and the entries proposed for the
+     properties of the concept. Each line may be deselected, its label rewritten, and its widget
+     changed among those that make sense for the property's type.
+
+     Inside the table the ITERATOR shadows the surrounding scope: every column binding starts from
+     'iterator', which is an InspectorEntryConfiguration - never from 'data'. -->
+<Panel layout="gridbag" useScrollBar="false" border="empty"
+	controllerClassName="org.openflexo.view.controller.FlexoFIBController"
+	dataClassName="org.openflexo.fml.gina.controller.CreateInspectorWizard$DescribeInspector"
+	trackViewPortWidth="true" trackViewPortHeight="true">
+
+	<Label label="inspector_name" align="right" localize="true"
+		constraints="gridbag(anchor=east;fill=none;gridWidth=1;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=10;weightX=0.0;weightY=0.0)" />
+	<TextField data="data.inspectorName" columns="40" name="inspectorNameTextField"
+		localize="true"
+		constraints="gridbag(anchor=center;fill=horizontal;gridWidth=0;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=10;weightX=1.0;weightY=0.0)" />
+
+	<Label label="use_tabbed_panel" align="right" localize="true"
+		constraints="gridbag(anchor=east;fill=none;gridWidth=1;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=5;weightX=0.0;weightY=0.0)" />
+	<CheckBox data="data.useTabbedPanel" name="useTabbedPanelCheckBox" localize="true"
+		constraints="gridbag(anchor=west;fill=none;gridWidth=0;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=5;weightX=1.0;weightY=0.0)" />
+
+	<Label label="entries" align="right" localize="true"
+		constraints="gridbag(anchor=north_east;fill=none;gridWidth=1;insetsBottom=20;insetsLeft=20;insetsRight=10;insetsTop=10;weightX=0.0;weightY=0.0)" />
+	<Table iteratorClassName="org.openflexo.fml.gina.action.InspectorEntryConfiguration"
+		data="data.entries" name="entriesTable" visibleRowCount="12" rowHeight="20"
+		autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false"
+		showFooter="false" selectionMode="SingleSelection" manageDynamicModel="true" localize="true"
+		constraints="gridbag(anchor=center;fill=both;gridWidth=0;insetsBottom=20;insetsLeft=0;insetsRight=20;insetsTop=10;weightX=1.0;weightY=1.0)">
+		<CheckBoxColumn data="iterator.selected" title="selected" columnWidth="60"
+			resizable="false" displayTitle="true" name="selectedColumn"
+			valueChangedAction="data.entryChanged()" />
+		<LabelColumn data="iterator.propertyName" title="property" columnWidth="150"
+			resizable="true" displayTitle="true" name="propertyColumn" />
+		<LabelColumn data="iterator.visibility" title="visibility" columnWidth="80" resizable="true"
+			displayTitle="true" name="visibilityColumn" />
+		<LabelColumn data="iterator.type" title="type" columnWidth="150" resizable="true"
+			displayTitle="true" name="typeColumn" />
+		<TextFieldColumn data="iterator.label" title="label" columnWidth="150" resizable="true"
+			displayTitle="true" name="labelColumn" />
+		<DropDownColumn data="iterator.widget" list="iterator.availableWidgetTypes"
+			title="widget" columnWidth="150" resizable="true" displayTitle="true"
+			name="widgetColumn" />
+	</Table>
+
+	<LocalizedDictionary>
+		<Localized key="inspector_name" lang="English" value="Inspector name" />
+		<Localized key="inspector_name" lang="French" value="Nom de l'inspecteur" />
+		<Localized key="use_tabbed_panel" lang="English" value="Use a tabbed panel" />
+		<Localized key="use_tabbed_panel" lang="French" value="Utiliser un panneau à onglets" />
+		<Localized key="entries" lang="English" value="Entries" />
+		<Localized key="entries" lang="French" value="Entrées" />
+		<Localized key="selected" lang="English" value="Keep" />
+		<Localized key="selected" lang="French" value="Garder" />
+		<Localized key="property" lang="English" value="Property" />
+		<Localized key="property" lang="French" value="Propriété" />
+		<Localized key="visibility" lang="English" value="Visibility" />
+		<Localized key="visibility" lang="French" value="Visibilité" />
+		<Localized key="type" lang="English" value="Type" />
+		<Localized key="type" lang="French" value="Type" />
+		<Localized key="label" lang="English" value="Label" />
+		<Localized key="label" lang="French" value="Libellé" />
+		<Localized key="widget" lang="English" value="Widget" />
+		<Localized key="widget" lang="French" value="Widget" />
+	</LocalizedDictionary>
+</Panel>
