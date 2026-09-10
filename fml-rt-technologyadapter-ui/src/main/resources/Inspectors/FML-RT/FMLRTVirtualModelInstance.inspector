@@ -11,8 +11,25 @@
 			darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true"
 			horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED"
 			verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+			<!-- Same names and indexes as in VirtualModelInstance.inspector: when merging, these redefinitions replace
+			     the inherited read-only TextField showing the VirtualModel name. Same widget as for the unloaded
+			     resource (FMLRTVirtualModelInstanceResource.inspector); valueValidator="false" prevents any write-back. -->
+			<Label label="virtual_model" index="8"
+				constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;location=left)"
+				name="VirtualModelNameLabel" localize="true" />
+			<Custom componentClassName="org.openflexo.fml.controller.widget.FIBVirtualModelSelector"
+				index="9" data="data.virtualModel.resource" valueValidator="false"
+				constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;location=right)"
+				localize="true" manageDynamicModel="true" name="VirtualModelName">
+				<Assignment variable="component.virtualModelLibrary"
+					value="data.serviceManager.virtualModelLibrary" mandatory="true" />
+			</Custom>
 		</Tab>
 	</TabPanel>
-	<LocalizedDictionary />
+	<LocalizedDictionary>
+		<Localized key="virtual_model" lang="English" value="Virtual model" />
+		<Localized key="virtual_model" lang="French" value="Virtual model" />
+		<Localized key="virtual_model" lang="Dutch" value="Virtual model" />
+	</LocalizedDictionary>
 	<Parameter name="title" value="Virtual model instance" />
 </Panel>

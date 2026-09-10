@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Inspector of an UNLOADED .fml.rt resource: once loaded, the FMLRTVirtualModelInstance is inspected instead.
+     Every binding must avoid loading: data.virtualModel would load the VirtualModel, use data.virtualModelResource.
+     The VirtualModel selector stays enabled (a disabled one is unreadable) but must never write back:
+     valueValidator="false" makes FIBWidgetView.setValue() return before setting data.virtualModelResource,
+     on every path (apply, reset, enter in the filter field). -->
+<Panel className="org.openflexo.gina.utils.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.fml.rt.rm.FMLRTVirtualModelInstanceResource" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="name" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" name="NameLabel" localize="true" />
+      <TextField index="1" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Name" readOnly="true" localize="true" columns="10" />
+      <Label label="virtual_model" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;location=left)" name="VirtualModelLabel" localize="true" />
+      <Custom componentClassName="org.openflexo.fml.controller.widget.FIBVirtualModelSelector" index="3" data="data.virtualModelResource" valueValidator="false" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;location=right)" localize="true" manageDynamicModel="true" name="VirtualModelSelector">
+        <Assignment variable="component.virtualModelLibrary" value="data.serviceManager.virtualModelLibrary" mandatory="true" />
+      </Custom>
+      <Label label="virtual_model_uri" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=left)" name="VirtualModelURILabel" localize="true" />
+      <TextField index="5" data="data.virtualModelURI" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" name="VirtualModelURI" readOnly="true" localize="true" columns="10" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Basic" lang="French" value="Basique" />
+    <Localized key="name" lang="English" value="Name" />
+    <Localized key="name" lang="French" value="Nom" />
+    <Localized key="name" lang="Dutch" value="Name" />
+    <Localized key="virtual_model" lang="English" value="Virtual model" />
+    <Localized key="virtual_model" lang="French" value="Virtual model" />
+    <Localized key="virtual_model" lang="Dutch" value="Virtual model" />
+    <Localized key="virtual_model_uri" lang="English" value="Virtual model URI" />
+    <Localized key="virtual_model_uri" lang="French" value="URI du virtual model" />
+    <Localized key="virtual_model_uri" lang="Dutch" value="Virtual model URI" />
+  </LocalizedDictionary>
+  <Parameter name="title" value="Virtual Model Instance (unloaded)" />
+</Panel>
