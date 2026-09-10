@@ -39,24 +39,18 @@
 package org.openflexo.fml.gina.view;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import org.openflexo.fib.binding.FMLControlledComponent;
 import org.openflexo.fml.gina.FMLGINAPlugin;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.rm.FMLFIBComponent;
-import org.openflexo.foundation.resource.SaveResourceException;
-import org.openflexo.foundation.resource.StreamIODelegate;
 import org.openflexo.gina.model.FIBComponent;
 import org.openflexo.gina.swing.editor.FIBEditor;
 import org.openflexo.gina.swing.editor.controller.FIBEditorController;
 import org.openflexo.gina.swing.editor.validation.ValidationPanel;
-import org.openflexo.localization.LocalizedDelegate;
 import org.openflexo.pamela.validation.ValidationIssue;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
@@ -92,19 +86,16 @@ public class FIBComponentModuleView extends JPanel implements ModuleView<FMLFIBC
 	private final FMLFIBComponent representedObject;
 	private final FlexoController controller;
 	private final FlexoPerspective perspective;
-	private final LocalizedDelegate locales;
 
 	private FIBEditorController editorController;
 	private ValidationPanel validationPanel;
 
-	public FIBComponentModuleView(FMLFIBComponent representedObject, FlexoController controller, FlexoPerspective perspective,
-			LocalizedDelegate locales) {
+	public FIBComponentModuleView(FMLFIBComponent representedObject, FlexoController controller, FlexoPerspective perspective) {
 		super(new BorderLayout());
 
 		this.representedObject = representedObject;
 		this.controller = controller;
 		this.perspective = perspective;
-		this.locales = locales;
 
 		FIBEditor editor = getFIBEditor();
 
@@ -126,13 +117,22 @@ public class FIBComponentModuleView extends JPanel implements ModuleView<FMLFIBC
 		editorController = editor.openFIBComponent(representedObject.getResource().getIODelegate().getSerializationArtefactAsResource(),
 				representedObject.getComponent(), null, controller.getFlexoFrame());
 
+		// The structure browser this view puts in the bottom-left slot is GINA's own, and so is its contextual menu: its nodes are
+		// FIBModelObjects, which are not FlexoObjects, so the platform's actions can never reach it by themselves. The plugin contributes
+		// them to the editor's menu instead - once per editing session, which outlives this view.
+		getPlugin().contributeActionsToEditorSession(editorController, representedObject, controller);
 
 		add(editorController.getEditorPanel(), BorderLayout.CENTER);
 		add(makeSouthPanel(editor), BorderLayout.SOUTH);
 	}
 
 	/**
-	 * The validation report of the edited component, and the actions on it.
+	 * The validation report of the edited component.
+	 *
+	 * <p>
+	 * No buttons: saving and localizing are {@link org.openflexo.fml.gina.action.SaveFIBComponent} and
+	 * {@link org.openflexo.fml.gina.action.LocalizeFIBComponent}, offered on the component like every other action of the platform - from
+	 * the contextual menu of the component in a browser, and from the menu bar while its view is the current one.
 	 */
 	private JPanel makeSouthPanel(FIBEditor editor) {
 
@@ -152,39 +152,7 @@ public class FIBComponentModuleView extends JPanel implements ModuleView<FMLFIBC
 		validationPanel.setEditorController(editorController);
 		southPanel.add(validationPanel, BorderLayout.CENTER);
 
-		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-
-		JButton localizeButton = new JButton(locales.localizedForKey("localize"));
-		localizeButton.addActionListener(e -> getFIBEditor().localizeFIB(editorController.getEditedComponent(),
-				controller.getFlexoFrame()));
-		buttonPanel.add(localizeButton);
-
-		JButton saveButton = new JButton(locales.localizedForKey("save"));
-		saveButton.addActionListener(e -> save());
-		buttonPanel.add(saveButton);
-
-		southPanel.add(buttonPanel, BorderLayout.SOUTH);
-
 		return southPanel;
-	}
-
-	/**
-	 * Save the edited component back to the artefact it came from.
-	 *
-	 * <p>
-	 * {@link StreamIODelegate#setSaveToSourceResource(boolean)} matters here: without it the component is written to wherever the resource
-	 * center was READ from - under <code>build/</code> for a project run from Gradle - and the edit is lost on the next build.
-	 */
-	public void save() {
-		try {
-			if (representedObject.getResource().getIODelegate() instanceof StreamIODelegate) {
-				((StreamIODelegate<?>) representedObject.getResource().getIODelegate()).setSaveToSourceResource(true);
-			}
-			representedObject.getResource().save();
-		} catch (SaveResourceException e) {
-			logger.log(Level.WARNING, "Could not save " + representedObject.getResource().getURI(), e);
-			controller.notify(locales.localizedForKey("could_not_save_component"));
-		}
 	}
 
 	/**
@@ -197,8 +165,12 @@ public class FIBComponentModuleView extends JPanel implements ModuleView<FMLFIBC
 	 * Every view of the former <code>gina-ta</code> called <code>getFIBEditor(false)</code> for exactly this reason.
 	 */
 	private FIBEditor getFIBEditor() {
-		FMLGINAPlugin plugin = controller.getApplicationContext().getTechnologyAdapterControllerService().getPlugin(FMLGINAPlugin.class);
+		FMLGINAPlugin plugin = getPlugin();
 		return plugin != null ? plugin.getFIBEditor(false) : null;
+	}
+
+	private FMLGINAPlugin getPlugin() {
+		return controller.getApplicationContext().getTechnologyAdapterControllerService().getPlugin(FMLGINAPlugin.class);
 	}
 	@Override
 	public FMLFIBComponent getRepresentedObject() {

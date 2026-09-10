@@ -256,11 +256,16 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 			repaint();
 			// logger.info("reset title to "+newInspector.getParameter("title"));dsqqsd
 			// inspectorDialog.setTitle(newInspector.getParameter("title"));
-			tabPanelView = (JFIBTabPanelView) currentInspectorView.getController().viewForComponent(newInspector.getTabPanel());
-			if (lastInspectedTabIndex >= 0 && lastInspectedTabIndex < tabPanelView.getJComponent().getTabCount()) {
-				tabPanelView.getJComponent().setSelectedIndex(lastInspectedTabIndex);
+			// An inspector without a TabPanel has no selected tab to remember: getTabPanel() answers null for it, rather than failing
+			tabPanelView = newInspector.getTabPanel() != null
+					? (JFIBTabPanelView) currentInspectorView.getController().viewForComponent(newInspector.getTabPanel())
+					: null;
+			if (tabPanelView != null) {
+				if (lastInspectedTabIndex >= 0 && lastInspectedTabIndex < tabPanelView.getJComponent().getTabCount()) {
+					tabPanelView.getJComponent().setSelectedIndex(lastInspectedTabIndex);
+				}
+				tabPanelView.getJComponent().addChangeListener(this);
 			}
-			tabPanelView.getJComponent().addChangeListener(this);
 			// System.out.println("addChangeListener for "+tabPanelView.getJComponent());
 		}
 		else {

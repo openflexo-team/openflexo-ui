@@ -37,6 +37,9 @@
  */
 package org.openflexo.fml.gina;
 
+import javax.swing.ImageIcon;
+
+import org.openflexo.icon.FMLIconLibrary;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.ImageIconResource;
 import org.openflexo.rm.ResourceLocator;
@@ -69,6 +72,16 @@ public class FMLGINAIconLibrary extends IconLibrary {
 
 	public static final ImageIconResource GINA_LOGO_MEDIUM_ICON = new ImageIconResource(
 			ResourceLocator.locateResource("Icons/GinaLogo32x32.png"));
+
+	/**
+	 * Saving a container component is saving a resource, and localizing one is what the platform calls localization: both take the icon
+	 * the rest of the application already uses for that, rather than a private one nobody would recognise.
+	 */
+	public static final ImageIcon SAVE_COMPONENT_ICON = IconLibrary.SAVE_ICON;
+
+	public static final ImageIcon SAVE_COMPONENT_DISABLED_ICON = IconLibrary.SAVE_DISABLED_ICON;
+
+	public static final ImageIconResource LOCALIZE_COMPONENT_ICON = FMLIconLibrary.LOCALIZATION_ICON;
 
 	/**
 	 * Carried over with the rest, though nothing uses it yet: it belonged to the <code>VariableAssignment</code> of the deprecated model

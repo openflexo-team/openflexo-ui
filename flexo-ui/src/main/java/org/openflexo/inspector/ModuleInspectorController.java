@@ -63,6 +63,9 @@ import org.openflexo.connie.expr.ExpressionTransformer;
 import org.openflexo.connie.expr.UnresolvedBindingVariable;
 import org.openflexo.connie.type.TypeUtils;
 import org.openflexo.fib.binding.FMLControlledComponent;
+import org.openflexo.gina.controller.CustomTypeEditorProvider;
+import org.openflexo.gina.model.container.layout.ComponentConstraints;
+import org.openflexo.gina.model.container.FIBTabPanel;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.inspector.FlexoConceptInspector;
 import org.openflexo.foundation.fml.inspector.InspectorEntry;
@@ -398,7 +401,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 			FIBComponent containerInspector = loadContainerInspector(concept);
 
 			if (containerInspector instanceof FIBContainer) {
-				returned.append((FIBContainer) containerInspector);
+				mergeContainerInspector(returned, (FIBContainer) containerInspector, concept, customTypeEditorProvider());
 				flexoConceptInspectors.put(concept, returned);
 				// No FlexoConceptInstanceInspectorUpdater here: there are no InspectorEntry to listen to, and asking
 				// for concept.getInspector() would lazily create an empty one.
@@ -603,14 +606,99 @@ public class ModuleInspectorController extends Observable implements Observer {
 	 * widget by widget from the FML model, the inspector of a concept is an ordinary GINA component stored beside the FML source, in the
 	 * <code>Xxx.fml/</code> container. See {@link FlexoConcept#getInspectorComponentResource()} for how it is named and found.
 	 *
-	 * @return a freshly loaded component - the caller owns it and may merge it into another inspector
+	 * @return the component its resource holds, which is SHARED - with the GINA editor and with every sub-concept inheriting it. Never merge
+	 *         it as it is: see {@link #mergeContainerInspector}, which merges a clone
 	 */
 	private FIBComponent loadContainerInspector(FlexoConcept concept) {
-		return FMLControlledComponent.loadInspectorComponent(concept,
-				getFlexoController() != null && getFlexoController().getApplicationContext() != null
-						? getFlexoController().getApplicationContext().getTechnologyAdapterControllerService()
-						: null);
+		return FMLControlledComponent.loadInspectorComponent(concept, customTypeEditorProvider());
 	}
+
+	/**
+	 * The technology adapter controllers, which provide the editors of FML custom types, or null outside an application.
+	 */
+	private CustomTypeEditorProvider customTypeEditorProvider() {
+		return getFlexoController() != null && getFlexoController().getApplicationContext() != null
+				? getFlexoController().getApplicationContext().getTechnologyAdapterControllerService()
+				: null;
+	}
+
+	/**
+	 * Complete supplied class inspector - a CLONE of the inspector of the FlexoConceptInstance class - with the inspector the container of
+	 * supplied concept ships.
+	 *
+	 * <p>
+	 * Three things make this more than an <code>append()</code>:
+	 * <ul>
+	 * <li>the container component is SHARED: it is the data of its resource, shown by the GINA editor and inherited by every sub-concept.
+	 * And {@link FIBContainer#append(FIBContainer)} does not take what it merges away from where it came, it re-parents it - leaving the
+	 * resource's component listing children that now belong to another. So a clone is merged, never the original;</li>
+	 * <li>the component comes in either shape. A <code>&lt;TabPanel name="Tab"&gt;</code> is merged by that name into the tabs the
+	 * platform shows. A PLAIN panel - what the CreateInspector action generates by default - is wrapped into one tab of its own, titled
+	 * after the concept and put first, where the tab generated from the deprecated FlexoConceptInspector goes. Appended as it is, its first
+	 * widget lands in front of the TabPanel, which is where {@link FIBInspector#getTabPanel()} used to expect it;</li>
+	 * <li><code>append()</code> carries sub-components only. The <code>data</code> variable typed by the concept and the FML binding factory,
+	 * which {@link FMLControlledComponent#bindToConcept} set on the root of the container, stay behind on it - and every
+	 * <code>data.someProperty</code> of the merged tabs is then read against the bare FlexoConceptInstance of the class inspector, i.e.
+	 * resolves to nothing. Each contributed tab is therefore bound to the concept exactly as that root was. The <code>data</code> variable
+	 * this declares on the tab has no value of its own, and does not hide the inspected object: a view looks a variable up by NAME and,
+	 * finding no value, asks its parent view.</li>
+	 * </ul>
+	 *
+	 * @param customTypeEditorProvider
+	 *            may be null in a headless context
+	 */
+	static void mergeContainerInspector(FIBInspector classInspector, FIBContainer containerInspector, FlexoConcept concept,
+			CustomTypeEditorProvider customTypeEditorProvider) {
+
+		FIBContainer contributed = (FIBContainer) containerInspector.cloneObject();
+		FIBTabPanel classTabPanel = classInspector.getTabPanel();
+
+		FIBComponent containerTabPanel = contributed.getSubComponentNamed(CONTAINER_TAB_PANEL_NAME);
+
+		if (containerTabPanel instanceof FIBTabPanel || classTabPanel == null) {
+			if (classTabPanel == null) {
+				Logger.getLogger(ModuleInspectorController.class.getPackage().getName()).warning("The class inspector of " + concept + " has no TabPanel: its container inspector is appended as it is");
+			}
+			List<FIBComponent> contributedTabs = containerTabPanel instanceof FIBTabPanel
+					? new ArrayList<>(((FIBTabPanel) containerTabPanel).getSubComponents())
+					: new ArrayList<>();
+			classInspector.append(contributed);
+			for (FIBComponent tab : contributedTabs) {
+				FMLControlledComponent.bindToConcept(tab, concept, customTypeEditorProvider);
+			}
+			return;
+		}
+
+		FIBTab tab = classInspector.getModelFactory().newFIBTab();
+		tab.setName(concept.getName() + "Panel");
+		tab.setTitle(concept.getName());
+		tab.setLayout(contributed instanceof FIBPanel && ((FIBPanel) contributed).getLayout() != null ? ((FIBPanel) contributed).getLayout()
+				: Layout.twocols);
+		// A tab may scroll: it is not the root of what the module view shows
+		tab.setUseScrollBar(true);
+
+		// The clone is ours: emptying it is how its children move into the tab, keeping the constraints they were laid out with
+		for (FIBComponent child : new ArrayList<>(contributed.getSubComponents())) {
+			ComponentConstraints constraints = child.getConstraints();
+			contributed.removeFromSubComponents(child);
+			tab.addToSubComponents(child, constraints);
+		}
+
+		// Parent first, as appendFlexoConceptInspector() does: bindings of the tab resolve through it while it is being added
+		tab.setParent(classTabPanel);
+		classTabPanel.addToSubComponents(tab, null, 0);
+
+		if (contributed.getLocalizedDictionary() != null) {
+			classInspector.retrieveFIBLocalizedDictionary().append(contributed.getLocalizedDictionary());
+		}
+
+		FMLControlledComponent.bindToConcept(tab, concept, customTypeEditorProvider);
+	}
+
+	/**
+	 * The name of the TabPanel every platform inspector declares, and the key a container inspector's own TabPanel is merged by.
+	 */
+	private static final String CONTAINER_TAB_PANEL_NAME = "Tab";
 
 	private FIBTab appendFlexoConceptInspector(FlexoConcept concept, FIBInspector inspector) {
 		FIBTab newTab = makeFIBTab(concept);

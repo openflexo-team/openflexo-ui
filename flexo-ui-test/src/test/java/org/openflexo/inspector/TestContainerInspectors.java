@@ -8,6 +8,7 @@ package org.openflexo.inspector;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.TreeSet;
@@ -26,6 +27,7 @@ import org.openflexo.gina.model.container.FIBPanel;
 import org.openflexo.gina.model.container.FIBTab;
 import org.openflexo.gina.model.container.FIBTabPanel;
 import org.openflexo.gina.model.FIBVariable;
+import org.openflexo.gina.model.FIBWidget;
 import org.openflexo.gina.utils.FIBInspector;
 import org.openflexo.pamela.validation.ValidationError;
 import org.openflexo.pamela.validation.ValidationReport;
@@ -63,7 +65,7 @@ public class TestContainerInspectors extends OpenflexoTestCase {
 		virtualModel = resource.getCompilationUnit().getVirtualModel();
 		assertNotNull(virtualModel);
 		// A failed parse leaves an EMPTY compilation unit behind, which validates with zero errors
-		assertEquals("The fixture did not parse", 10, virtualModel.getFlexoConcepts().size());
+		assertEquals("The fixture did not parse", 11, virtualModel.getFlexoConcepts().size());
 
 	}
 
@@ -209,23 +211,116 @@ public class TestContainerInspectors extends OpenflexoTestCase {
 		assertNotNull("The container inspector declares no TabPanel named 'Tab'", tabPanel);
 		assertNotNull(((FIBContainer) tabPanel).getSubComponentNamed("SimpleInspectorTab"));
 
-		// A stand-in for the platform inspector of the FlexoConceptInstance class: a TabPanel named "Tab" holding one tab
-		FIBModelFactory factory = new FIBModelFactory(null, serviceManager.getTechnologyAdapterService(), FIBInspector.class);
-		FIBPanel classInspector = factory.newFIBPanel();
-		FIBTabPanel classTabPanel = factory.newInstance(FIBTabPanel.class);
-		classTabPanel.setName("Tab");
-		FIBTab basicTab = factory.newFIBTab();
-		basicTab.setName("BasicTab");
-		classTabPanel.addToSubComponents(basicTab);
-		classInspector.addToSubComponents(classTabPanel);
-
-		classInspector.append((FIBContainer) containerInspector);
+		FIBInspector classInspector = makeClassInspectorStandIn();
+		ModuleInspectorController.mergeContainerInspector(classInspector, (FIBContainer) containerInspector, concept("Simple"), null);
 
 		// The container tab landed INSIDE the existing TabPanel, beside the platform tab
 		FIBComponent mergedTabPanel = classInspector.getSubComponentNamed("Tab");
 		assertNotNull(mergedTabPanel);
 		assertNotNull("The platform tab was lost", ((FIBContainer) mergedTabPanel).getSubComponentNamed("BasicTab"));
 		assertNotNull("The container tab was not merged in", ((FIBContainer) mergedTabPanel).getSubComponentNamed("SimpleInspectorTab"));
+	}
+
+	/**
+	 * A PLAIN container inspector - no TabPanel, what CreateInspector generates by default - becomes a tab of its own inside the TabPanel
+	 * of the class inspector. Appended as it was, its first label landed in front of that TabPanel, and FIBInspector.getTabPanel(), which
+	 * casts the first sub-component, threw a ClassCastException on the first instance selected.
+	 */
+	@Test
+	@TestOrder(9)
+	public void test8PlainContainerInspectorBecomesATab() {
+
+		FlexoConcept plain = concept("Plain");
+		FIBComponent containerInspector = FMLControlledComponent.loadInspectorComponent(plain, null);
+		assertTrue(containerInspector instanceof FIBContainer);
+		assertNull("The fixture must be a PLAIN inspector", ((FIBContainer) containerInspector).getSubComponentNamed("Tab"));
+
+		FIBInspector classInspector = makeClassInspectorStandIn();
+		ModuleInspectorController.mergeContainerInspector(classInspector, (FIBContainer) containerInspector, plain, null);
+
+		// Nothing leaked in front of the TabPanel: getTabPanel() relies on it being the first sub-component
+		assertEquals("Something was appended at the root of the class inspector", 1, classInspector.getSubComponents().size());
+		FIBTabPanel tabPanel = classInspector.getTabPanel();
+		assertNotNull(tabPanel);
+
+		FIBComponent conceptTab = tabPanel.getSubComponentNamed("PlainPanel");
+		assertNotNull("The plain inspector did not become a tab", conceptTab);
+		assertSame("The concept tab comes first, as the legacy one did", conceptTab, tabPanel.getSubComponents().get(0));
+		assertNotNull("The platform tab was lost", tabPanel.getSubComponentNamed("BasicTab"));
+
+		assertBindingIsValid(((FIBContainer) conceptTab).getSubComponentNamed("descriptionWidget"));
+		assertResourceComponentUntouched(plain);
+	}
+
+	/**
+	 * A TABBED container inspector still merges into the TabPanel by name - and its widgets keep the typing its own root gave them.
+	 * append() carries sub-components only: the 'data' variable typed by the concept and the FML binding factory both stay behind on the
+	 * discarded root, and 'data.description' would then be read against the bare FlexoConceptInstance of the class inspector.
+	 */
+	@Test
+	@TestOrder(10)
+	public void test9TabbedContainerInspectorKeepsItsTyping() {
+
+		FlexoConcept simple = concept("Simple");
+		FIBComponent containerInspector = FMLControlledComponent.loadInspectorComponent(simple, null);
+
+		FIBInspector classInspector = makeClassInspectorStandIn();
+		ModuleInspectorController.mergeContainerInspector(classInspector, (FIBContainer) containerInspector, simple, null);
+
+		assertEquals("Something was appended at the root of the class inspector", 1, classInspector.getSubComponents().size());
+		FIBTabPanel tabPanel = classInspector.getTabPanel();
+		FIBComponent conceptTab = tabPanel.getSubComponentNamed("SimpleInspectorTab");
+		assertNotNull("The container tab was not merged in", conceptTab);
+		assertNotNull("The platform tab was lost", tabPanel.getSubComponentNamed("BasicTab"));
+
+		assertBindingIsValid(((FIBContainer) conceptTab).getSubComponentNamed("descriptionWidget"));
+		assertResourceComponentUntouched(simple);
+	}
+
+	/**
+	 * Stand-in for <code>Inspectors/FML-RT/FlexoConceptInstance.inspector</code>, which is not on this module's classpath: a
+	 * {@link FIBInspector} laid out in a border, whose ONLY sub-component is a TabPanel named "Tab" holding the platform's BasicTab. That
+	 * single-child shape is exactly what {@link FIBInspector#getTabPanel()} assumes.
+	 */
+	private FIBInspector makeClassInspectorStandIn() {
+		try {
+			FIBModelFactory factory = new FIBModelFactory(null, serviceManager.getTechnologyAdapterService(), FIBInspector.class);
+			FIBInspector classInspector = factory.newInstance(FIBInspector.class);
+			classInspector.setName("Inspector");
+			classInspector.setLayout(FIBPanel.Layout.border);
+			classInspector.setDataClass(org.openflexo.foundation.fml.rt.FlexoConceptInstance.class);
+			FIBTabPanel classTabPanel = factory.newInstance(FIBTabPanel.class);
+			classTabPanel.setName("Tab");
+			FIBTab basicTab = factory.newFIBTab();
+			basicTab.setName("BasicTab");
+			classTabPanel.addToSubComponents(basicTab);
+			classInspector.addToSubComponents(classTabPanel);
+			return classInspector;
+		} catch (org.openflexo.pamela.exceptions.ModelDefinitionException e) {
+			throw new AssertionError(e);
+		}
+	}
+
+	private static void assertBindingIsValid(FIBComponent widget) {
+		assertTrue("Expected a widget, got " + widget, widget instanceof FIBWidget);
+		org.openflexo.connie.DataBinding<?> data = ((FIBWidget) widget).getData();
+		assertTrue("Binding '" + data + "' of " + widget.getName() + " is not valid once merged: " + data.invalidBindingReason(),
+				data.isValid());
+	}
+
+	/**
+	 * The component a resource holds is shared - with the GINA editor, and with every concept inheriting that inspector - so merging must
+	 * never take its children away. append() does not remove them from the container: it re-parents them, leaving the resource's
+	 * component listing children that belong to another.
+	 */
+	private static void assertResourceComponentUntouched(FlexoConcept concept) {
+		FIBComponent original = concept.getInspectorComponentFlexoResource().getComponent();
+		assertTrue(original instanceof FIBContainer);
+		assertTrue("The component of the resource was emptied", ((FIBContainer) original).getSubComponents().size() > 0);
+		for (FIBComponent child : ((FIBContainer) original).getSubComponents()) {
+			assertSame("A child of the resource component now belongs to another component: " + child.getName(), original,
+					child.getParent());
+		}
 	}
 
 	private static FlexoConcept concept(String name) {

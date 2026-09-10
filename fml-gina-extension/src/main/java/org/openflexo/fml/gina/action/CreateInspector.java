@@ -173,9 +173,9 @@ public class CreateInspector extends FlexoAction<CreateInspector, FMLObject, FML
 	 * Whether the inspector is laid out inside a tabbed panel, rather than as a plain two-column panel.
 	 *
 	 * <p>
-	 * Off by default: a plain panel is what an inspector of a single concept needs. Turn it on when the component is meant to be MERGED into
-	 * the inspector of the FlexoConceptInstance class - <code>ModuleInspectorController</code> merges by component name, so only a
-	 * <code>&lt;TabPanel name="Tab"&gt;</code> lands inside the tabs the platform already shows; a plain panel is appended beside them.
+	 * Off by default: a plain panel is what an inspector of a single concept needs, and <code>ModuleInspectorController</code> shows it as one
+	 * tab of the inspector of the FlexoConceptInstance class, titled after the concept. Turn it on to contribute tabs of one's own: a
+	 * <code>&lt;TabPanel name="Tab"&gt;</code> is merged, by that name, into the tabs the platform already shows.
 	 */
 	public boolean getUseTabbedPanel() {
 		return useTabbedPanel;
@@ -288,11 +288,12 @@ public class CreateInspector extends FlexoAction<CreateInspector, FMLObject, FML
 	}
 
 	/**
-	 * Build the component: a FIBInspector holding one tab, laid out in two columns, with a label and a widget per selected property.
+	 * Build the component: a FIBInspector laid out in two columns - directly, or inside the single tab of a tabbed panel - with a label and a
+	 * widget per selected property.
 	 *
 	 * <p>
-	 * When a tabbed panel is asked for, the <code>TabPanel</code> is named as the platform names its own, so the tab merges into the
-	 * inspector of the FlexoConceptInstance class rather than landing beside it.
+	 * When a tabbed panel is asked for, the <code>TabPanel</code> is named as the platform names its own: that name is the key its tabs are
+	 * merged by into the inspector of the FlexoConceptInstance class.
 	 */
 	private FIBComponent makeInspectorComponent(FlexoConcept concept) throws FlexoException {
 

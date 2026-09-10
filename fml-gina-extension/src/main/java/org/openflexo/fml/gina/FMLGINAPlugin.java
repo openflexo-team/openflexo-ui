@@ -37,14 +37,27 @@
  */
 package org.openflexo.fml.gina;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
+import java.util.WeakHashMap;
 import java.util.logging.Logger;
 
+import javax.swing.Icon;
+import javax.swing.KeyStroke;
+
+import org.openflexo.fml.gina.action.LocalizeFIBComponent;
+import org.openflexo.fml.gina.action.SaveFIBComponent;
 import org.openflexo.fml.gina.controller.CreateInspectorInitializer;
+import org.openflexo.fml.gina.controller.LocalizeFIBComponentInitializer;
+import org.openflexo.fml.gina.controller.SaveFIBComponentInitializer;
 import org.openflexo.fml.gina.view.FIBComponentModuleView;
 import org.openflexo.fml.gina.view.FMLControlledFIBModuleView;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.action.FlexoAction;
+import org.openflexo.foundation.action.FlexoActionFactory;
 import org.openflexo.foundation.fml.FMLTechnologyAdapter;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.rm.FMLFIBComponent;
@@ -52,7 +65,11 @@ import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
 import org.openflexo.foundation.task.FlexoTask;
 import org.openflexo.foundation.task.Progress;
 import org.openflexo.gina.FIBLibrary.FIBLibraryImpl;
+import org.openflexo.gina.model.FIBModelObject;
 import org.openflexo.gina.swing.editor.FIBEditor;
+import org.openflexo.gina.swing.editor.controller.ContextualMenu;
+import org.openflexo.gina.swing.editor.controller.FIBEditorController;
+import org.openflexo.gina.swing.editor.controller.action.EditorAction;
 import org.openflexo.gina.swing.utils.FIBEditorLoadingProgress;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.view.ModuleView;
@@ -102,12 +119,14 @@ public class FMLGINAPlugin extends TechnologyAdapterPluginController<FMLTechnolo
 	}
 
 	/**
-	 * Instantiating the initializer is also what LOADS the action class, whose static block registers it on FlexoConcept and
-	 * FMLCompilationUnit - the mechanism by which a plugin contributes an action.
+	 * Instantiating an initializer is also what LOADS its action class, whose static block registers it on the classes it applies to - the
+	 * mechanism by which a plugin contributes an action.
 	 */
 	@Override
 	protected void initializeActions(ControllerActionInitializer actionInitializer) {
 		new CreateInspectorInitializer(actionInitializer);
+		new SaveFIBComponentInitializer(actionInitializer);
+		new LocalizeFIBComponentInitializer(actionInitializer);
 	}
 
 	/**
@@ -152,7 +171,7 @@ public class FMLGINAPlugin extends TechnologyAdapterPluginController<FMLTechnolo
 	public ModuleView<?> createModuleViewForMasterObject(FlexoObject object, FlexoController controller, FlexoPerspective perspective) {
 
 		if (object instanceof FMLFIBComponent) {
-			return new FIBComponentModuleView((FMLFIBComponent) object, controller, perspective, getLocales());
+			return new FIBComponentModuleView((FMLFIBComponent) object, controller, perspective);
 		}
 
 		if (object instanceof FlexoConceptInstance) {
@@ -221,6 +240,101 @@ public class FMLGINAPlugin extends TechnologyAdapterPluginController<FMLTechnolo
 			fibEditor = makeFIBEditor();
 		}
 
+		return fibEditor;
+	}
+
+	/**
+	 * Weakly held, because a {@link FIBEditorController} outlives the module view: {@link FIBEditor} caches one per edited component and
+	 * hands the same one back when the view is closed and reopened. Contributing to its menu twice would show the entries twice.
+	 */
+	private final Set<FIBEditorController> editorSessionsWithContributedActions = Collections
+			.newSetFromMap(new WeakHashMap<FIBEditorController, Boolean>());
+
+	/**
+	 * Offer the actions of a container component in the contextual menu of the GINA editor's own structure browser.
+	 *
+	 * <p>
+	 * That browser - the one the editor view puts in the perspective's bottom-left slot - is pure GINA: its nodes are
+	 * {@link org.openflexo.gina.model.FIBModelObject}s, which are not {@link FlexoObject}s, and its right-click goes to
+	 * <code>ComponentSwingEditorFIBController.rightClick</code>, i.e. to the editor's OWN {@link ContextualMenu} rather than to the
+	 * platform's <code>ContextualMenuManager</code>. Openflexo actions can therefore never appear there on their own - GINA sits below
+	 * openflexo-core and knows nothing of {@link FlexoAction}.
+	 *
+	 * <p>
+	 * What that menu does expose is {@link ContextualMenu#addToActions(EditorAction)}, so the two actions are contributed as
+	 * {@link EditorAction}s delegating to the platform. Whichever widget is right-clicked, they act on the COMPONENT: saving or localizing
+	 * one widget of it means nothing.
+	 */
+	public void contributeActionsToEditorSession(FIBEditorController editorController, FMLFIBComponent component,
+			FlexoController controller) {
+
+		if (editorController == null || component == null || controller == null) {
+			return;
+		}
+
+		if (!editorSessionsWithContributedActions.add(editorController)) {
+			return;
+		}
+
+		contribute(editorController, SaveFIBComponent.actionType, FMLGINAIconLibrary.SAVE_COMPONENT_ICON, component, controller);
+		contribute(editorController, LocalizeFIBComponent.actionType, FMLGINAIconLibrary.LOCALIZE_COMPONENT_ICON, component, controller);
+	}
+
+	/**
+	 * One entry, delegating everything to the action factory: what it is called, whether it applies, and its execution - through
+	 * <code>performActionFactory</code>, which is what runs the initializers, the finalizers and the exception handler the platform menu
+	 * would have run.
+	 */
+	private <A extends FlexoAction<A, FlexoObject, FlexoObject>> void contribute(FIBEditorController editorController,
+			FlexoActionFactory<A, FlexoObject, FlexoObject> actionFactory, Icon icon, FMLFIBComponent component,
+			FlexoController controller) {
+
+		editorController.getContextualMenu().addToActions(new EditorAction() {
+
+			/** Used VERBATIM as the menu item text: ContextualMenu localizes nothing. */
+			@Override
+			public String getActionName() {
+				return getLocales().localizedForKey(actionFactory.getActionName());
+			}
+
+			/** The same icon the platform's own menu shows for this action - see the initializer's getEnabledIcon(). */
+			@Override
+			public Icon getActionIcon() {
+				return icon;
+			}
+
+			@Override
+			public KeyStroke getShortcut() {
+				return null;
+			}
+
+			@Override
+			public FIBModelObject performAction(FIBModelObject object) {
+				controller.getEditor().performActionFactory(actionFactory, component, new Vector<FlexoObject>(), null);
+				// Nothing to select afterwards: the effect is on the component, not on the widget that was right-clicked
+				return null;
+			}
+
+			@Override
+			public boolean isVisibleFor(FIBModelObject object) {
+				return actionFactory.isVisibleForSelection(component, null);
+			}
+
+			@Override
+			public boolean isEnabledFor(FIBModelObject object) {
+				return actionFactory.isEnabledForSelection(component, null);
+			}
+		});
+	}
+
+	/**
+	 * The editor if one has already been built, null otherwise.
+	 *
+	 * <p>
+	 * For callers that must NOT trigger its construction - an action deciding whether it applies, which runs every time a contextual menu is
+	 * built. {@link #getFIBEditor(boolean)} would build palette and widget inspectors just to answer.
+	 */
+	public FIBEditor getExistingFIBEditor() {
 		return fibEditor;
 	}
 
