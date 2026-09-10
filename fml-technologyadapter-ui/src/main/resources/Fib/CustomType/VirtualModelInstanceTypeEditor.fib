@@ -45,7 +45,7 @@
 		</BrowserElement>
 		<BrowserElement dataClassName="org.openflexo.foundation.resource.RepositoryFolder"
 			label="folder.displayableName" icon="controller.iconForObject(folder)"
-			isEditable="false" filtered="false" defaultVisible="true" name="folder" visible="(folder.resources.size &gt; 0) || (folder.children.size &gt; 0)">
+			isEditable="false" filtered="false" defaultVisible="true" name="folder" visible="folder.containsResources()">
 			<Children data="folder.children" name="subFolders" />
 			<Children data="folder.resources" name="resources" />
 		</BrowserElement>
