@@ -234,7 +234,22 @@ public class TestCreateFIBComponent extends OpenflexoTestCase {
 		action.setVariantName("compact");
 		assertTrue(action.isValid());
 
-		action.declareVariant(concept);
+		// What the FML editor listens to: without it, the editor keeps its former text, parses it again on the next occasion and aligns
+		// the model on it - which removes the declaration just made
+		int[] prettyPrintEvents = { 0 };
+		java.beans.PropertyChangeListener editorStandIn = evt -> {
+			if ("FMLPrettyPrint".equals(evt.getPropertyName())) {
+				prettyPrintEvents[0]++;
+			}
+		};
+		compilationUnit.getPropertyChangeSupport().addPropertyChangeListener(editorStandIn);
+		try {
+			action.declareVariant(concept);
+		} finally {
+			compilationUnit.getPropertyChangeSupport().removePropertyChangeListener(editorStandIn);
+		}
+		assertTrue("Declaring a variant does not tell the FML editor showing the compilation unit", prettyPrintEvents[0] > 0);
+
 		assertEquals("WithoutAnyComponentCompact.fib", concept.getMultiValuedMetaData(FlexoConcept.UI_METADATA).getValue("compact", String.class));
 
 		String after = compilationUnit.getFMLPrettyPrint();

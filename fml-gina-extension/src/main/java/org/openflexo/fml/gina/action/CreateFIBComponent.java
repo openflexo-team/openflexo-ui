@@ -51,7 +51,6 @@ import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.md.MultiValuedMetaData;
 import org.openflexo.foundation.fml.rm.CompilationUnitResource;
 import org.openflexo.foundation.fml.rm.FIBComponentResourceFactory;
-import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.gina.model.FIBModelFactory;
 import org.openflexo.gina.model.container.FIBPanel;
 import org.openflexo.localization.LocalizedDelegate;
@@ -65,7 +64,8 @@ import org.openflexo.toolbox.StringUtils;
  * Unlike an inspector, a concept may drive several such components - its default view, named variants, fragments shown elsewhere - so the
  * action is always offered. Named <code>&lt;Concept&gt;.fib</code>, the component is the default view of the concept by convention. Under
  * any other name nothing links it to the concept, unless it is also declared as a NAMED VARIANT: the action then adds it to the
- * <code>@UI</code> annotation of the concept, and saves the compilation unit.
+ * <code>@UI</code> annotation of the concept. That is an edit of the model like any other: it marks the compilation unit modified, and is
+ * saved when the user saves it.
  *
  * @author sylvain
  */
@@ -204,15 +204,14 @@ public class CreateFIBComponent extends AbstractCreateFIBComponent<CreateFIBComp
 		return super.isValid() && (!getDeclareAsVariant() || (hasValidVariantName() && !variantIsAlreadyDeclared()));
 	}
 
+	/**
+	 * Declares the component as a variant of the concept, when asked to. The compilation unit is NOT saved: the declaration is an edit of the
+	 * model like any other, which marks it modified and is saved when the user asks for it.
+	 */
 	@Override
 	protected void componentCreated(FlexoConcept concept, CompilationUnitResource compilationUnitResource) throws FlexoException {
 		if (getDeclareAsVariant()) {
 			declareVariant(concept);
-			try {
-				compilationUnitResource.save();
-			} catch (SaveResourceException e) {
-				throw new FlexoException("Could not save " + compilationUnitResource.getURI() + " after declaring " + getComponentName(), e);
-			}
 		}
 	}
 
@@ -240,9 +239,17 @@ public class CreateFIBComponent extends AbstractCreateFIBComponent<CreateFIBComp
 			}
 			metaData.setValue(getVariantName(), getComponentName(), String.class);
 			concept.addToMetaData(metaData);
-			return;
+		}
+		else {
+			metaData.setValue(getVariantName(), getComponentName(), String.class);
 		}
 
-		metaData.setValue(getVariantName(), getComponentName(), String.class);
+		// Tell whoever shows the FML source: the FML editor listens to "FMLPrettyPrint" on the compilation unit, which setIsModified() fires
+		// - as CreateTypeDeclaration does. Adding a metadata fires nothing up there by itself, and an editor left with its former text parses
+		// it again on the next occasion and aligns the model on it, which silently REMOVES the declaration just made.
+		FMLCompilationUnit compilationUnit = concept.getDeclaringCompilationUnit();
+		if (compilationUnit != null) {
+			compilationUnit.setIsModified();
+		}
 	}
 }
