@@ -333,7 +333,9 @@ public class FMLRTTechnologyAdapterController extends TechnologyAdapterControlle
 	public FlexoObject getRepresentableMasterObject(TechnologyObject<FMLRTTechnologyAdapter> object) {
 		for (TechnologyAdapterPluginController<?> plugin : getTechnologyAdapterControllerService().getActivatedPlugins()) {
 			if (plugin.isRepresentableInModuleView(object)) {
-				return getRepresentableMasterObject(object);
+				// The PLUGIN decides: calling this very method again with the same object recursed forever, as soon as a plugin
+				// claimed an FML-RT object - the first to do so being FMLGINAPlugin, for an instance of a concept that has a .fib
+				return plugin.getRepresentableMasterObject(object);
 			}
 		}
 
