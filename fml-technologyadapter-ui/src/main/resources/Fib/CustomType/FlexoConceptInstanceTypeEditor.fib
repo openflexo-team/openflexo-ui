@@ -51,10 +51,10 @@
 		</BrowserElement>
 		<BrowserElement dataClassName="org.openflexo.foundation.fml.rm.CompilationUnitResource"
 			label="virtualModel.name" icon="controller.iconForObject(virtualModel)"
-			enabled="virtualModel.isLoaded" isEditable="false"
+			enabled="" isEditable="false"
 			filtered="false" defaultVisible="true" dynamicFont=""
 			name="virtualModel">
-			<Children data="virtualModel.contents" visible="virtualModel.isLoaded"
+			<Children data="virtualModel.contents" visible=""
 				cast="" name="subresources" />
 			<Children data="virtualModel.loadedCompilationUnit.virtualModel.allRootFlexoConcepts"
 				visible="virtualModel.isLoaded" cast="" name="rootFlexoConcepts" />

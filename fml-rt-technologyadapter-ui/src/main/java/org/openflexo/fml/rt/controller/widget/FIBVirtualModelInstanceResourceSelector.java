@@ -172,6 +172,11 @@ public class FIBVirtualModelInstanceResourceSelector extends FIBProjectObjectSel
 		return super.isAcceptableValue(o);
 	}*/
 
+	/**
+	 * Tells if supplied resource conforms to expected type<br>
+	 * Called for every resource displayed by the browser, and while filtering: the test is performed at resource level, so that the
+	 * instance is never loaded (only its VirtualModel may be)
+	 */
 	@Override
 	public boolean isAcceptableValue(Object o) {
 		if (!super.isAcceptableValue(o)) {
@@ -183,10 +188,9 @@ public class FIBVirtualModelInstanceResourceSelector extends FIBProjectObjectSel
 		if (!(getExpectedType() instanceof VirtualModelInstanceType)) {
 			return false;
 		}
-		FMLRTVirtualModelInstance vmi = ((FMLRTVirtualModelInstanceResource) o).getVirtualModelInstance();
 		VirtualModelInstanceType vmiType = (VirtualModelInstanceType) getExpectedType();
-		return (vmiType.getVirtualModel() == null) || (vmiType.getVirtualModel().isAssignableFrom(vmi.getVirtualModel()));
-
+		return (vmiType.getVirtualModel() == null)
+				|| (vmiType.getVirtualModel().isAssignableFrom(((FMLRTVirtualModelInstanceResource) o).getVirtualModel()));
 	}
 
 	/*public boolean isConformedToVirtualModel(VirtualModelInstanceResource vmiResource) {

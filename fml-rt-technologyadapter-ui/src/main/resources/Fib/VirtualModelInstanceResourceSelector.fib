@@ -61,10 +61,10 @@
 		<BrowserElement
 			dataClassName="org.openflexo.foundation.fml.rt.rm.FMLRTVirtualModelInstanceResource"
 			label="virtualModelInstanceResource.name" icon="controller.iconForObject(virtualModelInstanceResource)"
-			enabled="(virtualModelInstanceResource.isLoaded) &amp;&amp;(data.isAcceptableValue(virtualModelInstanceResource))"
+			enabled="data.isAcceptableValue(virtualModelInstanceResource)"
 			isEditable="false" filtered="false" defaultVisible="true"
 			name="virtualModelInstanceResource">
-			<Children data="virtualModelInstanceResource.contents" visible="virtualModelInstanceResource.isLoaded"
+			<Children data="virtualModelInstanceResource.contents" visible=""
 				name="children" />
 		</BrowserElement>
 	</Browser>
