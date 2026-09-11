@@ -1,24 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Wizard step of CreateInspector: the name of the component, and the entries proposed for the
-     properties of the concept. Each line may be deselected, its label rewritten, and its widget
-     changed among those that make sense for the property's type.
+<!-- Wizard step shared by CreateInspector and CreateFIBComponent: the name of the component, what is
+     specific to the action - a tabbed layout for an inspector, a named variant for a user interface,
+     each shown only when the action supports it - and the entries proposed for the properties of the
+     concept. Each line may be deselected, its label rewritten, and its widget changed among those
+     that make sense for the property's type.
 
      Inside the table the ITERATOR shadows the surrounding scope: every column binding starts from
      'iterator', which is an InspectorEntryConfiguration - never from 'data'. -->
 <Panel layout="gridbag" useScrollBar="false" border="empty"
 	controllerClassName="org.openflexo.view.controller.FlexoFIBController"
-	dataClassName="org.openflexo.fml.gina.controller.CreateInspectorWizard$DescribeInspector"
+	dataClassName="org.openflexo.fml.gina.controller.AbstractCreateFIBComponentWizard$DescribeComponent"
 	trackViewPortWidth="true" trackViewPortHeight="true">
 
-	<Label label="inspector_name" align="right" localize="true"
+	<Label label="component_name" align="right" localize="true"
 		constraints="gridbag(anchor=east;fill=none;gridWidth=1;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=10;weightX=0.0;weightY=0.0)" />
-	<TextField data="data.inspectorName" columns="40" name="inspectorNameTextField"
+	<TextField data="data.componentName" columns="40" name="componentNameTextField"
 		localize="true"
 		constraints="gridbag(anchor=center;fill=horizontal;gridWidth=0;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=10;weightX=1.0;weightY=0.0)" />
 
-	<Label label="use_tabbed_panel" align="right" localize="true"
+	<Label label="use_tabbed_panel" align="right" localize="true" visible="data.supportsTabbedPanel"
 		constraints="gridbag(anchor=east;fill=none;gridWidth=1;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=5;weightX=0.0;weightY=0.0)" />
-	<CheckBox data="data.useTabbedPanel" name="useTabbedPanelCheckBox" localize="true"
+	<CheckBox data="data.useTabbedPanel" name="useTabbedPanelCheckBox" localize="true" visible="data.supportsTabbedPanel"
+		constraints="gridbag(anchor=west;fill=none;gridWidth=0;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=5;weightX=1.0;weightY=0.0)" />
+
+	<Label label="declare_as_variant" align="right" localize="true" visible="data.supportsVariantDeclaration"
+		constraints="gridbag(anchor=east;fill=none;gridWidth=1;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=5;weightX=0.0;weightY=0.0)" />
+	<CheckBox data="data.declareAsVariant" name="declareAsVariantCheckBox" localize="true" visible="data.supportsVariantDeclaration"
+		constraints="gridbag(anchor=west;fill=none;gridWidth=0;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=5;weightX=1.0;weightY=0.0)" />
+
+	<Label label="variant_name" align="right" localize="true" visible="data.supportsVariantDeclaration"
+		constraints="gridbag(anchor=east;fill=none;gridWidth=1;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=5;weightX=0.0;weightY=0.0)" />
+	<TextField data="data.variantName" columns="20" name="variantNameTextField" localize="true"
+		visible="data.supportsVariantDeclaration" enable="data.declareAsVariant"
 		constraints="gridbag(anchor=west;fill=none;gridWidth=0;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=5;weightX=1.0;weightY=0.0)" />
 
 	<Label label="entries" align="right" localize="true"
@@ -45,10 +58,17 @@
 	</Table>
 
 	<LocalizedDictionary>
-		<Localized key="inspector_name" lang="English" value="Inspector name" />
-		<Localized key="inspector_name" lang="French" value="Nom de l'inspecteur" />
+		<Localized key="component_name" lang="English" value="Component name" />
+		<Localized key="component_name" lang="French" value="Nom du composant" />
+		<Localized key="component_name" lang="Dutch" value="Naam van de component" />
 		<Localized key="use_tabbed_panel" lang="English" value="Use a tabbed panel" />
 		<Localized key="use_tabbed_panel" lang="French" value="Utiliser un panneau à onglets" />
+		<Localized key="declare_as_variant" lang="English" value="Declare as a variant of the concept" />
+		<Localized key="declare_as_variant" lang="French" value="Déclarer comme variante du concept" />
+		<Localized key="declare_as_variant" lang="Dutch" value="Declareren als variant van het concept" />
+		<Localized key="variant_name" lang="English" value="Variant name" />
+		<Localized key="variant_name" lang="French" value="Nom de la variante" />
+		<Localized key="variant_name" lang="Dutch" value="Naam van de variant" />
 		<Localized key="entries" lang="English" value="Entries" />
 		<Localized key="entries" lang="French" value="Entrées" />
 		<Localized key="selected" lang="English" value="Keep" />

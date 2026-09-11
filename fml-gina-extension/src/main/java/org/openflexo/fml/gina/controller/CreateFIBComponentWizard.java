@@ -35,19 +35,40 @@
  * or visit www.openflexo.org if you need additional information.
  * 
  */
-package org.openflexo.fml.gina;
+package org.openflexo.fml.gina.controller;
 
-import org.junit.Test;
-import org.openflexo.gina.test.GenericFIBTestCase;
+import org.openflexo.fml.gina.action.CreateFIBComponent;
+import org.openflexo.view.controller.FlexoController;
 
 /**
- * The components of this plugin still load and their bindings still resolve. Nothing else catches a broken binding in a wizard panel: it
- * simply shows an empty or dead widget at runtime.
+ * Wizard of {@link CreateFIBComponent}: names the component, offers to declare it as a named variant of the concept, and lets the reader
+ * select, deselect and edit the entries proposed for the properties of the concept.
+ *
+ * @author sylvain
  */
-public class TestFMLGINAFibs extends GenericFIBTestCase {
+public class CreateFIBComponentWizard extends AbstractCreateFIBComponentWizard<CreateFIBComponent> {
 
-	@Test
-	public void testDescribeFIBComponent() {
-		validateFIB("Fib/Wizard/DescribeFIBComponent.fib");
+	public CreateFIBComponentWizard(CreateFIBComponent action, FlexoController controller) {
+		super(action, controller);
+	}
+
+	@Override
+	public String getWizardTitle() {
+		return getAction().getLocales().localizedForKey("create_user_interface");
+	}
+
+	@Override
+	protected String getDescribeStepTitleKey() {
+		return "describe_user_interface";
+	}
+
+	@Override
+	protected String getInvalidNameMessageKey() {
+		return "please_supply_a_valid_component_name";
+	}
+
+	@Override
+	protected String getEmptyComponentWarningKey() {
+		return "no_entry_selected_the_component_will_be_empty";
 	}
 }

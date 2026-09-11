@@ -1,11 +1,17 @@
 a_component_of_this_name_already_exists=A component of this name already exists in the container
 could_not_save_component=Could not save component
 create_inspector=Create inspector
+create_user_interface=Create user interface
 describe_inspector=Describe the inspector to create
+describe_user_interface=Describe the user interface to create
 inspector=Inspector
 loading_fib_editor=Loading component editor
 localize=Localize
+no_entry_selected_the_component_will_be_empty=No entry selected: the component will be empty
 no_entry_selected_the_inspector_will_be_empty=No entry selected: the inspector will be empty
+please_supply_a_valid_component_name=Please supply a valid component name, ending with .fib
 please_supply_a_valid_inspector_name=Please supply a valid inspector name, ending with .inspector
+please_supply_a_valid_variant_name=Please supply a valid variant name: letters, digits and underscores, not starting with a digit
 save=Save
+this_variant_is_already_declared=This concept already declares a variant of this name
 user_interface=User interface

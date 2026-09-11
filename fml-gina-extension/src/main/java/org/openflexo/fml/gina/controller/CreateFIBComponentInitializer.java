@@ -44,7 +44,7 @@ import javax.swing.Icon;
 import org.openflexo.components.wizard.Wizard;
 import org.openflexo.components.wizard.WizardDialog;
 import org.openflexo.fml.gina.FMLGINAIconLibrary;
-import org.openflexo.fml.gina.action.CreateInspector;
+import org.openflexo.fml.gina.action.CreateFIBComponent;
 import org.openflexo.foundation.action.FlexoActionFactory;
 import org.openflexo.foundation.action.FlexoActionRunnable;
 import org.openflexo.foundation.fml.FMLObject;
@@ -53,27 +53,27 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
 /**
- * Wires {@link CreateInspector} into the module: its wizard, and what happens once it ran.
+ * Wires {@link CreateFIBComponent} into the module: its wizard, and what happens once it ran.
  *
  * <p>
- * Instantiating this is also what LOADS {@link CreateInspector}, whose static block registers the action on FlexoConcept and
+ * Instantiating this is also what LOADS {@link CreateFIBComponent}, whose static block registers the action on FlexoConcept and
  * FMLCompilationUnit. That is the mechanism by which a plugin contributes an action - the same one FMLDiagrammingPlugin relies on.
  *
  * @author sylvain
  */
-public class CreateInspectorInitializer extends ActionInitializer<CreateInspector, FMLObject, FMLObject> {
+public class CreateFIBComponentInitializer extends ActionInitializer<CreateFIBComponent, FMLObject, FMLObject> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	public CreateInspectorInitializer(ControllerActionInitializer actionInitializer) {
-		super(CreateInspector.actionType, actionInitializer);
+	public CreateFIBComponentInitializer(ControllerActionInitializer actionInitializer) {
+		super(CreateFIBComponent.actionType, actionInitializer);
 	}
 
 	@Override
-	protected FlexoActionRunnable<CreateInspector, FMLObject, FMLObject> getDefaultInitializer() {
+	protected FlexoActionRunnable<CreateFIBComponent, FMLObject, FMLObject> getDefaultInitializer() {
 		return (e, action) -> {
-			Wizard wizard = new CreateInspectorWizard(action, getController());
+			Wizard wizard = new CreateFIBComponentWizard(action, getController());
 			WizardDialog dialog = new WizardDialog(wizard, getController());
 			dialog.showDialog();
 			return dialog.getStatus() == Status.VALIDATED;
@@ -90,7 +90,7 @@ public class CreateInspectorInitializer extends ActionInitializer<CreateInspecto
 	 * {@link org.openflexo.foundation.resource.FlexoResource#getLoadedResourceData()} is enough and raises nothing.
 	 */
 	@Override
-	protected FlexoActionRunnable<CreateInspector, FMLObject, FMLObject> getDefaultFinalizer() {
+	protected FlexoActionRunnable<CreateFIBComponent, FMLObject, FMLObject> getDefaultFinalizer() {
 		return (e, action) -> {
 			if (action.getNewComponentResource() != null && action.getNewComponentResource().getLoadedResourceData() != null) {
 				getController().setCurrentEditedObject(action.getNewComponentResource().getLoadedResourceData());
@@ -100,7 +100,7 @@ public class CreateInspectorInitializer extends ActionInitializer<CreateInspecto
 	}
 
 	@Override
-	protected Icon getEnabledIcon(FlexoActionFactory<CreateInspector, FMLObject, FMLObject> actionType) {
+	protected Icon getEnabledIcon(FlexoActionFactory<CreateFIBComponent, FMLObject, FMLObject> actionType) {
 		return FMLGINAIconLibrary.FIB_COMPONENT_ICON;
 	}
 }

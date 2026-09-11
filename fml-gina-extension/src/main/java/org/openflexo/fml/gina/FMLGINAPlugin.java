@@ -50,6 +50,7 @@ import javax.swing.KeyStroke;
 
 import org.openflexo.fml.gina.action.LocalizeFIBComponent;
 import org.openflexo.fml.gina.action.SaveFIBComponent;
+import org.openflexo.fml.gina.controller.CreateFIBComponentInitializer;
 import org.openflexo.fml.gina.controller.CreateInspectorInitializer;
 import org.openflexo.fml.gina.controller.LocalizeFIBComponentInitializer;
 import org.openflexo.fml.gina.controller.SaveFIBComponentInitializer;
@@ -125,6 +126,7 @@ public class FMLGINAPlugin extends TechnologyAdapterPluginController<FMLTechnolo
 	@Override
 	protected void initializeActions(ControllerActionInitializer actionInitializer) {
 		new CreateInspectorInitializer(actionInitializer);
+		new CreateFIBComponentInitializer(actionInitializer);
 		new SaveFIBComponentInitializer(actionInitializer);
 		new LocalizeFIBComponentInitializer(actionInitializer);
 	}
