@@ -47,6 +47,8 @@ import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.fml.FMLCompilationUnit;
 import org.openflexo.foundation.fml.FMLObject;
 import org.openflexo.foundation.fml.VirtualModel;
+import org.openflexo.foundation.fml.rm.FMLLocalizedDictionary;
+import org.openflexo.foundation.fml.rm.LocalizedDictionaryResource;
 import org.openflexo.icon.FMLIconLibrary;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
@@ -54,7 +56,11 @@ import org.openflexo.view.controller.GenericPerspective;
 
 /**
  * A perspective specializing {@link GenericPerspective} by representing {@link VirtualModel} localized dictionary
- * 
+ *
+ * <p>
+ * Superseded by the "Localize..." action of a compilation unit or VirtualModel, which opens the dictionary - now a resource contained in
+ * the compilation unit - from any FML perspective. Kept until it is removed.
+ *
  * @author sylvain
  * 
  * @param <TA>
@@ -111,7 +117,12 @@ public class LocalizationPerspective extends GenericPerspective {
 	@Override
 	public ModuleView<?> createModuleViewForMasterObject(FlexoObject object) {
 		if (object instanceof FMLCompilationUnit) {
-			return new FMLLocalizedDictionaryView((FMLCompilationUnit) object, getController(), this);
+			// Only a compilation unit that has a dictionary: this perspective no longer creates one as a side effect of showing it
+			LocalizedDictionaryResource dictionaryResource = ((FMLCompilationUnit) object).getLocalizedDictionaryResource();
+			FMLLocalizedDictionary dictionary = dictionaryResource != null ? dictionaryResource.getLocalizedDictionary() : null;
+			if (dictionary != null) {
+				return new FMLLocalizedDictionaryView(dictionary, getController(), this);
+			}
 		}
 		/*if (object instanceof VirtualModel) {
 			return new FMLLocalizedDictionaryView(((VirtualModel) object).getCompilationUnit(), getController(), this);

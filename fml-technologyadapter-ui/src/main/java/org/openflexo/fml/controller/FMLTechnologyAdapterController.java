@@ -85,11 +85,13 @@ import org.openflexo.fml.controller.action.DeleteFlexoConceptObjectsInitializer;
 import org.openflexo.fml.controller.action.DuplicateVirtualModelInitializer;
 import org.openflexo.fml.controller.action.GenerateCreationSchemeInitializer;
 import org.openflexo.fml.controller.action.GenerateUnimplementedPropertiesAndBehavioursInitializer;
+import org.openflexo.fml.controller.action.LocalizeCompilationUnitInitializer;
 import org.openflexo.fml.controller.action.MoveVirtualModelToContainerVirtualModelInitializer;
 import org.openflexo.fml.controller.action.MoveVirtualModelToDirectoryInitializer;
 import org.openflexo.fml.controller.action.RenameCompilationUnitInitializer;
 import org.openflexo.fml.controller.action.RenameFlexoConceptInitializer;
 import org.openflexo.fml.controller.validation.ValidateActionizer;
+import org.openflexo.fml.controller.view.FMLLocalizedDictionaryView;
 import org.openflexo.fml.controller.view.StandardCompilationUnitView;
 import org.openflexo.fml.controller.widget.FIBCompilationUnitBrowser;
 import org.openflexo.fml.controller.widget.FIBVirtualModelLibraryBrowser;
@@ -109,6 +111,7 @@ import org.openflexo.foundation.fml.EventListener;
 import org.openflexo.foundation.fml.FMLCompilationUnit;
 import org.openflexo.foundation.fml.FMLObject;
 import org.openflexo.foundation.fml.rm.FMLFIBComponent;
+import org.openflexo.foundation.fml.rm.FMLLocalizedDictionary;
 import org.openflexo.foundation.task.Progress;
 import org.openflexo.gina.swing.editor.controller.FIBEditorIconLibrary;
 import org.openflexo.foundation.fml.FMLTechnologyAdapter;
@@ -278,6 +281,7 @@ public class FMLTechnologyAdapterController extends TechnologyAdapterController<
 
 		new AddUseDeclarationInitializer(actionInitializer);
 		new CreateTypeDeclarationInitializer(actionInitializer);
+		new LocalizeCompilationUnitInitializer(actionInitializer);
 
 		new CreateTechnologyRoleInitializer(actionInitializer);
 		new CreatePrimitiveRoleInitializer(actionInitializer);
@@ -372,6 +376,9 @@ public class FMLTechnologyAdapterController extends TechnologyAdapterController<
 		if (FMLFIBComponent.class.isAssignableFrom(objectClass)) {
 			// The icon the FIB editor itself uses for a component
 			return FIBEditorIconLibrary.ROOT_COMPONENT_ICON;
+		}
+		if (FMLLocalizedDictionary.class.isAssignableFrom(objectClass)) {
+			return FMLIconLibrary.LOCALIZATION_ICON;
 		}
 		if (VirtualModel.class.isAssignableFrom(objectClass)) {
 			return FMLIconLibrary.VIRTUAL_MODEL_ICON;
@@ -527,6 +534,10 @@ public class FMLTechnologyAdapterController extends TechnologyAdapterController<
 			}
 		}
 
+		if (object instanceof FMLLocalizedDictionary) {
+			return true;
+		}
+
 		return (object instanceof FMLObject && ((FMLObject) object).getDeclaringCompilationUnit() != null);
 	}
 
@@ -539,6 +550,9 @@ public class FMLTechnologyAdapterController extends TechnologyAdapterController<
 			}
 		}
 
+		if (object instanceof FMLLocalizedDictionary) {
+			return object;
+		}
 		if (object instanceof FMLObject) {
 			return ((FMLObject) object).getDeclaringCompilationUnit();
 		}
@@ -562,6 +576,10 @@ public class FMLTechnologyAdapterController extends TechnologyAdapterController<
 			}
 		}
 
+		if (object instanceof FMLLocalizedDictionary) {
+			// The localization editor, opened on the dictionary a compilation unit got through "Localize..."
+			return new FMLLocalizedDictionaryView((FMLLocalizedDictionary) object, controller, perspective);
+		}
 		if (object instanceof FMLCompilationUnit) {
 			return new StandardCompilationUnitView((FMLCompilationUnit) object, controller, perspective);
 		}
