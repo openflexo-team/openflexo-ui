@@ -41,6 +41,7 @@ package org.openflexo.fml.controller.widget.fmleditor;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.fml.SemanticAnalysisIssue;
+import org.openflexo.foundation.fml.SemanticAnalysisWarning;
 
 /**
  * A {@link FMLNotice} wrapping a {@link SemanticAnalysisIssue}
@@ -56,6 +57,11 @@ public class SemanticAnalyzerNotice extends FMLNotice {
 	public SemanticAnalyzerNotice(FMLEditorParser parser, SemanticAnalysisIssue issue) {
 		super(parser, issue.getMessage(), issue.getLine(), issue.getOffset(), issue.getLength());
 		setLevel(Level.ERROR);
+	}
+
+	public SemanticAnalyzerNotice(FMLEditorParser parser, SemanticAnalysisWarning warning) {
+		super(parser, warning.getMessage(), warning.getLine(), warning.getOffset(), warning.getLength());
+		setLevel(Level.WARNING);
 	}
 
 	@Override
