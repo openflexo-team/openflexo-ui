@@ -160,8 +160,10 @@ public class FMLControlledComponent {
 			dataVariable.setType(concept.getInstanceType());
 		}
 
-		// Types have changed, so every binding has to be revalidated against them
-		component.revalidateBindings();
+		// Types AND binding rules have changed: the bindings must be parsed again, not merely revalidated. A path element cannot change
+		// nature once built, so a call to a behaviour of the concept - analyzed with the default binding factory when the component was
+		// deserialized - would otherwise stay unresolved, and its widget silently empty
+		component.rebuildBindings();
 	}
 
 	private static FIBModelFactory factoryOf(FIBComponent component) {
