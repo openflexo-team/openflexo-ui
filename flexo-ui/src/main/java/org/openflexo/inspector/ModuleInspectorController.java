@@ -408,6 +408,12 @@ public class ModuleInspectorController extends Observable implements Observer {
 				return returned;
 			}
 
+			if (concept.getInspector() == null) {
+				// The concept ships no .inspector and declares no deprecated inspector either: the basic inspector is all there is
+				flexoConceptInspectors.put(concept, returned);
+				return returned;
+			}
+
 			// And append tab matching FlexoConceptInspector
 			appendFlexoConceptInspector(concept, returned);
 			flexoConceptInspectors.put(concept, returned);
@@ -715,7 +721,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 		if (concept != null && inspector != null && inspector.getTabPanel() != null
 				&& inspector.getTabPanel().getSubComponents().size() > 0) {
 			FIBTab existingTab = (FIBTab) inspector.getTabPanel().getSubComponents().get(0);
-			if (existingTab.getTitle().equals(concept.getInspector().getInspectorTitle())) {
+			if (concept.getInspector() != null && existingTab.getTitle().equals(concept.getInspector().getInspectorTitle())) {
 				inspector.getTabPanel().removeFromSubComponents(existingTab);
 			}
 		}
@@ -791,7 +797,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 	 */
 	private FIBTab makeFIBTab(FlexoConcept flexoConcept) {
 		FIBTab newTab = getFactory().newFIBTab();
-		newTab.setTitle(flexoConcept.getInspector().getInspectorTitle());
+		newTab.setTitle(flexoConcept.getInspector() != null ? flexoConcept.getInspector().getInspectorTitle() : flexoConcept.getName());
 		newTab.setLayout(Layout.twocols);
 		newTab.setUseScrollBar(true);
 
@@ -838,6 +844,9 @@ public class ModuleInspectorController extends Observable implements Observer {
 			return;
 		}
 		LocalizedDelegate localizedDictionary = flexoConcept.getDeclaringCompilationUnit().getLocalizedDictionary();
+		if (flexoConcept.getInspector() == null) {
+			return;
+		}
 		for (final InspectorEntry entry : flexoConcept.getInspector().getEntries()) {
 			FIBLabel label = getFactory().newFIBLabel();
 			String entryLabel = localizedDictionary.localizedForKeyAndLanguage(entry.getLabel(), FlexoLocalization.getCurrentLanguage());
