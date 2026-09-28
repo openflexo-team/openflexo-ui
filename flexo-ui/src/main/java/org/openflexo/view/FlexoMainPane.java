@@ -58,6 +58,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.ChangeListener;
 
@@ -609,6 +610,15 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 
 	@Override
 	public void propertyChange(final PropertyChangeEvent evt) {
+
+		// This pane is Swing, and reacting to a location change creates module views - which loads resources. The events come from
+		// wherever the model is changed: loading a project fires them from a background task. Handled there, the view is built off the
+		// event dispatch thread while holding the AWT tree lock (FlexoController.moduleViewForLocation), and deadlocks with the event
+		// dispatch thread as soon as both need the same resource (measured 2026-09-28, the free modelling editor loading a project).
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(() -> propertyChange(evt));
+			return;
+		}
 
 		// System.out.println("--------> propertyChange in FlexoMainPane with " + evt);
 		if (evt.getSource() == controller.getControllerModel()) {

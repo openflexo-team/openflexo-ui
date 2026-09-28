@@ -1091,8 +1091,11 @@ public abstract class FlexoController implements PropertyChangeListener, HasProp
 		}
 
 		Object lock = flexoFrame.getTreeLock();
-		// Should only create view if I am the AWT event Thread
-		//
+		// Should only create view if I am the AWT event Thread: created elsewhere, a view is built holding the AWT tree lock, while
+		// loading resources, and deadlocks with the event dispatch thread (FlexoMainPane handles location changes on it for that reason)
+		if (createViewIfRequired && !SwingUtilities.isEventDispatchThread()) {
+			logger.warning("Module view for " + location + " requested out of the event dispatch thread: risk of deadlock");
+		}
 
 		synchronized (lock) {
 
