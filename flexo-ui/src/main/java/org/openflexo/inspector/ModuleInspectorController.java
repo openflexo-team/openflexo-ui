@@ -69,6 +69,8 @@ import org.openflexo.gina.model.container.FIBTabPanel;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.inspector.FlexoConceptInspector;
 import org.openflexo.foundation.fml.inspector.InspectorEntry;
+import org.openflexo.foundation.fml.rm.FIBComponentResource;
+import org.openflexo.foundation.fml.rm.FMLFIBComponent;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
 import org.openflexo.foundation.task.Progress;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
@@ -113,6 +115,27 @@ public class ModuleInspectorController extends Observable implements Observer {
 	private final FlexoController flexoController;
 
 	private final Map<FlexoConcept, FIBInspector> flexoConceptInspectors;
+
+	/**
+	 * For each concept whose inspector is cached, the container component it was built from - null when it was built without one. A cached
+	 * inspector is stale as soon as the component its concept resolves to is no longer that one: see {@link #isStale(FlexoConcept, Map)}.
+	 */
+	private final Map<FlexoConcept, FIBComponent> containerComponentsOfInspectors = new HashMap<>();
+
+	/**
+	 * The resource data of the container components merged so far, listened to so that the inspected object is shown again with the new
+	 * component when a generator or an editor replaces it.
+	 */
+	private final List<FMLFIBComponent> listenedContainerComponents = new ArrayList<>();
+
+	private final PropertyChangeListener containerComponentListener = new PropertyChangeListener() {
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (FMLFIBComponent.COMPONENT_KEY.equals(evt.getPropertyName())) {
+				reinspectCurrentConceptInstance();
+			}
+		}
+	};
 
 	private FIBInspector currentInspector = null;
 
@@ -385,7 +408,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 			return null;
 		}
 		FIBInspector returned = flexoConceptInspectors.get(concept);
-		if (returned != null) {
+		if (returned != null && !isStale(concept, containerComponentsOfInspectors)) {
 			return returned;
 		}
 		else {
@@ -400,8 +423,11 @@ public class ModuleInspectorController extends Observable implements Observer {
 			// the TabPanel this inspector already has - the same way a super inspector is merged in.
 			FIBComponent containerInspector = loadContainerInspector(concept);
 
+			containerComponentsOfInspectors.put(concept, containerInspector);
+
 			if (containerInspector instanceof FIBContainer) {
 				mergeContainerInspector(returned, (FIBContainer) containerInspector, concept, customTypeEditorProvider());
+				listenToContainerComponent(concept);
 				flexoConceptInspectors.put(concept, returned);
 				// No FlexoConceptInstanceInspectorUpdater here: there are no InspectorEntry to listen to, and asking
 				// for concept.getInspector() would lazily create an empty one.
@@ -598,9 +624,52 @@ public class ModuleInspectorController extends Observable implements Observer {
 	}
 
 	public void delete() {
+		for (FMLFIBComponent resourceData : listenedContainerComponents) {
+			resourceData.getPropertyChangeSupport().removePropertyChangeListener(containerComponentListener);
+		}
+		listenedContainerComponents.clear();
 		inspectorDialog.delete();
 		currentInspectedObject = null;
 		currentInspector = null;
+	}
+
+	/**
+	 * Whether the inspector cached for supplied concept was built from another container component than the one the concept resolves to now:
+	 * a component was created, removed or replaced since - typically by a generator such as the free modelling editor's, which (re)writes
+	 * the inspector of a concept as the user adds properties to it.
+	 *
+	 * <p>
+	 * Checked on every lookup rather than only notified, because a component that APPEARS has no resource data to listen to beforehand.
+	 */
+	private static boolean isStale(FlexoConcept concept, Map<FlexoConcept, FIBComponent> containerComponentsInUse) {
+		if (!containerComponentsInUse.containsKey(concept)) {
+			// Never recorded: built before this check existed for it, nothing to compare with
+			return false;
+		}
+		FIBComponentResource componentResource = concept.getInspectorComponentFlexoResource();
+		FIBComponent current = componentResource != null ? componentResource.getComponent() : null;
+		return current != containerComponentsInUse.get(concept);
+	}
+
+	/**
+	 * Listen to the resource data of the container component of supplied concept, so that replacing the component shows the inspected object
+	 * again - with an inspector rebuilt from the new component, since the cached one is then stale.
+	 */
+	private void listenToContainerComponent(FlexoConcept concept) {
+		FIBComponentResource componentResource = concept.getInspectorComponentFlexoResource();
+		FMLFIBComponent resourceData = componentResource != null ? componentResource.getLoadedResourceData() : null;
+		if (resourceData != null && !listenedContainerComponents.contains(resourceData)) {
+			resourceData.getPropertyChangeSupport().addPropertyChangeListener(containerComponentListener);
+			listenedContainerComponents.add(resourceData);
+		}
+	}
+
+	private void reinspectCurrentConceptInstance() {
+		Object wasInspected = currentInspectedObject;
+		if (wasInspected instanceof FlexoConceptInstance) {
+			switchToEmptyContent();
+			inspectObject(wasInspected);
+		}
 	}
 
 	/**
@@ -736,13 +805,16 @@ public class ModuleInspectorController extends Observable implements Observer {
 
 	private Map<FlexoConcept, FIBPanel> flexoConceptInspectorPanels = new HashMap<>();
 
+	/** Same as {@link #containerComponentsOfInspectors}, for {@link #flexoConceptInspectorPanels} */
+	private final Map<FlexoConcept, FIBComponent> containerComponentsOfPanels = new HashMap<>();
+
 	public FIBPanel getFIBInspectorPanel(FlexoConcept flexoConcept) {
 		return getFIBInspectorPanel(flexoConcept, FlexoFIBController.class);
 	}
 
 	public FIBPanel getFIBInspectorPanel(FlexoConcept flexoConcept, Class<? extends FlexoFIBController> controllerClass) {
 		FIBPanel returned = flexoConceptInspectorPanels.get(flexoConcept);
-		if (returned == null) {
+		if (returned == null || isStale(flexoConcept, containerComponentsOfPanels)) {
 			returned = makeFIBInspectorPanel(flexoConcept, controllerClass);
 			flexoConceptInspectorPanels.put(flexoConcept, returned);
 		}
@@ -756,6 +828,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 		// This is what makes a container inspector show up in the standard FML-RT VirtualModelInstanceView, whose
 		// FIBReferencedComponent renders controller.inspectorForFlexoConceptInstance(browser.selected).
 		FIBComponent containerInspector = loadContainerInspector(flexoConcept);
+		containerComponentsOfPanels.put(flexoConcept, containerInspector);
 		if (containerInspector instanceof FIBPanel) {
 			FIBPanel returned = (FIBPanel) containerInspector;
 			if (returned.getControllerClass() == null) {
