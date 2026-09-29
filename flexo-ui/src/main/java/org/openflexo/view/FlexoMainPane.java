@@ -731,6 +731,18 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 		}
 	}
 
+	/**
+	 * Put the components of the current perspective back in place. A component shared by the whole application (the inspectors of a
+	 * technology adapter, a palette) is taken by the window of another module when displayed there - a Swing component has one parent
+	 * only - while the perspective of this module still holds it: setting it again notifies nothing, so this is what shows it again when
+	 * this module is activated.
+	 */
+	public void refreshLayout() {
+		updateLayoutForPerspective();
+		centerPanel.revalidate();
+		centerPanel.repaint();
+	}
+
 	private void updateLayoutForPerspective() {
 
 		if (perspective == null) {
