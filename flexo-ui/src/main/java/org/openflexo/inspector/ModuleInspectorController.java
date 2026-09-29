@@ -46,6 +46,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -127,6 +128,23 @@ public class ModuleInspectorController extends Observable implements Observer {
 	 * component when a generator or an editor replaces it.
 	 */
 	private final List<FMLFIBComponent> listenedContainerComponents = new ArrayList<>();
+
+	/**
+	 * The resources of the container components merged so far, listened to for {@link FIBComponentResource#COMPONENT_SAVED_KEY}: the GINA
+	 * editor edits a component in place, which nothing else announces.
+	 */
+	private final List<FIBComponentResource> listenedContainerResources = new ArrayList<>();
+
+	private final PropertyChangeListener containerComponentSavedListener = new PropertyChangeListener() {
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getSource() instanceof FIBComponentResource
+					&& dropInspectorsBuiltFrom((FIBComponentResource) evt.getSource(), flexoConceptInspectors,
+							containerComponentsOfInspectors)) {
+				reinspectCurrentConceptInstance();
+			}
+		}
+	};
 
 	private final PropertyChangeListener containerComponentListener = new PropertyChangeListener() {
 		@Override
@@ -628,6 +646,11 @@ public class ModuleInspectorController extends Observable implements Observer {
 			resourceData.getPropertyChangeSupport().removePropertyChangeListener(containerComponentListener);
 		}
 		listenedContainerComponents.clear();
+		for (FIBComponentResource resource : listenedContainerResources) {
+			resource.getPropertyChangeSupport().removePropertyChangeListener(FIBComponentResource.COMPONENT_SAVED_KEY,
+					containerComponentSavedListener);
+		}
+		listenedContainerResources.clear();
 		inspectorDialog.delete();
 		currentInspectedObject = null;
 		currentInspector = null;
@@ -657,11 +680,37 @@ public class ModuleInspectorController extends Observable implements Observer {
 	 */
 	private void listenToContainerComponent(FlexoConcept concept) {
 		FIBComponentResource componentResource = concept.getInspectorComponentFlexoResource();
+		if (componentResource != null && !listenedContainerResources.contains(componentResource)) {
+			componentResource.getPropertyChangeSupport().addPropertyChangeListener(FIBComponentResource.COMPONENT_SAVED_KEY,
+					containerComponentSavedListener);
+			listenedContainerResources.add(componentResource);
+		}
 		FMLFIBComponent resourceData = componentResource != null ? componentResource.getLoadedResourceData() : null;
 		if (resourceData != null && !listenedContainerComponents.contains(resourceData)) {
 			resourceData.getPropertyChangeSupport().addPropertyChangeListener(containerComponentListener);
 			listenedContainerComponents.add(resourceData);
 		}
+	}
+
+	/**
+	 * Forget the inspectors that were built from the component of supplied resource, which was edited in place and saved: they are clones
+	 * of what it held before, and {@link #isStale} cannot tell, the component being the same object. The next lookup rebuilds them.
+	 *
+	 * @return whether anything was dropped
+	 */
+	static boolean dropInspectorsBuiltFrom(FIBComponentResource resource, Map<FlexoConcept, FIBInspector> inspectors,
+			Map<FlexoConcept, FIBComponent> builtFrom) {
+		FIBComponent saved = resource.getComponent();
+		boolean dropped = false;
+		for (Iterator<Map.Entry<FlexoConcept, FIBComponent>> i = builtFrom.entrySet().iterator(); i.hasNext();) {
+			Map.Entry<FlexoConcept, FIBComponent> entry = i.next();
+			if (saved != null && entry.getValue() == saved) {
+				inspectors.remove(entry.getKey());
+				i.remove();
+				dropped = true;
+			}
+		}
+		return dropped;
 	}
 
 	private void reinspectCurrentConceptInstance() {

@@ -6,11 +6,19 @@
 package org.openflexo.inspector;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.TreeSet;
 
 import org.junit.Test;
@@ -19,6 +27,7 @@ import org.openflexo.fib.binding.FMLControlledComponent;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.rm.CompilationUnitResource;
+import org.openflexo.foundation.fml.rm.FIBComponentResource;
 import org.openflexo.foundation.test.OpenflexoTestCase;
 import org.openflexo.gina.model.FIBComponent;
 import org.openflexo.gina.model.FIBContainer;
@@ -275,6 +284,66 @@ public class TestContainerInspectors extends OpenflexoTestCase {
 
 		assertBindingIsValid(((FIBContainer) conceptTab).getSubComponentNamed("descriptionWidget"));
 		assertResourceComponentUntouched(simple);
+	}
+
+	/**
+	 * The GINA editor edits the component of the resource IN PLACE, so the component a cached inspector was built from stays the same
+	 * object: {@link ModuleInspectorController}'s identity check never sees the edit, and the cached inspector - built from a CLONE - keeps
+	 * showing the old layout (free modelling editor: an inspector edited in the FIB editor did not update). Saving announces
+	 * <code>componentSaved</code> on the resource; whatever the controller cached from that resource must then be dropped, and nothing else.
+	 */
+	@Test
+	@TestOrder(11)
+	public void test10SavedComponentDropsTheInspectorsBuiltFromIt() {
+
+		FlexoConcept simple = concept("Simple");
+		FlexoConcept plain = concept("Plain");
+		FIBComponentResource simpleResource = simple.getInspectorComponentFlexoResource();
+		FIBComponentResource plainResource = plain.getInspectorComponentFlexoResource();
+		assertNotSame(simpleResource, plainResource);
+
+		Map<FlexoConcept, FIBInspector> inspectors = new HashMap<>();
+		Map<FlexoConcept, FIBComponent> builtFrom = new HashMap<>();
+		inspectors.put(simple, makeClassInspectorStandIn());
+		builtFrom.put(simple, simpleResource.getComponent());
+		inspectors.put(plain, makeClassInspectorStandIn());
+		builtFrom.put(plain, plainResource.getComponent());
+
+		// The editor's kind of edit: same component, changed content. Nothing tells the identity check.
+		FIBComponent edited = ((FIBContainer) simpleResource.getComponent()).getSubComponents().get(0);
+		String name = edited.getName();
+		edited.setName("EditedInPlace");
+		try {
+			assertSame(builtFrom.get(simple), simpleResource.getComponent());
+			assertTrue(ModuleInspectorController.dropInspectorsBuiltFrom(simpleResource, inspectors, builtFrom));
+		} finally {
+			edited.setName(name);
+		}
+
+		assertFalse("The inspector built from the saved component is still cached", inspectors.containsKey(simple));
+		assertFalse(builtFrom.containsKey(simple));
+		assertTrue("The inspector of another component was dropped", inspectors.containsKey(plain));
+		assertTrue(builtFrom.containsKey(plain));
+
+		// Nothing left to drop: the controller then has nothing to redisplay
+		assertFalse(ModuleInspectorController.dropInspectorsBuiltFrom(simpleResource, inspectors, builtFrom));
+	}
+
+	/** Saving a component announces it on its resource, which is what {@link ModuleInspectorController} listens to. */
+	@Test
+	@TestOrder(12)
+	public void test11ResourceAnnouncesASavedComponent() {
+
+		FIBComponentResource resource = concept("Simple").getInspectorComponentFlexoResource();
+		List<PropertyChangeEvent> events = new ArrayList<>();
+		PropertyChangeListener listener = events::add;
+		resource.getPropertyChangeSupport().addPropertyChangeListener(FIBComponentResource.COMPONENT_SAVED_KEY, listener);
+		try {
+			resource.notifyComponentSaved();
+		} finally {
+			resource.getPropertyChangeSupport().removePropertyChangeListener(FIBComponentResource.COMPONENT_SAVED_KEY, listener);
+		}
+		assertEquals(1, events.size());
 	}
 
 	/**
