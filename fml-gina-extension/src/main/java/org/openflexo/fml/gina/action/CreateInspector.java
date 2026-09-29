@@ -40,12 +40,14 @@ package org.openflexo.fml.gina.action;
 import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.action.FlexoActionFactory;
 import org.openflexo.foundation.fml.FMLCompilationUnit;
 import org.openflexo.foundation.fml.FMLObject;
 import org.openflexo.foundation.fml.FlexoConcept;
+import org.openflexo.foundation.fml.rm.CompilationUnitResource;
 import org.openflexo.foundation.fml.rm.FIBComponentResourceFactory;
 import org.openflexo.gina.model.FIBModelFactory;
 import org.openflexo.gina.model.container.FIBPanel;
@@ -59,7 +61,10 @@ import org.openflexo.localization.LocalizedDelegate;
  * VirtualModel declaring it. See {@link AbstractCreateFIBComponent} for what the component holds.
  *
  * <p>
- * A concept has ONE inspector of its own: the action is offered only while it has none - editing the one it has is the editor's job.
+ * A concept has ONE inspector of its own: the action is offered only while it has none - editing the one it has is the editor's job. The
+ * component is proposed the conventional name <code>&lt;Concept&gt;.inspector</code>, but {@link #componentCreated} always writes an
+ * explicit <code>@Inspector</code> annotation naming it: the naming convention is never what links it to the concept, so a later rename
+ * cannot orphan it.
  *
  * @author sylvain
  */
@@ -126,6 +131,30 @@ public class CreateInspector extends AbstractCreateFIBComponent<CreateInspector>
 	@Override
 	public String getComponentSuffix() {
 		return FIBComponentResourceFactory.INSPECTOR_SUFFIX;
+	}
+
+	@Override
+	protected void componentCreated(FlexoConcept concept, CompilationUnitResource compilationUnitResource) throws FlexoException {
+		declareInspector(concept);
+	}
+
+	/**
+	 * Declares the just-created component as this concept's inspector: <code>@Inspector("&lt;name&gt;.inspector")</code>. Always
+	 * written - unlike {@link CreateFIBComponent}, there is no variant to choose between: the action is offered only while
+	 * {@link #declaresItsOwnInspector} answers false, so there is never a pre-existing <code>@Inspector</code> to preserve here. The
+	 * compilation unit is NOT saved: the declaration is an edit of the model like any other, which marks it modified and is saved when
+	 * the user asks for it. Public for the same reason {@link CreateFIBComponent#declareComponent} is: a test can assert on the model
+	 * without writing the FML source.
+	 */
+	public void declareInspector(FlexoConcept concept) {
+		concept.setSingleMetaData(FlexoConcept.INSPECTOR_METADATA, getComponentName(), String.class);
+
+		// Tell whoever shows the FML source: the FML editor listens to "FMLPrettyPrint" on the compilation unit - see
+		// CreateFIBComponent#declareComponent for the full explanation of why this call is needed here.
+		FMLCompilationUnit compilationUnit = concept.getDeclaringCompilationUnit();
+		if (compilationUnit != null) {
+			compilationUnit.setIsModified();
+		}
 	}
 
 	@Override

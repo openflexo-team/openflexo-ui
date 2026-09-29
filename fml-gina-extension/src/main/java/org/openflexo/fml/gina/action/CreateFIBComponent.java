@@ -62,10 +62,10 @@ import org.openflexo.toolbox.StringUtils;
  *
  * <p>
  * Unlike an inspector, a concept may drive several such components - its default view, named variants, fragments shown elsewhere - so the
- * action is always offered. Named <code>&lt;Concept&gt;.fib</code>, the component is the default view of the concept by convention. Under
- * any other name nothing links it to the concept, unless it is also declared as a NAMED VARIANT: the action then adds it to the
- * <code>@UI</code> annotation of the concept. That is an edit of the model like any other: it marks the compilation unit modified, and is
- * saved when the user saves it.
+ * action is always offered. The component is proposed the conventional name <code>&lt;Concept&gt;.fib</code>, but the naming convention is
+ * never what links it to the concept: an explicit <code>@UI</code> annotation is ALWAYS written - the default variant when the wizard's
+ * "declare as a named variant" box is left unchecked, the chosen key otherwise - so a later rename of the concept can never orphan the
+ * component. That is an edit of the model like any other: it marks the compilation unit modified, and is saved when the user saves it.
  *
  * @author sylvain
  */
@@ -205,14 +205,14 @@ public class CreateFIBComponent extends AbstractCreateFIBComponent<CreateFIBComp
 	}
 
 	/**
-	 * Declares the component as a variant of the concept, when asked to. The compilation unit is NOT saved: the declaration is an edit of the
-	 * model like any other, which marks it modified and is saved when the user asks for it.
+	 * Declares the component: as the named variant chosen in the wizard, or - when the reader did not ask for one - as the concept's
+	 * DEFAULT view. Either way an explicit <code>@UI</code> annotation is always written, so that nothing here relies on the naming
+	 * convention any more: a later rename of the concept can never orphan a component this action created. The compilation unit is NOT
+	 * saved: the declaration is an edit of the model like any other, which marks it modified and is saved when the user asks for it.
 	 */
 	@Override
 	protected void componentCreated(FlexoConcept concept, CompilationUnitResource compilationUnitResource) throws FlexoException {
-		if (getDeclareAsVariant()) {
-			declareVariant(concept);
-		}
+		declareComponent(concept, getDeclareAsVariant() ? getVariantName() : FlexoConcept.DEFAULT_VARIANT);
 	}
 
 	/**
@@ -223,6 +223,17 @@ public class CreateFIBComponent extends AbstractCreateFIBComponent<CreateFIBComp
 	 * variant would lose it. Public because it only changes the model: it is what a test can assert on without writing the FML source.
 	 */
 	public void declareVariant(FlexoConcept concept) {
+		declareComponent(concept, getVariantName());
+	}
+
+	/**
+	 * Declare the component under an arbitrary variant key: <code>@UI(&lt;variantKey&gt;="&lt;component&gt;")</code>, converting a
+	 * pre-existing single-valued <code>@UI("A.fib")</code> into the multi-valued form first, so that declaring a second variant never
+	 * loses the default the concept already had. What both {@link #declareVariant(FlexoConcept)} (a named variant) and
+	 * {@link #componentCreated} (the default view, {@link FlexoConcept#DEFAULT_VARIANT}) delegate to. Public for the same reason
+	 * {@link #declareVariant(FlexoConcept)} is: a test can assert on the model without writing the FML source.
+	 */
+	public void declareComponent(FlexoConcept concept, String variantKey) {
 
 		MultiValuedMetaData metaData = concept.getMultiValuedMetaData(FlexoConcept.UI_METADATA);
 
@@ -237,11 +248,11 @@ public class CreateFIBComponent extends AbstractCreateFIBComponent<CreateFIBComp
 			if (StringUtils.isNotEmpty(defaultComponent)) {
 				metaData.setValue(FlexoConcept.DEFAULT_VARIANT, defaultComponent, String.class);
 			}
-			metaData.setValue(getVariantName(), getComponentName(), String.class);
+			metaData.setValue(variantKey, getComponentName(), String.class);
 			concept.addToMetaData(metaData);
 		}
 		else {
-			metaData.setValue(getVariantName(), getComponentName(), String.class);
+			metaData.setValue(variantKey, getComponentName(), String.class);
 		}
 
 		// Tell whoever shows the FML source: the FML editor listens to "FMLPrettyPrint" on the compilation unit, which setIsModified() fires

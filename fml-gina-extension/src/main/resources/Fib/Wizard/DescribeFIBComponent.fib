@@ -63,9 +63,9 @@
 		<Localized key="component_name" lang="Dutch" value="Naam van de component" />
 		<Localized key="use_tabbed_panel" lang="English" value="Use a tabbed panel" />
 		<Localized key="use_tabbed_panel" lang="French" value="Utiliser un panneau à onglets" />
-		<Localized key="declare_as_variant" lang="English" value="Declare as a variant of the concept" />
-		<Localized key="declare_as_variant" lang="French" value="Déclarer comme variante du concept" />
-		<Localized key="declare_as_variant" lang="Dutch" value="Declareren als variant van het concept" />
+		<Localized key="declare_as_variant" lang="English" value="Declare as a named variant" />
+		<Localized key="declare_as_variant" lang="French" value="Déclarer comme variante nommée" />
+		<Localized key="declare_as_variant" lang="Dutch" value="Declareren als benoemde variant" />
 		<Localized key="variant_name" lang="English" value="Variant name" />
 		<Localized key="variant_name" lang="French" value="Nom de la variante" />
 		<Localized key="variant_name" lang="Dutch" value="Naam van de variant" />
