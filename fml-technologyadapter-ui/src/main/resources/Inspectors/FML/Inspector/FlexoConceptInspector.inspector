@@ -181,14 +181,6 @@
 				</Panel>
 			</Panel>
 
-			<Label label="delegate" index="6" 
-				constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-			<Custom componentClassName="org.openflexo.gina.swing.utils.BindingSelector"
-				index="7" data="data.delegateConceptInstance"
-				constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-				<Assignment variable="component.bindable" value="data.formatter" />
-			</Custom>
-
 		</Tab>
 		<Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11"
 			darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true"
