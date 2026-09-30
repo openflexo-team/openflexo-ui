@@ -130,7 +130,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 	private final List<FMLFIBComponent> listenedContainerComponents = new ArrayList<>();
 
 	/**
-	 * The resources of the container components merged so far, listened to for {@link FIBComponentResource#COMPONENT_SAVED_KEY}: the GINA
+	 * The resources of the container components merged so far, listened to for {@link FIBComponentResource#COMPONENT_SAVED_KEY} and {@link FIBComponentResource#COMPONENT_EDITED_KEY}: the GINA
 	 * editor edits a component in place, which nothing else announces.
 	 */
 	private final List<FIBComponentResource> listenedContainerResources = new ArrayList<>();
@@ -138,7 +138,9 @@ public class ModuleInspectorController extends Observable implements Observer {
 	private final PropertyChangeListener containerComponentSavedListener = new PropertyChangeListener() {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getSource() instanceof FIBComponentResource
+			if ((FIBComponentResource.COMPONENT_SAVED_KEY.equals(evt.getPropertyName())
+					|| FIBComponentResource.COMPONENT_EDITED_KEY.equals(evt.getPropertyName()))
+					&& evt.getSource() instanceof FIBComponentResource
 					&& dropInspectorsBuiltFrom((FIBComponentResource) evt.getSource(), flexoConceptInspectors,
 							containerComponentsOfInspectors)) {
 				reinspectCurrentConceptInstance();
@@ -647,8 +649,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 		}
 		listenedContainerComponents.clear();
 		for (FIBComponentResource resource : listenedContainerResources) {
-			resource.getPropertyChangeSupport().removePropertyChangeListener(FIBComponentResource.COMPONENT_SAVED_KEY,
-					containerComponentSavedListener);
+			resource.getPropertyChangeSupport().removePropertyChangeListener(containerComponentSavedListener);
 		}
 		listenedContainerResources.clear();
 		inspectorDialog.delete();
@@ -681,8 +682,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 	private void listenToContainerComponent(FlexoConcept concept) {
 		FIBComponentResource componentResource = concept.getInspectorComponentFlexoResource();
 		if (componentResource != null && !listenedContainerResources.contains(componentResource)) {
-			componentResource.getPropertyChangeSupport().addPropertyChangeListener(FIBComponentResource.COMPONENT_SAVED_KEY,
-					containerComponentSavedListener);
+			componentResource.getPropertyChangeSupport().addPropertyChangeListener(containerComponentSavedListener);
 			listenedContainerResources.add(componentResource);
 		}
 		FMLFIBComponent resourceData = componentResource != null ? componentResource.getLoadedResourceData() : null;
