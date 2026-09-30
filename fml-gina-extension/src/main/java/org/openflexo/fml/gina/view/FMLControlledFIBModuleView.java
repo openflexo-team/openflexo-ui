@@ -67,8 +67,7 @@ import org.openflexo.view.controller.model.FlexoPerspective;
  * <code>&lt;ConceptName&gt;.fib</code>. Since a VirtualModel is a {@link FlexoConcept}, the same class serves a VirtualModelInstance.
  *
  * <p>
- * Because it hangs off the FML-RT adapter controller rather than off a dedicated perspective, every module gets it without declaring
- * anything.
+ * It is shown by the GUI perspective ({@link org.openflexo.fml.gina.controller.FMLGUIPerspective}), not by the textual FML one.
  *
  * @author sylvain
  */

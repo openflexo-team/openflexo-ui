@@ -105,6 +105,16 @@ public class FMLGINAPlugin extends TechnologyAdapterPluginController<FMLTechnolo
 		return FMLTechnologyAdapter.class;
 	}
 
+	/**
+	 * The user interface of an instance belongs to the GUI perspective ({@link org.openflexo.fml.gina.controller.FMLGUIPerspective}) and
+	 * to the nature-based perspectives: the textual FML perspective shows the generic views. The GINA component editor, on the other hand,
+	 * is available from every perspective.
+	 */
+	@Override
+	public boolean isPerspectiveScoped(FlexoObject object) {
+		return !(object instanceof FMLFIBComponent);
+	}
+
 	@Override
 	protected String getLocalizationDirectory() {
 		return "FlexoLocalization/FMLGINAPlugin";

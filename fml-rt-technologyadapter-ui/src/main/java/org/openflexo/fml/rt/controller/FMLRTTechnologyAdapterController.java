@@ -318,7 +318,7 @@ public class FMLRTTechnologyAdapterController extends TechnologyAdapterControlle
 	public boolean isRepresentableInModuleView(TechnologyObject<FMLRTTechnologyAdapter> object) {
 
 		for (TechnologyAdapterPluginController<?> plugin : getTechnologyAdapterControllerService().getActivatedPlugins()) {
-			if (plugin.isRepresentableInModuleView(object)) {
+			if (!plugin.isPerspectiveScoped(object) && plugin.isRepresentableInModuleView(object)) {
 				return true;
 			}
 		}
@@ -332,7 +332,7 @@ public class FMLRTTechnologyAdapterController extends TechnologyAdapterControlle
 	@Override
 	public FlexoObject getRepresentableMasterObject(TechnologyObject<FMLRTTechnologyAdapter> object) {
 		for (TechnologyAdapterPluginController<?> plugin : getTechnologyAdapterControllerService().getActivatedPlugins()) {
-			if (plugin.isRepresentableInModuleView(object)) {
+			if (!plugin.isPerspectiveScoped(object) && plugin.isRepresentableInModuleView(object)) {
 				// The PLUGIN decides: calling this very method again with the same object recursed forever, as soon as a plugin
 				// claimed an FML-RT object - the first to do so being FMLGINAPlugin, for an instance of a concept that has a .fib
 				return plugin.getRepresentableMasterObject(object);
@@ -368,13 +368,13 @@ public class FMLRTTechnologyAdapterController extends TechnologyAdapterControlle
 			FlexoPerspective perspective) {
 
 		for (TechnologyAdapterPluginController<?> plugin : getTechnologyAdapterControllerService().getActivatedPlugins()) {
-			if (plugin.isRepresentableInModuleView(object)) {
+			if (!plugin.isPerspectiveScoped(object) && plugin.isRepresentableInModuleView(object)) {
 				return plugin.createModuleViewForMasterObject(object, controller, perspective);
 			}
 		}
 
-		// A user interface stored in the Xxx.fml/ container of the VirtualModel wins over the generic views. That is
-		// served by the FML/GINA extension, through the plugin loop above - see FMLGINAPlugin.
+		// A user interface stored in the Xxx.fml/ container of the VirtualModel is NOT served from here: FMLGINAPlugin is
+		// perspective-scoped, so it is only asked by the GUI perspective (and the nature-based ones), never by the FML one.
 
 		if (object instanceof FMLRTVirtualModelInstance) {
 			FMLRTVirtualModelInstance vmi = (FMLRTVirtualModelInstance) object;

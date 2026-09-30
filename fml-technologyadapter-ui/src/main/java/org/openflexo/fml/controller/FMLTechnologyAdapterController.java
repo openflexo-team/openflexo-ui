@@ -529,7 +529,7 @@ public class FMLTechnologyAdapterController extends TechnologyAdapterController<
 	public boolean isRepresentableInModuleView(TechnologyObject<FMLTechnologyAdapter> object) {
 
 		for (TechnologyAdapterPluginController<?> plugin : getTechnologyAdapterControllerService().getActivatedPlugins()) {
-			if (plugin.isRepresentableInModuleView(object)) {
+			if (!plugin.isPerspectiveScoped(object) && plugin.isRepresentableInModuleView(object)) {
 				return true;
 			}
 		}
@@ -545,7 +545,7 @@ public class FMLTechnologyAdapterController extends TechnologyAdapterController<
 	public FlexoObject getRepresentableMasterObject(TechnologyObject<FMLTechnologyAdapter> object) {
 
 		for (TechnologyAdapterPluginController<?> plugin : getTechnologyAdapterControllerService().getActivatedPlugins()) {
-			if (plugin.isRepresentableInModuleView(object)) {
+			if (!plugin.isPerspectiveScoped(object) && plugin.isRepresentableInModuleView(object)) {
 				return plugin.getRepresentableMasterObject(object);
 			}
 		}
@@ -571,7 +571,7 @@ public class FMLTechnologyAdapterController extends TechnologyAdapterController<
 			FlexoPerspective perspective) {
 
 		for (TechnologyAdapterPluginController<?> plugin : getTechnologyAdapterControllerService().getActivatedPlugins()) {
-			if (plugin.isRepresentableInModuleView(object)) {
+			if (!plugin.isPerspectiveScoped(object) && plugin.isRepresentableInModuleView(object)) {
 				return plugin.createModuleViewForMasterObject(object, controller, perspective);
 			}
 		}
