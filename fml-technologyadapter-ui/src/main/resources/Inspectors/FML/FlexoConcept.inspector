@@ -16,6 +16,15 @@
 				constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)"
 				name="Name" localize="true" columns="10" validateOnReturn="true" />
 
+			<Label name="RendererLabel" label="renderer" index="2"
+				constraints="twocols(expandHorizontally=true;expandVertically=false;location=left)"
+				localize="true" />
+			<Custom name="RendererSelector" componentClassName="org.openflexo.gina.swing.utils.JavaBindingSelector"
+				localize="true" manageDynamicModel="true" opaque="false" index="3" data="data.renderer"
+				constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)">
+				<Assignment variable="component.bindable" value="data.rendererContext" />
+			</Custom>
+
 			<Label name="AbstractLabel" label="abstract_concept" index="10"
 				constraints="twocols(expandHorizontally=true;expandVertically=false;location=left)"
 				localize="true" />
@@ -318,6 +327,9 @@
 		<Localized key="name" lang="English" value="Name" />
 		<Localized key="name" lang="French" value="Nom" />
 		<Localized key="name" lang="Dutch" value="Name" />
+		<Localized key="renderer" lang="English" value="Renderer" />
+		<Localized key="renderer" lang="French" value="Représentation" />
+		<Localized key="renderer" lang="Dutch" value="Renderer" />
 		<Localized key="abstract_concept" lang="English" value="Abstract concept" />
 		<Localized key="abstract_concept" lang="French" value="Concept abstrait" />
 		<Localized key="abstract_concept" lang="Dutch" value="Abstract concept" />
