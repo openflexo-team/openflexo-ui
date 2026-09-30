@@ -255,6 +255,16 @@ public abstract class Wizard implements HasPropertyChangeSupport {
 		return null;
 	}
 
+	/**
+	 * Please override when you want a wizard a bit larger than what its content requires, without fixing its size: the dialog is sized
+	 * to its content as usual, then enlarged by this dimension. Ignored when {@link #getPreferredSize()} is defined.
+	 * 
+	 * @return the width and height to add to the dialog, or null (default)
+	 */
+	public Dimension getExtraSize() {
+		return null;
+	}
+
 	public void cancel() {
 		if (getCurrentStep() != null) {
 			getCurrentStep().cancelled();
