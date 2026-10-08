@@ -16,6 +16,8 @@ import static org.junit.Assert.assertTrue;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,7 +76,7 @@ public class TestContainerInspectors extends OpenflexoTestCase {
 		virtualModel = resource.getCompilationUnit().getVirtualModel();
 		assertNotNull(virtualModel);
 		// A failed parse leaves an EMPTY compilation unit behind, which validates with zero errors
-		assertEquals("The fixture did not parse", 11, virtualModel.getFlexoConcepts().size());
+		assertEquals("The fixture did not parse", 21, virtualModel.getFlexoConcepts().size());
 
 	}
 
@@ -303,18 +305,18 @@ public class TestContainerInspectors extends OpenflexoTestCase {
 		assertNotSame(simpleResource, plainResource);
 
 		Map<FlexoConcept, FIBInspector> inspectors = new HashMap<>();
-		Map<FlexoConcept, FIBComponent> builtFrom = new HashMap<>();
+		Map<FlexoConcept, List<FIBComponent>> builtFrom = new HashMap<>();
 		inspectors.put(simple, makeClassInspectorStandIn());
-		builtFrom.put(simple, simpleResource.getComponent());
+		builtFrom.put(simple, Collections.singletonList(simpleResource.getComponent()));
 		inspectors.put(plain, makeClassInspectorStandIn());
-		builtFrom.put(plain, plainResource.getComponent());
+		builtFrom.put(plain, Collections.singletonList(plainResource.getComponent()));
 
 		// The editor's kind of edit: same component, changed content. Nothing tells the identity check.
 		FIBComponent edited = ((FIBContainer) simpleResource.getComponent()).getSubComponents().get(0);
 		String name = edited.getName();
 		edited.setName("EditedInPlace");
 		try {
-			assertSame(builtFrom.get(simple), simpleResource.getComponent());
+			assertSame(builtFrom.get(simple).get(0), simpleResource.getComponent());
 			assertTrue(ModuleInspectorController.dropInspectorsBuiltFrom(simpleResource, inspectors, builtFrom));
 		} finally {
 			edited.setName(name);
@@ -344,6 +346,222 @@ public class TestContainerInspectors extends OpenflexoTestCase {
 			resource.getPropertyChangeSupport().removePropertyChangeListener(FIBComponentResource.COMPONENT_SAVED_KEY, listener);
 		}
 		assertEquals(1, events.size());
+	}
+
+	// ---- Additive inspector: the inspector of an instance composes those of its whole concept hierarchy ----
+
+	/** A single contribution is merged as before, as the tab of its own component. */
+	@Test
+	@TestOrder(13)
+	public void test12HierarchyOfOneComponentIsMergedAsBefore() {
+
+		FIBTabPanel tabPanel = composed("InspParent");
+		assertNotNull("The container tab was not merged in", tabPanel.getSubComponentNamed("InspParentInspectorTab"));
+	}
+
+	/** Ancestor first, the index of the widgets deciding: parentName(100), childName(150), parentNote(200), childNote(300). */
+	@Test
+	@TestOrder(14)
+	public void test13ChildIsComposedWithItsParentByIndex() {
+
+		FIBContainer tab = composedTab("InspChild");
+		assertEquals(Arrays.asList("parentNameLabel", "parentNameWidget", "childNameLabel", "childNameWidget", "parentNoteLabel",
+				"parentNoteWidget", "childNoteLabel", "childNoteWidget"), names(tab));
+		assertEquals("ONE tab, titled after the concept of the instance", "InspChild", ((FIBTab) tab).getTitle());
+	}
+
+	/**
+	 * Three generations. grandName has the SAME index as parentName and stays after it; grandNote has none and comes before the indexed
+	 * ones (after the negative ones only).
+	 */
+	@Test
+	@TestOrder(15)
+	public void test14EqualIndexKeepsAncestorFirstAndNoIndexComesBeforePositives() {
+
+		assertEquals(Arrays.asList("grandNoteLabel", "grandNoteWidget", "parentNameLabel", "parentNameWidget", "grandNameLabel",
+				"grandNameWidget", "childNameLabel", "childNameWidget", "parentNoteLabel", "parentNoteWidget", "childNoteLabel",
+				"childNoteWidget"), names(composedTab("InspGrandChild")));
+	}
+
+	/** A concept with no inspector of its own still shows its ancestors', in a tab titled after IT. */
+	@Test
+	@TestOrder(16)
+	public void test15ConceptWithoutInspectorShowsItsAncestors() {
+
+		FIBContainer tab = composedTab("InspNoInspector");
+		assertEquals(names(composedTab("InspChild")), names(tab));
+		assertEquals("InspNoInspector", ((FIBTab) tab).getTitle());
+	}
+
+	/** Several parents: negative index first, then the no-index one, then 50 (before the common ancestor's 100), the ancestor once. */
+	@Test
+	@TestOrder(17)
+	public void test16DiamondComposesEveryParentOnce() {
+
+		assertEquals(Arrays.asList("rightNameLabel", "rightNameWidget", "leftNameLabel", "leftNameWidget", "diamondNameLabel",
+				"diamondNameWidget", "parentNameLabel", "parentNameWidget", "parentNoteLabel", "parentNoteWidget"),
+				names(composedTab("InspDiamond")));
+	}
+
+	/** Every contributed widget resolves against the INSTANCE's concept, whichever ancestor it comes from. */
+	@Test
+	@TestOrder(18)
+	public void test17EveryComposedBindingIsValid() {
+
+		for (String name : Arrays.asList("InspChild", "InspGrandChild", "InspNoInspector", "InspDiamond")) {
+			for (FIBComponent widget : composedTab(name).getSubComponents()) {
+				if (widget instanceof FIBWidget && !(widget instanceof org.openflexo.gina.model.widget.FIBLabel)) {
+					assertBindingIsValid(widget);
+				}
+			}
+		}
+	}
+
+	/** Composing works on clones: no component of a resource is emptied, and none of them is bound to a descendant. */
+	@Test
+	@TestOrder(19)
+	public void test18ComposingLeavesTheSharedComponentsUntouched() {
+
+		composedTab("InspGrandChild");
+		for (String name : Arrays.asList("InspParent", "InspChild", "InspGrandChild")) {
+			assertResourceComponentUntouched(concept(name));
+		}
+	}
+
+	/** A widget named like an ancestor's replaces it: the descendant redefines. Here the same component is contributed twice. */
+	@Test
+	@TestOrder(20)
+	public void test19WidgetWithTheSameNameRedefinesTheAncestorOne() {
+
+		FlexoConcept plain = concept("Plain");
+		FIBContainer plainComponent = (FIBContainer) FMLControlledComponent.loadInspectorComponent(plain, null);
+
+		FIBInspector classInspector = makeClassInspectorStandIn();
+		ModuleInspectorController.mergeContainerInspectors(classInspector, Arrays.asList(plainComponent, plainComponent), plain, null);
+
+		FIBContainer tab = (FIBContainer) classInspector.getTabPanel().getSubComponentNamed("PlainPanel");
+		assertEquals(Arrays.asList("descriptionLabel", "descriptionWidget"), names(tab));
+	}
+
+	/** Saving the component of an ANCESTOR drops the cached inspector of its descendants, and of nothing else. */
+	@Test
+	@TestOrder(21)
+	public void test20SavingAnAncestorComponentDropsTheDescendantsInspectors() {
+
+		FlexoConcept parent = concept("InspParent");
+		FlexoConcept child = concept("InspChild");
+		FlexoConcept simple = concept("Simple");
+
+		Map<FlexoConcept, FIBInspector> inspectors = new HashMap<>();
+		Map<FlexoConcept, List<FIBComponent>> builtFrom = new HashMap<>();
+		builtFrom.put(child, Arrays.asList(parent.getInspectorComponentFlexoResource().getComponent(),
+				child.getInspectorComponentFlexoResource().getComponent()));
+		builtFrom.put(simple, Collections.singletonList(simple.getInspectorComponentFlexoResource().getComponent()));
+		inspectors.put(child, makeClassInspectorStandIn());
+		inspectors.put(simple, makeClassInspectorStandIn());
+
+		assertTrue(ModuleInspectorController.dropInspectorsBuiltFrom(parent.getInspectorComponentFlexoResource(), inspectors, builtFrom));
+
+		assertFalse("The child inspector was built from the parent's component", inspectors.containsKey(child));
+		assertTrue(inspectors.containsKey(simple));
+	}
+
+	// ---- Named tabs: tabs of the same name are merged along the hierarchy ----
+
+	/** Single and Advanced of the parent and of the child give ONE Single and ONE Advanced, each with the widgets of both. */
+	@Test
+	@TestOrder(22)
+	public void test21TabsOfTheSameNameAreMerged() {
+
+		FIBTabPanel tabPanel = composed("InspTabsChild");
+
+		assertEquals(Arrays.asList("Single", "Advanced", "Extra", "BasicTab"), names(tabPanel));
+
+		// Index decides inside a merged tab: the parent's 1 before the child's 2
+		assertEquals(Arrays.asList("singleParentLabel", "singleParentWidget", "singleChildLabel", "singleChildWidget"),
+				names((FIBContainer) tabPanel.getSubComponentNamed("Single")));
+		assertEquals(Arrays.asList("advancedParentLabel", "advancedParentWidget", "advancedChildLabel", "advancedChildWidget"),
+				names((FIBContainer) tabPanel.getSubComponentNamed("Advanced")));
+	}
+
+	/** A tab only the child has stays a tab of its own, after the ancestors' tabs. */
+	@Test
+	@TestOrder(23)
+	public void test22TabOfOneSideOnlyIsKept() {
+
+		FIBContainer extra = (FIBContainer) composed("InspTabsChild").getSubComponentNamed("Extra");
+		assertEquals(Arrays.asList("extraChildLabel", "extraChildWidget"), names(extra));
+	}
+
+	/** The title of a merged tab is the most specialized one. */
+	@Test
+	@TestOrder(24)
+	public void test23MergedTabTakesTheTitleOfTheDescendant() {
+
+		FIBTabPanel tabPanel = composed("InspTabsChild");
+		assertEquals("Single (child)", ((FIBTab) tabPanel.getSubComponentNamed("Single")).getTitle());
+		assertEquals("Advanced", ((FIBTab) tabPanel.getSubComponentNamed("Advanced")).getTitle());
+	}
+
+	/** A component declaring ONE tab - whatever its name - contributes to the FIRST tab. */
+	@Test
+	@TestOrder(25)
+	public void test24SingleTabComponentJoinsTheFirstTab() {
+
+		FIBTabPanel tabPanel = composed("InspTabsMixed");
+
+		assertEquals(Arrays.asList("Single", "Advanced", "Extra", "BasicTab"), names(tabPanel));
+		assertEquals(Arrays.asList("singleParentLabel", "singleParentWidget", "singleChildLabel", "singleChildWidget",
+				"mixedWidgetLabel", "mixedWidgetWidget"), names((FIBContainer) tabPanel.getSubComponentNamed("Single")));
+	}
+
+	/** Bindings of every tab composed from named tabs resolve against the instance's concept. */
+	@Test
+	@TestOrder(26)
+	public void test25EveryNamedTabBindingIsValid() {
+
+		for (String name : Arrays.asList("InspTabsChild", "InspTabsMixed")) {
+			for (FIBComponent tab : composed(name).getSubComponents()) {
+				if ("BasicTab".equals(tab.getName())) {
+					continue;
+				}
+				for (FIBComponent widget : ((FIBContainer) tab).getSubComponents()) {
+					if (widget instanceof FIBWidget && !(widget instanceof org.openflexo.gina.model.widget.FIBLabel)) {
+						assertBindingIsValid(widget);
+					}
+				}
+			}
+		}
+		assertResourceComponentUntouched(concept("InspTabsParent"));
+		assertResourceComponentUntouched(concept("InspTabsChild"));
+	}
+
+	/** The inspector the controller builds for supplied concept: its whole hierarchy composed into the class inspector stand-in. */
+	private FIBTabPanel composed(String conceptName) {
+		FlexoConcept concept = concept(conceptName);
+		List<FIBContainer> containers = new ArrayList<>();
+		for (FlexoConcept contributor : concept.getInspectorContributingConcepts()) {
+			containers.add((FIBContainer) FMLControlledComponent.loadInspectorComponent(contributor, null));
+		}
+		FIBInspector classInspector = makeClassInspectorStandIn();
+		ModuleInspectorController.mergeContainerInspectors(classInspector, containers, concept, null);
+		assertEquals("Something was appended at the root of the class inspector", 1, classInspector.getSubComponents().size());
+		return classInspector.getTabPanel();
+	}
+
+	/** The tab holding the composed widgets: the first one, where the legacy tab went. */
+	private FIBContainer composedTab(String conceptName) {
+		FIBComponent tab = composed(conceptName).getSubComponents().get(0);
+		assertEquals(conceptName + "Panel", tab.getName());
+		return (FIBContainer) tab;
+	}
+
+	private static List<String> names(FIBContainer container) {
+		List<String> returned = new ArrayList<>();
+		for (FIBComponent c : container.getSubComponents()) {
+			returned.add(c.getName());
+		}
+		return returned;
 	}
 
 	/**

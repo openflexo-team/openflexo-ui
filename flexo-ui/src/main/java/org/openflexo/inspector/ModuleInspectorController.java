@@ -44,11 +44,13 @@ import java.awt.event.ComponentEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Logger;
@@ -118,10 +120,12 @@ public class ModuleInspectorController extends Observable implements Observer {
 	private final Map<FlexoConcept, FIBInspector> flexoConceptInspectors;
 
 	/**
-	 * For each concept whose inspector is cached, the container component it was built from - null when it was built without one. A cached
-	 * inspector is stale as soon as the component its concept resolves to is no longer that one: see {@link #isStale(FlexoConcept, Map)}.
+	 * For each concept whose inspector is cached, the container components it was built from - those of its whole concept hierarchy, the
+	 * most general first (see {@link FlexoConcept#getInspectorComponentResources()}); empty when it was built without any. A cached
+	 * inspector is stale as soon as the components its concept resolves to are no longer those ones: see
+	 * {@link #isStale(FlexoConcept, Map, Function)}.
 	 */
-	private final Map<FlexoConcept, FIBComponent> containerComponentsOfInspectors = new HashMap<>();
+	private final Map<FlexoConcept, List<FIBComponent>> containerComponentsOfInspectors = new HashMap<>();
 
 	/**
 	 * The resource data of the container components merged so far, listened to so that the inspected object is shown again with the new
@@ -428,7 +432,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 			return null;
 		}
 		FIBInspector returned = flexoConceptInspectors.get(concept);
-		if (returned != null && !isStale(concept, containerComponentsOfInspectors)) {
+		if (returned != null && !isStale(concept, containerComponentsOfInspectors, ModuleInspectorController::currentHierarchyComponents)) {
 			return returned;
 		}
 		else {
@@ -441,12 +445,23 @@ public class ModuleInspectorController extends Observable implements Observer {
 			// A .inspector shipped by the container of the concept wins over the tab generated from the deprecated
 			// FlexoConceptInspector entries. append() merges by component name, so its <TabPanel name="Tab"> lands in
 			// the TabPanel this inspector already has - the same way a super inspector is merged in.
-			FIBComponent containerInspector = loadContainerInspector(concept);
+			// The inspector is ADDITIVE: the components of the whole hierarchy, ancestors first, then the concept's own
+			List<FIBComponent> loaded = new ArrayList<>();
+			List<FIBContainer> containers = new ArrayList<>();
+			for (FlexoConcept contributor : concept.getInspectorContributingConcepts()) {
+				FIBComponent component = loadContainerInspector(contributor);
+				if (component != null) {
+					loaded.add(component);
+					if (component instanceof FIBContainer) {
+						containers.add((FIBContainer) component);
+					}
+				}
+			}
 
-			containerComponentsOfInspectors.put(concept, containerInspector);
+			containerComponentsOfInspectors.put(concept, loaded);
 
-			if (containerInspector instanceof FIBContainer) {
-				mergeContainerInspector(returned, (FIBContainer) containerInspector, concept, customTypeEditorProvider());
+			if (!containers.isEmpty()) {
+				mergeContainerInspectors(returned, containers, concept, customTypeEditorProvider());
 				listenToContainerComponent(concept);
 				flexoConceptInspectors.put(concept, returned);
 				// No FlexoConceptInstanceInspectorUpdater here: there are no InspectorEntry to listen to, and asking
@@ -665,14 +680,41 @@ public class ModuleInspectorController extends Observable implements Observer {
 	 * <p>
 	 * Checked on every lookup rather than only notified, because a component that APPEARS has no resource data to listen to beforehand.
 	 */
-	private static boolean isStale(FlexoConcept concept, Map<FlexoConcept, FIBComponent> containerComponentsInUse) {
+	private static boolean isStale(FlexoConcept concept, Map<FlexoConcept, List<FIBComponent>> containerComponentsInUse,
+			Function<FlexoConcept, List<FIBComponent>> currentComponents) {
 		if (!containerComponentsInUse.containsKey(concept)) {
 			// Never recorded: built before this check existed for it, nothing to compare with
 			return false;
 		}
-		FIBComponentResource componentResource = concept.getInspectorComponentFlexoResource();
-		FIBComponent current = componentResource != null ? componentResource.getComponent() : null;
-		return current != containerComponentsInUse.get(concept);
+		List<FIBComponent> inUse = containerComponentsInUse.get(concept);
+		List<FIBComponent> current = currentComponents.apply(concept);
+		if (inUse.size() != current.size()) {
+			return true;
+		}
+		for (int i = 0; i < inUse.size(); i++) {
+			if (inUse.get(i) != current.get(i)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/** The components the inspector of supplied concept is made of now: those of its whole hierarchy, the most general first. */
+	private static List<FIBComponent> currentHierarchyComponents(FlexoConcept concept) {
+		List<FIBComponent> returned = new ArrayList<>();
+		for (FIBComponentResource resource : concept.getInspectorComponentFlexoResources()) {
+			if (resource.getComponent() != null) {
+				returned.add(resource.getComponent());
+			}
+		}
+		return returned;
+	}
+
+	/** The single component {@link FlexoConcept#getInspectorComponentFlexoResource()} gives, for what is not composed. */
+	private static List<FIBComponent> currentSingleComponent(FlexoConcept concept) {
+		FIBComponentResource resource = concept.getInspectorComponentFlexoResource();
+		FIBComponent component = resource != null ? resource.getComponent() : null;
+		return component != null ? Collections.singletonList(component) : Collections.<FIBComponent> emptyList();
 	}
 
 	/**
@@ -680,15 +722,17 @@ public class ModuleInspectorController extends Observable implements Observer {
 	 * again - with an inspector rebuilt from the new component, since the cached one is then stale.
 	 */
 	private void listenToContainerComponent(FlexoConcept concept) {
-		FIBComponentResource componentResource = concept.getInspectorComponentFlexoResource();
-		if (componentResource != null && !listenedContainerResources.contains(componentResource)) {
-			componentResource.getPropertyChangeSupport().addPropertyChangeListener(containerComponentSavedListener);
-			listenedContainerResources.add(componentResource);
-		}
-		FMLFIBComponent resourceData = componentResource != null ? componentResource.getLoadedResourceData() : null;
-		if (resourceData != null && !listenedContainerComponents.contains(resourceData)) {
-			resourceData.getPropertyChangeSupport().addPropertyChangeListener(containerComponentListener);
-			listenedContainerComponents.add(resourceData);
+		// Every component of the hierarchy: saving an ancestor's inspector makes the cached inspector of its descendants stale
+		for (FIBComponentResource componentResource : concept.getInspectorComponentFlexoResources()) {
+			if (!listenedContainerResources.contains(componentResource)) {
+				componentResource.getPropertyChangeSupport().addPropertyChangeListener(containerComponentSavedListener);
+				listenedContainerResources.add(componentResource);
+			}
+			FMLFIBComponent resourceData = componentResource.getLoadedResourceData();
+			if (resourceData != null && !listenedContainerComponents.contains(resourceData)) {
+				resourceData.getPropertyChangeSupport().addPropertyChangeListener(containerComponentListener);
+				listenedContainerComponents.add(resourceData);
+			}
 		}
 	}
 
@@ -699,18 +743,27 @@ public class ModuleInspectorController extends Observable implements Observer {
 	 * @return whether anything was dropped
 	 */
 	static boolean dropInspectorsBuiltFrom(FIBComponentResource resource, Map<FlexoConcept, FIBInspector> inspectors,
-			Map<FlexoConcept, FIBComponent> builtFrom) {
+			Map<FlexoConcept, List<FIBComponent>> builtFrom) {
 		FIBComponent saved = resource.getComponent();
 		boolean dropped = false;
-		for (Iterator<Map.Entry<FlexoConcept, FIBComponent>> i = builtFrom.entrySet().iterator(); i.hasNext();) {
-			Map.Entry<FlexoConcept, FIBComponent> entry = i.next();
-			if (saved != null && entry.getValue() == saved) {
+		for (Iterator<Map.Entry<FlexoConcept, List<FIBComponent>>> i = builtFrom.entrySet().iterator(); i.hasNext();) {
+			Map.Entry<FlexoConcept, List<FIBComponent>> entry = i.next();
+			if (saved != null && containsSame(entry.getValue(), saved)) {
 				inspectors.remove(entry.getKey());
 				i.remove();
 				dropped = true;
 			}
 		}
 		return dropped;
+	}
+
+	private static boolean containsSame(List<FIBComponent> components, FIBComponent searched) {
+		for (FIBComponent component : components) {
+			if (component == searched) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void reinspectCurrentConceptInstance() {
@@ -820,6 +873,131 @@ public class ModuleInspectorController extends Observable implements Observer {
 	}
 
 	/**
+	 * Complete supplied class inspector with the inspector of an instance of supplied concept: the container components of its whole
+	 * hierarchy, given the most general first and the concept's own last (see {@link FlexoConcept#getInspectorComponentResources()}).
+	 *
+	 * <p>
+	 * A single component is merged exactly as {@link #mergeContainerInspector} does. Several are composed, the widgets being merged by
+	 * {@link FIBContainer#append(FIBContainer)} so that the <code>index</code> of the widgets decides the order, with an ancestor's
+	 * widget before a descendant's on equal indexes. Tabs are composed like this:
+	 * <ul>
+	 * <li>a component declaring SEVERAL tabs in its TabPanel contributes each of them to the tab of the same <b>name</b>: the tabs
+	 * <code>Single</code> and <code>Advanced</code> of a parent and of a child give a <code>Single</code> and an <code>Advanced</code>
+	 * tab, each made of the widgets of both. A tab the other components do not have is kept as a tab of its own, after the tabs of the
+	 * ancestors. The title of a merged tab is the most specialized one;</li>
+	 * <li>a component declaring a SINGLE tab - or a plain panel, which is what the generated inspectors are - contributes its widgets to
+	 * the FIRST tab composed so far, whatever its name; if there is none yet, the widgets make a tab of their own, named
+	 * <code>&lt;Concept&gt;Panel</code> and titled after the concept.</li>
+	 * </ul>
+	 * A widget NAMED like one an ancestor contributed to the same tab replaces it, the descendant redefining what the ancestor says.
+	 *
+	 * <p>
+	 * Every contributed widget is bound to the concept of the INSTANCE, a subtype of every ancestor: <code>data.x</code> of an ancestor
+	 * still resolves. As in {@link #mergeContainerInspector}, clones are composed and the components of the resources are left untouched.
+	 *
+	 * <p>
+	 * Public so that a test can compose the inspector of a concept without a {@link FlexoController}.
+	 *
+	 * @param containerInspectors
+	 *            the components, ancestors first; not empty
+	 */
+	public static void mergeContainerInspectors(FIBInspector classInspector, List<FIBContainer> containerInspectors, FlexoConcept concept,
+			CustomTypeEditorProvider customTypeEditorProvider) {
+
+		if (containerInspectors.size() == 1) {
+			mergeContainerInspector(classInspector, containerInspectors.get(0), concept, customTypeEditorProvider);
+			return;
+		}
+
+		FIBTabPanel classTabPanel = classInspector.getTabPanel();
+		List<FIBTab> composedTabs = new ArrayList<>();
+
+		for (FIBContainer containerInspector : containerInspectors) {
+
+			// The clone is ours: append() re-parents its widgets
+			FIBContainer contributed = (FIBContainer) containerInspector.cloneObject();
+
+			List<FIBContainer> tabs = new ArrayList<>();
+			FIBComponent containerTabPanel = contributed.getSubComponentNamed(CONTAINER_TAB_PANEL_NAME);
+			if (containerTabPanel instanceof FIBTabPanel) {
+				for (FIBComponent contributedTab : ((FIBTabPanel) containerTabPanel).getSubComponents()) {
+					if (contributedTab instanceof FIBContainer) {
+						tabs.add((FIBContainer) contributedTab);
+					}
+				}
+			}
+
+			if (tabs.size() > 1) {
+				// Several tabs: each one is merged by name
+				for (FIBContainer source : tabs) {
+					FIBTab target = null;
+					for (FIBTab composed : composedTabs) {
+						if (source.getName() != null && source.getName().equals(composed.getName())) {
+							target = composed;
+							break;
+						}
+					}
+					if (target == null) {
+						target = newComposedTab(classInspector, source.getName(), null);
+						composedTabs.add(target);
+					}
+					if (source instanceof FIBTab && ((FIBTab) source).getTitle() != null) {
+						target.setTitle(((FIBTab) source).getTitle());
+					}
+					composeInto(target, source);
+				}
+			}
+			else {
+				// A single tab, or a plain panel: its widgets join the first tab
+				if (composedTabs.isEmpty()) {
+					composedTabs.add(newComposedTab(classInspector, concept.getName() + "Panel", concept.getName()));
+				}
+				composeInto(composedTabs.get(0), tabs.size() == 1 ? tabs.get(0) : contributed);
+			}
+
+			if (contributed.getLocalizedDictionary() != null) {
+				classInspector.retrieveFIBLocalizedDictionary().append(contributed.getLocalizedDictionary());
+			}
+		}
+
+		// Parent first, as mergeContainerInspector() does: bindings of the tab resolve through it while it is being added
+		for (int i = 0; i < composedTabs.size(); i++) {
+			FIBTab tab = composedTabs.get(i);
+			tab.setParent(classTabPanel);
+			classTabPanel.addToSubComponents(tab, null, i);
+			FMLControlledComponent.bindToConcept(tab, concept, customTypeEditorProvider);
+		}
+	}
+
+	private static FIBTab newComposedTab(FIBInspector classInspector, String name, String title) {
+		FIBTab tab = classInspector.getModelFactory().newFIBTab();
+		tab.setName(name);
+		tab.setTitle(title != null ? title : name);
+		tab.setUseScrollBar(true);
+		tab.setLayout(Layout.twocols);
+		return tab;
+	}
+
+	/** Merge the widgets of supplied source - a clone, so it is consumed - into supplied composed tab. */
+	private static void composeInto(FIBTab tab, FIBContainer source) {
+		if (source instanceof FIBPanel && ((FIBPanel) source).getLayout() != null) {
+			tab.setLayout(((FIBPanel) source).getLayout());
+		}
+
+		// append() keeps what is already there when a widget has the same name: the descendant must redefine instead
+		for (FIBComponent child : source.getSubComponents()) {
+			FIBComponent redefined = child.getName() != null ? tab.getSubComponentNamed(child.getName()) : null;
+			if (redefined != null && !(redefined instanceof FIBContainer && child instanceof FIBContainer)) {
+				tab.removeFromSubComponents(redefined);
+			}
+		}
+
+		// The widgets stay where they are, with the constraints (the index!) they were laid out with: moving them out of the
+		// clone one by one rewrites those constraints
+		tab.append(source);
+	}
+
+	/**
 	 * The name of the TabPanel every platform inspector declares, and the key a container inspector's own TabPanel is merged by.
 	 */
 	private static final String CONTAINER_TAB_PANEL_NAME = "Tab";
@@ -855,7 +1033,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 	private Map<FlexoConcept, FIBPanel> flexoConceptInspectorPanels = new HashMap<>();
 
 	/** Same as {@link #containerComponentsOfInspectors}, for {@link #flexoConceptInspectorPanels} */
-	private final Map<FlexoConcept, FIBComponent> containerComponentsOfPanels = new HashMap<>();
+	private final Map<FlexoConcept, List<FIBComponent>> containerComponentsOfPanels = new HashMap<>();
 
 	public FIBPanel getFIBInspectorPanel(FlexoConcept flexoConcept) {
 		return getFIBInspectorPanel(flexoConcept, FlexoFIBController.class);
@@ -863,7 +1041,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 
 	public FIBPanel getFIBInspectorPanel(FlexoConcept flexoConcept, Class<? extends FlexoFIBController> controllerClass) {
 		FIBPanel returned = flexoConceptInspectorPanels.get(flexoConcept);
-		if (returned == null || isStale(flexoConcept, containerComponentsOfPanels)) {
+		if (returned == null || isStale(flexoConcept, containerComponentsOfPanels, ModuleInspectorController::currentSingleComponent)) {
 			returned = makeFIBInspectorPanel(flexoConcept, controllerClass);
 			flexoConceptInspectorPanels.put(flexoConcept, returned);
 		}
@@ -877,7 +1055,8 @@ public class ModuleInspectorController extends Observable implements Observer {
 		// This is what makes a container inspector show up in the standard FML-RT VirtualModelInstanceView, whose
 		// FIBReferencedComponent renders controller.inspectorForFlexoConceptInstance(browser.selected).
 		FIBComponent containerInspector = loadContainerInspector(flexoConcept);
-		containerComponentsOfPanels.put(flexoConcept, containerInspector);
+		containerComponentsOfPanels.put(flexoConcept,
+				containerInspector != null ? Collections.singletonList(containerInspector) : Collections.<FIBComponent> emptyList());
 		if (containerInspector instanceof FIBPanel) {
 			FIBPanel returned = (FIBPanel) containerInspector;
 			if (returned.getControllerClass() == null) {

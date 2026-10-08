@@ -105,7 +105,7 @@ public class TestCreateFIBComponent extends OpenflexoTestCase {
 		compilationUnit = resource.getCompilationUnit();
 		virtualModel = compilationUnit.getVirtualModel();
 		assertNotNull(virtualModel);
-		assertEquals("The fixture did not parse", 11, virtualModel.getFlexoConcepts().size());
+		assertEquals("The fixture did not parse", 21, virtualModel.getFlexoConcepts().size());
 	}
 
 	/** Unlike the inspector, offered even to a concept that already shows a component: a concept may drive several. */

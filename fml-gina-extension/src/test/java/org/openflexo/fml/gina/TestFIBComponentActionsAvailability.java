@@ -83,7 +83,7 @@ public class TestFIBComponentActionsAvailability extends OpenflexoTestCase {
 
 		virtualModel = resource.getCompilationUnit().getVirtualModel();
 		assertNotNull(virtualModel);
-		assertEquals("The fixture did not parse", 11, virtualModel.getFlexoConcepts().size());
+		assertEquals("The fixture did not parse", 21, virtualModel.getFlexoConcepts().size());
 	}
 
 	/** Both actions are registered on both objects a component is reached through. */

@@ -64,7 +64,7 @@ public class TestVirtualModelContainerFolderIsNotDisplayed extends OpenflexoTest
 
 		virtualModel = compilationUnitResource.getCompilationUnit().getVirtualModel();
 		assertNotNull(virtualModel);
-		assertEquals("The fixture did not parse", 11, virtualModel.getFlexoConcepts().size());
+		assertEquals("The fixture did not parse", 21, virtualModel.getFlexoConcepts().size());
 	}
 
 	/**
