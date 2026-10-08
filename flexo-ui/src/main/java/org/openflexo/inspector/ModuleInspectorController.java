@@ -48,6 +48,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -461,7 +464,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 			containerComponentsOfInspectors.put(concept, loaded);
 
 			if (!containers.isEmpty()) {
-				mergeContainerInspectors(returned, containers, concept, customTypeEditorProvider());
+				mergeContainerInspectors(returned, containers, concept, customTypeEditorProvider(), hidesStandardInspectorTabs());
 				listenToContainerComponent(concept);
 				flexoConceptInspectors.put(concept, returned);
 				// No FlexoConceptInstanceInspectorUpdater here: there are no InspectorEntry to listen to, and asking
@@ -791,6 +794,32 @@ public class ModuleInspectorController extends Observable implements Observer {
 	}
 
 	/**
+	 * Whether the inspector of an instance of a concept that ships its own inspector hides the standard tabs of the class inspector (the
+	 * label of the instance and the table of its actors), so that the inspector of the concept is the only thing shown. Asked to the
+	 * controller of the module (see {@link FlexoController#hidesStandardInspectorTabs()}): false outside an application.
+	 */
+	private boolean hidesStandardInspectorTabs() {
+		return getFlexoController() != null && getFlexoController().hidesStandardInspectorTabs();
+	}
+
+	/**
+	 * Remove the tabs the class inspector had before the inspector of a concept was merged into it, except the ones this merge contributed to
+	 * (a tab of the same name received the widgets of the concept: it is the concept's now).
+	 *
+	 * @param standardTabs
+	 *            the tabs of the class inspector, taken BEFORE the merge
+	 * @param contributedTabNames
+	 *            the names of the tabs the merge added or completed
+	 */
+	private static void removeStandardTabs(FIBTabPanel classTabPanel, List<FIBComponent> standardTabs, Set<String> contributedTabNames) {
+		for (FIBComponent standardTab : standardTabs) {
+			if (standardTab.getName() == null || !contributedTabNames.contains(standardTab.getName())) {
+				classTabPanel.removeFromSubComponents(standardTab);
+			}
+		}
+	}
+
+	/**
 	 * The technology adapter controllers, which provide the editors of FML custom types, or null outside an application.
 	 */
 	private CustomTypeEditorProvider customTypeEditorProvider() {
@@ -826,9 +855,20 @@ public class ModuleInspectorController extends Observable implements Observer {
 	 */
 	static void mergeContainerInspector(FIBInspector classInspector, FIBContainer containerInspector, FlexoConcept concept,
 			CustomTypeEditorProvider customTypeEditorProvider) {
+		mergeContainerInspector(classInspector, containerInspector, concept, customTypeEditorProvider, false);
+	}
+
+	/**
+	 * @param hideStandardTabs
+	 *            whether the tabs the class inspector had are removed once the inspector of the concept is merged in: it is then the only
+	 *            one shown
+	 */
+	static void mergeContainerInspector(FIBInspector classInspector, FIBContainer containerInspector, FlexoConcept concept,
+			CustomTypeEditorProvider customTypeEditorProvider, boolean hideStandardTabs) {
 
 		FIBContainer contributed = (FIBContainer) containerInspector.cloneObject();
 		FIBTabPanel classTabPanel = classInspector.getTabPanel();
+		List<FIBComponent> standardTabs = classTabPanel != null ? new ArrayList<>(classTabPanel.getSubComponents()) : new ArrayList<>();
 
 		FIBComponent containerTabPanel = contributed.getSubComponentNamed(CONTAINER_TAB_PANEL_NAME);
 
@@ -842,6 +882,13 @@ public class ModuleInspectorController extends Observable implements Observer {
 			classInspector.append(contributed);
 			for (FIBComponent tab : contributedTabs) {
 				FMLControlledComponent.bindToConcept(tab, concept, customTypeEditorProvider);
+			}
+			if (hideStandardTabs && classTabPanel != null && !contributedTabs.isEmpty()) {
+				Set<String> names = new HashSet<>();
+				for (FIBComponent tab : contributedTabs) {
+					names.add(tab.getName());
+				}
+				removeStandardTabs(classTabPanel, standardTabs, names);
 			}
 			return;
 		}
@@ -870,6 +917,10 @@ public class ModuleInspectorController extends Observable implements Observer {
 		}
 
 		FMLControlledComponent.bindToConcept(tab, concept, customTypeEditorProvider);
+
+		if (hideStandardTabs) {
+			removeStandardTabs(classTabPanel, standardTabs, new HashSet<>(Arrays.asList(tab.getName())));
+		}
 	}
 
 	/**
@@ -903,13 +954,25 @@ public class ModuleInspectorController extends Observable implements Observer {
 	 */
 	public static void mergeContainerInspectors(FIBInspector classInspector, List<FIBContainer> containerInspectors, FlexoConcept concept,
 			CustomTypeEditorProvider customTypeEditorProvider) {
+		mergeContainerInspectors(classInspector, containerInspectors, concept, customTypeEditorProvider, false);
+	}
+
+	/**
+	 * @param hideStandardTabs
+	 *            whether the tabs the class inspector had (the label of the instance, the table of its actors) are removed once the
+	 *            inspectors of the concept are composed: they are then the only ones shown. The module decides, see
+	 *            {@link FlexoController#hidesStandardInspectorTabs()}
+	 */
+	public static void mergeContainerInspectors(FIBInspector classInspector, List<FIBContainer> containerInspectors, FlexoConcept concept,
+			CustomTypeEditorProvider customTypeEditorProvider, boolean hideStandardTabs) {
 
 		if (containerInspectors.size() == 1) {
-			mergeContainerInspector(classInspector, containerInspectors.get(0), concept, customTypeEditorProvider);
+			mergeContainerInspector(classInspector, containerInspectors.get(0), concept, customTypeEditorProvider, hideStandardTabs);
 			return;
 		}
 
 		FIBTabPanel classTabPanel = classInspector.getTabPanel();
+		List<FIBComponent> standardTabs = classTabPanel != null ? new ArrayList<>(classTabPanel.getSubComponents()) : new ArrayList<>();
 		List<FIBTab> composedTabs = new ArrayList<>();
 
 		for (FIBContainer containerInspector : containerInspectors) {
@@ -966,6 +1029,14 @@ public class ModuleInspectorController extends Observable implements Observer {
 			tab.setParent(classTabPanel);
 			classTabPanel.addToSubComponents(tab, null, i);
 			FMLControlledComponent.bindToConcept(tab, concept, customTypeEditorProvider);
+		}
+
+		if (hideStandardTabs && !composedTabs.isEmpty()) {
+			Set<String> names = new HashSet<>();
+			for (FIBTab tab : composedTabs) {
+				names.add(tab.getName());
+			}
+			removeStandardTabs(classTabPanel, standardTabs, names);
 		}
 	}
 

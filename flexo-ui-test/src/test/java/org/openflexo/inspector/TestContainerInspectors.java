@@ -565,6 +565,76 @@ public class TestContainerInspectors extends OpenflexoTestCase {
 	}
 
 	/**
+	 * By default the inspector of a concept is added to the standard tabs of the class inspector: nothing is hidden unless the module asks
+	 * (FlexoController#hidesStandardInspectorTabs).
+	 */
+	@Test
+	@TestOrder(27)
+	public void test26StandardTabsAreKeptByDefault() {
+
+		FlexoConcept plain = concept("Plain");
+		FIBInspector classInspector = makeClassInspectorStandIn();
+		ModuleInspectorController.mergeContainerInspectors(classInspector,
+				Arrays.asList((FIBContainer) FMLControlledComponent.loadInspectorComponent(plain, null)), plain, null);
+
+		assertNotNull("The standard tab was hidden although the module did not ask", classInspector.getTabPanel().getSubComponentNamed("BasicTab"));
+		assertNotNull(classInspector.getTabPanel().getSubComponentNamed("PlainPanel"));
+	}
+
+	/** A module that hides the standard tabs shows the tab of a PLAIN inspector alone. */
+	@Test
+	@TestOrder(28)
+	public void test27PlainInspectorReplacesTheStandardTabs() {
+
+		FlexoConcept plain = concept("Plain");
+		FIBInspector classInspector = makeClassInspectorStandIn();
+		ModuleInspectorController.mergeContainerInspectors(classInspector,
+				Arrays.asList((FIBContainer) FMLControlledComponent.loadInspectorComponent(plain, null)), plain, null, true);
+
+		FIBTabPanel tabPanel = classInspector.getTabPanel();
+		assertNull("The standard tab is still there", tabPanel.getSubComponentNamed("BasicTab"));
+		assertEquals(Arrays.asList("PlainPanel"), names(tabPanel));
+		assertBindingIsValid(((FIBContainer) tabPanel.getSubComponentNamed("PlainPanel")).getSubComponentNamed("descriptionWidget"));
+		assertResourceComponentUntouched(plain);
+	}
+
+	/** Same for an inspector declaring its own TabPanel: its tab is the only one left. */
+	@Test
+	@TestOrder(29)
+	public void test28TabbedInspectorReplacesTheStandardTabs() {
+
+		FlexoConcept simple = concept("Simple");
+		FIBInspector classInspector = makeClassInspectorStandIn();
+		ModuleInspectorController.mergeContainerInspectors(classInspector,
+				Arrays.asList((FIBContainer) FMLControlledComponent.loadInspectorComponent(simple, null)), simple, null, true);
+
+		FIBTabPanel tabPanel = classInspector.getTabPanel();
+		assertNull("The standard tab is still there", tabPanel.getSubComponentNamed("BasicTab"));
+		assertEquals(Arrays.asList("SimpleInspectorTab"), names(tabPanel));
+		assertResourceComponentUntouched(simple);
+	}
+
+	/** An inspector composed with its ancestors' also replaces the standard tabs, and keeps the composed one. */
+	@Test
+	@TestOrder(30)
+	public void test29ComposedInspectorReplacesTheStandardTabs() {
+
+		FlexoConcept child = concept("InspChild");
+		List<FIBContainer> containers = new ArrayList<>();
+		for (FlexoConcept contributor : child.getInspectorContributingConcepts()) {
+			containers.add((FIBContainer) FMLControlledComponent.loadInspectorComponent(contributor, null));
+		}
+		assertTrue("The fixture must compose several inspectors", containers.size() > 1);
+
+		FIBInspector classInspector = makeClassInspectorStandIn();
+		ModuleInspectorController.mergeContainerInspectors(classInspector, containers, child, null, true);
+
+		FIBTabPanel tabPanel = classInspector.getTabPanel();
+		assertNull("The standard tab is still there", tabPanel.getSubComponentNamed("BasicTab"));
+		assertEquals(Arrays.asList("InspChildPanel"), names(tabPanel));
+	}
+
+	/**
 	 * Stand-in for <code>Inspectors/FML-RT/FlexoConceptInstance.inspector</code>, which is not on this module's classpath: a
 	 * {@link FIBInspector} laid out in a border, whose ONLY sub-component is a TabPanel named "Tab" holding the platform's BasicTab. That
 	 * single-child shape is exactly what {@link FIBInspector#getTabPanel()} assumes.

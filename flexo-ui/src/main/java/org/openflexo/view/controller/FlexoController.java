@@ -1246,6 +1246,19 @@ public abstract class FlexoController implements PropertyChangeListener, HasProp
 	}
 
 	/**
+	 * Whether the inspector of an instance of a concept that ships its own inspector (a <code>.inspector</code> stored in the container of
+	 * its model) hides the standard tabs of the inspector of the class: the label of the instance and the table of its actors. The
+	 * inspector of the concept is then the only thing shown.
+	 *
+	 * <p>
+	 * False by default: the tab of the concept is added to the standard ones. A module overrides it to present its own objects through
+	 * their inspector alone.
+	 */
+	public boolean hidesStandardInspectorTabs() {
+		return false;
+	}
+
+	/**
 	 * Return currently displayed ModuleView
 	 * 
 	 * @return
