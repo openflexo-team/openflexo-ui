@@ -19,12 +19,14 @@ dependencies {
   //testImplementation project(':flexo-test-resources')
   //testImplementation project(':flexo-foundation-test')
 
-  implementation ginaTest()
+  // Test libraries and fixtures are for the tests of this module: as 'implementation' they were shipped, through the runtime classpath,
+  // to every application using it (the Modeller, formod-app...), which then loaded the test resource center as one of its own
+  testImplementation ginaTest()
   testImplementation project(':flexo-ui-test')
   //implementation flexoUiTest()
   //implementation flexoOntologyUi()
-  implementation flexoTestResources()
-  implementation flexoFoundationTest()
+  testImplementation flexoTestResources()
+  testImplementation flexoFoundationTest()
 //  implementation project(':flexo-ui-test')
 //  implementation project(':flexo-ontology-ui')
 //  implementation project(':flexo-test-resources')
