@@ -2152,7 +2152,6 @@ public abstract class FlexoController implements PropertyChangeListener, HasProp
 	}
 
 	public boolean reviewModifiedResources() {
-		System.out.println("reviewModifiedResources()");
 		/*ResourceSavingInfo savingInfo = getResourceSavingInfo();
 		savingInfo.update();
 		for (ResourceSavingEntryInfo e : savingInfo.getEntries()) {
