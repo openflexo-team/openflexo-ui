@@ -260,14 +260,21 @@ public class ContextualMenuManager {
 					if (commonConcept.hasActionScheme()) {
 						for (ActionScheme as : commonConcept.getAccessibleActionSchemes()) {
 							if (as.getVisibility() == Visibility.Public) {
-								contextualMenu.putAction(new ActionSchemeActionFactory(as, fci));
+								ActionSchemeActionFactory factory = new ActionSchemeActionFactory(as, fci);
+								// The visibility of a behaviour (@Visible) is not the one of an action of the object action list
+								if (getEditor().isActionVisible((FlexoActionFactory) factory, fci, _selectionManager.getSelection())) {
+									contextualMenu.putAction(factory);
+								}
 							}
 						}
 					}
 					if (commonConcept.hasNavigationScheme()) {
 						for (NavigationScheme ns : commonConcept.getNavigationSchemes()) {
 							if (ns.getVisibility() == Visibility.Public) {
-								contextualMenu.putAction(new NavigationSchemeActionFactory(ns, fci));
+								NavigationSchemeActionFactory factory = new NavigationSchemeActionFactory(ns, fci);
+								if (getEditor().isActionVisible((FlexoActionFactory) factory, fci, _selectionManager.getSelection())) {
+									contextualMenu.putAction(factory);
+								}
 							}
 						}
 					}

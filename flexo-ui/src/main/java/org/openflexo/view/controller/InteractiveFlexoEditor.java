@@ -342,7 +342,8 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> boolean isActionEnabled(
 			FlexoActionFactory<A, T1, T2> actionFactory, T1 focusedObject, Vector<T2> globalSelection) {
 		if (actionFactory instanceof ActionSchemeActionFactory) {
-			return true;
+			// The behaviour tells itself whether it is enabled on this instance (@Enable)
+			return actionFactory.isEnabled(focusedObject, globalSelection);
 		}
 		if (actionFactory instanceof DeletionSchemeActionFactory) {
 			return true;

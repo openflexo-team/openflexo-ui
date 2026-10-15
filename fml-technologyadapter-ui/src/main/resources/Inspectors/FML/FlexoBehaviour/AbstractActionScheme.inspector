@@ -40,11 +40,34 @@
 		<Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11"
 			darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true"
 			horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED"
-			verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab" />
+			verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab">
+			<Label index="8" label="visible" align="right" name="VisibleLabel"
+				constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;location=left)"
+				localize="true" />
+			<Custom index="9" componentClassName="org.openflexo.gina.swing.utils.JavaBindingSelector" name="VisibleSelector"
+				localize="true" manageDynamicModel="true" data="data.visible"
+				constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;location=right)">
+				<Assignment variable="component.bindable" value="data.availabilityContext"/>
+			</Custom>
+			<Label index="10" label="enable" align="right" name="EnableLabel"
+				constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;location=left)"
+				localize="true" />
+			<Custom index="11" componentClassName="org.openflexo.gina.swing.utils.JavaBindingSelector" name="EnableSelector"
+				localize="true" manageDynamicModel="true" data="data.enable"
+				constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;location=right)">
+				<Assignment variable="component.bindable" value="data.availabilityContext"/>
+			</Custom>
+		</Tab>
 	</TabPanel>
 	<LocalizedDictionary>
 		<Localized key="Advanced" lang="French" value="Avancé" />
 		<Localized key="Basic" lang="French" value="Basique" />
+		<Localized key="visible" lang="English" value="Visible" />
+		<Localized key="visible" lang="French" value="Visible" />
+		<Localized key="visible" lang="Dutch" value="Visible" />
+		<Localized key="enable" lang="English" value="Enable" />
+		<Localized key="enable" lang="French" value="Activé" />
+		<Localized key="enable" lang="Dutch" value="Enable" />
 		<Localized key="name" lang="English" value="Name" />
 		<Localized key="name" lang="French" value="Nom" />
 		<Localized key="name" lang="Dutch" value="Name" />
