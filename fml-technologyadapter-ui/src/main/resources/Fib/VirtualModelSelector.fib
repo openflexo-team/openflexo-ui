@@ -48,7 +48,7 @@
 		</BrowserElement>
 		<BrowserElement dataClassName="org.openflexo.foundation.resource.RepositoryFolder"
 			label="viewPointFolder.displayableName" icon="controller.iconForObject(viewPointFolder)"
-			tooltip="" enabled="" visible="" isEditable="false" editableLabel=""
+			tooltip="" enabled="" visible="viewPointFolder.containsResources()" isEditable="false" editableLabel=""
 			filtered="false" defaultVisible="true" dynamicFont="" name="viewPointFolder">
 			<Children data="viewPointFolder.children" visible="" cast=""
 				name="subFolders" />
@@ -57,10 +57,10 @@
 		</BrowserElement>
 		<BrowserElement dataClassName="org.openflexo.foundation.fml.rm.CompilationUnitResource"
 			label="virtualModel.displayName" icon="controller.iconForObject(virtualModel)"
-			tooltip="" enabled="virtualModel.isLoaded" visible="" isEditable="false"
+			tooltip="" enabled="" visible="" isEditable="false"
 			editableLabel="" filtered="false" defaultVisible="true" dynamicFont=""
 			name="virtualModel">
-			<Children data="virtualModel.contents" visible="virtualModel.isLoaded"
+			<Children data="virtualModel.contents" visible=""
 				cast="" name="subresources" />
 		</BrowserElement>
 	</Browser>

@@ -46,6 +46,7 @@ import org.fife.ui.rsyntaxtextarea.parser.ParseResult;
 import org.openflexo.foundation.fml.FMLValidationReport;
 import org.openflexo.foundation.fml.ParseError;
 import org.openflexo.foundation.fml.SemanticAnalysisIssue;
+import org.openflexo.foundation.fml.SemanticAnalysisWarning;
 import org.openflexo.foundation.fml.UnexpectedExceptionError;
 import org.openflexo.foundation.fml.parser.ParseException;
 import org.openflexo.pamela.validation.ValidationError;
@@ -88,6 +89,10 @@ public class FMLParseResult extends DefaultParseResult {
 	public void addSemanticAnalysisIssue(SemanticAnalysisIssue<?, ?> issue) {
 		validationReport.appendSemanticAnalysisIssue(issue);
 		errors.add(issue);
+	}
+
+	public void addSemanticAnalysisWarning(SemanticAnalysisWarning<?, ?> warning) {
+		validationReport.appendSemanticAnalysisWarning(warning);
 	}
 
 	public void addParseError(ParseException e) {

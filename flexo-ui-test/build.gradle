@@ -4,6 +4,7 @@ dependencies {
   implementation project(':flexo-ui')
   //implementation flexoUi()
   implementation testUtils()
+  implementation bugReporting()
   // external dep
 
   // testing dep

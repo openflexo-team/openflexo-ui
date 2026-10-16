@@ -118,6 +118,7 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.gina.model.FIBComponent;
 import org.openflexo.gina.model.container.FIBTab;
+import org.openflexo.gina.swing.utils.localization.LocalizedPanel;
 import org.openflexo.gina.utils.FIBInspector;
 import org.openflexo.gina.utils.InspectorGroup;
 import org.openflexo.gina.view.GinaViewFactory;
@@ -146,6 +147,18 @@ public class FMLFIBController extends FlexoFIBController {
 
 	public FMLFIBController(FIBComponent component, GinaViewFactory<?> viewFactory, FlexoController controller) {
 		super(component, viewFactory, controller);
+	}
+
+	/**
+	 * The localization editor component of GINA (<code>Fib/LocalizedPanel.fib</code>, in gina-swing), which the localized dictionary view
+	 * embeds.
+	 *
+	 * <p>
+	 * Supplied through a binding rather than a <code>componentFile</code>: that attribute is a path relative to the referencing component, and
+	 * the editor lives in another module - another jar, once packaged.
+	 */
+	public Resource getLocalizedPanelComponent() {
+		return LocalizedPanel.lOCALIZED_PANEL_FIB;
 	}
 
 	public void changeURI(FMLCompilationUnit compilationUnit) {

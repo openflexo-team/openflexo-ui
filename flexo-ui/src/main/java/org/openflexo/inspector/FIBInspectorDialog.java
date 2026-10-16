@@ -50,6 +50,7 @@ import javax.swing.JDialog;
 import javax.swing.WindowConstants;
 
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
@@ -122,9 +123,9 @@ public class FIBInspectorDialog extends JDialog implements Observer {
 		} else*/if (notification instanceof InspectedObjectChanged) {
 			Object object = ((InspectedObjectChanged) notification).getInspectedObject();
 			if (object instanceof FlexoConceptInstance) {
-				if (((FlexoConceptInstance) object).getFlexoConcept() != null) {
-					String newTitle = ((FlexoConceptInstance) object).getFlexoConcept().getInspector().getInspectorTitle();
-					setTitle(newTitle);
+				FlexoConcept concept = ((FlexoConceptInstance) object).getFlexoConcept();
+				if (concept != null) {
+					setTitle(concept.getInspector() != null ? concept.getInspector().getInspectorTitle() : concept.getName());
 				}
 			} /*else if (getInspectorPanel() != null && getInspectorPanel().getCurrentlyDisplayedInspector() != null) {
 				setTitle(getInspectorPanel().getCurrentlyDisplayedInspector().getParameter("title"));

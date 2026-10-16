@@ -42,7 +42,7 @@ package org.openflexo.gina.test;
 import java.io.File;
 
 import org.openflexo.ApplicationContext;
-import org.openflexo.br.BugReportService;
+import org.openflexo.br.ui.BugReportServiceInUIContextImpl;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoProject;
@@ -118,7 +118,7 @@ public class TestApplicationContext extends ApplicationContext {
 	protected void registerPreferencesService() {
 		// PreferencesService is not activated in test context
 	}
-	
+
 	@Override
 	public ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory) {
 		/*
@@ -158,7 +158,7 @@ public class TestApplicationContext extends ApplicationContext {
 	}
 
 	@Override
-	public BugReportService createBugReportService() {
+	public BugReportServiceInUIContextImpl createBugReportService() {
 		// not necessary
 		return null;
 	}

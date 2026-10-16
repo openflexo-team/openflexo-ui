@@ -56,6 +56,7 @@ import org.openflexo.foundation.fml.ElementImportDeclaration;
 import org.openflexo.foundation.fml.FMLCompilationUnit;
 import org.openflexo.foundation.fml.FMLValidationReport;
 import org.openflexo.foundation.fml.SemanticAnalysisIssue;
+import org.openflexo.foundation.fml.SemanticAnalysisWarning;
 import org.openflexo.foundation.fml.parser.FMLCompilationUnitParser;
 import org.openflexo.foundation.fml.parser.ParseException;
 import org.openflexo.foundation.fml.rm.CompilationUnitResource;
@@ -334,6 +335,10 @@ public class FMLEditorParser extends AbstractParser {
 			for (SemanticAnalysisIssue semanticAnalysisIssue : compilationUnit.getPrettyPrintDelegate().getSemanticAnalysisIssues()) {
 				result.addNotice(new SemanticAnalyzerNotice(this, semanticAnalysisIssue));
 				result.addSemanticAnalysisIssue(semanticAnalysisIssue);
+			}
+			for (SemanticAnalysisWarning semanticAnalysisWarning : compilationUnit.getPrettyPrintDelegate().getSemanticAnalysisWarnings()) {
+				result.addNotice(new SemanticAnalyzerNotice(this, semanticAnalysisWarning));
+				result.addSemanticAnalysisWarning(semanticAnalysisWarning);
 			}
 		}
 

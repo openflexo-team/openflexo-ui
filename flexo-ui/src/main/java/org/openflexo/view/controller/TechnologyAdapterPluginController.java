@@ -101,6 +101,18 @@ public abstract class TechnologyAdapterPluginController<TA extends TechnologyAda
 
 	public abstract boolean isActivable(FlexoModule<?> module);
 
+	/**
+	 * Indicates that this plugin contributes its view of supplied object only to the perspectives that ask for it explicitly (the
+	 * nature-based ones, and any perspective consulting the plugin itself), and must therefore be ignored for that object by the
+	 * {@link TechnologyAdapterController}s, which serve every perspective.
+	 * 
+	 * @param object
+	 * @return false by default: the plugin is consulted by the technology adapter controllers it targets, whatever the perspective
+	 */
+	public boolean isPerspectiveScoped(FlexoObject object) {
+		return false;
+	}
+
 	public TechnologyAdapterControllerService getTechnologyAdapterControllerService() {
 		return getServiceManager().getService(TechnologyAdapterControllerService.class);
 	}

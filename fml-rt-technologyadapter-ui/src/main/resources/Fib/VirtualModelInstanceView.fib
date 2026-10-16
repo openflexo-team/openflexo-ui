@@ -102,11 +102,11 @@
 				visibleRowCount="5" backgroundNonSelectionColor="255,255,255"
 				textSelectionColor="255,255,255"
 				backgroundSecondarySelectionColor="173,215,255"
-				iteratorClassName="org.openflexo.foundation.fml.rt.ActorReference"
+				iteratorClassName="org.openflexo.foundation.fml.FlexoProperty"
 				showFooter="true" textNonSelectionColor="0,0,0"
 				selectionMode="MultipleIntervalSelection" rowHeight="18"
 				localize="true" manageDynamicModel="true"
-				data="flexoConceptInstanceBrowser.selected.actors" opaque="false"
+				data="flexoConceptInstanceBrowser.selected.flexoConcept.accessibleProperties" opaque="false"
 				boundToSelectionManager="true"
 				rightClickAction="controller.rightClick(table.selected,event)"
 				doubleClickAction="controller.doubleClick(table.selected)"
@@ -114,15 +114,14 @@
 				index="1"
 				constraints="border( weightY=1.0;anchor=center;expandHorizontally=true;expandVertically=true;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;splitIdentifier=middle;weightX=1.0)"
 				width="200" height="200" name="table">
-    			<RemoveAction name="delete" method="controller.deleteActorReference(data, selected)" />
-				<IconColumn id="25"
-					data="controller.iconForObject(iterator.flexoRole)"
+  				<IconColumn id="25"
+					data="controller.iconForObject(iterator)"
 					resizable="false" title="icon" displayTitle="false"
 					columnWidth="20" showIcon="false" name="icon" />
-				<LabelColumn id="26" data="iterator.roleName"
+				<LabelColumn id="26" data="iterator.name"
 					resizable="true" title="property" displayTitle="true"
 					columnWidth="100" showIcon="false" name="property" />
-				<LabelColumn id="27" data="iterator.stringRepresentation"
+				<LabelColumn id="27" data="flexoConceptInstanceBrowser.selected.getFlexoPropertyValue(iterator).toString"
 					resizable="true" title="value" displayTitle="true"
 					columnWidth="300" showIcon="false" name="value" />
 				<LocalizedDictionary id="28" />

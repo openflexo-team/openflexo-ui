@@ -1,11 +1,9 @@
 dependencies {
   // openflexo dep
   api flexoFoundation()
-  //implementation project(':flexo-foundation-rm')
   implementation flexoFoundationRm()
-  //api project(':flexodocresourcemanager')
+  implementation bugReporting()
   implementation fmlCli()
-  //implementation project(':fml-cli')
   implementation connie()
   implementation dianaApi()
   implementation diana()
@@ -14,8 +12,7 @@ dependencies {
   api ginaSwing()
   api ginaSwingEditor()
   implementation dianaSwing()
-  //implementation flexoHelp()
-
+ 
   implementation 'commons-codec:commons-codec:1.16.1'
 
   // Following dependencies are only required by handleWSException(...) method in FlexoController

@@ -68,16 +68,40 @@ public interface ModuleView<O extends FlexoObject> {
 	public FlexoPerspective getPerspective();
 
 	/**
-	 * This method is called before the module view is about to be shown
-	 * 
+	 * This method is called before the module view is about to be shown in its module, i.e. when it becomes the view of the main pane.
+	 * Not called when the module itself is activated again: see {@link #moduleActivated(FlexoController)}.
 	 */
 	public void willShow();
 
 	/**
-	 * This method is called before the module view is about to be hidden
-	 * 
+	 * This method is called before the module view is about to be hidden in its module, i.e. when another view replaces it in the main
+	 * pane. Not called when another module is activated: see {@link #moduleDeactivated()}.
 	 */
 	public void willHide();
+
+	/**
+	 * Called on the current view of a module when another module is activated.
+	 *
+	 * <p>
+	 * The view stays displayed in the window of its module, and so do the components it put in the side columns (palettes, inspectors):
+	 * hiding them - as {@link #willHide()} does - made them vanish as soon as the user clicked in another module. Override only to release
+	 * what is shared by the whole application and must not stay bound to an inactive module, such as a paste handler registered in the
+	 * editing context.
+	 */
+	public default void moduleDeactivated() {
+	}
+
+	/**
+	 * Called on the current view of a module when that module is activated again.
+	 *
+	 * <p>
+	 * By default {@link #show(FlexoController, FlexoPerspective)} again, which is repeatable: a component shared by the whole application
+	 * (the inspectors of a technology adapter, a palette) may have been taken by a view of the other module meanwhile - a Swing component
+	 * has one parent only - and is put back.
+	 */
+	public default void moduleActivated(FlexoController controller) {
+		show(controller, controller.getCurrentPerspective());
+	}
 
 	/**
 	 * This method is called when the module view is shown with a controller and perspective

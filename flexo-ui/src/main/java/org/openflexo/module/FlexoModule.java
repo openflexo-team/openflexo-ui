@@ -192,7 +192,8 @@ public abstract class FlexoModule<M extends FlexoModule<M>> implements DataFlexo
 			}
 
 			if (getFlexoController().getCurrentModuleView() != null) {
-				getFlexoController().getCurrentModuleView().willHide();
+				// Not willHide(): the view stays displayed in the window of this module, side columns included
+				getFlexoController().getCurrentModuleView().moduleDeactivated();
 			}
 		}
 	}
@@ -335,7 +336,10 @@ public abstract class FlexoModule<M extends FlexoModule<M>> implements DataFlexo
 			}
 
 			if (getFlexoController().getCurrentModuleView() != null) {
-				getFlexoController().getCurrentModuleView().willShow();
+				getFlexoController().getCurrentModuleView().moduleActivated(getFlexoController());
+				if (getFlexoController().getMainPane() != null) {
+					getFlexoController().getMainPane().refreshLayout();
+				}
 			}
 
 			else {

@@ -85,6 +85,7 @@ import org.openflexo.foundation.project.FlexoProjectReference;
 import org.openflexo.foundation.project.FlexoProjectResource;
 import org.openflexo.foundation.resource.DirectoryBasedIODelegate;
 import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
@@ -581,6 +582,14 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 	@NotificationUnsafe
 	public boolean shouldBeDisplayed(RepositoryFolder<?, ?> folder) {
 
+		// A VirtualModel container - an Xxx.fml/ directory - is never shown as such, whatever it holds: its resources are shown under its
+		// compilation unit instead, see getUncontainedResourcesOf(). This MUST come before asking the technology adapters. A container
+		// holding .fib / .inspector resources concerns the FML technology, whose default policy - show any folder holding resources -
+		// answered first, and that is how the container came back into the browsers.
+		if (isVirtualModelContainerFolder(folder)) {
+			return false;
+		}
+
 		// First look if the technology adapters may handle this
 		Set<TechnologyAdapter<?>> concernedTechnologyAdapters = getConcernedTechnologyAdapters(folder);
 		if (concernedTechnologyAdapters != null && concernedTechnologyAdapters.size() > 0) {
@@ -603,10 +612,6 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 			}
 		}
 
-		// Folders representing a VirtualModel should not be displayed here
-		if (folder.getName().endsWith(CompilationUnitResourceFactory.FML_SUFFIX)) {
-			return false;
-		}
 		if (folder.isRootFolder()) {
 			return true;
 		}
@@ -625,6 +630,104 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Whether supplied folder is the container of a VirtualModel: the <code>Xxx.fml/</code> directory holding its FML source and whatever is
+	 * stored beside it. Such a folder is never displayed.
+	 */
+	public static boolean isVirtualModelContainerFolder(RepositoryFolder<?, ?> folder) {
+		return folder != null && folder.getName() != null && folder.getName().endsWith(CompilationUnitResourceFactory.FML_SUFFIX);
+	}
+
+	/**
+	 * The resources stored in the <code>Xxx.fml/</code> container of supplied compilation unit that NO other resource contains.
+	 *
+	 * <p>
+	 * The container is never displayed (see {@link #shouldBeDisplayed(RepositoryFolder)}), so whatever it holds has to be reachable under
+	 * the compilation unit. What a resource contains is already shown under it, through its <code>contents</code>: the components linked to
+	 * the compilation unit, the VirtualModels it contains, the palettes and example diagrams of a diagram specification. What remains are
+	 * the resources nothing links - a diagram specification stored in the container, a component in a sub-directory of it, or any resource
+	 * a technology adapter stores there without linking it. Listing exactly those is what makes hiding the container lose nothing, for any
+	 * technology, without every resource factory having to link what it creates.
+	 */
+	@NotificationUnsafe
+	public List<FlexoResource<?>> getUncontainedResourcesOf(CompilationUnitResource compilationUnitResource) {
+		return uncontainedResourcesInContainerOf(compilationUnitResource);
+	}
+
+	/**
+	 * See {@link #getUncontainedResourcesOf(CompilationUnitResource)}.
+	 *
+	 * <p>
+	 * Decided on serialization artefacts, through {@link FlexoResourceCenter#getContainer(Object)} - NOT on repository folders. A
+	 * jar-based resource center files every resource in its root folder, so looking for the folder of a resource tells nothing there; the
+	 * container of an artefact is the one primitive that behaves the same over file- and jar-based resource centers.
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<FlexoResource<?>> uncontainedResourcesInContainerOf(CompilationUnitResource compilationUnitResource) {
+
+		List<FlexoResource<?>> returned = new ArrayList<>();
+		if (compilationUnitResource == null || compilationUnitResource.getResourceCenter() == null) {
+			return returned;
+		}
+
+		FlexoResourceCenter<Object> resourceCenter = (FlexoResourceCenter<Object>) compilationUnitResource.getResourceCenter();
+		Object containerDirectory = containerDirectoryOf(compilationUnitResource, resourceCenter);
+		if (containerDirectory == null) {
+			return returned;
+		}
+
+		// The containers of the other compilation units: what is stored in one of them belongs to that one, which is itself shown under
+		// the compilation unit containing it. A list, not a set: artefacts are compared by equals(), and their hashCode() is not trusted.
+		List<Object> otherContainers = new ArrayList<>();
+		for (FlexoResource<?> resource : new ArrayList<FlexoResource<?>>(resourceCenter.getAllResources())) {
+			if (resource instanceof CompilationUnitResource && resource != compilationUnitResource) {
+				Object otherContainer = containerDirectoryOf((CompilationUnitResource) resource, resourceCenter);
+				if (otherContainer != null) {
+					otherContainers.add(otherContainer);
+				}
+			}
+		}
+
+		for (FlexoResource<?> resource : new ArrayList<FlexoResource<?>>(resourceCenter.getAllResources())) {
+			if (resource == compilationUnitResource || resource.getContainer() != null || resource.isDeleted()
+					|| resource.getIODelegate() == null) {
+				continue;
+			}
+			if (isStoredIn(resource.getIODelegate().getSerializationArtefact(), containerDirectory, otherContainers, resourceCenter)) {
+				returned.add(resource);
+			}
+		}
+		return returned;
+	}
+
+	/**
+	 * The <code>Xxx.fml/</code> directory of supplied compilation unit, i.e. the container of its serialization artefact.
+	 */
+	private static Object containerDirectoryOf(CompilationUnitResource compilationUnitResource, FlexoResourceCenter<Object> resourceCenter) {
+		Object artefact = compilationUnitResource.getIODelegate() != null ? compilationUnitResource.getIODelegate().getSerializationArtefact()
+				: null;
+		return artefact != null ? resourceCenter.getContainer(artefact) : null;
+	}
+
+	/**
+	 * Whether supplied artefact lies somewhere under supplied directory - and not, on the way up, under the container of another compilation
+	 * unit.
+	 */
+	private static boolean isStoredIn(Object artefact, Object directory, List<Object> otherContainers, FlexoResourceCenter<Object> resourceCenter) {
+		Object current = artefact != null ? resourceCenter.getContainer(artefact) : null;
+		// Bounded, whatever a resource center answers for the container of its root
+		for (int depth = 0; current != null && depth < 64; depth++) {
+			if (current.equals(directory)) {
+				return true;
+			}
+			if (otherContainers.contains(current)) {
+				return false;
+			}
+			current = resourceCenter.getContainer(current);
+		}
+		return false;
 	}
 
 	@NotificationUnsafe

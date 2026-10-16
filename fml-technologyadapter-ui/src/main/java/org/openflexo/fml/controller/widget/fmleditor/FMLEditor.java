@@ -57,6 +57,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
@@ -422,6 +423,30 @@ public class FMLEditor extends JPanel implements PropertyChangeListener, Hyperli
 
 	private boolean updateFMLAsTextRequested = false;
 
+	/**
+	 * Where the caret goes once the text changed from <code>before</code> to <code>after</code>: unchanged when it was before the modified
+	 * part, shifted when it was after, clamped in it
+	 */
+	static int adjustedCaretPosition(String before, String after, int caretPosition) {
+		if (before == null || after == null) {
+			return Math.min(caretPosition, after != null ? after.length() : 0);
+		}
+		int prefix = 0;
+		int max = Math.min(before.length(), after.length());
+		while (prefix < max && before.charAt(prefix) == after.charAt(prefix)) {
+			prefix++;
+		}
+		int suffix = 0;
+		while (suffix < max - prefix && before.charAt(before.length() - 1 - suffix) == after.charAt(after.length() - 1 - suffix)) {
+			suffix++;
+		}
+		int returned = caretPosition;
+		if (caretPosition >= before.length() - suffix) {
+			returned = caretPosition + (after.length() - before.length());
+		}
+		return Math.max(0, Math.min(returned, after.length()));
+	}
+
 	public void parseImmediately() {
 		parser.parse((RSyntaxDocument) textArea.getDocument(), textArea.getSyntaxEditingStyle());
 	}
@@ -449,8 +474,21 @@ public class FMLEditor extends JPanel implements PropertyChangeListener, Hyperli
 			// System.out.println(newFML);
 			// Thread.dumpStack();
 
+			String previousFML = getTextArea().getText();
+			int caretPosition = getTextArea().getCaretPosition();
+			JViewport viewport = (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class, getTextArea());
+			Point viewPosition = viewport != null ? viewport.getViewPosition() : null;
+
 			lastFML = newFML;
 			getTextArea().setTextNoParsingAnalysis(newFML);
+
+			// Replacing the whole text sends the caret to the end and the view with it: put both back where they were
+			// (the text is edited from the model, from the inspector for instance, while the user is reading it)
+			getTextArea().setCaretPosition(adjustedCaretPosition(previousFML, newFML, caretPosition));
+			if (viewport != null) {
+				viewport.setViewPosition(viewPosition);
+				SwingUtilities.invokeLater(() -> viewport.setViewPosition(viewPosition));
+			}
 
 			// FML has changed, so we update validation decoration
 			if (parser != null) {

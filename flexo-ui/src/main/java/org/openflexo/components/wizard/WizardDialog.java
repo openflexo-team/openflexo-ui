@@ -81,6 +81,11 @@ public class WizardDialog extends JFIBDialog<Wizard> {
 		if (preferredSize != null) {
 			setPreferredSize(preferredSize);
 		}
+		else if (wizard.getExtraSize() != null) {
+			Dimension contentSize = getPreferredSize();
+			setPreferredSize(new Dimension(contentSize.width + wizard.getExtraSize().width,
+					contentSize.height + wizard.getExtraSize().height));
+		}
 		getController().setFlexoController(controller);
 
 		// Attempt to manage focus on buttons

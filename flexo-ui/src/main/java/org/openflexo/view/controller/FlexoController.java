@@ -1091,8 +1091,11 @@ public abstract class FlexoController implements PropertyChangeListener, HasProp
 		}
 
 		Object lock = flexoFrame.getTreeLock();
-		// Should only create view if I am the AWT event Thread
-		//
+		// Should only create view if I am the AWT event Thread: created elsewhere, a view is built holding the AWT tree lock, while
+		// loading resources, and deadlocks with the event dispatch thread (FlexoMainPane handles location changes on it for that reason)
+		if (createViewIfRequired && !SwingUtilities.isEventDispatchThread()) {
+			logger.warning("Module view for " + location + " requested out of the event dispatch thread: risk of deadlock");
+		}
 
 		synchronized (lock) {
 
@@ -1240,6 +1243,19 @@ public abstract class FlexoController implements PropertyChangeListener, HasProp
 	 */
 	public void addToPerspectives(FlexoPerspective perspective) {
 		controllerModel.addToPerspectives(perspective);
+	}
+
+	/**
+	 * Whether the inspector of an instance of a concept that ships its own inspector (a <code>.inspector</code> stored in the container of
+	 * its model) hides the standard tabs of the inspector of the class: the label of the instance and the table of its actors. The
+	 * inspector of the concept is then the only thing shown.
+	 *
+	 * <p>
+	 * False by default: the tab of the concept is added to the standard ones. A module overrides it to present its own objects through
+	 * their inspector alone.
+	 */
+	public boolean hidesStandardInspectorTabs() {
+		return false;
 	}
 
 	/**
@@ -2136,7 +2152,6 @@ public abstract class FlexoController implements PropertyChangeListener, HasProp
 	}
 
 	public boolean reviewModifiedResources() {
-		System.out.println("reviewModifiedResources()");
 		/*ResourceSavingInfo savingInfo = getResourceSavingInfo();
 		savingInfo.update();
 		for (ResourceSavingEntryInfo e : savingInfo.getEntries()) {

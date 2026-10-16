@@ -44,7 +44,7 @@
       </Panel>
     </Panel>
   </Panel>
-  <FIBVariable id="41" name="data" type="org.openflexo.br.view.JIRAIssueReportDialog" />
+  <FIBVariable id="41" name="data" type="org.openflexo.br.ui.JIRAIssueReportDialog" />
   <LocalizedDictionary id="42">
     <Localized id="43" value="Summary" lang="English" key="summary" />
     <Localized id="44" value="Summary" lang="Dutch" key="summary" />

@@ -55,7 +55,7 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.Flexo;
 import org.openflexo.FlexoCst;
-import org.openflexo.br.SendBugReportServiceTask;
+import org.openflexo.br.ui.SendBugReportServiceTask;
 import org.openflexo.components.ResourceCenterEditorDialog;
 import org.openflexo.components.UndoManagerDialog;
 import org.openflexo.foundation.DataModification;

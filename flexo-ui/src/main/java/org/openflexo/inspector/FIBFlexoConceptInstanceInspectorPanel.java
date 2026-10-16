@@ -57,6 +57,7 @@ import org.openflexo.gina.swing.view.JFIBView;
 import org.openflexo.gina.swing.view.SwingViewFactory;
 import org.openflexo.gina.utils.FIBInspector;
 import org.openflexo.gina.view.FIBView;
+import org.openflexo.gina.model.container.FIBTabPanel;
 import org.openflexo.inspector.ModuleInspectorController.EmptySelectionActivated;
 import org.openflexo.inspector.ModuleInspectorController.InspectedObjectChanged;
 import org.openflexo.inspector.ModuleInspectorController.InspectorSwitching;
@@ -183,11 +184,16 @@ public class FIBFlexoConceptInstanceInspectorPanel extends JPanel implements Obs
 		FlexoFIBController controller = (FlexoFIBController) view.getController();
 		controller.setFlexoController(inspectorController.getFlexoController());
 
-		JFIBView<?, ?> defaultTabView = (JFIBView<?, ?>) view.getController()
-				.viewForComponent(newInspector.getTabPanel().getSubComponents().get(0));
+		// The first tab is the one of the concept: that is where both the tab generated from the deprecated FlexoConceptInspector and a
+		// container inspector are put. An inspector without a TabPanel, or with an empty one, has no such tab: it is shown whole rather
+		// than failing
+		FIBTabPanel tabPanel = newInspector.getTabPanel();
+		JFIBView<?, ?> defaultTabView = tabPanel != null && !tabPanel.getSubComponents().isEmpty()
+				? (JFIBView<?, ?>) view.getController().viewForComponent(tabPanel.getSubComponents().get(0))
+				: null;
 
 		if (view != null) {
-			currentInspectorView = defaultTabView;
+			currentInspectorView = defaultTabView != null ? defaultTabView : view;
 			removeAll();
 			add(currentInspectorView.getResultingJComponent(), BorderLayout.CENTER);
 			revalidate();

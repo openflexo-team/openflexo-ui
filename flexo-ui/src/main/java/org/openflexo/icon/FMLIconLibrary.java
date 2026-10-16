@@ -335,7 +335,7 @@ public class FMLIconLibrary extends IconLibrary {
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((ModelSlot) object).getModelSlotTechnologyAdapter());
 			if (tac != null) {
 				// return IconFactory.getImageIcon(tac.getTechnologyIcon(), MODEL_SLOT_ICON_MARKER);
-				return IconFactory.getImageIcon(tac.getIconForModelSlot((Class<? extends ModelSlot<?,?>>) object.getClass()),
+				return IconFactory.getImageIcon(tac.getIconForModelSlot((Class<? extends ModelSlot<?, ?>>) object.getClass()),
 						MODEL_SLOT_ICON_MARKER);
 			}
 			return MODEL_SLOT_ICON;
@@ -399,11 +399,8 @@ public class FMLIconLibrary extends IconLibrary {
 						return tac.getTechnologyIcon();
 					}
 				}
-				else {
-					return UNKNOWN_ICON;
-				}
 			}
-			else if (object instanceof AddFlexoConceptInstance) {
+			if (object instanceof AddFlexoConceptInstance) {
 				return IconFactory.getImageIcon(FMLRTIconLibrary.FLEXO_CONCEPT_INSTANCE_ICON, IconLibrary.DUPLICATE);
 			}
 			else if (object instanceof SelectFlexoConceptInstance) {

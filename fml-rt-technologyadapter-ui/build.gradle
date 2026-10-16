@@ -9,6 +9,8 @@ dependencies {
   testImplementation ginaTest()
   testImplementation project(':flexo-ui-test')
   //testImplementation flexoUiTest()
+  testImplementation flexoFoundationTest()
+  testRuntimeOnly flexoTestResources()
   testRuntimeOnly project(':fml-technologyadapter-ui')
   //testRuntimeOnly fmlTechnologyAdapterUi()
 }

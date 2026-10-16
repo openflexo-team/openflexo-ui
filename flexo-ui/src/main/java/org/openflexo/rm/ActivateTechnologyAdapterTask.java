@@ -38,7 +38,7 @@
 
 package org.openflexo.rm;
 
-import org.openflexo.br.BugReportService;
+import org.openflexo.foundation.BugReportService;
 import org.openflexo.foundation.task.FlexoTask;
 import org.openflexo.foundation.task.Progress;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;

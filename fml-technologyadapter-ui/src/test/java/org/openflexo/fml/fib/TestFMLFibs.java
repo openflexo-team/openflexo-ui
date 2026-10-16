@@ -69,6 +69,15 @@ public class TestFMLFibs extends GenericFIBTestCase {
 		validateFIB("Fib/FML/FMLLocalizedDictionaryView.fib");
 	}
 
+	/**
+	 * The GINA localization editor (gina-swing) that FMLLocalizedDictionaryView.fib embeds through a binding. Validated here because the
+	 * validation of the view does not reach into a referenced component, and gina-swing's own build excludes its tests.
+	 */
+	@Test
+	public void testEmbeddedLocalizedPanel() {
+		validateFIB("Fib/LocalizedPanel.fib");
+	}
+
 	@Test
 	public void testFMLVirtualModelView() {
 		validateFIB("Fib/FML/FMLVirtualModelView.fib");

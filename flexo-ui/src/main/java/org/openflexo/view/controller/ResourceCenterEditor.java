@@ -57,7 +57,6 @@ import org.openflexo.rm.AddResourceCenterTask;
 import org.openflexo.rm.RefreshResourceCenterTask;
 import org.openflexo.rm.RemoveResourceCenterTask;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
-import org.openflexo.view.FlexoFrame;
 
 public class ResourceCenterEditor implements HasPropertyChangeSupport {
 
@@ -109,7 +108,7 @@ public class ResourceCenterEditor implements HasPropertyChangeSupport {
 	public FlexoResourceCenter<?> addResourceCenter() {
 		FIBComponent askRCDirectoryComponent = getApplicationFIBLibrary().retrieveFIBComponent(AskResourceCenterDirectory.FIB_FILE);
 		AskResourceCenterDirectory askDir = new AskResourceCenterDirectory();
-		JFIBDialog dialog = JFIBDialog.instanciateAndShowDialog(askRCDirectoryComponent, askDir, FlexoFrame.getActiveFrame(), true,
+		JFIBDialog dialog = JFIBDialog.instanciateAndShowDialog(askRCDirectoryComponent, askDir, owner, true,
 				FlexoLocalization.getMainLocalizer());
 		if (dialog.getStatus() == Status.VALIDATED) {
 			try {

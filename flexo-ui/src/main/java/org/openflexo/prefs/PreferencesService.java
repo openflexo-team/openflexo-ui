@@ -43,7 +43,9 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.ApplicationContext;
+import org.openflexo.br.ui.BugReportPreferences;
 import org.openflexo.components.PreferencesDialog;
+import org.openflexo.foundation.BugReportService;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceImpl;
@@ -55,6 +57,7 @@ import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenter.ResourceCenterEntry;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.SaveResourceException;
+import org.openflexo.foundation.secrets.SecretsService;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.module.Module;
@@ -160,6 +163,12 @@ public class PreferencesService extends FlexoServiceImpl implements HasPropertyC
 		}
 		else if (service instanceof ModuleLoader) {
 			return (Class) ModuleLoaderPreferences.class;
+		}
+		else if (service instanceof BugReportService) {
+			return (Class) BugReportPreferences.class;
+		}
+		else if (service instanceof SecretsService) {
+			return (Class) SecretsPreferences.class;
 		}
 		return null;
 	}

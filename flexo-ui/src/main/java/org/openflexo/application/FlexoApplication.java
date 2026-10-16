@@ -50,7 +50,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.Flexo;
-import org.openflexo.br.SendBugReportServiceTask;
+import org.openflexo.br.ui.SendBugReportServiceTask;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;

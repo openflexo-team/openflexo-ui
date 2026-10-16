@@ -45,8 +45,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.openflexo.br.ActivateBugReportServiceTask;
-import org.openflexo.br.BugReportService;
+import org.openflexo.br.ui.ActivateBugReportServiceTask;
+import org.openflexo.br.ui.BugReportPreferences;
+import org.openflexo.br.ui.BugReportServiceInUIContextImpl;
+import org.openflexo.foundation.BugReportService;
 import org.openflexo.foundation.DefaultFlexoServiceManager;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoService;
@@ -66,7 +68,6 @@ import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.prefs.AdvancedPrefs;
 import org.openflexo.prefs.ApplicationFIBLibraryService;
-import org.openflexo.prefs.BugReportPreferences;
 import org.openflexo.prefs.GeneralPreferences;
 import org.openflexo.prefs.LoggingPreferences;
 import org.openflexo.prefs.PreferencesService;
@@ -171,7 +172,8 @@ public abstract class ApplicationContext extends DefaultFlexoServiceManager {
 		return getService(ModuleLoader.class);
 	}
 
-	public BugReportService getBugReportService() {
+	@Override
+	public BugReportServiceInUIContextImpl getBugReportService() {
 		if (getService(BugReportService.class) == null) {
 
 			ActivateBugReportServiceTask activateBRTask = new ActivateBugReportServiceTask(this);
@@ -184,11 +186,11 @@ public abstract class ApplicationContext extends DefaultFlexoServiceManager {
 
 			return activateBRTask.getBugReportService();
 		}
-		return getService(BugReportService.class);
+		return (BugReportServiceInUIContextImpl) getService(BugReportService.class);
 	}
 
 	/*
-
+	
 	 	@Override
 	public synchronized ActivateTechnologyAdapterTask activateTechnologyAdapter(TechnologyAdapter technologyAdapter) {
 	
@@ -261,8 +263,6 @@ public abstract class ApplicationContext extends DefaultFlexoServiceManager {
 
 	protected abstract PreferencesService createPreferencesService();
 
-	public abstract BugReportService createBugReportService();
-
 	protected abstract FlexoServerInstanceManager createFlexoServerInstanceManager();
 
 	protected abstract ResourceConsistencyService createResourceConsistencyService();
@@ -275,6 +275,10 @@ public abstract class ApplicationContext extends DefaultFlexoServiceManager {
 	protected FlexoResourceCenterService createResourceCenterService(boolean enableDirectoryWatching) {
 		FlexoResourceCenterService returned = DefaultResourceCenterService.getNewInstance(enableDirectoryWatching, Flexo.isDev);
 		return returned;
+	}
+
+	public BugReportServiceInUIContextImpl createBugReportService() {
+		return new BugReportServiceInUIContextImpl();
 	}
 
 	@Override

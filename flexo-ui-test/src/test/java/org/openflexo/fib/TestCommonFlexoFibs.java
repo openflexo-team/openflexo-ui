@@ -90,18 +90,18 @@ public class TestCommonFlexoFibs extends GenericFIBTestCase {
 	}
 
 	@Test
-	public void testJIRAIssueReportDialog() {
-		validateFIB("Fib/JIRAIssueReportDialog.fib");
+	public void testGitHubIssueReportDialog() {
+		validateFIB("Fib/GitHubIssueReportDialog.fib");
 	}
 
 	@Test
-	public void testJIRASubmitIssueReportDialog() {
-		validateFIB("Fib/JIRASubmitIssueReportDialog.fib");
+	public void testGitHubSubmitIssueReportDialog() {
+		validateFIB("Fib/GitHubSubmitIssueReportDialog.fib");
 	}
 
 	@Test
-	public void testJIRAURLCredentialsDialog() {
-		validateFIB("Fib/JIRAURLCredentialsDialog.fib");
+	public void testGitHubTokenDialog() {
+		validateFIB("Fib/GitHubTokenDialog.fib");
 	}
 
 	@Test
