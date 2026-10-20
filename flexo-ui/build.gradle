@@ -13,7 +13,7 @@ dependencies {
   api ginaSwingEditor()
   implementation dianaSwing()
  
-  implementation 'commons-codec:commons-codec:1.16.1'
+  implementation commonsCodec()
 
   // Following dependencies are only required by handleWSException(...) method in FlexoController
   // TODO: do we really need this ???
