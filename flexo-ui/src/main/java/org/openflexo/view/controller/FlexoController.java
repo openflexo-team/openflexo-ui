@@ -64,6 +64,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -86,7 +87,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.xml.ws.Holder;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.FlexoCst;
@@ -1482,14 +1482,14 @@ public abstract class FlexoController implements PropertyChangeListener, HasProp
 
 	public boolean handleWSException(final Exception e) throws InterruptedException {
 		if (!SwingUtilities.isEventDispatchThread()) {
-			final Holder<Boolean> returned = new Holder<>();
+			final AtomicReference<Boolean> returned = new AtomicReference<>();
 			try {
-				SwingUtilities.invokeAndWait(() -> returned.value = _handleWSException(e));
+				SwingUtilities.invokeAndWait(() -> returned.set(_handleWSException(e)));
 			} catch (InvocationTargetException e1) {
 				e1.printStackTrace();
 				return false;
 			}
-			return returned.value != null && returned.value;
+			return returned.get() != null && returned.get();
 		}
 		return _handleWSException(e);
 	}

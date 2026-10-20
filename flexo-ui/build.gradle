@@ -15,11 +15,6 @@ dependencies {
  
   implementation commonsCodec()
 
-  // Following dependencies are only required by handleWSException(...) method in FlexoController
-  // TODO: do we really need this ???
-  implementation "javax.xml.ws:jaxws-api:2.3.1"
-  implementation "com.sun.xml.ws:jaxws-rt:2.3.3"
-
   // external dep
   if (!JavaVersion.current().isJava9Compatible()) {
   	implementation group: "org.openflexo.utils", name: "macos_ui_simulation", version: "1.1"
