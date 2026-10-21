@@ -10,38 +10,62 @@
  */
 package org.openflexo.fml.rstasupport.buildpath;
 
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
 
 import org.openflexo.fml.rstasupport.PackageMapNode;
 import org.openflexo.fml.rstasupport.classreader.ClassFile;
 
 /**
- * Information about a jmods folder
+ * Information about the classes of a "modern" (modularized, Java 9+) JRE or JDK.
  * 
- * TODO: work in progress
- *
+ * The classes are read from the runtime image of the JRE (the <code>jrt:/</code> file system), which every JRE and JDK holds. The
+ * <code>jmods</code> directory is not used: it is only found in some JDKs (the JDK builds since Java 24 may be linked without it) and it
+ * holds <code>.jmod</code> archives, not class files.
  */
 public class ModulesLibraryInfo extends LibraryInfo {
 
-	// jmods directory
-	private File dir;
+	// Home of the JRE or JDK
+	private File javaHome;
 
-	public ModulesLibraryInfo(File jmodsDir) {
-		this(jmodsDir, null);
+	// Class files by entry name (for instance "java/lang/String.class"), built on demand
+	private Map<String, Path> classFiles;
+
+	private FileSystem fileSystem;
+
+	public ModulesLibraryInfo(File javaHome) {
+		this(javaHome, null);
 	}
 
-	public ModulesLibraryInfo(String jmodsDir) {
-		this(new File(jmodsDir));
+	public ModulesLibraryInfo(String javaHome) {
+		this(new File(javaHome));
 	}
 
-	public ModulesLibraryInfo(File dir, SourceLocation sourceLoc) {
-		setDirectory(dir);
+	public ModulesLibraryInfo(File javaHome, SourceLocation sourceLoc) {
+		setJavaHome(javaHome);
 		setSourceLocation(sourceLoc);
 	}
 
-	public ModulesLibraryInfo(String dir, SourceLocation sourceLoc) {
-		this(new File(dir), sourceLoc);
+	public ModulesLibraryInfo(String javaHome, SourceLocation sourceLoc) {
+		this(new File(javaHome), sourceLoc);
+	}
+
+	/**
+	 * Returns whether the given directory is the home of a modularized JRE or JDK (it holds a runtime image).
+	 */
+	public static boolean isModularJavaHome(File javaHome) {
+		return new File(javaHome, "lib/modules").isFile();
 	}
 
 	@Override
@@ -56,7 +80,7 @@ public class ModulesLibraryInfo extends LibraryInfo {
 
 	/**
 	 * Compares this <code>LibraryInfo</code> to another one. Two instances of this class are only considered equal if they represent the
-	 * same class file location. Source attachment is irrelevant.
+	 * same Java home. Source attachment is irrelevant.
 	 *
 	 * @return The sort order of these two library infos.
 	 */
@@ -65,11 +89,10 @@ public class ModulesLibraryInfo extends LibraryInfo {
 		if (info == this) {
 			return 0;
 		}
-		int result = -1;
 		if (info instanceof ModulesLibraryInfo) {
-			return dir.compareTo(((ModulesLibraryInfo) info).dir);
+			return javaHome.compareTo(((ModulesLibraryInfo) info).javaHome);
 		}
-		return result;
+		return -1;
 	}
 
 	@Override
@@ -79,89 +102,99 @@ public class ModulesLibraryInfo extends LibraryInfo {
 
 	@Override
 	public ClassFile createClassFileBulk(String entryName) throws IOException {
-		File file = new File(dir, entryName);
-		if (!file.isFile()) {
-			System.err.println("ERROR: Invalid class file: " + file.getAbsolutePath());
+		Path path = getClassFiles().get(entryName);
+		if (path == null) {
+			System.err.println("ERROR: Invalid class file: " + entryName);
 			return null;
 		}
-		return new ClassFile(file);
+		try (InputStream is = Files.newInputStream(path); DataInputStream in = new DataInputStream(new BufferedInputStream(is))) {
+			return new ClassFile(in);
+		}
 	}
 
 	@Override
-	public PackageMapNode createPackageMap() {
+	public PackageMapNode createPackageMap() throws IOException {
 		PackageMapNode root = new PackageMapNode();
-		getPackageMapImpl(dir, null, root);
+		for (String entryName : getClassFiles().keySet()) {
+			root.add(entryName);
+		}
 		return root;
 	}
 
 	@Override
 	public long getLastModified() {
-		return dir.lastModified();
+		return new File(javaHome, "lib/modules").lastModified();
 	}
 
 	@Override
 	public String getLocationAsString() {
-		return dir.getAbsolutePath();
-	}
-
-	/**
-	 * Does the dirty-work of finding all class files in a directory tree.
-	 *
-	 * @param dir
-	 *            The directory to scan.
-	 * @param pkg
-	 *            The package name scanned so far, in the form "<code>com/company/pkgname</code>"...
-	 */
-	private void getPackageMapImpl(File dir, String pkg, PackageMapNode root) {
-
-		File[] children = dir.listFiles();
-
-		for (File child : children) {
-			if (child.isFile() && child.getName().endsWith(".class")) {
-				if (pkg != null) { // will be null the first time through
-					// TODO: Split pkg here to prevent repeated splits
-					// for performance
-					root.add(pkg + "/" + child.getName());
-				}
-				else {
-					root.add(child.getName());
-				}
-			}
-			else if (child.isDirectory()) {
-				String subpkg = pkg == null ? child.getName() : (pkg + "/" + child.getName());
-				getPackageMapImpl(child, subpkg, root);
-			}
-		}
-
+		return javaHome.getAbsolutePath();
 	}
 
 	@Override
 	public int hashCodeImpl() {
-		return dir.hashCode();
+		return javaHome.hashCode();
+	}
+
+	private synchronized Map<String, Path> getClassFiles() throws IOException {
+		if (classFiles == null) {
+			Map<String, Path> returned = new HashMap<>();
+			Path modules = getFileSystem().getPath("/modules");
+			try (Stream<Path> moduleDirs = Files.list(modules)) {
+				for (Path moduleDir : (Iterable<Path>) moduleDirs::iterator) {
+					try (Stream<Path> files = Files.walk(moduleDir)) {
+						for (Path file : (Iterable<Path>) files::iterator) {
+							String name = file.getFileName() != null ? file.getFileName().toString() : "";
+							if (name.endsWith(".class") && !name.equals("module-info.class")) {
+								// jar-like entry name: "java/lang/String.class"
+								returned.put(moduleDir.relativize(file).toString(), file);
+							}
+						}
+					}
+				}
+			}
+			classFiles = returned;
+		}
+		return classFiles;
+	}
+
+	private FileSystem getFileSystem() throws IOException {
+		if (fileSystem == null) {
+			File runningJavaHome = new File(System.getProperty("java.home"));
+			if (runningJavaHome.getCanonicalFile().equals(javaHome.getCanonicalFile())) {
+				fileSystem = FileSystems.getFileSystem(URI.create("jrt:/"));
+			}
+			else {
+				// Another JRE: its runtime image is read through the jrt-fs.jar that it holds
+				Map<String, String> env = new HashMap<>();
+				env.put("java.home", javaHome.getAbsolutePath());
+				fileSystem = FileSystems.newFileSystem(URI.create("jrt:/"), env);
+			}
+		}
+		return fileSystem;
 	}
 
 	/**
-	 * Sets the directory containing the classes.
+	 * Sets the home of the JRE.
 	 *
-	 * @param dir
+	 * @param javaHome
 	 *            The directory. This cannot be <code>null</code>.
 	 */
-	private void setDirectory(File dir) {
-		if (dir == null || !dir.isDirectory()) {
-			String name = dir == null ? "null" : dir.getAbsolutePath();
+	private void setJavaHome(File javaHome) {
+		if (javaHome == null || !javaHome.isDirectory()) {
+			String name = javaHome == null ? "null" : javaHome.getAbsolutePath();
 			throw new IllegalArgumentException("Directory does not exist: " + name);
 		}
-		this.dir = dir;
+		this.javaHome = javaHome;
 	}
 
 	/**
-	 * Returns a string representation of this jar information. Useful for debugging.
+	 * Returns a string representation of this library information. Useful for debugging.
 	 *
 	 * @return A string representation of this object.
 	 */
 	@Override
 	public String toString() {
-		return "[ModulesLibraryInfo: " + "jmods=" + dir.getAbsolutePath() + "; source=" + getSourceLocation() + "]";
+		return "[ModulesLibraryInfo: " + "javaHome=" + javaHome.getAbsolutePath() + "; source=" + getSourceLocation() + "]";
 	}
-
 }

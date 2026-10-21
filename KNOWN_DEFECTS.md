@@ -31,7 +31,7 @@ Status legend: `TODO` · `IN PROGRESS` · `BLOCKED` · `DONE` · `DEFERRED`.
 
 **Same pattern in three other modules, fixed the same day (2026-10-09/10).** `openflexo-diagram/diagram-ta` (`implementation flexoFoundationTest()`), `openflexo-utils/flexo-p2pp` (`implementation testUtils()`) and `openflexo-utils/flexo-utils` (`implementation testUtils()`, the one that brought JUnit and `testutils` to every application through `pamela-core`, `flexolocalization` and `flexo-foundation`): each is now `testImplementation`. None of their production sources imports a test class (`grep` on `import org.openflexo.test|org.junit|org.openflexo.foundation.test`). Tests before/after: `diagram-ta` 24 (2 skipped), `flexo-p2pp` 5, `flexo-utils` 44 (10 skipped), identical. Runtime classpath of `formod-app`: `flexo-test-resources`, `gina-test`, `flexo-foundation-test`, `testutils` and JUnit were all in it, none is any more.
 
-### UI-D-3 — On a Java runtime without its class library files, the application dies at startup behind its splash screen  ·  `TODO`
+### UI-D-3 — On a Java runtime without its class library files, the application dies at startup behind its splash screen  ·  `DONE`
 
 **Symptom.** The splash screen stays forever. The log ends with `[ERROR]: Cannot locate JRE jar in …/jre` then `Exception in thread "main" java.lang.IllegalArgumentException: info cannot be null` at `JarManager.addClassFileSource(JarManager.java:155)` ← `JarManager.addCurrentJreClassFileSource` ← `FMLTechnologyAdapterController.activate(FMLTechnologyAdapterController.java:214)` ← `DefaultTechnologyAdapterControllerService.initialize` ← `ApplicationContext.<init>` ← `Flexo.main`.
 
@@ -39,4 +39,6 @@ Status legend: `TODO` · `IN PROGRESS` · `BLOCKED` · `DONE` · `DEFERRED`.
 
 **Work-around.** Run the application on a JDK (`JAVA_HOME=<a JDK 17> ./gradlew …:run`), or point jenv's `17` to a JDK.
 
-**To fix.** In `activate()`, skip the JRE class-file source (with a warning) when `getMainJreJarInfo()` is null, so that only the completion of Java types in the FML editor is degraded; more generally, an exception during the initialization of a service should not leave the splash screen up with a dead main thread.
+**Fixed (2026-10-21).** The cause was deeper than the missing JRE of jenv: a "modern" Java was recognized by its `jmods` directory, which JREs do not have and which JDK builds since Java 24 may not have either (the Temurin 25 of the workspace: same symptom on a full JDK). The `jmods` directory was also read as a directory of class files, but it holds `.jmod` archives, so the classes of the JDK were never offered on Java 9+. `ModulesLibraryInfo` now reads the runtime image through the `jrt:/` file system, found by the presence of `lib/modules`, and `addCurrentJreClassFileSource()` no longer throws when no class library is found (it warns). Verified: formod and Flexo Maintainer start on JDK 25. The code completion of JDK types was not checked by hand.
+
+**Original proposal.** In `activate()`, skip the JRE class-file source (with a warning) when `getMainJreJarInfo()` is null, so that only the completion of Java types in the FML editor is degraded; more generally, an exception during the initialization of a service should not leave the splash screen up with a dead main thread.

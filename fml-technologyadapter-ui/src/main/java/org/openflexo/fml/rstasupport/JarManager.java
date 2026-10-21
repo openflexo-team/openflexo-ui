@@ -188,7 +188,13 @@ public class JarManager {
 	 * @see #addClassFileSource(LibraryInfo)
 	 */
 	public void addCurrentJreClassFileSource() throws IOException {
-		addClassFileSource(LibraryInfo.getMainJreJarInfo());
+		LibraryInfo info = LibraryInfo.getMainJreJarInfo();
+		if (info == null) {
+			// No class library found for this JRE: only the completion of the types of the JRE is degraded, do not stop the application
+			System.err.println("[WARNING]: the classes of the JRE are not available for code completion");
+			return;
+		}
+		addClassFileSource(info);
 	}
 
 

@@ -150,10 +150,9 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>, Cloneable 
 		LibraryInfo info = null;
 		File sourceZip;
 
-		// Is it a "modern" (modularized, >=1.9) java ?
-		File jmodsDirectory = new File(jreHome, "jmods");
-		if (jmodsDirectory.exists()) {
-			info = new ModulesLibraryInfo(jmodsDirectory);
+		// Is it a "modern" (modularized, >=1.9) java ? It holds a runtime image (the jmods directory is not always there)
+		if (ModulesLibraryInfo.isModularJavaHome(jreHome)) {
+			info = new ModulesLibraryInfo(jreHome);
 			sourceZip = new File(jreHome, "lib/src.zip");
 			if (sourceZip.isFile()) { // Make sure our last guess actually exists
 				info.setSourceLocation(new ZipSourceLocation(sourceZip));
