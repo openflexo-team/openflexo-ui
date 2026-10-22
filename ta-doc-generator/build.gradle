@@ -1,6 +1,6 @@
 dependencies {
-	api group: 'org.apache.velocity', name: 'velocity', version: '1.7'
-	api group: 'org.apache.velocity', name: 'velocity-tools', version: '2.0'
+	// Velocity 1.7 and velocity-tools 2.0 have known vulnerabilities and no fixed 1.x version (BUILD-F-7). Only the engine is used.
+	api 'org.apache.velocity:velocity-engine-core:2.4.1'
 	
     implementation flexoFoundation()
     implementation project(':flexo-ui')

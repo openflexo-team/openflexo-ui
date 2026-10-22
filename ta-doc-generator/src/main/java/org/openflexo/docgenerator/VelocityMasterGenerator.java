@@ -66,6 +66,8 @@ public abstract class VelocityMasterGenerator<TA extends TechnologyAdapter<TA>> 
 
 		super(taClass, repositoryName, mainProjectName, applicationContext);
 		velocityEngine = new VelocityEngine();
+		// Velocity 2 gobbles the white spaces of the directives differently from Velocity 1.7 by default: keep the former layout
+		velocityEngine.setProperty("space.gobbling", "bc");
 		Resource templateResource = ResourceLocator.locateResource(getTemplateDirectoryRelativePath());
 		if (templateResource instanceof FileResourceImpl) {
 			velocityEngine.setProperty("file.resource.loader.path", ((FileResourceImpl) templateResource).getFile().getAbsolutePath());
