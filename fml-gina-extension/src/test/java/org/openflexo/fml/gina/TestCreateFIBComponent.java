@@ -354,7 +354,7 @@ public class TestCreateFIBComponent extends OpenflexoTestCase {
 	 * The indentation of such a line is the one tolerance of the comparison, and it is a known defect of the pretty-printer, not of the
 	 * declaration: a child inserted in front of an indented node - an annotation added to a concept - takes the place of the node's first
 	 * fragment, AFTER its indentation, so the declaration that follows restarts at column 0. The source stays valid FML. See "Inserting
-	 * a child in front of an indented node" in <code>openflexo-utils/flexo-p2pp/KNOWN_DEFECTS.md</code>. Every other line is compared
+	 * a child in front of an indented node" in <code>p2pp/p2pp-core/KNOWN_DEFECTS.md</code>. Every other line is compared
 	 * exactly.
 	 */
 	private static List<SourceLine> withoutAnnotations(String fml) {

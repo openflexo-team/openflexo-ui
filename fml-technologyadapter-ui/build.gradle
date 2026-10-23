@@ -7,7 +7,7 @@ dependencies {
   implementation flexoOntology()
   implementation project(':flexo-ontology-ui')
   //implementation flexoOntologyUi()
-  implementation flexoP2PP();
+  implementation p2pp();
   // external dep
 
   // testing dep
