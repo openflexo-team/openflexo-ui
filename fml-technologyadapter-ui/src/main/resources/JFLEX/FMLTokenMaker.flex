@@ -293,16 +293,24 @@ URL						= (((https?|f(tp|ile))"://"|"www.")({URLCharacters}{URLEndCharacter})?)
 "with"		{ addToken(Token.RESERVED_WORD); }
 
 	/* Keywords 2 (just an optional set of keywords colored differently) */
-	"default" |
+	"create" |
+"default" |
+"delete" |
 "new" |
 "private" |
 "protected" |
 "public"		{ addToken(Token.RESERVED_WORD_2); }
 
 	/* Data types */
-	"boolean" |
+	"String" |
+"boolean" |
+"byte" |
+"char" |
+"double" |
 "float" |
 "int" |
+"long" |
+"short" |
 "void"		{ addToken(Token.DATA_TYPE); }
 
 	/* Functions */
