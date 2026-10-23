@@ -117,6 +117,9 @@ public interface PreferencesContainer extends FlexoObject {
 
 	public String getName();
 
+	/** Called when the user applies the preferences: a container whose changes are not effective at once makes them so here */
+	public void applyPreferences();
+
 	@Getter(value = PREFERENCES_SERVICE, ignoreType = true)
 	public PreferencesService getPreferencesService();
 
@@ -184,6 +187,10 @@ public interface PreferencesContainer extends FlexoObject {
 				}
 			}
 			return null;
+		}
+
+		@Override
+		public void applyPreferences() {
 		}
 
 		@Override

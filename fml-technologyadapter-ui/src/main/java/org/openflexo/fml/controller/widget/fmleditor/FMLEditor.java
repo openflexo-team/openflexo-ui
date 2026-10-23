@@ -49,10 +49,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
@@ -74,13 +75,16 @@ import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rsyntaxtextarea.Theme;
-import org.fife.ui.rsyntaxtextarea.Token;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
 import org.fife.ui.rtextarea.Gutter;
 import org.fife.ui.rtextarea.RTextScrollPane;
+import org.openflexo.fml.controller.FMLPreferences;
 import org.openflexo.fml.controller.FMLTechnologyAdapterController;
+import org.openflexo.fml.controller.theme.FMLEditorTheme;
+import org.openflexo.fml.controller.theme.FMLThemeLibrary;
+import org.openflexo.pamela.exceptions.ModelDefinitionException;
+import org.openflexo.toolbox.FileUtils;
 import org.openflexo.fml.controller.widget.FIBCompilationUnitDetailedBrowser;
 import org.openflexo.fml.controller.widget.FMLValidationPanel;
 import org.openflexo.fml.rstasupport.FMLLanguageSupport;
@@ -121,8 +125,6 @@ import org.openflexo.view.controller.TechnologyAdapterControllerService;
 public class FMLEditor extends JPanel implements PropertyChangeListener, HyperlinkListener {
 
 	static final Logger logger = Logger.getLogger(FMLEditor.class.getPackage().getName());
-
-	private static final Color ANNOTATION_COLOR = new Color(0xA0, 0x78, 0x00);
 
 	static {
 		AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory) TokenMakerFactory.getDefaultInstance();
@@ -233,19 +235,10 @@ public class FMLEditor extends JPanel implements PropertyChangeListener, Hyperli
 			}
 		});
 
-		try {
-			// Theme theme = Theme.load(getClass().getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/dark.xml"));
-			Theme theme = Theme.load(getClass().getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/default.xml"));
-			// Theme theme = Theme.load(getClass().getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/default-alt.xml"));
-			// Theme theme = Theme.load(getClass().getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/eclipse.xml"));
-			// Theme theme = Theme.load(getClass().getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/idea.xml"));
-			// Theme theme = Theme.load(getClass().getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/monokai.xml"));
-			// Theme theme = Theme.load(getClass().getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/vs.xml"));
-			theme.apply(textArea);
-			// Annotations get their own colour, whatever the theme
-			textArea.getSyntaxScheme().getStyle(Token.ANNOTATION).foreground = ANNOTATION_COLOR;
-		} catch (IOException ioe) { // Never happens
-			ioe.printStackTrace();
+		applyActiveTheme();
+		FMLPreferences fmlPreferences = getFMLPreferences();
+		if (fmlPreferences != null) {
+			fmlPreferences.getPropertyChangeSupport().addPropertyChangeListener(themeListener);
 		}
 
 		try {
@@ -331,11 +324,48 @@ public class FMLEditor extends JPanel implements PropertyChangeListener, Hyperli
 	}
 
 	public void delete() {
+		FMLPreferences fmlPreferences = getFMLPreferences();
+		if (fmlPreferences != null) {
+			fmlPreferences.getPropertyChangeSupport().removePropertyChangeListener(themeListener);
+		}
 		textArea.setParser(null);
 		LanguageSupportFactory.get().unregister(textArea);
 		ToolTipManager.sharedInstance().unregisterComponent(textArea);
 		logger.warning("delete() not fully implemented for FMLEditor");
 	}
+
+	private FMLPreferences getFMLPreferences() {
+		if (flexoController != null && flexoController.getApplicationContext() != null
+				&& flexoController.getApplicationContext().getPreferencesService() != null) {
+			return flexoController.getApplicationContext().getPreferencesService().getPreferences(FMLPreferences.class);
+		}
+		return null;
+	}
+
+	/** Colours the text with the active theme of the preferences, or with the default theme when there are no preferences */
+	private void applyActiveTheme() {
+		FMLPreferences fmlPreferences = getFMLPreferences();
+		FMLEditorTheme theme = fmlPreferences != null ? fmlPreferences.getActiveTheme() : null;
+		if (theme == null) {
+			try {
+				theme = new FMLThemeLibrary(new File(FileUtils.getApplicationDataDirectory(), "FMLThemes")).getDefaultTheme();
+			} catch (ModelDefinitionException e) {
+				logger.log(Level.SEVERE, "Cannot build the FML themes model", e);
+				return;
+			}
+		}
+		theme.applyTo(textArea);
+	}
+
+	// The user has applied the preferences: every editor takes the theme that they chose
+	private final PropertyChangeListener themeListener = new PropertyChangeListener() {
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (FMLPreferences.ACTIVE_THEME.equals(evt.getPropertyName())) {
+				SwingUtilities.invokeLater(() -> applyActiveTheme());
+			}
+		}
+	};
 
 	public CompilationUnitResource getFMLResource() {
 		return fmlResource;

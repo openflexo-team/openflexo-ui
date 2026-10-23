@@ -122,6 +122,7 @@ import org.openflexo.module.FlexoModule;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.pamela.validation.ValidationModel;
 import org.openflexo.pamela.validation.ValidationReport;
+import org.openflexo.prefs.PreferencesContainer;
 import org.openflexo.prefs.TechnologyAdapterPreferences;
 import org.openflexo.rm.Resource;
 import org.openflexo.rm.ResourceLocator;
@@ -739,6 +740,16 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<T
 	}
 
 	public Class<? extends TechnologyAdapterPreferences<TA>> getPreferencesClass() {
+		return null;
+	}
+
+	/**
+	 * Preferences of this technology that are not specific to it and appear at the top of the preferences tree, as a page of the
+	 * application (for example the editors), instead of under the technology adapters.<br>
+	 * 
+	 * @return the class of these preferences, or null if there are none
+	 */
+	public Class<? extends PreferencesContainer> getApplicationPreferencesClass() {
 		return null;
 	}
 

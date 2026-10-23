@@ -1029,7 +1029,7 @@ public class FMLTechnologyAdapterController extends TechnologyAdapterController<
 	}
 
 	@Override
-	public Class<FMLPreferences> getPreferencesClass() {
+	public Class<FMLPreferences> getApplicationPreferencesClass() {
 		return FMLPreferences.class;
 	}
 

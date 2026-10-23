@@ -121,8 +121,14 @@ public class PreferencesService extends FlexoServiceImpl implements HasPropertyC
 		getFlexoPreferences().setPreferencesService(this);
 		managePreferences(GeneralPreferences.class, getFlexoPreferences());
 		managePreferences(PresentationPreferences.class, getFlexoPreferences());
-		managePreferences(AdvancedPrefs.class, getFlexoPreferences());
 		ApplicationContext ac = getServiceManager();
+		// The pages that technologies contribute to the top of the tree come next
+		if (ac.getTechnologyAdapterService() != null && ac.getTechnologyAdapterControllerService() != null) {
+			for (TechnologyAdapter<?> technologyAdapter : ac.getTechnologyAdapterService().getTechnologyAdapters()) {
+				initializeApplicationPreferencesForTechnologyAdapter(technologyAdapter);
+			}
+		}
+		managePreferences(AdvancedPrefs.class, getFlexoPreferences());
 		for (FlexoService service : ac.getRegisteredServices()) {
 			initializePreferencesForService(service);
 		}
@@ -193,6 +199,46 @@ public class PreferencesService extends FlexoServiceImpl implements HasPropertyC
 		return preferences;
 	}
 
+	private PreferencesContainer initializeApplicationPreferencesForTechnologyAdapter(TechnologyAdapter<?> technologyAdapter) {
+		TechnologyAdapterController<?> controller = getServiceManager().getTechnologyAdapterControllerService()
+				.getTechnologyAdapterController((TechnologyAdapter) technologyAdapter);
+		if (controller != null && controller.getApplicationPreferencesClass() != null) {
+			PreferencesContainer returned = managePreferences(controller.getApplicationPreferencesClass(), getFlexoPreferences());
+			// A file saved by an earlier version may hold these preferences somewhere else in the tree
+			if (returned != null && returned.getContainer() != getFlexoPreferences()) {
+				if (returned.getContainer() != null) {
+					returned.getContainer().removeFromContents(returned);
+				}
+				getFlexoPreferences().addToContents(returned);
+			}
+			placeAfter(returned, PresentationPreferences.class);
+			return returned;
+		}
+		return null;
+	}
+
+	/**
+	 * Moves a page of the preferences tree just after the page of the given class. The pages are listed in the order of the contents of the
+	 * root, which a preferences file keeps: a page found at the end of the list of a saved file would otherwise stay there.
+	 */
+	private void placeAfter(PreferencesContainer page, Class<? extends PreferencesContainer> anchorClass) {
+		List<PreferencesContainer> order = new ArrayList<>(getFlexoPreferences().getContents());
+		PreferencesContainer anchor = getFlexoPreferences().getPreferences(anchorClass);
+		int anchorIndex = order.indexOf(anchor);
+		if (anchorIndex < 0 || order.indexOf(page) == anchorIndex + 1) {
+			return;
+		}
+		order.remove(page);
+		order.add(order.indexOf(anchor) + 1, page);
+		List<PreferencesContainer> moved = new ArrayList<>(order.subList(order.indexOf(anchor) + 1, order.size()));
+		for (PreferencesContainer container : moved) {
+			getFlexoPreferences().removeFromContents(container);
+		}
+		for (PreferencesContainer container : moved) {
+			getFlexoPreferences().addToContents(container);
+		}
+	}
+
 	private <TA extends TechnologyAdapter<TA>> TechnologyAdapterPreferences<TA> initializePreferencesForTechnologyAdapter(
 			TA technologyAdapter) {
 		TechnologyAdapterPreferences<TA> preferences = managePreferences(getTechnologyAdapterPreferencesClass(technologyAdapter),
@@ -223,6 +269,8 @@ public class PreferencesService extends FlexoServiceImpl implements HasPropertyC
 		if (caller instanceof TechnologyAdapterControllerService) {
 			if (notification instanceof TechnologyAdapterHasBeenActivated) {
 				initializePreferencesForTechnologyAdapter(((TechnologyAdapterHasBeenActivated) notification).getTechnologyAdapter());
+				initializeApplicationPreferencesForTechnologyAdapter(
+						((TechnologyAdapterHasBeenActivated) notification).getTechnologyAdapter());
 			}
 		}
 		if (notification instanceof ServiceRegistered) {
@@ -264,6 +312,9 @@ public class PreferencesService extends FlexoServiceImpl implements HasPropertyC
 				if (tac != null && tac.getPreferencesClass() != null) {
 					classes.add(tac.getPreferencesClass());
 				}
+				if (tac != null && tac.getApplicationPreferencesClass() != null) {
+					classes.add(tac.getApplicationPreferencesClass());
+				}
 			}
 		}
 
@@ -274,7 +325,14 @@ public class PreferencesService extends FlexoServiceImpl implements HasPropertyC
 	}
 
 	public void applyPreferences() {
-		System.out.println("applyPreferences() not implemented yet");
+		applyPreferences(getFlexoPreferences());
+	}
+
+	private void applyPreferences(PreferencesContainer container) {
+		container.applyPreferences();
+		for (PreferencesContainer child : new ArrayList<>(container.getContents())) {
+			applyPreferences(child);
+		}
 	}
 
 	public void savePreferences() {

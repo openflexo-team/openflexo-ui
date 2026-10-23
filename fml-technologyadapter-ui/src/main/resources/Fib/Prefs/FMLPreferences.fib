@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel id="0" name="FMLPreferencesPanel" layout="twocols" border="empty" borderTop="5" borderLeft="0" borderRight="0" borderBottom="0" controllerClassName="org.openflexo.components.PreferencesDialog$PreferencesFIBController" trackViewPortWidth="true" trackViewPortHeight="true" align="left" width="99" height="99" sizeAdjustment="OriginalSize">
+  <Label id="176" name="ThemesLabel" label="themes" localize="true" align="left" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=2;insetsLeft=10;insetsRight=10;insetsTop=2;location=center)" />
+  <Table id="177" name="themeTable" data="data.themes" selected="data.selectedTheme" iteratorClassName="org.openflexo.fml.controller.theme.FMLEditorTheme" visibleRowCount="4" rowHeight="18" autoSelectFirstRow="false" selectionMode="SingleSelection" manageDynamicModel="true" localize="true" showFooter="false" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;insetsBottom=2;insetsLeft=10;insetsRight=10;insetsTop=2;location=center)">
+    <LabelColumn id="178" name="name" data="(iterator == data.usedTheme) ? (&quot;&lt;html&gt;&lt;b&gt;&quot; + iterator.name + &quot; (active)&lt;/b&gt;&lt;/html&gt;&quot;) : iterator.name" title="theme_name" displayTitle="true" columnWidth="200" resizable="true" showIcon="false" />
+  </Table>
+  <Panel id="180" name="ThemeButtons" layout="flow" border="empty" borderTop="0" borderLeft="0" borderRight="0" borderBottom="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=2;insetsLeft=10;insetsRight=10;insetsTop=2;location=center)">
+    <Button id="181" name="new_themeButton" action="data.createTheme()" buttonType="Trigger" label="new_theme" localize="true" constraints="flow(index=0)" />
+    <Button id="182" name="duplicate_themeButton" action="data.duplicateSelectedTheme()" buttonType="Trigger" label="duplicate_theme" localize="true" constraints="flow(index=1)" enable="data.selectedTheme != null" />
+    <Button id="183" name="delete_themeButton" action="data.deleteSelectedTheme()" buttonType="Trigger" label="delete_theme" localize="true" constraints="flow(index=2)" enable="data.canDeleteSelectedTheme()" />
+    <Button id="321" name="use_themeButton" action="data.useSelectedTheme()" buttonType="Trigger" label="use_theme" localize="true" constraints="flow(index=3)" enable="data.selectedTheme != null" />
+    <Button id="185" name="import_themeButton" action="data.importTheme()" buttonType="Trigger" label="import_theme" localize="true" constraints="flow(index=4)" />
+    <Button id="186" name="export_themeButton" action="data.exportSelectedTheme()" buttonType="Trigger" label="export_theme" localize="true" constraints="flow(index=5)" enable="data.selectedTheme != null" />
+  </Panel>
+  <Label id="187" name="ReadOnlyLabel" label="read_only_theme" localize="true" align="left" visible="data.selectedTheme != null &amp;&amp; !data.selectedTheme.editable" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=2;insetsLeft=10;insetsRight=10;insetsTop=2;location=center)" />
+  <Label id="188" name="NameLabel" label="theme_name" localize="true" align="left" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=2;insetsLeft=10;insetsRight=10;insetsTop=2;location=left)" />
+  <TextField id="189" name="NameField" data="data.selectedThemeName" columns="20" enable="data.canRenameSelectedTheme()" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=2;insetsLeft=10;insetsRight=10;insetsTop=2;location=right)" />
+  <Label id="190" name="BackgroundLabel" label="editor_background" localize="true" align="left" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=2;insetsLeft=10;insetsRight=10;insetsTop=2;location=left)" />
+  <Color id="191" name="BackgroundColor" data="data.selectedTheme.background" enable="data.selectedTheme.editable" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=2;insetsLeft=10;insetsRight=10;insetsTop=2;location=right)" />
+  <Label id="192" name="CurrentLineLabel" label="current_line" localize="true" align="left" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=2;insetsLeft=10;insetsRight=10;insetsTop=2;location=left)" />
+  <Color id="193" name="CurrentLineColor" data="data.selectedTheme.currentLineHighlight" enable="data.selectedTheme.editable" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=2;insetsLeft=10;insetsRight=10;insetsTop=2;location=right)" />
+  <Table id="194" name="tokenTable" data="data.selectedTheme.tokenStyles" iteratorClassName="org.openflexo.fml.controller.theme.FMLTokenStyle" visibleRowCount="10" rowHeight="18" autoSelectFirstRow="true" selectionMode="SingleSelection" manageDynamicModel="true" localize="true" showFooter="false" constraints="twocols(expandHorizontally=true;expandVertically=true;index=10;insetsBottom=2;insetsLeft=10;insetsRight=10;insetsTop=2;location=center)">
+    <LabelColumn id="195" name="token" data="iterator.label" title="token_type" displayTitle="true" columnWidth="200" resizable="true" showIcon="false" />
+    <CustomColumn id="310" name="color" componentClassName="org.openflexo.gina.swing.utils.FIBColorSelector" customRendering="true" data="iterator.foreground" title="color" displayTitle="true" columnWidth="60" resizable="false" showIcon="false" />
+    <CheckBoxColumn id="196" name="bold" data="iterator.bold" title="bold" displayTitle="true" columnWidth="50" resizable="false" showIcon="false" />
+    <CheckBoxColumn id="197" name="italic" data="iterator.italic" title="italic" displayTitle="true" columnWidth="50" resizable="false" showIcon="false" />
+  </Table>
+  <Custom id="300" name="ThemePreview" componentClassName="org.openflexo.fml.controller.widget.FMLThemePreview" dataClassForComponent="org.openflexo.fml.controller.theme.FMLEditorTheme" data="data.selectedTheme" localize="true" manageDynamicModel="true" constraints="twocols(expandHorizontally=true;expandVertically=true;index=13;insetsBottom=2;insetsLeft=10;insetsRight=10;insetsTop=2;location=center)" />
+  <FIBVariable id="200" name="data" type="org.openflexo.fml.controller.FMLPreferences" />
+  <LocalizedDictionary id="101">
+    <Localized id="102" value="Themes (use the Apply button to give the used theme to the open editors)" lang="English" key="themes" />
+    <Localized id="103" value="Thèmes (le bouton Appliquer donne le thème utilisé aux éditeurs ouverts)" lang="French" key="themes" />
+    <Localized id="104" value="Name" lang="English" key="theme_name" />
+    <Localized id="105" value="Nom" lang="French" key="theme_name" />
+    <Localized id="106" value="Active" lang="English" key="active" />
+    <Localized id="107" value="Actif" lang="French" key="active" />
+    <Localized id="108" value="Theme" lang="English" key="theme" />
+    <Localized id="109" value="Thème" lang="French" key="theme" />
+    <Localized id="110" value="New" lang="English" key="new_theme" />
+    <Localized id="111" value="Nouveau" lang="French" key="new_theme" />
+    <Localized id="112" value="Duplicate" lang="English" key="duplicate_theme" />
+    <Localized id="113" value="Dupliquer" lang="French" key="duplicate_theme" />
+    <Localized id="114" value="Delete" lang="English" key="delete_theme" />
+    <Localized id="115" value="Supprimer" lang="French" key="delete_theme" />
+            <Localized id="118" value="Import..." lang="English" key="import_theme" />
+    <Localized id="119" value="Importer..." lang="French" key="import_theme" />
+    <Localized id="120" value="Export..." lang="English" key="export_theme" />
+    <Localized id="121" value="Exporter..." lang="French" key="export_theme" />
+    <Localized id="122" value="Shipped themes cannot be modified: duplicate one to make your own" lang="English" key="read_only_theme" />
+    <Localized id="123" value="Les thèmes fournis ne sont pas modifiables : dupliquez-en un pour créer le vôtre" lang="French" key="read_only_theme" />
+    <Localized id="124" value="Editor background" lang="English" key="editor_background" />
+    <Localized id="125" value="Fond de l'éditeur" lang="French" key="editor_background" />
+    <Localized id="126" value="Current line highlight" lang="English" key="current_line" />
+    <Localized id="127" value="Ligne courante" lang="French" key="current_line" />
+    <Localized id="128" value="Token type" lang="English" key="token_type" />
+    <Localized id="129" value="Type de jeton" lang="French" key="token_type" />
+    <Localized id="130" value="Bold" lang="English" key="bold" />
+    <Localized id="131" value="Gras" lang="French" key="bold" />
+    <Localized id="132" value="Italic" lang="English" key="italic" />
+    <Localized id="133" value="Italique" lang="French" key="italic" />
+    <Localized id="134" value="Colour" lang="English" key="color" />
+    <Localized id="135" value="Couleur" lang="French" key="color" />
+    <Localized id="136" value="Colour of the selected token type" lang="English" key="token_color" />
+    <Localized id="137" value="Couleur du type de jeton sélectionné" lang="French" key="token_color" />
+    <Localized id="138" value="Keyword" lang="English" key="RESERVED_WORD" />
+    <Localized id="139" value="Mot-clé" lang="French" key="RESERVED_WORD" />
+    <Localized id="140" value="Keyword (secondary)" lang="English" key="RESERVED_WORD_2" />
+    <Localized id="141" value="Mot-clé (secondaire)" lang="French" key="RESERVED_WORD_2" />
+    <Localized id="142" value="Data type" lang="English" key="DATA_TYPE" />
+    <Localized id="143" value="Type de données" lang="French" key="DATA_TYPE" />
+    <Localized id="144" value="Function" lang="English" key="FUNCTION" />
+    <Localized id="145" value="Fonction" lang="French" key="FUNCTION" />
+    <Localized id="146" value="Annotation" lang="English" key="ANNOTATION" />
+    <Localized id="147" value="Annotation" lang="French" key="ANNOTATION" />
+    <Localized id="148" value="Boolean" lang="English" key="LITERAL_BOOLEAN" />
+    <Localized id="149" value="Booléen" lang="French" key="LITERAL_BOOLEAN" />
+    <Localized id="150" value="Integer" lang="English" key="LITERAL_NUMBER_DECIMAL_INT" />
+    <Localized id="151" value="Entier" lang="French" key="LITERAL_NUMBER_DECIMAL_INT" />
+    <Localized id="152" value="Floating point number" lang="English" key="LITERAL_NUMBER_FLOAT" />
+    <Localized id="153" value="Nombre flottant" lang="French" key="LITERAL_NUMBER_FLOAT" />
+    <Localized id="154" value="Hexadecimal number" lang="English" key="LITERAL_NUMBER_HEXADECIMAL" />
+    <Localized id="155" value="Nombre hexadécimal" lang="French" key="LITERAL_NUMBER_HEXADECIMAL" />
+    <Localized id="156" value="String" lang="English" key="LITERAL_STRING_DOUBLE_QUOTE" />
+    <Localized id="157" value="Chaîne" lang="French" key="LITERAL_STRING_DOUBLE_QUOTE" />
+    <Localized id="158" value="Line comment" lang="English" key="COMMENT_EOL" />
+    <Localized id="159" value="Commentaire de ligne" lang="French" key="COMMENT_EOL" />
+    <Localized id="160" value="Block comment" lang="English" key="COMMENT_MULTILINE" />
+    <Localized id="161" value="Commentaire de bloc" lang="French" key="COMMENT_MULTILINE" />
+    <Localized id="162" value="Documentation comment" lang="English" key="COMMENT_DOCUMENTATION" />
+    <Localized id="163" value="Commentaire de documentation" lang="French" key="COMMENT_DOCUMENTATION" />
+    <Localized id="164" value="Identifier" lang="English" key="IDENTIFIER" />
+    <Localized id="165" value="Identifiant" lang="French" key="IDENTIFIER" />
+    <Localized id="166" value="Separator" lang="English" key="SEPARATOR" />
+    <Localized id="167" value="Séparateur" lang="French" key="SEPARATOR" />
+    <Localized id="168" value="Operator" lang="English" key="OPERATOR" />
+    <Localized id="169" value="Opérateur" lang="French" key="OPERATOR" />
+    <Localized id="170" value="Whitespace" lang="English" key="WHITESPACE" />
+    <Localized id="171" value="Espace" lang="French" key="WHITESPACE" />
+    <Localized id="172" value="Malformed number" lang="English" key="ERROR_NUMBER_FORMAT" />
+    <Localized id="173" value="Nombre mal formé" lang="French" key="ERROR_NUMBER_FORMAT" />
+    <Localized id="174" value="Unterminated string" lang="English" key="ERROR_STRING_DOUBLE" />
+    <Localized id="175" value="Chaîne non terminée" lang="French" key="ERROR_STRING_DOUBLE" />
+    <Localized id="330" value="Use" lang="English" key="use_theme" />
+    <Localized id="331" value="Utiliser" lang="French" key="use_theme" />
+          </LocalizedDictionary>
+</Panel>
