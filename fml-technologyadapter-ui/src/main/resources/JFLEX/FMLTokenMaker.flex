@@ -1,4 +1,7 @@
 /*
+ * EDITED BY HAND: this file is the source of FMLTokenMaker.java (task generateTokenMakers).
+ * Do NOT regenerate it from FMLTokenMaker.xml with TokenMakerMaker: the {Annotation} rule would be lost.
+ *
  * Generated on 2/3/25, 11:45 AM
  */
 package org.openflexo.fml.controller.view;
@@ -223,6 +226,7 @@ Separator					= ([\(\)\{\}\[\]])
 Separator2				= ([\;,.])
 
 Identifier				= ({IdentifierStart}{IdentifierPart}*)
+Annotation				= ("@"{Identifier}("."{Identifier})*)
 
 URLGenDelim				= ([:\/\?#\[\]@])
 URLSubDelim				= ([\!\$&'\(\)\*\+,;=])
@@ -296,11 +300,7 @@ URL						= (((https?|f(tp|ile))"://"|"www.")({URLCharacters}{URLEndCharacter})?)
 "public"		{ addToken(Token.RESERVED_WORD_2); }
 
 	/* Data types */
-	"@Author" |
-"@Description" |
-"@URI" |
-"@Version" |
-"boolean" |
+	"boolean" |
 "float" |
 "int" |
 "void"		{ addToken(Token.DATA_TYPE); }
@@ -313,6 +313,8 @@ URL						= (((https?|f(tp|ile))"://"|"www.")({URLCharacters}{URLEndCharacter})?)
 	{BooleanLiteral}			{ addToken(Token.LITERAL_BOOLEAN); }
 
 	{LineTerminator}				{ addNullToken(); return firstToken; }
+
+	{Annotation}				{ addToken(Token.ANNOTATION); }
 
 	{Identifier}					{ addToken(Token.IDENTIFIER); }
 

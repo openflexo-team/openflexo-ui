@@ -75,6 +75,7 @@ import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.Theme;
+import org.fife.ui.rsyntaxtextarea.Token;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
 import org.fife.ui.rtextarea.Gutter;
@@ -120,6 +121,8 @@ import org.openflexo.view.controller.TechnologyAdapterControllerService;
 public class FMLEditor extends JPanel implements PropertyChangeListener, HyperlinkListener {
 
 	static final Logger logger = Logger.getLogger(FMLEditor.class.getPackage().getName());
+
+	private static final Color ANNOTATION_COLOR = new Color(0xA0, 0x78, 0x00);
 
 	static {
 		AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory) TokenMakerFactory.getDefaultInstance();
@@ -239,6 +242,8 @@ public class FMLEditor extends JPanel implements PropertyChangeListener, Hyperli
 			// Theme theme = Theme.load(getClass().getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/monokai.xml"));
 			// Theme theme = Theme.load(getClass().getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/vs.xml"));
 			theme.apply(textArea);
+			// Annotations get their own colour, whatever the theme
+			textArea.getSyntaxScheme().getStyle(Token.ANNOTATION).foreground = ANNOTATION_COLOR;
 		} catch (IOException ioe) { // Never happens
 			ioe.printStackTrace();
 		}

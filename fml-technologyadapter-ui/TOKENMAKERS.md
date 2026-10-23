@@ -21,9 +21,12 @@ JFlex: running the task on the files as committed gives the committed class, but
 
 ## Changing the keywords, the operators... of the language
 
-The `.flex` is **not edited by hand**: TokenMakerMaker builds it from the definition (`FMLTokenMaker.xml`), by filling the holes of a template
-(`Template.flex`) with the keywords, the operators, the comments and the literals of the definition. The `.flex` of this directory is exactly what
-TokenMakerMaker gives for the `.xml` (checked on 2026-10-22: no difference but the date of the first lines).
+The `.flex` of FML is the **master**, edited by hand: it holds a rule that TokenMakerMaker cannot express (`{Annotation}`, any `@Name` or
+`@a.b.Name`, coloured as `Token.ANNOTATION`; the four `@Author`... entries of the `.xml` were dropped for it). `FMLTokenMaker.xml` is only the
+starting point from which the `.flex` was first built: **do not regenerate the `.flex` from it**, that would erase the rule.
+
+For a language that stays within what TokenMakerMaker expresses, the `.flex` is built from the definition instead, by filling the holes of a
+template (`Template.flex`) with the keywords, operators, comments and literals; the procedure follows.
 
 So, to change the language:
 
@@ -34,8 +37,7 @@ So, to change the language:
 3. TokenMakerMaker also generates a Java class, with *its own* skeleton, which targets an old RSyntaxTextArea (3.1.3 for the last release):
    **ignore that Java**, and run `generateTokenMakers`, which uses the skeleton of this directory.
 
-If a rule is needed that TokenMakerMaker cannot express, edit the `.flex` by hand, but then the `.xml` is no longer the source: the next
-generation from the `.xml` would erase the change. Decide which of the two is the master and say it here.
+If a rule is needed that TokenMakerMaker cannot express, edit the `.flex` by hand: it becomes the master (as for FML), say so above.
 
 ### Building the `.flex` without the window
 

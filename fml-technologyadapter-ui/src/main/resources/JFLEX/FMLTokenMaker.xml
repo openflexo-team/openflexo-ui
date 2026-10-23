@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- OBSOLETE: FMLTokenMaker.flex is edited by hand and is the only source. Do NOT generate the .flex from this file (it would erase the annotation rule). -->
 <TokenMakerDefinition>
   <general>
     <package>org.openflexo.fml.controller.view</package>
@@ -66,10 +67,6 @@
     <keyword>public</keyword>
   </keywords2>
   <dataTypes>
-    <dataType>@Author</dataType>
-    <dataType>@Description</dataType>
-    <dataType>@URI</dataType>
-    <dataType>@Version</dataType>
     <dataType>boolean</dataType>
     <dataType>float</dataType>
     <dataType>int</dataType>
