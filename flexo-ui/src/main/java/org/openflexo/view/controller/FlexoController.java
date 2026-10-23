@@ -1472,14 +1472,6 @@ public abstract class FlexoController implements PropertyChangeListener, HasProp
 		module = null;
 	}
 
-	@Override
-	protected void finalize() throws Throwable {
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Finalizing controller " + getClass().getSimpleName());
-		}
-		super.finalize();
-	}
-
 	public boolean handleWSException(final Exception e) throws InterruptedException {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			final AtomicReference<Boolean> returned = new AtomicReference<>();
