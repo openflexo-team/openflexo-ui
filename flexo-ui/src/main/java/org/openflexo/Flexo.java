@@ -73,6 +73,7 @@ import org.openflexo.application.PlatformHook;
 import org.openflexo.components.RequestLoginDialog;
 import org.openflexo.components.SplashWindow;
 import org.openflexo.components.WelcomeDialog;
+import org.openflexo.foundation.task.FlexoTask;
 import org.openflexo.foundation.task.FlexoTask.TaskStatus;
 import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
@@ -244,7 +245,25 @@ public class Flexo {
 
 		SplashWindow splashWindow = null;
 		if (!noSplash) {
-			splashWindow = new SplashWindow(FlexoFrame.getActiveFrame());
+			// The startup, executed in this thread until the splash window is disposed, is replayed from the previous one
+			FlexoTask startupTask = new FlexoTask("Startup", "Startup") {
+				@Override
+				public String getProgressHistoryKey() {
+					return "Startup";
+				}
+
+				@Override
+				public long getDefaultExpectedDuration() {
+					return 15000;
+				}
+
+				@Override
+				public void performTask() {
+					// Not executed by a task manager: see begin() and end()
+				}
+			};
+			startupTask.begin();
+			splashWindow = new SplashWindow(FlexoFrame.getActiveFrame(), startupTask);
 		}
 		final SplashWindow splashWindow2 = splashWindow;
 
