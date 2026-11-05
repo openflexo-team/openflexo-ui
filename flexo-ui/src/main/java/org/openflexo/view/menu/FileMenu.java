@@ -310,7 +310,7 @@ public class FileMenu extends FlexoMenu {
 			if (projectDirectory != null) {
 				// try {
 				try {
-					getProjectLoader().loadProject(projectDirectory);
+					getController().getApplicationContext().openProject(projectDirectory);
 				} catch (ProjectLoadingCancelledException e) {
 					// Nothing to do
 				} catch (ProjectInitializerException e) {
@@ -388,7 +388,7 @@ public class FileMenu extends FlexoMenu {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			try {
-				getProjectLoader().loadProject(projectDirectory);
+				getController().getApplicationContext().openProject(projectDirectory);
 			} catch (ProjectLoadingCancelledException e) {
 				// Nothing to do
 			} catch (ProjectInitializerException e) {

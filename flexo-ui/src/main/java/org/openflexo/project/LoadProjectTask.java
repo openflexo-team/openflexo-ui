@@ -41,11 +41,14 @@ package org.openflexo.project;
 import java.io.File;
 import java.util.logging.Logger;
 
+import javax.swing.SwingUtilities;
+
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.task.Progress;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.module.FlexoModule;
 import org.openflexo.task.FlexoApplicationTask;
 import org.openflexo.view.controller.FlexoController;
 
@@ -80,10 +83,13 @@ public class LoadProjectTask extends FlexoApplicationTask {
 		Progress.setExpectedProgressSteps(10);
 
 		try {
-			projectLoader.loadProject(projectDirectory);
+			flexoEditor = projectLoader.loadProject(projectDirectory);
 		} catch (ProjectLoadingCancelledException e) {
 			throwException(e);
 		} catch (ProjectInitializerException e) {
+			// Callers schedule this task and return: the failure is reported here
+			SwingUtilities.invokeLater(() -> FlexoController.notify(
+					FlexoLocalization.getMainLocalizer().localizedForKey("could_not_open_project_located_at") + projectDirectory.getAbsolutePath()));
 			throwException(e);
 		}
 
@@ -138,6 +144,23 @@ public class LoadProjectTask extends FlexoApplicationTask {
 
 	public FlexoEditor getFlexoEditor() {
 		return flexoEditor;
+	}
+
+	private String progressHistoryKey;
+
+	/**
+	 * The loading of a project is replayed from the previous loading of the same project in the same module (the module decides what
+	 * is loaded with the project, see {@link FlexoModule#loadProjectContents(org.openflexo.foundation.FlexoProject)}), so that its
+	 * progress is linear in time. The key is fixed at the first call, the module being the one active when the task starts.
+	 */
+	@Override
+	public synchronized String getProgressHistoryKey() {
+		if (progressHistoryKey == null) {
+			FlexoModule<?> module = projectLoader.getServiceManager().getModuleLoader().getActiveModule();
+			progressHistoryKey = "LoadProject." + (module != null ? module.getModule().getName() + "." : "")
+					+ projectDirectory.getAbsolutePath();
+		}
+		return progressHistoryKey;
 	}
 
 	@Override

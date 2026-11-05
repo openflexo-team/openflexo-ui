@@ -64,6 +64,8 @@ import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.JarResourceCenter;
 import org.openflexo.foundation.task.FlexoTaskManager;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.utils.ProjectInitializerException;
+import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.prefs.AdvancedPrefs;
@@ -72,6 +74,7 @@ import org.openflexo.prefs.GeneralPreferences;
 import org.openflexo.prefs.LoggingPreferences;
 import org.openflexo.prefs.PreferencesService;
 import org.openflexo.prefs.PresentationPreferences;
+import org.openflexo.project.InteractiveProjectLoader;
 import org.openflexo.rm.ActivateTechnologyAdapterTask;
 import org.openflexo.rm.AddResourceCenterTask;
 import org.openflexo.rm.DisactivateTechnologyAdapterTask;
@@ -223,6 +226,26 @@ public abstract class ApplicationContext extends DefaultFlexoServiceManager {
 
 	public ProjectLoader getProjectLoader() {
 		return getService(ProjectLoader.class);
+	}
+
+	/**
+	 * Open the project located in supplied directory: in a loading task with the interactive project loader, so that the user
+	 * interface stays responsive and shows the progress (a failure is then reported by the task), otherwise in the calling thread
+	 * 
+	 * @param projectDirectory
+	 *            directory of the project
+	 * @throws ProjectLoadingCancelledException
+	 *             when the project is loaded in the calling thread and its loading is cancelled
+	 * @throws ProjectInitializerException
+	 *             when the project is loaded in the calling thread and cannot be opened
+	 */
+	public void openProject(File projectDirectory) throws ProjectLoadingCancelledException, ProjectInitializerException {
+		if (getProjectLoader() instanceof InteractiveProjectLoader) {
+			((InteractiveProjectLoader) getProjectLoader()).makeLoadProjectTask(projectDirectory);
+		}
+		else {
+			getProjectLoader().loadProject(projectDirectory);
+		}
 	}
 
 	public FlexoServerInstanceManager getFlexoServerInstanceManager() {

@@ -42,7 +42,10 @@ package org.openflexo.module;
 import java.awt.Frame;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,10 +57,12 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoService.ServiceNotification;
 import org.openflexo.foundation.nature.ProjectNature;
 import org.openflexo.foundation.project.ProjectLoader;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.ProjectClosed;
 import org.openflexo.foundation.resource.ProjectLoaded;
 import org.openflexo.foundation.resource.ResourceModified;
@@ -65,6 +70,7 @@ import org.openflexo.foundation.resource.ResourceRegistered;
 import org.openflexo.foundation.resource.ResourceSaved;
 import org.openflexo.foundation.resource.ResourceUnregistered;
 import org.openflexo.foundation.task.FlexoTask;
+import org.openflexo.foundation.task.Progress;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
@@ -224,7 +230,7 @@ public abstract class FlexoModule<M extends FlexoModule<M>> implements DataFlexo
 				if (projectDirectory != null) {
 					// try {
 					try {
-						getModule().getProjectLoader().loadProject(projectDirectory);
+						getModule().getApplicationContext().openProject(projectDirectory);
 					} catch (ProjectLoadingCancelledException e) {
 						// Nothing to do
 					} catch (ProjectInitializerException e) {
@@ -349,6 +355,47 @@ public abstract class FlexoModule<M extends FlexoModule<M>> implements DataFlexo
 
 	}
 
+	/**
+	 * Load, in the task loading supplied project and before the project is shown, what this module will display of it: what its views
+	 * would otherwise load in the event dispatch thread, freezing the user interface. Called on the active module.<br>
+	 * Default does nothing: the resources of the project are loaded when used.
+	 * 
+	 * @param project
+	 *            the project being loaded
+	 */
+	public void loadProjectContents(FlexoProject<?> project) {
+	}
+
+	/**
+	 * Load the virtual models and the virtual model instances of supplied project, one progress step each (the technology adapter
+	 * controllers validate each loaded resource, in the same thread)
+	 * 
+	 * @param project
+	 *            the project being loaded
+	 */
+	protected void loadVirtualModelsAndInstances(FlexoProject<?> project) {
+		List<FlexoResource<?>> resources = new ArrayList<>();
+		if (project.getVirtualModelRepository() != null) {
+			resources.addAll(project.getVirtualModelRepository().getAllResources());
+		}
+		if (project.getVirtualModelInstanceRepository() != null) {
+			resources.addAll(project.getVirtualModelInstanceRepository().getAllResources());
+		}
+		// A stable order, so that the progress history of the project matches from one loading to the next
+		resources.sort(Comparator.comparing(r -> String.valueOf(r.getURI())));
+		String step = getApplicationContext().getLocalizationService().getFlexoLocalizer().localizedForKey("loading_project_resource");
+		for (FlexoResource<?> resource : resources) {
+			if (!resource.isLoaded()) {
+				Progress.progress(step + " " + resource.getName());
+				try {
+					resource.getResourceData();
+				} catch (Exception e) {
+					logger.warning("Could not load " + resource + " while loading project " + project + ": " + e);
+				}
+			}
+		}
+	}
+
 	private boolean isRequestingDefaultObjectSelection = false;
 
 	/**
@@ -371,6 +418,14 @@ public abstract class FlexoModule<M extends FlexoModule<M>> implements DataFlexo
 
 		public SelectDefaultObjectWhenRequired() {
 			super("SelectDefaultObject", getLocales().localizedForKey("select_default_object"));
+		}
+
+		/**
+		 * Only scheduled to run after the other tasks: not worth a progress bar
+		 */
+		@Override
+		public boolean isShownInTaskPanel() {
+			return false;
 		}
 
 		@Override

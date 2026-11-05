@@ -23,3 +23,35 @@ Status legend: `TODO` · `IN PROGRESS` · `BLOCKED` · `DONE` · `DEFERRED`.
 - Checking the page in the running application.
 
 **Acceptance.** Creating, duplicating, editing and deleting a theme works from the preferences; a change of the active theme or of its colours is seen at once in every open FML editor; the shipped themes cannot be altered.
+
+---
+
+### UI-F-2 — Faster startup and linear progress bars for long tasks  ·  `IN PROGRESS`
+
+**Problem.** Long tasks (startup, module loading, project loading, resource center and technology activation, validation, FML creation actions) show progress bars that jump back, stop early or stay indeterminate:
+- `Progress` only acts when the current thread is a `FlexoTaskThread`: the whole startup (23 s on `main`, before the Welcome) reports nothing, and the splash is a still image;
+- steps are counted, not weighted, and `setExpectedProgressSteps` resets the current progress, so nested phases make the bar jump back;
+- announced counts are wrong: a module announces 150 steps (`Module.getExpectedProgressLoadingSteps`) for about twenty reported ones.
+
+**Measured** (Eclipse, Free Modelling Editor, JFR + log timestamps, 2026-11-05):
+- before the Welcome: about 8 s building the GINA FIB editor (palettes, inspectors) that nobody asked for, about 4.7 s activating the FML technology (resource center scan);
+- Welcome → module opened: 12.3 s in `LoadModuleTask`, 78 % of it in `TechnologyAdapterController.activate`, mostly the Diana inspectors built in advance by the Diagram technology adapter controller.
+
+**Done.**
+- The application FIB editor is built on first use (Tools menu, Alt+click on a component), no longer at startup: the Welcome appears after 15 s instead of 24 s.
+- Progress linear in time, replayed from the previous execution (flexo-foundation, `ProgressHistory`): a `FlexoTask` that returns a `getProgressHistoryKey()` records its milestones (its `Progress.progress(name)` calls) with their times, in `<application data directory>/ProgressHistory/<key>.properties`. The next execution sets its bar, at each milestone reached again, at the fraction of the total duration it had the previous time, and moves it with time in between; the bar never goes back and stays below 99 % until the end. Without history, the bar tends towards 100 % along `getDefaultExpectedDuration()`. Tasks without a key keep their counted steps.
+- Used by the loading of a module (one history per module; 220 milestones for the Free Modelling Editor) and by the loading of a project (one history per module and project directory, since the module decides what is loaded with the project). The task panel shows these bars with a percentage, refreshed every 100 ms.
+- Loading a project no longer freezes the user interface in the Free Modelling Editor: its views loaded and validated the virtual models and instances of the project in the event dispatch thread (8 s for `TestNewFME5`). A module now loads, in the loading task and before the project is shown, what it will display (`FlexoModule.loadProjectContents`, called through the hook `ProjectLoader.loadProjectContents`; nothing by default, virtual models and instances for the Free Modelling Editor).
+- A task can stay out of the task panel (`FlexoTask.isShownInTaskPanel()`): the selection of the default object of a module no longer shows a bar.
+- File → Open, File → Recent projects and the "Open" button of a module welcome panel loaded the project in the event dispatch thread, without a task: they now go through a loading task (`ApplicationContext.openProject`), as the Welcome dialog does, and `LoadProjectTask` reports a project that cannot be opened.
+- Measured on `TestNewFME5`: 9.1 s in the Free Modelling Editor (virtual models and instances preloaded and validated), 2.1 s in the Openflexo Modeller (nothing preloaded, nothing heavy left to the event dispatch thread).
+
+**Left.**
+- `Progress` is still bound to the task thread: work done on `main` or on the event dispatch thread reports nothing. The startup (a bar on the splash) needs it.
+- Other modules (Openflexo Modeller, the EA editor, formod): check what their views load in the event dispatch thread when a project is shown, and override `loadProjectContents` if needed.
+- A project opened from the command line (`Flexo.main`) may start loading before its module is active: no preloading then, and a history without module.
+- Default histories shipped with the application, for the first execution (not through `ResourceLocator.locateResource`, which prints a stack trace for every resource it does not find).
+- The other long tasks (resource centers, technology activation, validation, FML creation actions).
+- Build the Diana inspectors of the Diagram controller on first use.
+
+**Acceptance.** Between the Welcome and the opened module, and while a project loads, the bar moves forward without going back, and in near-linear time from the second execution on.

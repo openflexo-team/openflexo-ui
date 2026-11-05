@@ -52,6 +52,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -63,6 +64,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 import org.jdesktop.swingx.VerticalLayout;
 import org.openflexo.foundation.task.FlexoTask;
@@ -135,12 +137,25 @@ public class TaskManagerPanel extends JDialog implements PropertyChangeListener 
 		}
 	}
 
+	/**
+	 * Return the scheduled tasks shown in this panel (see {@link FlexoTask#isShownInTaskPanel()})
+	 */
+	private List<FlexoTask> getShownTasks() {
+		List<FlexoTask> returned = new ArrayList<>();
+		for (FlexoTask task : new ArrayList<>(taskManager.getScheduledTasks())) {
+			if (task.isShownInTaskPanel()) {
+				returned.add(task);
+			}
+		}
+		return returned;
+	}
+
 	private void updatePanel() {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(() -> updatePanel());
 			return;
 		}
-		for (FlexoTask task : new ArrayList<>(taskManager.getScheduledTasks())) {
+		for (FlexoTask task : getShownTasks()) {
 			TaskPanel p = taskPanels.get(task);
 			if (p == null) {
 				p = new TaskPanel(task);
@@ -149,7 +164,7 @@ public class TaskManagerPanel extends JDialog implements PropertyChangeListener 
 			}
 		}
 
-		if (!isVisible() && taskManager.getScheduledTasks().size() > 0 && !forceHide) {
+		if (!isVisible() && getShownTasks().size() > 0 && !forceHide) {
 			performShowTaskManagerPanel();
 		}
 
@@ -163,7 +178,7 @@ public class TaskManagerPanel extends JDialog implements PropertyChangeListener 
 			return;
 		}
 
-		contentPane.setPreferredSize(new Dimension(PREFERRED_WIDTH, PREFERRED_HEIGHT * taskManager.getScheduledTasks().size()));
+		contentPane.setPreferredSize(new Dimension(PREFERRED_WIDTH, PREFERRED_HEIGHT * getShownTasks().size()));
 
 		((JComponent) getContentPane()).revalidate();
 		repaint();
@@ -171,7 +186,7 @@ public class TaskManagerPanel extends JDialog implements PropertyChangeListener 
 		pack();
 		center();
 
-		if (taskManager.getScheduledTasks().size() == 0) {
+		if (getShownTasks().size() == 0) {
 			// System.out.println("Hidding TaskManagerPanel " + Integer.toHexString(TaskManagerPanel.this.hashCode()) + "...");
 			setVisible(false);
 			SwingUtilities.invokeLater(() -> {
@@ -194,7 +209,7 @@ public class TaskManagerPanel extends JDialog implements PropertyChangeListener 
 			}
 		}
 		else {
-			if (!isVisible() && taskManager.getScheduledTasks().size() > 0) {
+			if (!isVisible() && getShownTasks().size() > 0) {
 				performShowTaskManagerPanel();
 			}
 
@@ -242,6 +257,8 @@ public class TaskManagerPanel extends JDialog implements PropertyChangeListener 
 		private final JLabel statusLabel;
 		private final JButton cancelButton;
 		private final JProgressBar progressBar;
+		// Refreshes the bar of a task whose progress is linear in time (FlexoTask.hasTimedProgress())
+		private Timer timedProgressTimer;
 
 		public TaskPanel(FlexoTask aTask) {
 
@@ -299,6 +316,25 @@ public class TaskManagerPanel extends JDialog implements PropertyChangeListener 
 			setPreferredSize(new Dimension(200, 50));
 		}
 
+		private void startTimedProgress() {
+			progressBar.setIndeterminate(false);
+			progressBar.setStringPainted(true);
+			progressBar.setMinimum(0);
+			progressBar.setMaximum(1000);
+			progressBar.setValue((int) Math.round(task.getProgressFraction() * 1000));
+			if (timedProgressTimer == null) {
+				timedProgressTimer = new Timer(100, e -> progressBar.setValue((int) Math.round(task.getProgressFraction() * 1000)));
+				timedProgressTimer.start();
+			}
+		}
+
+		private void stopTimedProgress() {
+			if (timedProgressTimer != null) {
+				timedProgressTimer.stop();
+				timedProgressTimer = null;
+			}
+		}
+
 		private void updateStatusLabel() {
 			if (StringUtils.isEmpty(task.getCurrentStepName())) {
 				statusLabel.setText(task.getTaskStatus().getLocalizedName());
@@ -319,18 +355,28 @@ public class TaskManagerPanel extends JDialog implements PropertyChangeListener 
 					cancelButton.setEnabled(task.getTaskStatus() == TaskStatus.RUNNING && task.isCancellable());
 					updateStatusLabel();
 					if (task.getTaskStatus() == TaskStatus.RUNNING) {
-						progressBar.setStringPainted(false);
-						progressBar.setIndeterminate(true);
 						progressBar.setEnabled(true);
+						if (task.hasTimedProgress()) {
+							startTimedProgress();
+						}
+						else {
+							progressBar.setStringPainted(false);
+							progressBar.setIndeterminate(true);
+						}
 					}
 					else if ((task.getTaskStatus() == TaskStatus.FINISHED) || (task.getTaskStatus() == TaskStatus.CANCELLED)
 							|| (task.getTaskStatus() == TaskStatus.EXCEPTION_THROWN)) {
+						stopTimedProgress();
 						taskPanels.remove(task);
 						contentPane.remove(this);
 						((JComponent) getContentPane()).revalidate();
 						TaskManagerPanel.this.repaint();
 						updateSizeAndCenter();
 					}
+				}
+				else if (task.hasTimedProgress() && (evt.getPropertyName().equals(FlexoTask.EXPECTED_PROGRESS_STEPS_PROPERTY)
+						|| evt.getPropertyName().equals(FlexoTask.CURRENT_PROGRESS_PROPERTY))) {
+					// The bar follows the time, not the counted steps
 				}
 				else if (evt.getPropertyName().equals(FlexoTask.EXPECTED_PROGRESS_STEPS_PROPERTY)) {
 					progressBar.setStringPainted(true);

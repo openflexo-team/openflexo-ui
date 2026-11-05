@@ -72,6 +72,22 @@ public class LoadModuleTask extends FlexoApplicationTask {
 		}
 	}
 
+	/**
+	 * The loading of a module is replayed from its previous loading, so that its progress is linear in time
+	 */
+	@Override
+	public String getProgressHistoryKey() {
+		return "LoadModule." + module.getName();
+	}
+
+	/**
+	 * About the loading time of the Free Modelling Editor, measured under Eclipse
+	 */
+	@Override
+	public long getDefaultExpectedDuration() {
+		return 12000;
+	}
+
 	@Override
 	public boolean isCancellable() {
 		return false;

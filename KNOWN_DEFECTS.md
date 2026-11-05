@@ -42,3 +42,13 @@ Status legend: `TODO` · `IN PROGRESS` · `BLOCKED` · `DONE` · `DEFERRED`.
 **Fixed (2026-10-21).** The cause was deeper than the missing JRE of jenv: a "modern" Java was recognized by its `jmods` directory, which JREs do not have and which JDK builds since Java 24 may not have either (the Temurin 25 of the workspace: same symptom on a full JDK). The `jmods` directory was also read as a directory of class files, but it holds `.jmod` archives, so the classes of the JDK were never offered on Java 9+. `ModulesLibraryInfo` now reads the runtime image through the `jrt:/` file system, found by the presence of `lib/modules`, and `addCurrentJreClassFileSource()` no longer throws when no class library is found (it warns). Verified: formod and Flexo Maintainer start on JDK 25. The code completion of JDK types was not checked by hand.
 
 **Original proposal.** In `activate()`, skip the JRE class-file source (with a warning) when `getMainJreJarInfo()` is null, so that only the completion of Java types in the FML editor is degraded; more generally, an exception during the initialization of a service should not leave the splash screen up with a dead main thread.
+
+---
+
+### UI-D-4 — A project imported into another one is loaded as a root project  ·  `TODO`
+
+**Symptom.** File → Import project schedules `makeLoadProjectTask(directory, true)`, but `LoadProjectTask.performTask` calls `ProjectLoader.loadProject(projectDirectory)`, which is `loadProject(projectDirectory, false)`: the `asImportedProject` flag of the task is never passed on.
+
+**Verified.** By reading the code only (2026-11-05), not reproduced in the application.
+
+**Expected.** `loadProject(projectDirectory, asImportedProject)`: an imported project is not added to the root projects nor to the recent projects.

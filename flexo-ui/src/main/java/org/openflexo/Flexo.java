@@ -325,9 +325,7 @@ public class Flexo {
 						showWelcomeDialog(applicationContext, null);
 					}
 					else if (loadProject.getThrownException() instanceof ProjectInitializerException) {
-						loadProject.getThrownException().printStackTrace();
-						FlexoController.notify(applicationContext.getLocalizationService().getFlexoLocalizer()
-								.localizedForKey("could_not_open_project_located_at") + projectDirectory.getAbsolutePath());
+						// The task has reported the failure
 						showWelcomeDialog(applicationContext, null);
 					}
 				}

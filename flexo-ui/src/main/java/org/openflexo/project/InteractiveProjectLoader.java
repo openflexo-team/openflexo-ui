@@ -58,6 +58,7 @@ import org.openflexo.foundation.resource.SaveResourceExceptionList;
 import org.openflexo.foundation.resource.SaveResourcePermissionDeniedException;
 import org.openflexo.foundation.task.FlexoTask;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.module.FlexoModule;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
@@ -72,6 +73,18 @@ import org.openflexo.view.controller.InteractiveFlexoEditor;
 public class InteractiveProjectLoader extends ProjectLoader {
 
 	private static final Logger logger = Logger.getLogger(InteractiveProjectLoader.class.getPackage().getName());
+
+	/**
+	 * Let the active module load, in the loading task, what it will display of the project: otherwise its views would load it in the
+	 * event dispatch thread, freezing the user interface (see {@link FlexoModule#loadProjectContents(FlexoProject)})
+	 */
+	@Override
+	protected void loadProjectContents(FlexoProject<?> project) {
+		FlexoModule<?> module = getServiceManager().getModuleLoader().getActiveModule();
+		if (module != null) {
+			module.loadProjectContents(project);
+		}
+	}
 
 	protected final Map<FlexoProject<?>, AutoSaveService> autoSaveServices;
 
