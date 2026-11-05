@@ -79,8 +79,9 @@ public class ApplicationFIBLibraryService extends FlexoServiceImpl implements Fl
 	@Override
 	public void initialize() {
 		applicationFIBLibrary = ApplicationFIBLibraryImpl.createInstance(getServiceManager().getTechnologyAdapterService());
-		applicationFIBEditor = new JFIBEditor(applicationFIBLibrary);
-		SwingViewFactory.INSTANCE.installInteractiveFIBEditor(applicationFIBEditor);
+		// The FIB editor (palettes and inspectors) costs several seconds to build: it is built on first use only
+		SwingViewFactory.INSTANCE.installInteractiveFIBEditor(
+				(fibResource, component, dataObject) -> getApplicationFIBEditor().openResource(fibResource, component, dataObject));
 		status = Status.Started;
 	}
 
@@ -88,7 +89,15 @@ public class ApplicationFIBLibraryService extends FlexoServiceImpl implements Fl
 		return applicationFIBLibrary;
 	}
 
-	public JFIBEditor getApplicationFIBEditor() {
+	/**
+	 * Return the FIB editor of the application, building it on first call
+	 *
+	 * @return the application {@link JFIBEditor}
+	 */
+	public synchronized JFIBEditor getApplicationFIBEditor() {
+		if (applicationFIBEditor == null) {
+			applicationFIBEditor = new JFIBEditor(applicationFIBLibrary);
+		}
 		return applicationFIBEditor;
 	}
 
