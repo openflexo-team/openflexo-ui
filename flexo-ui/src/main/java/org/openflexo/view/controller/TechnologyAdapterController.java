@@ -45,6 +45,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.WeakHashMap;
 
 import javax.swing.ImageIcon;
 
@@ -219,6 +221,9 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<T
 	 */
 	public void disactivate() {
 		isActivated = false;
+		synchronized (initializedControllers) {
+			initializedControllers.clear();
+		}
 	}
 
 	/**
@@ -230,14 +235,25 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<T
 	public void activate(FlexoModule<?> module) {
 		FlexoController controller = module.getFlexoController();
 		if (controller != null) {
-			initializeInspectors(controller);
-			initializeActions(controller.getControllerActionInitializer());
-			if (module.activateAdvancedActions(getTechnologyAdapter())) {
-				initializeAdvancedActions(controller.getControllerActionInitializer());
+			// A module being loaded reaches here twice: when its initialization activates this technology, then when the module is
+			// loaded. Inspectors and actions are initialized once per controller; plugins may have become activable in between.
+			boolean firstActivation;
+			synchronized (initializedControllers) {
+				firstActivation = initializedControllers.add(controller);
+			}
+			if (firstActivation) {
+				initializeInspectors(controller);
+				initializeActions(controller.getControllerActionInitializer());
+				if (module.activateAdvancedActions(getTechnologyAdapter())) {
+					initializeAdvancedActions(controller.getControllerActionInitializer());
+				}
 			}
 			activateActivablePlugins(module);
 		}
 	}
+
+	// Controllers for which inspectors and actions of this technology have been initialized (weak: a closed module is forgotten)
+	private final Set<FlexoController> initializedControllers = Collections.newSetFromMap(new WeakHashMap<>());
 
 	/**
 	 * Called to activate the {@link TechnologyAdapter}

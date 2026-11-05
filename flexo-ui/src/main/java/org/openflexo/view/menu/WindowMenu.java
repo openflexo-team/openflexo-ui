@@ -49,6 +49,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -535,18 +536,43 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 
 	public class WindowMenuItem extends JCheckBoxMenuItem implements WindowListener {
 
-		private final Window window;
+		private Window window;
+		// Builds the window at the first use of this item (null once the window is known)
+		private Supplier<? extends Window> windowSupplier;
 
 		public WindowMenuItem(String menuName, Window aWindow) {
 			super(menuName);
-			this.window = aWindow;
-			addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					window.setVisible(!window.isVisible());
-				}
-			});
-			aWindow.addWindowListener(this);
+			setWindow(aWindow);
+			addActionListener(e -> toggleWindow());
+		}
+
+		/**
+		 * Build a menu item showing or hiding a window built only when the item is first used
+		 * 
+		 * @param menuName
+		 *            name of the item
+		 * @param windowSupplier
+		 *            builds the window, at the first use of the item
+		 */
+		public WindowMenuItem(String menuName, Supplier<? extends Window> windowSupplier) {
+			super(menuName);
+			this.windowSupplier = windowSupplier;
+			addActionListener(e -> toggleWindow());
+		}
+
+		private void setWindow(Window aWindow) {
+			window = aWindow;
+			window.addWindowListener(this);
+		}
+
+		private void toggleWindow() {
+			if (window == null && windowSupplier != null) {
+				setWindow(windowSupplier.get());
+				windowSupplier = null;
+			}
+			if (window != null) {
+				window.setVisible(!window.isVisible());
+			}
 		}
 
 		@Override

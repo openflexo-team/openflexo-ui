@@ -52,3 +52,13 @@ Status legend: `TODO` · `IN PROGRESS` · `BLOCKED` · `DONE` · `DEFERRED`.
 **Verified.** By reading the code only (2026-11-05), not reproduced in the application.
 
 **Expected.** `loadProject(projectDirectory, asImportedProject)`: an imported project is not added to the root projects nor to the recent projects.
+
+---
+
+### UI-D-5 — Loading a module initialized the inspectors and actions of its technologies twice  ·  `DONE`
+
+**Symptom.** Loading the Free Modelling Editor took 15.8 s, and 47 inspectors were loaded twice (`CreateDiagram` four times).
+
+**Cause.** A module that activates technologies in its `initModule()` reaches `TechnologyAdapterController.activate(module)` twice: through `TechnologyAdapterController.activate()`, which goes over the loaded modules (the module being loaded is already one of them), then through the `ModuleLoaded` notification. Each call initialized the inspectors, the actions and the advanced actions again.
+
+**Fix.** Inspectors and actions are initialized once per module controller; activable plugins are still checked at each call. Loading the Free Modelling Editor now takes 13.4 s (measured under Eclipse, 2026-11-05), each inspector being loaded once.
