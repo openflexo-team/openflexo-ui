@@ -43,6 +43,7 @@ import org.openflexo.foundation.fml.cli.command.directive.ExitDirective;
 import org.openflexo.foundation.fml.cli.command.directive.QuitDirective;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.localization.LocalizedSwing;
 import org.openflexo.toolbox.StringUtils;
 
 //TODO: Keep a global StringBuilder to decrease memory footprint
@@ -70,7 +71,7 @@ public class FMLTerminal extends JFrame {
 		textPane = new JTextPane();
 		JPanel mainPane = new JPanel(new BorderLayout());
 		JPanel buttonsPane = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-		JButton closeButton = new JButton(FlexoLocalization.getMainLocalizer().localizedForKey("close"));
+		JButton closeButton = LocalizedSwing.bind(new JButton(FlexoLocalization.getMainLocalizer().localizedForKey("close")), FlexoLocalization.getMainLocalizer(), "close");
 		closeButton.setIcon(IconLibrary.CLOSE_ICON);
 		closeButton.addActionListener(new ActionListener() {
 			@Override
@@ -78,7 +79,7 @@ public class FMLTerminal extends JFrame {
 				close();
 			}
 		});
-		JButton clearButton = new JButton(FlexoLocalization.getMainLocalizer().localizedForKey("clear"));
+		JButton clearButton = LocalizedSwing.bind(new JButton(FlexoLocalization.getMainLocalizer().localizedForKey("clear")), FlexoLocalization.getMainLocalizer(), "clear");
 		clearButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

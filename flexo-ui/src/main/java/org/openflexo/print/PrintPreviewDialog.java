@@ -53,6 +53,7 @@ import javax.swing.event.ChangeListener;
 import org.openflexo.diana.ScreenshotBuilder;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.localization.LocalizedSwing;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.view.FlexoDialog;
 import org.openflexo.view.controller.FlexoController;
@@ -78,7 +79,7 @@ public class PrintPreviewDialog extends FlexoDialog {
 		_controller = controller;
 		_printableComponent = printableProcessView;
 
-		setTitle(FlexoLocalization.getMainLocalizer().localizedForKey("print_preview"));
+		setTitle(FlexoLocalization.getMainLocalizer().localizedForKey("print_preview", this));
 
 		JPanel topPanel = new JPanel(new FlowLayout());
 		JButton plusScale = new JButton("+");
@@ -157,8 +158,8 @@ public class PrintPreviewDialog extends FlexoDialog {
 		};
 		previewScaleSlider.addChangeListener(previewScaleChangeListener);
 
-		final JCheckBox showPages = new JCheckBox(FlexoLocalization.getMainLocalizer().localizedForKey("show_pages"),
-				_printableComponent.getPrintableDelegate().showPages());
+		final JCheckBox showPages = LocalizedSwing.bind(new JCheckBox(FlexoLocalization.getMainLocalizer().localizedForKey("show_pages"),
+				_printableComponent.getPrintableDelegate().showPages()), FlexoLocalization.getMainLocalizer(), "show_pages");
 		showPages.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -167,8 +168,8 @@ public class PrintPreviewDialog extends FlexoDialog {
 				_printableComponent.getPrintableDelegate().refresh();
 			}
 		});
-		final JCheckBox showTitle = new JCheckBox(FlexoLocalization.getMainLocalizer().localizedForKey("show_title"),
-				_printableComponent.getPrintableDelegate().showTitles());
+		final JCheckBox showTitle = LocalizedSwing.bind(new JCheckBox(FlexoLocalization.getMainLocalizer().localizedForKey("show_title"),
+				_printableComponent.getPrintableDelegate().showTitles()), FlexoLocalization.getMainLocalizer(), "show_title");
 		showTitle.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

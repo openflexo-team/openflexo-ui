@@ -431,12 +431,12 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 		public void actionPerformed(ActionEvent arg0) {
 			if (isShowed) {
 				getController().hideControlPanel();
-				_item.setText(FlexoLocalization.getMainLocalizer().localizedForKey("show_control_panel"));
+				_item.setText(FlexoLocalization.getMainLocalizer().localizedForKey("show_control_panel", _item));
 				isShowed = false;
 			}
 			else {
 				getController().showControlPanel();
-				_item.setText(FlexoLocalization.getMainLocalizer().localizedForKey("hide_control_panel"));
+				_item.setText(FlexoLocalization.getMainLocalizer().localizedForKey("hide_control_panel", _item));
 				isShowed = true;
 			}
 		}

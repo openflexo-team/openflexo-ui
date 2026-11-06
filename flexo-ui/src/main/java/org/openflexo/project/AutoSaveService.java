@@ -61,6 +61,7 @@ import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.localization.LocalizedSwing;
 import org.openflexo.prefs.GeneralPreferences;
 import org.openflexo.project.FlexoAutoSaveThread.FlexoAutoSaveFile;
 import org.openflexo.toolbox.FileUtils;
@@ -182,7 +183,7 @@ public class AutoSaveService implements PropertyChangeListener {
 		north.add(label);
 		// AskParametersPanel panel = new AskParametersPanel(project, parameters);
 		JPanel south = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		JButton cancel = new JButton(FlexoLocalization.getMainLocalizer().localizedForKey("cancel"));
+		JButton cancel = LocalizedSwing.bind(new JButton(FlexoLocalization.getMainLocalizer().localizedForKey("cancel")), FlexoLocalization.getMainLocalizer(), "cancel");
 		cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -190,7 +191,7 @@ public class AutoSaveService implements PropertyChangeListener {
 				resume();
 			}
 		});
-		JButton ok = new JButton(FlexoLocalization.getMainLocalizer().localizedForKey("restore"));
+		JButton ok = LocalizedSwing.bind(new JButton(FlexoLocalization.getMainLocalizer().localizedForKey("restore")), FlexoLocalization.getMainLocalizer(), "restore");
 		ok.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -232,7 +233,7 @@ public class AutoSaveService implements PropertyChangeListener {
 		dialog.getContentPane().add(new JLabel("Please reimplement this"));
 		dialog.getContentPane().add(north, BorderLayout.NORTH);
 		dialog.getContentPane().add(south, BorderLayout.SOUTH);
-		dialog.setTitle(FlexoLocalization.getMainLocalizer().localizedForKey("time_traveler"));
+		dialog.setTitle(FlexoLocalization.getMainLocalizer().localizedForKey("time_traveler", dialog));
 		dialog.validate();
 		dialog.pack();
 		dialog.show();
