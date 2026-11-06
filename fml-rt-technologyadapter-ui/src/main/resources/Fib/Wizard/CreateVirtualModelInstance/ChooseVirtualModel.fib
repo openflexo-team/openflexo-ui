@@ -18,12 +18,6 @@
   <Label id="15" label="label" align="left" data="data.creationScheme.description" visible="((virtualModelSelector.value.compilationUnit != null) &amp;&amp;(virtualModelSelector.value.compilationUnit.virtualModel.creationSchemes.size &gt; 0))" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)" font="SansSerif,2,11" name="Label" />
   <FIBVariable id="16" type="org.openflexo.fml.rt.controller.action.CreateBasicVirtualModelInstanceWizard$ChooseVirtualModel" name="data" />
   <LocalizedDictionary id="17">
-    <Localized id="18" lang="English" value="URI" key="uri" />
-    <Localized id="19" lang="English" value="Description" key="description" />
-    <Localized id="20" lang="French" value="URI" key="uri" />
-    <Localized id="21" lang="French" value="Description" key="description" />
-    <Localized id="22" lang="Dutch" value="URI" key="uri" />
-    <Localized id="23" lang="Dutch" value="Description" key="description" />
     <Localized id="24" lang="French" value="Flexo concept" key="flexo_concept" />
     <Localized id="25" lang="English" value="Flexo concept" key="flexo_concept" />
     <Localized id="26" lang="English" value="Validate" key="validate" />

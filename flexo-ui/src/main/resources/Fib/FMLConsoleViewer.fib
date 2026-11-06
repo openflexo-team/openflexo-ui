@@ -409,9 +409,6 @@
     <Localized id="391" lang="English" value="Reload" key="reload" />
     <Localized id="392" lang="French" value="Recharger" key="reload" />
     <Localized id="393" lang="Dutch" value="Reload" key="reload" />
-    <Localized id="394" lang="English" value="Description" key="description" />
-    <Localized id="395" lang="French" value="Description" key="description" />
-    <Localized id="396" lang="Dutch" value="Description" key="description" />
     <Localized id="397" lang="English" value="OnlyKeep" key="OnlyKeep" />
     <Localized id="398" lang="French" value="OnlyKeep" key="OnlyKeep" />
     <Localized id="399" lang="Dutch" value="OnlyKeep" key="OnlyKeep" />

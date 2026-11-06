@@ -15,7 +15,6 @@
     <Localized key="resource_center_directory" lang="Dutch" value="resource_center_directory" />
     <Localized key="description" lang="English" value="&lt;html&gt;&lt;center&gt;The default resource center packaged with this version of Openflexo appears not to be installed.&lt;br&gt; Would you like to install it now ?&lt;/center&gt;&lt;/html&gt;" />
     <Localized key="description" lang="French" value="&lt;html&gt;&lt;center&gt;Le centre de resource livré avec cette version d'Openflexo n'est pas installé.&lt;br&gt;Voulez-vous l'installer maintenant ?&lt;/center&gt;&lt;/html&gt;" />
-    <Localized key="description" lang="Dutch" value="Description" />
     <Localized key="install_default_resource_center" lang="English" value="Install resource center" />
     <Localized key="install_default_resource_center" lang="French" value="Installer le centre de resources" />
     <Localized key="install_default_resource_center" lang="Dutch" value="install_default_resource_center" />

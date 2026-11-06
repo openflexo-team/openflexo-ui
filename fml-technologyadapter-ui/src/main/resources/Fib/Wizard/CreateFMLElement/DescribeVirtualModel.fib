@@ -11,15 +11,6 @@
   <Label id="9" label="description" align="right" localize="true" constraints="twocols(anchor=north_east;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=12;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" index="12" name="DescriptionLabel" />
   <TextArea id="10" rows="5" columns="6" text="TextArea" localize="true" data="data.newVirtualModelDescription" useScrollBar="true" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=true;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=13;insetsBottom=20;insetsLeft=0;insetsRight=20;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=1.0)" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" index="13" name="TextArea" />
   <LocalizedDictionary id="11">
-    <Localized id="12" lang="English" value="Description" key="description" />
-    <Localized id="13" lang="Dutch" value="Description" key="description" />
-    <Localized id="14" lang="French" value="Description" key="description" />
-    <Localized id="15" lang="English" value="Name" key="name" />
-    <Localized id="16" lang="Dutch" value="Naam" key="name" />
-    <Localized id="17" lang="French" value="Nom" key="name" />
-    <Localized id="18" lang="English" value="URI" key="uri" />
-    <Localized id="19" lang="Dutch" value="URI" key="uri" />
-    <Localized id="20" lang="French" value="URI" key="uri" />
     <Localized id="21" lang="English" value="Visibility" key="visibility" />
     <Localized id="22" lang="Dutch" value="Visibility" key="visibility" />
     <Localized id="23" lang="French" value="Visibilité" key="visibility" />

@@ -11,9 +11,6 @@
   <Label id="9" label="description" align="right" localize="true" constraints="twocols(anchor=north_east;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=5;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" index="15" name="DescriptionLabel" />
   <TextArea id="10" rows="2" columns="6" text="TextArea" localize="true" data="data.description" useScrollBar="true" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=true;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=1.0)" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" index="12" name="TextArea" />
   <LocalizedDictionary id="11">
-    <Localized id="12" lang="English" value="Name" key="name" />
-    <Localized id="13" lang="Dutch" value="Name" key="name" />
-    <Localized id="14" lang="French" value="Nom" key="name" />
     <Localized id="15" lang="English" value="Behaviour type" key="behaviour_type" />
     <Localized id="16" lang="Dutch" value="Behaviour type" key="behaviour_type" />
     <Localized id="17" lang="French" value="Type de comportement" key="behaviour_type" />
@@ -23,9 +20,6 @@
     <Localized id="21" lang="English" value="Is abstract" key="is_abstract" />
     <Localized id="22" lang="Dutch" value="Is abstract" key="is_abstract" />
     <Localized id="23" lang="French" value="Comportement abstrait" key="is_abstract" />
-    <Localized id="24" lang="English" value="Description" key="description" />
-    <Localized id="25" lang="Dutch" value="Description" key="description" />
-    <Localized id="26" lang="French" value="Description" key="description" />
   </LocalizedDictionary>
   <FIBVariable id="27" type="org.openflexo.fml.controller.action.CreateFlexoBehaviourWizard$DescribeFlexoBehaviour" name="data" />
 </Panel>

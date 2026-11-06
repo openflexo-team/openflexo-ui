@@ -176,8 +176,6 @@
 			key="technology_adapter" />
 		<Localized id="68" value="technology_adapter" lang="French"
 			key="technology_adapter" />
-		<Localized id="69" value="Name" lang="English" key="name" />
-		<Localized id="70" value="Name" lang="Dutch" key="name" />
 		<Localized id="71" value="name" lang="French" key="name" />
 		<Localized id="72" value="Virtual model" lang="English"
 			key="virtual_model" />
@@ -188,8 +186,6 @@
 		<Localized id="75" value="Metamodel" lang="English" key="metamodel" />
 		<Localized id="76" value="Metamodel" lang="Dutch" key="metamodel" />
 		<Localized id="77" value="metamodel" lang="French" key="metamodel" />
-		<Localized id="78" value="Description" lang="English" key="description" />
-		<Localized id="79" value="Description" lang="Dutch" key="description" />
 		<Localized id="80" value="description" lang="French" key="description" />
 		<Localized id="81" value="New entry" lang="English" key="new_entry" />
 		<Localized id="82" value="New entry" lang="Dutch" key="new_entry" />

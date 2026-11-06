@@ -16,18 +16,12 @@
     <Button action="controller.cancelAndDispose()" buttonIcon="" buttonType="Trigger" label="cancel" index="1" data="" constraints="flow(index=1)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" />
   </Panel>
   <LocalizedDictionary>
-    <Localized key="name" lang="English" value="Name" />
     <Localized key="type" lang="English" value="Type" />
     <Localized key="save" lang="English" value="Save" />
-    <Localized key="cancel" lang="English" value="Cancel" />
-    <Localized key="name" lang="French" value="Nom" />
     <Localized key="type" lang="French" value="Type" />
     <Localized key="save" lang="French" value="Sauver" />
-    <Localized key="cancel" lang="French" value="Annuler" />
-    <Localized key="name" lang="Dutch" value="Name" />
     <Localized key="type" lang="Dutch" value="Type" />
     <Localized key="save" lang="Dutch" value="Save" />
-    <Localized key="cancel" lang="Dutch" value="Cancel" />
     <Localized key="modified" lang="French" value="Modifié" />
     <Localized key="modified" lang="English" value="Modified" />
     <Localized key="modified_resources_text" lang="French" value="Les resources suivantes ont été gérées au cours de la session courante. Veuillez sélectionner les resources à sauver." />

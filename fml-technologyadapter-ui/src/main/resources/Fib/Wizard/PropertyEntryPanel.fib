@@ -184,9 +184,6 @@
 	<FIBVariable id="59"
 		type="org.openflexo.foundation.fml.action.PropertyEntry" name="data" />
 	<LocalizedDictionary id="60">
-    <Localized id="134" lang="English" value="Name" key="name" />
-    <Localized id="135" lang="Dutch" value="Name" key="name" />
-    <Localized id="136" lang="French" value="Nom" key="name" />
     <Localized id="137" lang="English" value="Type" key="type" />
     <Localized id="138" lang="Dutch" value="Type" key="type" />
     <Localized id="139" lang="French" value="Type" key="type" />
@@ -220,8 +217,5 @@
     <Localized id="167" lang="English" value="Required" key="required" />
     <Localized id="168" lang="Dutch" value="Required" key="required" />
     <Localized id="169" lang="French" value="Obligatoire" key="required" />
-    <Localized id="170" lang="English" value="Description" key="description" />
-    <Localized id="171" lang="Dutch" value="Description" key="description" />
-    <Localized id="172" lang="French" value="Description" key="description" />
  	</LocalizedDictionary>
 </Panel>

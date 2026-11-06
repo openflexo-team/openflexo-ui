@@ -55,9 +55,6 @@
     <Localized id="49" value="Label" lang="English" key="label" />
     <Localized id="50" value="Label" lang="Dutch" key="label" />
     <Localized id="51" value="Etiquette" lang="French" key="label" />
-    <Localized id="52" value="Description" lang="English" key="description" />
-    <Localized id="53" value="Beschrijving" lang="Dutch" key="description" />
-    <Localized id="54" value="Description" lang="French" key="description" />
     <Localized id="55" value="Project" lang="English" key="project" />
     <Localized id="56" value="Project" lang="Dutch" key="project" />
     <Localized id="57" value="Projet" lang="French" key="project" />
@@ -88,9 +85,7 @@
     <Localized id="82" value="Send bug report" lang="English" key="send_bug_report" />
     <Localized id="83" value="Send bug report" lang="Dutch" key="send_bug_report" />
     <Localized id="84" value="Envoyer le rapport d'anomalie" lang="French" key="send_bug_report" />
-    <Localized id="85" value="Cancel" lang="English" key="cancel" />
     <Localized id="86" value="Annuleren" lang="Dutch" key="cancel" />
-    <Localized id="87" value="Annuler" lang="French" key="cancel" />
     <Localized id="88" value="Submit bug report or feature request" lang="English" key="submit_bug_report_or_feature_request" />
     <Localized id="89" value="Submit bug report or feature request" lang="Dutch" key="submit_bug_report_or_feature_request" />
     <Localized id="90" value="Soumettre un rapport d'anomalie ou une demande d'évolution" lang="French" key="submit_bug_report_or_feature_request" />

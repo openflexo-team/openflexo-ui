@@ -295,11 +295,6 @@
 	<FIBVariable id="70" name="data"
 		type="org.openflexo.foundation.fml.FlexoBehaviour" />
 	<LocalizedDictionary id="71">
-		<Localized id="72" value="Avancé" lang="French" key="Advanced" />
-		<Localized id="73" value="Basique" lang="French" key="Basic" />
-		<Localized id="74" value="Name" lang="English" key="name" />
-		<Localized id="75" value="Nom" lang="French" key="name" />
-		<Localized id="76" value="Name" lang="Dutch" key="name" />
 		<Localized id="77" value="Parameters" lang="English" key="parameters" />
 		<Localized id="78" value="Parameters" lang="Dutch" key="parameters" />
 		<Localized id="79" value="Paramètres" lang="French" key="parameters" />
@@ -350,9 +345,6 @@
 		<Localized id="108" value="Required value" lang="Dutch" key="required" />
 		<Localized id="109" value="Valeur requise" lang="French"
 			key="required" />
-		<Localized id="110" value="Description" lang="English" key="description" />
-		<Localized id="111" value="Description" lang="Dutch" key="description" />
-		<Localized id="112" value="Description" lang="French" key="description" />
 		<Localized id="113" value="Skip confirmation panel when possible"
 			lang="English" key="skip_confirmation_panel_when_possible" />
 		<Localized id="114" value="Skip confirmation panel when possible"
@@ -375,7 +367,5 @@
 			key="flexo_concept" />
 		<Localized id="124" value="Flexo concept" lang="French"
 			key="flexo_concept" />
-		<Localized id="125" value="Avancé" lang="French" key="Advanced" />
-		<Localized id="126" value="Basique" lang="French" key="Basic" />
 	</LocalizedDictionary>
 </Inspector>

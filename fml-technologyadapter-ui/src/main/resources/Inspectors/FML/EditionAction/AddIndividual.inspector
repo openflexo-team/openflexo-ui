@@ -192,9 +192,6 @@
 			value="Nom de l'individu (URI)" />
 		<Localized key="individual_name_(uri)" lang="Dutch"
 			value="Individual name (URI)" />
-		<Localized key="description" lang="English" value="Description" />
-		<Localized key="description" lang="French" value="Description" />
-		<Localized key="description" lang="Dutch" value="Description" />
 		<Localized key="action_type" lang="English" value="Action type" />
 		<Localized key="action_type" lang="French" value="Type d'Action" />
 		<Localized key="action_type" lang="Dutch" value="Action type" />

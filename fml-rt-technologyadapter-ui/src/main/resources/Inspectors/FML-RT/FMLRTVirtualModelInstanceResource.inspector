@@ -18,10 +18,6 @@
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
-    <Localized key="Basic" lang="French" value="Basique" />
-    <Localized key="name" lang="English" value="Name" />
-    <Localized key="name" lang="French" value="Nom" />
-    <Localized key="name" lang="Dutch" value="Name" />
     <Localized key="virtual_model" lang="English" value="Virtual model" />
     <Localized key="virtual_model" lang="French" value="Virtual model" />
     <Localized key="virtual_model" lang="Dutch" value="Virtual model" />

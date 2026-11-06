@@ -12,8 +12,6 @@
     <Localized id="10" lang="English" value="Project uri" key="project_uri" />
     <Localized id="11" lang="Dutch" value="project_uri" key="project_uri" />
     <Localized id="12" lang="French" value="URI du projet" key="project_uri" />
-    <Localized id="13" lang="English" value="Description" key="description" />
-    <Localized id="14" lang="Dutch" value="Description" key="description" />
     <Localized id="15" lang="French" value="Description du projet" key="description" />
   </LocalizedDictionary>
   <FIBVariable id="16" type="org.openflexo.view.controller.action.CreateProjectWizard$ConfigureNewProject" name="data" />

@@ -60,17 +60,12 @@
 		</Tab>
 	</TabPanel>
 	<LocalizedDictionary>
-		<Localized key="Advanced" lang="French" value="Avancé" />
-		<Localized key="Basic" lang="French" value="Basique" />
 		<Localized key="visible" lang="English" value="Visible" />
 		<Localized key="visible" lang="French" value="Visible" />
 		<Localized key="visible" lang="Dutch" value="Visible" />
 		<Localized key="enable" lang="English" value="Enable" />
 		<Localized key="enable" lang="French" value="Activé" />
 		<Localized key="enable" lang="Dutch" value="Enable" />
-		<Localized key="name" lang="English" value="Name" />
-		<Localized key="name" lang="French" value="Nom" />
-		<Localized key="name" lang="Dutch" value="Name" />
 	</LocalizedDictionary>
 	<Parameter name="title" value="Abstract Action Scheme" />
 </Panel>

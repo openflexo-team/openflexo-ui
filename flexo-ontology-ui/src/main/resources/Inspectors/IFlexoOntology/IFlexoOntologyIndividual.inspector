@@ -12,10 +12,6 @@
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
-    <Localized key="Basic" lang="French" value="Basique" />
-    <Localized key="name" lang="English" value="Name" />
-    <Localized key="name" lang="French" value="Nom" />
-    <Localized key="name" lang="Dutch" value="Name" />
     <Localized key="ontology_super_classes" lang="English" value="Super classes" />
     <Localized key="ontology_super_classes" lang="French" value="Super classes" />
     <Localized key="ontology_super_classes" lang="Dutch" value="Super classes" />

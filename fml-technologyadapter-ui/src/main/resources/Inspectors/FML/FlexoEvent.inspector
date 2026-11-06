@@ -33,11 +33,6 @@
 			</Tab> -->
 	</TabPanel>
 	<LocalizedDictionary>
-		<Localized key="Advanced" lang="French" value="Avancé" />
-		<Localized key="Basic" lang="French" value="Basique" />
-		<Localized key="name" lang="English" value="Name" />
-		<Localized key="name" lang="French" value="Nom" />
-		<Localized key="name" lang="Dutch" value="Name" />
 		<Localized key="abstract_concept" lang="English" value="abstract_concept" />
 		<Localized key="abstract_concept" lang="French" value="concept_abstrait" />
 		<Localized key="abstract_concept" lang="Dutch" value="abstract_concept" />

@@ -102,9 +102,6 @@
 		<Localized key="creation_scheme" lang="English" value="creation_scheme" />
 		<Localized key="creation_scheme" lang="French" value="creation_scheme" />
 		<Localized key="creation_scheme" lang="Dutch" value="creation_scheme" />
-		<Localized key="description" lang="English" value="Description" />
-		<Localized key="description" lang="French" value="Description" />
-		<Localized key="description" lang="Dutch" value="Description" />
 		<Localized key="action_type" lang="English" value="Action type" />
 		<Localized key="action_type" lang="French" value="Type d'Action" />
 		<Localized key="action_type" lang="Dutch" value="Action type" />

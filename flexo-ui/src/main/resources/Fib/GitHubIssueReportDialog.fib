@@ -55,8 +55,6 @@
   <LocalizedDictionary id="30">
     <Localized id="31" value="Summary" lang="English" key="summary" />
     <Localized id="32" value="Résumé" lang="French" key="summary" />
-    <Localized id="33" value="Description" lang="English" key="description" />
-    <Localized id="34" value="Description" lang="French" key="description" />
     <Localized id="35" value="Repository" lang="English" key="repository" />
     <Localized id="36" value="Dépôt GitHub" lang="French" key="repository" />
     <Localized id="37" value="Milestone" lang="English" key="milestone" />
@@ -73,8 +71,6 @@
     <Localized id="48" value="Attacher un fichier" lang="French" key="attach_file" />
     <Localized id="49" value="Send bug report" lang="English" key="send_bug_report" />
     <Localized id="50" value="Envoyer le rapport d'anomalie" lang="French" key="send_bug_report" />
-    <Localized id="51" value="Cancel" lang="English" key="cancel" />
-    <Localized id="52" value="Annuler" lang="French" key="cancel" />
     <Localized id="53" value="Submit bug report or feature request" lang="English" key="submit_bug_report_or_feature_request" />
     <Localized id="54" value="Soumettre un rapport d'anomalie ou une demande d'évolution" lang="French" key="submit_bug_report_or_feature_request" />
     <Localized id="55" value="Please provide a precise and reproducible scenario" lang="English" key="please_provide_a_precise_and_reproducible_scenario" />

@@ -22,14 +22,6 @@
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
-    <Localized key="Advanced" lang="French" value="Avancé" />
-    <Localized key="Basic" lang="French" value="Basique" />
-    <Localized key="name" lang="English" value="Name" />
-    <Localized key="name" lang="French" value="Nom" />
-    <Localized key="name" lang="Dutch" value="Name" />
-    <Localized key="uri" lang="English" value="URI" />
-    <Localized key="uri" lang="French" value="URI" />
-    <Localized key="uri" lang="Dutch" value="URI" />
     <Localized key="is_loaded" lang="English" value="Loaded" />
     <Localized key="is_loaded" lang="French" value="Chargé" />
     <Localized key="is_loaded" lang="Dutch" value="Loaded" />

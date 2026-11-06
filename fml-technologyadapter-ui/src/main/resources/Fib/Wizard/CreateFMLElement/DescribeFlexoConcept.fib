@@ -57,9 +57,6 @@
     <Localized id="53" lang="English" value="AddParentFlexoConcept" key="addParentFlexoConcept" />
     <Localized id="54" lang="Dutch" value="AddParentFlexoConcept" key="addParentFlexoConcept" />
     <Localized id="55" lang="French" value="addParentFlexoConcept" key="addParentFlexoConcept" />
-    <Localized id="56" lang="English" value="Description" key="description" />
-    <Localized id="57" lang="Dutch" value="Description" key="description" />
-    <Localized id="58" lang="French" value="Description" key="description" />
   </LocalizedDictionary>
   <FIBVariable id="59" type="org.openflexo.fml.controller.action.CreateFlexoConceptWizard$DescribeFlexoConcept" name="data" />
 </Panel>
