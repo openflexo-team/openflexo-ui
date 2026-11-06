@@ -57,9 +57,6 @@
 		<Localized key="dont_generate" lang="English" value="Don't generate doc" />
 		<Localized key="dont_generate" lang="French" value="Ne pas générer" />
 		<Localized key="dont_generate" lang="Dutch" value="Geen documentatie genereren" />
-		<Localized key="EP refs" lang="English" value="EP refs" />
-		<Localized key="EP refs" lang="French" value="Références EP" />
-		<Localized key="EP refs" lang="Dutch" value="EP-verwijzingen" />
 		<Localized key="Id" lang="English" value="Id" />
 		<Localized key="Id" lang="French" value="Id" />
 		<Localized key="Id" lang="Dutch" value="Id" />
