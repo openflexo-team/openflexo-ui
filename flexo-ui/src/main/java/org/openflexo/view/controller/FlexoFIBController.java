@@ -151,6 +151,11 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 			report.getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
 		observedReports.clear();
+		if (observedControllerService != null) {
+			observedControllerService.getPropertyChangeSupport()
+					.removePropertyChangeListener(TechnologyAdapterControllerService.VALIDATION_REPORT_AVAILABLE, this);
+			observedControllerService = null;
+		}
 		super.delete();
 	}
 
@@ -323,6 +328,7 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 	}*/
 
 	public ValidationReport getValidationReport(Validable object) {
+		observeValidationReports();
 		if (getServiceManager() != null) {
 			TechnologyAdapter ta = null;
 			if (object instanceof TechnologyObject) {
@@ -369,6 +375,27 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getSource() instanceof ValidationReport) {
 			clearCachedIcons();
+		}
+		else if (TechnologyAdapterControllerService.VALIDATION_REPORT_AVAILABLE.equals(evt.getPropertyName())) {
+			// A report computed after this view was shown (see TechnologyAdapterController.validateInBackground)
+			SwingUtilities.invokeLater(() -> {
+				clearCachedIcons();
+				if (getRootView() != null) {
+					getRootView().update();
+				}
+			});
+		}
+	}
+
+	// The service telling when a validation report becomes available, observed once this controller has asked for a report
+	private TechnologyAdapterControllerService observedControllerService;
+
+	private void observeValidationReports() {
+		if (observedControllerService == null && getServiceManager() != null
+				&& getServiceManager().getTechnologyAdapterControllerService() != null) {
+			observedControllerService = getServiceManager().getTechnologyAdapterControllerService();
+			observedControllerService.getPropertyChangeSupport()
+					.addPropertyChangeListener(TechnologyAdapterControllerService.VALIDATION_REPORT_AVAILABLE, this);
 		}
 	}
 

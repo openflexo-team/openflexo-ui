@@ -40,8 +40,8 @@ package org.openflexo.fml.controller;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -192,7 +192,10 @@ public class FMLTechnologyAdapterController extends TechnologyAdapterController<
 	private InspectorGroup fmlInspectors;
 
 	private FMLValidationModel validationModel;
-	private Map<FMLCompilationUnit, FMLValidationReport> validationReports = new HashMap<>();
+	// Filled in background tasks, read in the event dispatch thread
+	private final Map<FMLCompilationUnit, FMLValidationReport> validationReports = new ConcurrentHashMap<>();
+	// One lock per validated unit, so that a unit is validated once even when asked from two threads
+	private final Map<FMLCompilationUnit, Object> validationLocks = new ConcurrentHashMap<>();
 
 	private FIBCompilationUnitBrowser compilationUnitBrowser;
 
@@ -922,7 +925,10 @@ public class FMLTechnologyAdapterController extends TechnologyAdapterController<
 
 		if (resource instanceof CompilationUnitResource) {
 			FMLCompilationUnit cu = ((CompilationUnitResource) resource).getLoadedCompilationUnit();
-			buildFMLValidationReport(cu);
+			if (cu != null) {
+				// Validated after the loading, which it would otherwise delay
+				validateInBackground(cu, () -> buildFMLValidationReport(cu));
+			}
 		}
 	}
 
@@ -957,6 +963,7 @@ public class FMLTechnologyAdapterController extends TechnologyAdapterController<
 			FMLCompilationUnit cu = ((CompilationUnitResource) resource).getLoadedCompilationUnit();
 			if (cu != null) {
 				validationReports.remove(cu);
+				validationLocks.remove(cu);
 			}
 		}
 	}
@@ -977,6 +984,20 @@ public class FMLTechnologyAdapterController extends TechnologyAdapterController<
 	}
 
 	private FMLValidationReport buildFMLValidationReport(FMLCompilationUnit cu) {
+		if (cu == null) {
+			return computeFMLValidationReport(null);
+		}
+		// A request arriving while the background validation of this unit runs waits for it and takes its report
+		synchronized (validationLocks.computeIfAbsent(cu, k -> new Object())) {
+			FMLValidationReport existing = validationReports.get(cu);
+			if (existing != null) {
+				return existing;
+			}
+			return computeFMLValidationReport(cu);
+		}
+	}
+
+	private FMLValidationReport computeFMLValidationReport(FMLCompilationUnit cu) {
 		FMLValidationReport validationReport = null;
 		try {
 			if (logger.isLoggable(Level.INFO)) {

@@ -94,6 +94,7 @@ import org.openflexo.foundation.nature.ProjectNatureService;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.ResourceData;
+import org.openflexo.foundation.task.FlexoTask;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
@@ -712,6 +713,41 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<T
 
 	public ValidationModel getValidationModel(Class<? extends ResourceData<?>> resourceDataClass) {
 		return null;
+	}
+
+	/**
+	 * Compute, in a background task not shown in the task panel, the validation report of supplied resource data, then tell the user
+	 * interface that it is available (see {@link TechnologyAdapterControllerService#VALIDATION_REPORT_AVAILABLE}): validating a resource
+	 * when it is loaded no longer delays the loading.
+	 * 
+	 * @param resourceData
+	 *            the validated resource data
+	 * @param validation
+	 *            computes and stores the report
+	 */
+	protected void validateInBackground(ResourceData<?> resourceData, Runnable validation) {
+		if (getServiceManager() == null || getServiceManager().getTaskManager() == null) {
+			validation.run();
+			return;
+		}
+		// Not localized: the task is not shown, and a missing key would be added to the dictionaries in development mode
+		FlexoTask task = new FlexoTask("BackgroundValidation", "Validating " + resourceData) {
+			@Override
+			public void performTask() {
+				validation.run();
+				TechnologyAdapterControllerService service = getServiceManager().getTechnologyAdapterControllerService();
+				if (service != null) {
+					service.getPropertyChangeSupport().firePropertyChange(TechnologyAdapterControllerService.VALIDATION_REPORT_AVAILABLE,
+							null, resourceData);
+				}
+			}
+
+			@Override
+			public boolean isShownInTaskPanel() {
+				return false;
+			}
+		};
+		getServiceManager().getTaskManager().scheduleExecution(task);
 	}
 
 	public ValidationReport getValidationReport(ResourceData<?> resourceData, boolean createWhenNotExistent) {

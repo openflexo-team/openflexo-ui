@@ -38,8 +38,8 @@
 
 package org.openflexo.fml.rt.controller;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -117,7 +117,10 @@ public class FMLRTTechnologyAdapterController extends TechnologyAdapterControlle
 	static final Logger logger = Logger.getLogger(FlexoController.class.getPackage().getName());
 
 	private FMLRTValidationModel validationModel;
-	private Map<VirtualModelInstance, FMLRTValidationReport> validationReports = new HashMap<>();
+	// Filled in background tasks, read in the event dispatch thread
+	private final Map<VirtualModelInstance, FMLRTValidationReport> validationReports = new ConcurrentHashMap<>();
+	// One lock per validated instance, so that an instance is validated once even when asked from two threads
+	private final Map<VirtualModelInstance, Object> validationLocks = new ConcurrentHashMap<>();
 
 	@Override
 	public Class<FMLRTTechnologyAdapter> getTechnologyAdapterClass() {
@@ -425,6 +428,17 @@ public class FMLRTTechnologyAdapterController extends TechnologyAdapterControlle
 	}
 
 	private FMLRTValidationReport makeValidationReport(VirtualModelInstance<?, ?> vmi) {
+		// A request arriving while the background validation of this instance runs waits for it and takes its report
+		synchronized (validationLocks.computeIfAbsent(vmi, k -> new Object())) {
+			FMLRTValidationReport existing = validationReports.get(vmi);
+			if (existing != null) {
+				return existing;
+			}
+			return computeValidationReport(vmi);
+		}
+	}
+
+	private FMLRTValidationReport computeValidationReport(VirtualModelInstance<?, ?> vmi) {
 		FMLRTValidationReport validationReport = null;
 		try {
 			if (logger.isLoggable(Level.INFO)) {
@@ -454,7 +468,8 @@ public class FMLRTTechnologyAdapterController extends TechnologyAdapterControlle
 		if (resource instanceof FMLRTVirtualModelInstanceResource) {
 			VirtualModelInstance vmi = ((FMLRTVirtualModelInstanceResource) resource).getLoadedResourceData();
 			if (vmi != null) {
-				makeValidationReport(vmi);
+				// Validated after the loading, which it would otherwise delay
+				validateInBackground(vmi, () -> makeValidationReport(vmi));
 			}
 		}
 	}
@@ -467,6 +482,7 @@ public class FMLRTTechnologyAdapterController extends TechnologyAdapterControlle
 			VirtualModelInstance vmi = ((FMLRTVirtualModelInstanceResource) resource).getLoadedResourceData();
 			if (vmi != null) {
 				validationReports.remove(vmi);
+				validationLocks.remove(vmi);
 			}
 		}
 	}

@@ -39,6 +39,7 @@
 
 package org.openflexo.view.controller;
 
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
@@ -86,6 +87,13 @@ public abstract class DefaultTechnologyAdapterControllerService extends FlexoSer
 	private static final Logger logger = Logger.getLogger(DefaultTechnologyAdapterControllerService.class.getPackage().getName());
 
 	private Map<Class<?>, TechnologyAdapterController<?>> loadedAdapters;
+
+	private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return propertyChangeSupport;
+	}
 
 	public static TechnologyAdapterControllerService getNewInstance() {
 		try {

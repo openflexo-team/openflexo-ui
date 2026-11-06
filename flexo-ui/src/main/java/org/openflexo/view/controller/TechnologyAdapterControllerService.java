@@ -39,6 +39,7 @@
 
 package org.openflexo.view.controller;
 
+import java.beans.PropertyChangeSupport;
 import java.util.Collection;
 import java.util.List;
 
@@ -67,6 +68,17 @@ import org.openflexo.view.controller.model.FlexoPerspective;
 @ModelEntity
 @ImplementationClass(DefaultTechnologyAdapterControllerService.class)
 public interface TechnologyAdapterControllerService extends FlexoService, CustomTypeEditorProvider {
+
+	/**
+	 * Fired when the validation report of a resource data has been computed, possibly after the resource data was shown; the new value
+	 * is the validated resource data
+	 */
+	public static final String VALIDATION_REPORT_AVAILABLE = "validationReportAvailable";
+
+	/**
+	 * Return the support through which this service notifies the user interface (see {@link #VALIDATION_REPORT_AVAILABLE})
+	 */
+	public PropertyChangeSupport getPropertyChangeSupport();
 
 	/**
 	 * Load all available technology adapters controllers
