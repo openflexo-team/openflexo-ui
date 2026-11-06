@@ -143,31 +143,31 @@
 	<LocalizedDictionary>
 		<Localized key="Assign" lang="English" value="Assign" />
 		<Localized key="Assign" lang="French" value="Affecter" />
-		<Localized key="Assign" lang="Dutch" value="Assign" />
+		<Localized key="Assign" lang="Dutch" value="Toewijzen" />
 		<Localized key="parameters" lang="English" value="Parameters" />
 		<Localized key="parameters" lang="French" value="Paramètres" />
 		<Localized key="parameters" lang="Dutch" value="Parameters" />
 		<Localized key="creation_scheme" lang="English" value="creation_scheme" />
 		<Localized key="creation_scheme" lang="French" value="CreationScheme" />
-		<Localized key="creation_scheme" lang="Dutch" value="creation_scheme" />
+		<Localized key="creation_scheme" lang="Dutch" value="CreationScheme" />
 		<Localized key="action_type" lang="English" value="Action type" />
 		<Localized key="action_type" lang="French" value="Type d'Action" />
-		<Localized key="action_type" lang="Dutch" value="Action type" />
+		<Localized key="action_type" lang="Dutch" value="Type actie" />
 		<Localized key="view" lang="English" value="view" />
 		<Localized key="view" lang="French" value="Affichage" />
-		<Localized key="view" lang="Dutch" value="view" />
+		<Localized key="view" lang="Dutch" value="Weergave" />
 		<Localized key="flexo_concept" lang="English" value="flexo concept" />
 		<Localized key="flexo_concept" lang="French" value="FlexoConcept" />
-		<Localized key="flexo_concept" lang="Dutch" value="flexo concept" />
+		<Localized key="flexo_concept" lang="Dutch" value="FlexoConcept" />
 		<Localized key="parameter" lang="English" value="parameter" />
 		<Localized key="parameter" lang="French" value="Paramètre" />
-		<Localized key="parameter" lang="Dutch" value="parameter" />
+		<Localized key="parameter" lang="Dutch" value="Parameter" />
 		<Localized key="value" lang="English" value="Value" />
 		<Localized key="value" lang="French" value="Valeur" />
-		<Localized key="value" lang="Dutch" value="Value" />
+		<Localized key="value" lang="Dutch" value="Waarde" />
 		<Localized key="conditional" lang="English" value="conditional" />
 		<Localized key="conditional" lang="French" value="conditionnel" />
-		<Localized key="conditional" lang="Dutch" value="conditional" />
+		<Localized key="conditional" lang="Dutch" value="Voorwaardelijk" />
 	</LocalizedDictionary>
 	<Parameter name="title" value="MatchFlexoConceptInstance action" />
 </Panel>

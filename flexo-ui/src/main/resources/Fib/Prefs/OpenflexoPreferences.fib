@@ -18,16 +18,16 @@
   <FIBVariable id="14" name="data" type="org.openflexo.prefs.FlexoPreferences" />
   <LocalizedDictionary id="15">
     <Localized id="16" value="Software version" lang="English" key="software_version" />
-    <Localized id="17" value="Software version" lang="Dutch" key="software_version" />
+    <Localized id="17" value="Softwareversie" lang="Dutch" key="software_version" />
     <Localized id="18" value="Version du logiciel" lang="French" key="software_version" />
     <Localized id="19" value="Java version" lang="English" key="java_version" />
-    <Localized id="20" value="Java version" lang="Dutch" key="java_version" />
+    <Localized id="20" value="Java-versie" lang="Dutch" key="java_version" />
     <Localized id="21" value="Version de Java" lang="French" key="java_version" />
     <Localized id="22" value="Platform" lang="English" key="platform" />
     <Localized id="23" value="Platform" lang="Dutch" key="platform" />
     <Localized id="24" value="Plateforme" lang="French" key="platform" />
     <Localized id="25" value="Heap memory size" lang="English" key="heap_memory_size" />
-    <Localized id="26" value="Heap memory size" lang="Dutch" key="heap_memory_size" />
+    <Localized id="26" value="Grootte van het heapgeheugen" lang="Dutch" key="heap_memory_size" />
     <Localized id="27" value="Mémoire allouée" lang="French" key="heap_memory_size" />
   </LocalizedDictionary>
 </Panel>

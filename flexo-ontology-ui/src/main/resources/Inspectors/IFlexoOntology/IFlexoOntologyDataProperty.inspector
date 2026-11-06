@@ -14,7 +14,7 @@
   <LocalizedDictionary>
     <Localized key="ontology_super_properties" lang="English" value="Super properties" />
     <Localized key="ontology_super_properties" lang="French" value="Super-propriétés" />
-    <Localized key="ontology_super_properties" lang="Dutch" value="Super properties" />
+    <Localized key="ontology_super_properties" lang="Dutch" value="Supereigenschappen" />
   </LocalizedDictionary>
   <Parameter name="title" value="Ontologic data property" />
 </Panel>

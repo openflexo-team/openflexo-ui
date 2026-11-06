@@ -9,20 +9,20 @@
 	<LocalizedDictionary id="1">
 		<Localized id="2" value="Creates new FlexoConcept" lang="English"
 			key="CREATES_FLEXO_CONCEPT" />
-		<Localized id="3" value="CREATES_FLEXO_CONCEPT" lang="Dutch"
+		<Localized id="3" value="Maakt een nieuw FlexoConcept" lang="Dutch"
 			key="CREATES_FLEXO_CONCEPT" />
 		<Localized id="4" value="Créer un nouveau FlexoConcept"
 			lang="French" key="CREATES_FLEXO_CONCEPT" />
 		<Localized id="5" value="Replace element in existing FlexoConcept"
 			lang="English" key="REPLACE_ELEMENT_IN_EXISTING_FLEXO_CONCEPT" />
-		<Localized id="6" value="REPLACE_ELEMENT_IN_EXISTING_FLEXO_CONCEPT"
+		<Localized id="6" value="Element in een bestaand FlexoConcept vervangen"
 			lang="Dutch" key="REPLACE_ELEMENT_IN_EXISTING_FLEXO_CONCEPT" />
 		<Localized id="7"
 			value="Remplacer un element d'un FlexoConcept existant" lang="French"
 			key="REPLACE_ELEMENT_IN_EXISTING_FLEXO_CONCEPT" />
 		<Localized id="8" value="Creates element in existing FlexoConcept"
 			lang="English" key="CREATE_ELEMENT_IN_EXISTING_FLEXO_CONCEPT" />
-		<Localized id="9" value="CREATE_ELEMENT_IN_EXISTING_FLEXO_CONCEPT"
+		<Localized id="9" value="Maakt een element in een bestaand FlexoConcept"
 			lang="Dutch" key="CREATE_ELEMENT_IN_EXISTING_FLEXO_CONCEPT" />
 		<Localized id="10"
 			value="Créer un element dans un FlexoConcept existant" lang="French"
@@ -56,13 +56,13 @@
 			lang="French" key="CREATE_ELEMENT_IN_EXISTING_FLEXO_CONCEPT_description" />
 		<Localized id="20" value="Virtual model" lang="English"
 			key="virtual_model" />
-		<Localized id="21" value="virtual_model" lang="Dutch"
+		<Localized id="21" value="VirtualModel" lang="Dutch"
 			key="virtual_model" />
 		<Localized id="22" value="VirtualModel" lang="French"
 			key="virtual_model" />
 		<Localized id="23" value="Please select an option" lang="English"
 			key="please_select_an_option" />
-		<Localized id="24" value="please_select_an_option" lang="Dutch"
+		<Localized id="24" value="Selecteer een optie" lang="Dutch"
 			key="please_select_an_option" />
 		<Localized id="25" value="Sélectionner une option" lang="French"
 			key="please_select_an_option" />

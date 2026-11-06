@@ -36,43 +36,43 @@
   <LocalizedDictionary>
     <Localized key="individual" lang="English" value="Individual" />
     <Localized key="individual" lang="French" value="Individu" />
-    <Localized key="individual" lang="Dutch" value="individual" />
+    <Localized key="individual" lang="Dutch" value="Individu" />
     <Localized key="URI" lang="English" value="URI" />
     <Localized key="URI" lang="French" value="URI" />
     <Localized key="URI" lang="Dutch" value="URI" />
     <Localized key="Property" lang="English" value="Property" />
     <Localized key="Property" lang="French" value="Propriété" />
-    <Localized key="Property" lang="Dutch" value="Property" />
+    <Localized key="Property" lang="Dutch" value="Eigenschap" />
     <Localized key="add_see_also" lang="English" value="add_see_also" />
     <Localized key="add_see_also" lang="French" value="Ajouter « voir aussi »" />
-    <Localized key="add_see_also" lang="Dutch" value="add_see_also" />
+    <Localized key="add_see_also" lang="Dutch" value="'Zie ook' toevoegen" />
     <Localized key="add_is_defined_by" lang="English" value="add_is_defined_by" />
     <Localized key="add_is_defined_by" lang="French" value="Ajouter « est défini par »" />
-    <Localized key="add_is_defined_by" lang="Dutch" value="add_is_defined_by" />
+    <Localized key="add_is_defined_by" lang="Dutch" value="'Is gedefinieerd door' toevoegen" />
     <Localized key="delete_action" lang="English" value="Delete action" />
     <Localized key="delete_action" lang="French" value="Supprimer l'action" />
-    <Localized key="delete_action" lang="Dutch" value="Delete action" />
+    <Localized key="delete_action" lang="Dutch" value="Actie verwijderen" />
     <Localized key="Annotation statements" lang="English" value="Annotation statements" />
     <Localized key="Annotation statements" lang="French" value="Déclarations d'annotation" />
-    <Localized key="Annotation statements" lang="Dutch" value="Annotation statements" />
+    <Localized key="Annotation statements" lang="Dutch" value="Annotatie-uitspraken" />
     <Localized key="Language" lang="English" value="Language" />
     <Localized key="Language" lang="French" value="Langue" />
-    <Localized key="Language" lang="Dutch" value="Language" />
+    <Localized key="Language" lang="Dutch" value="Taal" />
     <Localized key="Value" lang="English" value="Value" />
     <Localized key="Value" lang="French" value="Valeur" />
-    <Localized key="Value" lang="Dutch" value="Value" />
+    <Localized key="Value" lang="Dutch" value="Waarde" />
     <Localized key="add_comment" lang="English" value="add_comment" />
     <Localized key="add_comment" lang="French" value="Ajouter un commentaire" />
-    <Localized key="add_comment" lang="Dutch" value="add_comment" />
+    <Localized key="add_comment" lang="Dutch" value="Opmerking toevoegen" />
     <Localized key="add_label" lang="English" value="add_label" />
     <Localized key="add_label" lang="French" value="Ajouter un libellé" />
-    <Localized key="add_label" lang="Dutch" value="add_label" />
+    <Localized key="add_label" lang="Dutch" value="Label toevoegen" />
     <Localized key="Value(s)" lang="English" value="Value(s)" />
     <Localized key="Value(s)" lang="French" value="Valeur(s)" />
-    <Localized key="Value(s)" lang="Dutch" value="Value(s)" />
+    <Localized key="Value(s)" lang="Dutch" value="Waarde(n)" />
     <Localized key="property_values" lang="English" value="Property values" />
     <Localized key="property_values" lang="French" value="Valeurs" />
-    <Localized key="property_values" lang="Dutch" value="property_values" />
+    <Localized key="property_values" lang="Dutch" value="Eigenschapswaarden" />
     <Localized key="Types" lang="English" value="Types" />
     <Localized key="Types" lang="French" value="Types" />
     <Localized key="Types" lang="Dutch" value="Types" />
@@ -81,9 +81,9 @@
     <Localized key="types" lang="Dutch" value="types" />
     <Localized key="Annotations" lang="English" value="Annotations" />
     <Localized key="Annotations" lang="French" value="Annotations" />
-    <Localized key="Annotations" lang="Dutch" value="Annotations" />
+    <Localized key="Annotations" lang="Dutch" value="Annotaties" />
     <Localized key="Semantic" lang="English" value="Semantic" />
     <Localized key="Semantic" lang="French" value="Sémantique" />
-    <Localized key="Semantic" lang="Dutch" value="Semantic" />
+    <Localized key="Semantic" lang="Dutch" value="Semantisch" />
   </LocalizedDictionary>
 </Panel>

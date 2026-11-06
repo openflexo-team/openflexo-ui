@@ -28,13 +28,13 @@
   <TextArea id="24" rows="5" columns="6" text="TextArea" localize="true" data="data.newFlexoConceptDescription" useScrollBar="true" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=true;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=13;insetsBottom=30;insetsLeft=0;insetsRight=20;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=1.0)" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" index="13" name="TextArea" />
   <LocalizedDictionary id="25">
     <Localized id="26" lang="English" value="Concept name" key="concept_name" />
-    <Localized id="27" lang="Dutch" value="Concept name" key="concept_name" />
+    <Localized id="27" lang="Dutch" value="Naam van het concept" key="concept_name" />
     <Localized id="28" lang="French" value="Nom du concept" key="concept_name" />
     <Localized id="29" lang="English" value="Label" key="label" />
     <Localized id="30" lang="Dutch" value="Label" key="label" />
     <Localized id="31" lang="French" value="Libellé" key="label" />
     <Localized id="32" lang="English" value="Visibility" key="visibility" />
-    <Localized id="33" lang="Dutch" value="Visibility" key="visibility" />
+    <Localized id="33" lang="Dutch" value="Zichtbaarheid" key="visibility" />
     <Localized id="34" lang="French" value="Visibilité" key="visibility" />
     <Localized id="35" lang="English" value="Abstract concept" key="abstract_concept" />
     <Localized id="36" lang="Dutch" value="Abstract concept" key="abstract_concept" />
@@ -43,19 +43,19 @@
     <Localized id="39" lang="Dutch" value="Container" key="container" />
     <Localized id="40" lang="French" value="Conteneur" key="container" />
     <Localized id="41" lang="English" value="Parent concepts" key="parent_concepts" />
-    <Localized id="42" lang="Dutch" value="Parent concepts" key="parent_concepts" />
+    <Localized id="42" lang="Dutch" value="Bovenliggende concepten" key="parent_concepts" />
     <Localized id="43" lang="French" value="Concepts parents" key="parent_concepts" />
     <Localized id="44" lang="English" value="Icon" key="icon" />
-    <Localized id="45" lang="Dutch" value="Icon" key="icon" />
+    <Localized id="45" lang="Dutch" value="Pictogram" key="icon" />
     <Localized id="46" lang="French" value="Icone" key="icon" />
     <Localized id="47" lang="English" value="Flexo concept" key="flexo_concept" />
-    <Localized id="48" lang="Dutch" value="Flexo concept" key="flexo_concept" />
+    <Localized id="48" lang="Dutch" value="FlexoConcept" key="flexo_concept" />
     <Localized id="49" lang="French" value="FlexoConcept" key="flexo_concept" />
     <Localized id="50" lang="English" value="Delete" key="delete" />
-    <Localized id="51" lang="Dutch" value="Delete" key="delete" />
+    <Localized id="51" lang="Dutch" value="Verwijderen" key="delete" />
     <Localized id="52" lang="French" value="Supprimer" key="delete" />
     <Localized id="53" lang="English" value="AddParentFlexoConcept" key="addParentFlexoConcept" />
-    <Localized id="54" lang="Dutch" value="AddParentFlexoConcept" key="addParentFlexoConcept" />
+    <Localized id="54" lang="Dutch" value="Bovenliggend FlexoConcept toevoegen" key="addParentFlexoConcept" />
     <Localized id="55" lang="French" value="Ajouter un FlexoConcept parent" key="addParentFlexoConcept" />
   </LocalizedDictionary>
   <FIBVariable id="59" type="org.openflexo.fml.controller.action.CreateFlexoConceptWizard$DescribeFlexoConcept" name="data" />

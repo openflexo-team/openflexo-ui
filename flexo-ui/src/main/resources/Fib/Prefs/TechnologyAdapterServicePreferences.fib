@@ -15,13 +15,13 @@
   </Panel>
   <LocalizedDictionary id="12">
     <Localized id="13" lang="English" value="Icon" key="icon" />
-    <Localized id="14" lang="Dutch" value="Icon" key="icon" />
+    <Localized id="14" lang="Dutch" value="Pictogram" key="icon" />
     <Localized id="15" lang="French" value="Icône" key="icon" />
     <Localized id="16" lang="English" value="Technology adapter" key="technology_adapter" />
-    <Localized id="17" lang="Dutch" value="Technology adapter" key="technology_adapter" />
+    <Localized id="17" lang="Dutch" value="Technologie-adapter" key="technology_adapter" />
     <Localized id="18" lang="French" value="Connecteur technique" key="technology_adapter" />
     <Localized id="19" lang="English" value="Activated" key="activated" />
-    <Localized id="20" lang="Dutch" value="Activated" key="activated" />
+    <Localized id="20" lang="Dutch" value="Geactiveerd" key="activated" />
     <Localized id="21" lang="French" value="Activé" key="activated" />
   </LocalizedDictionary>
   <FIBVariable id="22" type="org.openflexo.prefs.TechnologyAdapterServicePreferences" name="data" />

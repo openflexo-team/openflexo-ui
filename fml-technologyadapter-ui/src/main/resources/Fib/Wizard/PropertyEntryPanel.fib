@@ -188,34 +188,34 @@
     <Localized id="138" lang="Dutch" value="Type" key="type" />
     <Localized id="139" lang="French" value="Type" key="type" />
     <Localized id="140" lang="English" value="Cardinality" key="cardinality" />
-    <Localized id="141" lang="Dutch" value="Cardinality" key="cardinality" />
+    <Localized id="141" lang="Dutch" value="Kardinaliteit" key="cardinality" />
     <Localized id="142" lang="French" value="Cardinalité" key="cardinality" />
     <Localized id="143" lang="English" value="Kind of property" key="kind_of_property" />
-    <Localized id="144" lang="Dutch" value="Kind of property" key="kind_of_property" />
+    <Localized id="144" lang="Dutch" value="Soort eigenschap" key="kind_of_property" />
     <Localized id="145" lang="French" value="Type de propriété" key="kind_of_property" />
     <Localized id="146" lang="English" value="Technology" key="technology" />
-    <Localized id="147" lang="Dutch" value="Technology" key="technology" />
+    <Localized id="147" lang="Dutch" value="Technologie" key="technology" />
     <Localized id="148" lang="French" value="Technologie" key="technology" />
     <Localized id="149" lang="English" value="Model slot type" key="model_slot_type" />
-    <Localized id="150" lang="Dutch" value="Model slot type" key="model_slot_type" />
+    <Localized id="150" lang="Dutch" value="Type ModelSlot" key="model_slot_type" />
     <Localized id="151" lang="French" value="Type de model slot" key="model_slot_type" />
     <Localized id="152" lang="English" value="Virtual model" key="virtual_model" />
-    <Localized id="153" lang="Dutch" value="Virtual model" key="virtual_model" />
+    <Localized id="153" lang="Dutch" value="VirtualModel" key="virtual_model" />
     <Localized id="154" lang="French" value="VirtualModel" key="virtual_model" />
     <Localized id="155" lang="English" value="Meta model" key="meta_model" />
-    <Localized id="156" lang="Dutch" value="Meta model" key="meta_model" />
+    <Localized id="156" lang="Dutch" value="Metamodel" key="meta_model" />
     <Localized id="157" lang="French" value="Méta-modèle" key="meta_model" />
     <Localized id="158" lang="English" value="Role type" key="role_type" />
-    <Localized id="159" lang="Dutch" value="Role type" key="role_type" />
+    <Localized id="159" lang="Dutch" value="Roltype" key="role_type" />
     <Localized id="160" lang="French" value="Type de role" key="role_type" />
     <Localized id="161" lang="English" value="Container" key="container" />
     <Localized id="162" lang="Dutch" value="Container" key="container" />
     <Localized id="163" lang="French" value="Conteneur" key="container" />
     <Localized id="164" lang="English" value="Default value" key="default_value" />
-    <Localized id="165" lang="Dutch" value="Default value" key="default_value" />
+    <Localized id="165" lang="Dutch" value="Standaardwaarde" key="default_value" />
     <Localized id="166" lang="French" value="Valeur par défaut" key="default_value" />
     <Localized id="167" lang="English" value="Required" key="required" />
-    <Localized id="168" lang="Dutch" value="Required" key="required" />
+    <Localized id="168" lang="Dutch" value="Verplicht" key="required" />
     <Localized id="169" lang="French" value="Obligatoire" key="required" />
  	</LocalizedDictionary>
 </Panel>

@@ -7,10 +7,10 @@
   <Label id="5" label="no_properties_nor_behaviours_found" align="center" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" visible="((data.action.propertiesToConsider.size == 0) &amp;&amp;(data.action.behavioursToConsider.size == 0))" name="Label2" />
   <LocalizedDictionary id="6">
     <Localized id="7" lang="English" value="Properties to be implemented" key="properties_to_be_implemented" />
-    <Localized id="8" lang="Dutch" value="Properties to be implemented" key="properties_to_be_implemented" />
+    <Localized id="8" lang="Dutch" value="Te implementeren eigenschappen" key="properties_to_be_implemented" />
     <Localized id="9" lang="French" value="Propriétés à implémenter" key="properties_to_be_implemented" />
     <Localized id="10" lang="English" value="Behaviours to be implemented" key="behaviours_to_be_implemented" />
-    <Localized id="11" lang="Dutch" value="Behaviours to be implemented" key="behaviours_to_be_implemented" />
+    <Localized id="11" lang="Dutch" value="Te implementeren gedragingen" key="behaviours_to_be_implemented" />
     <Localized id="12" lang="French" value="Comportements à implémenter" key="behaviours_to_be_implemented" />
   </LocalizedDictionary>
   <FIBVariable id="13" type="org.openflexo.fml.controller.action.GenerateUnimplementedPropertiesAndBehavioursWizard$GenerateUnimplementedPropertiesAndBehavioursInfo" name="data" />

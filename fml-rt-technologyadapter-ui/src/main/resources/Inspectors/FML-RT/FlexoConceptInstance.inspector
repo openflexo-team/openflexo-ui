@@ -49,17 +49,17 @@
 	<LocalizedDictionary>
 		<Localized key="flexo_id" lang="English" value="OpenFlexo ID" />
 		<Localized key="flexo_id" lang="French" value="Identifiant OpenFlexo" />
-		<Localized key="flexo_id" lang="Dutch" value="OpenFlexo ID" />
+		<Localized key="flexo_id" lang="Dutch" value="OpenFlexo-id" />
 		<Localized key="custom_properties" lang="English" value="Custom properties" />
 		<Localized key="custom_properties" lang="French"
 			value="Propriétés supplémentaires" />
-		<Localized key="custom_properties" lang="Dutch" value="Custom properties" />
+		<Localized key="custom_properties" lang="Dutch" value="Aangepaste eigenschappen" />
 		<Localized key="dont_generate" lang="English" value="Don't generate doc" />
 		<Localized key="dont_generate" lang="French" value="Ne pas générer" />
-		<Localized key="dont_generate" lang="Dutch" value="Don't generate doc" />
+		<Localized key="dont_generate" lang="Dutch" value="Geen documentatie genereren" />
 		<Localized key="EP refs" lang="English" value="EP refs" />
 		<Localized key="EP refs" lang="French" value="Références EP" />
-		<Localized key="EP refs" lang="Dutch" value="EP refs" />
+		<Localized key="EP refs" lang="Dutch" value="EP-verwijzingen" />
 		<Localized key="Id" lang="English" value="Id" />
 		<Localized key="Id" lang="French" value="Id" />
 		<Localized key="Id" lang="Dutch" value="Id" />
@@ -68,26 +68,26 @@
 		<Localized key="FlexoConcept" lang="Dutch" value="FlexoConcept" />
 		<Localized key="actor" lang="English" value="Actor" />
 		<Localized key="actor" lang="French" value="Acteur" />
-		<Localized key="actor" lang="Dutch" value="actor" />
+		<Localized key="actor" lang="Dutch" value="Actor" />
 		<Localized key="value" lang="English" value="Value" />
 		<Localized key="value" lang="French" value="Valeur" />
-		<Localized key="value" lang="Dutch" value="Value" />
+		<Localized key="value" lang="Dutch" value="Waarde" />
 		<Localized key="new" lang="English" value="New" />
 		<Localized key="new" lang="French" value="Nouveau" />
-		<Localized key="new" lang="Dutch" value="New" />
+		<Localized key="new" lang="Dutch" value="Nieuw" />
 		<Localized key="delete" lang="English" value="Delete" />
 		<Localized key="delete" lang="French" value="Supprimer" />
-		<Localized key="delete" lang="Dutch" value="Delete" />
+		<Localized key="delete" lang="Dutch" value="Verwijderen" />
 		<Localized key="sort" lang="English" value="Sort" />
 		<Localized key="sort" lang="French" value="Trier" />
 		<Localized key="sort" lang="Dutch" value="Sort" />
 		<Localized key="Doc" lang="English" value="Doc" />
 		<Localized key="Doc" lang="French" value="Doc" />
 		<Localized key="Doc" lang="Dutch" value="Doc" />
-		<Localized key="Advanced" lang="Dutch" value="Advanced" />
+		<Localized key="Advanced" lang="Dutch" value="Geavanceerd" />
 		<Localized key="actors" lang="English" value="Actors" />
 		<Localized key="actors" lang="French" value="Acteurs" />
-		<Localized key="actors" lang="Dutch" value="actors" />
+		<Localized key="actors" lang="Dutch" value="Actoren" />
 	</LocalizedDictionary>
 	<Parameter name="title" value="FlexoConceptInstance" />
 </Panel>

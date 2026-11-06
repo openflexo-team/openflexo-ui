@@ -20,10 +20,10 @@
   <LocalizedDictionary>
     <Localized key="virtual_model" lang="English" value="Virtual model" />
     <Localized key="virtual_model" lang="French" value="VirtualModel" />
-    <Localized key="virtual_model" lang="Dutch" value="Virtual model" />
+    <Localized key="virtual_model" lang="Dutch" value="VirtualModel" />
     <Localized key="virtual_model_uri" lang="English" value="Virtual model URI" />
     <Localized key="virtual_model_uri" lang="French" value="URI du virtual model" />
-    <Localized key="virtual_model_uri" lang="Dutch" value="Virtual model URI" />
+    <Localized key="virtual_model_uri" lang="Dutch" value="URI van het VirtualModel" />
   </LocalizedDictionary>
   <Parameter name="title" value="Virtual Model Instance (unloaded)" />
 </Panel>

@@ -73,7 +73,7 @@
 			value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;Reparse&lt;/a&gt;&lt;/html&gt;"
 			key="&lt;html&gt;&lt;a href=&quot;&quot;&gt;reparse&lt;/a&gt;&lt;/html&gt;" />
 		<Localized id="150" lang="Dutch"
-			value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;Reparse&lt;/a&gt;&lt;/html&gt;"
+			value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;opnieuw parseren&lt;/a&gt;&lt;/html&gt;"
 			key="&lt;html&gt;&lt;a href=&quot;&quot;&gt;reparse&lt;/a&gt;&lt;/html&gt;" />
 		<Localized id="151" lang="French"
 			value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;Reanalyser&lt;/a&gt;&lt;/html&gt;"
@@ -82,17 +82,17 @@
 			value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;Revalidate&lt;/a&gt;&lt;/html&gt;"
 			key="&lt;html&gt;&lt;a href=&quot;&quot;&gt;revalidate&lt;/a&gt;&lt;/html&gt;" />
 		<Localized id="156" lang="Dutch"
-			value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;Revalidate&lt;/a&gt;&lt;/html&gt;"
+			value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;opnieuw valideren&lt;/a&gt;&lt;/html&gt;"
 			key="&lt;html&gt;&lt;a href=&quot;&quot;&gt;revalidate&lt;/a&gt;&lt;/html&gt;" />
 		<Localized id="157" lang="French"
 			value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;Revalider&lt;/a&gt;&lt;/html&gt;"
 			key="&lt;html&gt;&lt;a href=&quot;&quot;&gt;revalidate&lt;/a&gt;&lt;/html&gt;" />
 		<Localized id="158" lang="English" value="Icon" key="icon" />
-		<Localized id="159" lang="Dutch" value="Icon" key="icon" />
+		<Localized id="159" lang="Dutch" value="Pictogram" key="icon" />
 		<Localized id="160" lang="French" value="Icône" key="icon" />
 		<Localized id="161" lang="English" value="Errors/warnings"
 			key="errors/warnings" />
-		<Localized id="162" lang="Dutch" value="Errors/warnings"
+		<Localized id="162" lang="Dutch" value="Fouten/waarschuwingen"
 			key="errors/warnings" />
 		<Localized id="163" lang="French" value="Erreurs/avertissements"
 			key="errors/warnings" />
@@ -100,7 +100,7 @@
 			value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;Synchronize&lt;/a&gt;&lt;/html&gt;"
 			key="&lt;html&gt;&lt;a href=&quot;&quot;&gt;synchronize&lt;/a&gt;&lt;/html&gt;" />
 		<Localized id="171" lang="Dutch"
-			value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;Synchronize&lt;/a&gt;&lt;/html&gt;"
+			value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;synchroniseren&lt;/a&gt;&lt;/html&gt;"
 			key="&lt;html&gt;&lt;a href=&quot;&quot;&gt;synchronize&lt;/a&gt;&lt;/html&gt;" />
 		<Localized id="172" lang="French"
 			value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;Synchroniser&lt;/a&gt;&lt;/html&gt;"

@@ -35,7 +35,7 @@
 	<LocalizedDictionary>
 		<Localized key="abstract_concept" lang="English" value="abstract_concept" />
 		<Localized key="abstract_concept" lang="French" value="concept_abstrait" />
-		<Localized key="abstract_concept" lang="Dutch" value="abstract_concept" />
+		<Localized key="abstract_concept" lang="Dutch" value="Abstract concept" />
 	</LocalizedDictionary>
 	<Parameter name="title" value="FlexoEvent" />
 </Panel>

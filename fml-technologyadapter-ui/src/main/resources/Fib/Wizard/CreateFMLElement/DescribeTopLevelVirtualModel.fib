@@ -12,7 +12,7 @@
   <TextArea id="10" rows="5" columns="6" text="TextArea" localize="true" data="data.newVirtualModelDescription" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=true;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=13;insetsBottom=20;insetsLeft=0;insetsRight=20;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=1.0)" index="13" name="TextArea" />
   <LocalizedDictionary id="11">
     <Localized id="18" lang="English" value="Visibility" key="visibility" />
-    <Localized id="19" lang="Dutch" value="Visibility" key="visibility" />
+    <Localized id="19" lang="Dutch" value="Zichtbaarheid" key="visibility" />
     <Localized id="20" lang="French" value="Visibilité" key="visibility" />
     <Localized id="21" lang="English" value="Abstract" key="abstract" />
     <Localized id="22" lang="Dutch" value="Abstract" key="abstract" />

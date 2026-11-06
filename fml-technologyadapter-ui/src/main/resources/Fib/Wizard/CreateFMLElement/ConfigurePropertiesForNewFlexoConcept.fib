@@ -31,19 +31,19 @@
   <FIBVariable id="20" type="org.openflexo.fml.controller.action.AbstractCreateFlexoConceptWizard$ConfigurePropertiesForNewFlexoConcept" name="data" />
   <LocalizedDictionary id="21">
     <Localized id="22" lang="English" value="Icon" key="icon" />
-    <Localized id="23" lang="Dutch" value="Icon" key="icon" />
+    <Localized id="23" lang="Dutch" value="Pictogram" key="icon" />
     <Localized id="24" lang="French" value="Icone" key="icon" />
     <Localized id="25" lang="English" value="Property" key="property" />
-    <Localized id="26" lang="Dutch" value="Property" key="property" />
+    <Localized id="26" lang="Dutch" value="Eigenschap" key="property" />
     <Localized id="27" lang="French" value="Propriété" key="property" />
     <Localized id="28" lang="English" value="Add property" key="add_property" />
-    <Localized id="29" lang="Dutch" value="Add property" key="add_property" />
+    <Localized id="29" lang="Dutch" value="Eigenschap toevoegen" key="add_property" />
     <Localized id="30" lang="French" value="Ajouter une propriété" key="add_property" />
     <Localized id="31" lang="English" value="Delete property" key="delete_property" />
-    <Localized id="32" lang="Dutch" value="Delete property" key="delete_property" />
+    <Localized id="32" lang="Dutch" value="Eigenschap verwijderen" key="delete_property" />
     <Localized id="33" lang="French" value="Supprimer la propriété" key="delete_property" />
    <Localized id="73" lang="English" value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;Click to add a property&lt;/a&gt;&lt;/html&gt;" key="&lt;html&gt;&lt;a href=&quot;&quot;&gt;click_to_add_a_property&lt;/a&gt;&lt;/html&gt;" />
-    <Localized id="74" lang="Dutch" value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;Click to add a property&lt;/a&gt;&lt;/html&gt;" key="&lt;html&gt;&lt;a href=&quot;&quot;&gt;click_to_add_a_property&lt;/a&gt;&lt;/html&gt;" />
+    <Localized id="74" lang="Dutch" value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;klik om een eigenschap toe te voegen&lt;/a&gt;&lt;/html&gt;" key="&lt;html&gt;&lt;a href=&quot;&quot;&gt;click_to_add_a_property&lt;/a&gt;&lt;/html&gt;" />
     <Localized id="75" lang="French" value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;Cliquer pour ajouter une propriété&lt;/a&gt;&lt;/html&gt;" key="&lt;html&gt;&lt;a href=&quot;&quot;&gt;click_to_add_a_property&lt;/a&gt;&lt;/html&gt;" />
   </LocalizedDictionary>
 </Panel>

@@ -185,64 +185,64 @@
 	<LocalizedDictionary>
 		<Localized key="object_assertions" lang="English" value="object_assertions" />
 		<Localized key="object_assertions" lang="French" value="Assertions d'objet" />
-		<Localized key="object_assertions" lang="Dutch" value="object_assertions" />
+		<Localized key="object_assertions" lang="Dutch" value="Objectbeweringen" />
 		<Localized key="individual_name_(uri)" lang="English"
 			value="Individual name (URI)" />
 		<Localized key="individual_name_(uri)" lang="French"
 			value="Nom de l'individu (URI)" />
 		<Localized key="individual_name_(uri)" lang="Dutch"
-			value="Individual name (URI)" />
+			value="Naam van het individu (URI)" />
 		<Localized key="action_type" lang="English" value="Action type" />
 		<Localized key="action_type" lang="French" value="Type d'Action" />
-		<Localized key="action_type" lang="Dutch" value="Action type" />
+		<Localized key="action_type" lang="Dutch" value="Type actie" />
 		<Localized key="data_assertions" lang="English" value="data_assertions" />
 		<Localized key="data_assertions" lang="French" value="Assertions de données" />
-		<Localized key="data_assertions" lang="Dutch" value="data_assertions" />
+		<Localized key="data_assertions" lang="Dutch" value="Gegevensbeweringen" />
 		<Localized key="Assign" lang="English" value="Assign" />
 		<Localized key="Assign" lang="French" value="Affecter" />
-		<Localized key="Assign" lang="Dutch" value="Assign" />
+		<Localized key="Assign" lang="Dutch" value="Toewijzen" />
 		<Localized key="property" lang="English" value="Property" />
 		<Localized key="property" lang="French" value="Propriété" />
-		<Localized key="property" lang="Dutch" value="Property" />
+		<Localized key="property" lang="Dutch" value="Eigenschap" />
 		<Localized key="object" lang="English" value="Object" />
 		<Localized key="object" lang="French" value="Objet" />
 		<Localized key="object" lang="Dutch" value="Object" />
 		<Localized key="conditional" lang="English" value="conditional" />
 		<Localized key="conditional" lang="French" value="conditionnel" />
-		<Localized key="conditional" lang="Dutch" value="conditional" />
+		<Localized key="conditional" lang="Dutch" value="Voorwaardelijk" />
 		<Localized key="add_object_assertion" lang="English"
 			value="Add object assertion" />
 		<Localized key="add_object_assertion" lang="French"
 			value="Ajouter une assertion de type 'objet'" />
 		<Localized key="add_object_assertion" lang="Dutch"
-			value="Add object assertion" />
+			value="Objectbewering toevoegen" />
 		<Localized key="delete_object_assertion" lang="English"
 			value="Delete the object assertion" />
 		<Localized key="delete_object_assertion" lang="French"
 			value="Effacer l' object assertion" />
 		<Localized key="delete_object_assertion" lang="Dutch"
-			value="Delete the object assertion" />
+			value="De objectbewering verwijderen" />
 		<Localized key="value" lang="English" value="Value" />
 		<Localized key="value" lang="French" value="Valeur" />
-		<Localized key="value" lang="Dutch" value="Value" />
+		<Localized key="value" lang="Dutch" value="Waarde" />
 		<Localized key="add_data_assertion" lang="English"
 			value="Add data assertion" />
 		<Localized key="add_data_assertion" lang="French"
 			value="Ajouter l'assertion de données" />
 		<Localized key="add_data_assertion" lang="Dutch"
-			value="Add data assertion" />
+			value="Gegevensbewering toevoegen" />
 		<Localized key="delete_data_assertion" lang="English"
 			value="Delete data assertion" />
 		<Localized key="delete_data_assertion" lang="French"
 			value="Supprimer l'assertion" />
 		<Localized key="delete_data_assertion" lang="Dutch"
-			value="Delete data assertion" />
+			value="Gegevensbewering verwijderen" />
 		<Localized key="model_slot" lang="English" value="model_slot" />
 		<Localized key="model_slot" lang="French" value="ModelSlot" />
-		<Localized key="model_slot" lang="Dutch" value="model_slot" />
+		<Localized key="model_slot" lang="Dutch" value="ModelSlot" />
 		<Localized key="ontology_class" lang="English" value="Ontology class" />
 		<Localized key="ontology_class" lang="French" value="Classe ontologique" />
-		<Localized key="ontology_class" lang="Dutch" value="Ontology class" />
+		<Localized key="ontology_class" lang="Dutch" value="Ontologieklasse" />
 	</LocalizedDictionary>
 	<Parameter name="title" value="AddIndividual action" />
 </Panel>

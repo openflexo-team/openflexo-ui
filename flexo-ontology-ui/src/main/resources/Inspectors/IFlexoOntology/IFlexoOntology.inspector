@@ -24,13 +24,13 @@
   <LocalizedDictionary>
     <Localized key="is_loaded" lang="English" value="Loaded" />
     <Localized key="is_loaded" lang="French" value="Chargé" />
-    <Localized key="is_loaded" lang="Dutch" value="Loaded" />
+    <Localized key="is_loaded" lang="Dutch" value="Geladen" />
     <Localized key="is_read_only" lang="English" value="Is read only" />
     <Localized key="is_read_only" lang="French" value="Lecture seule" />
-    <Localized key="is_read_only" lang="Dutch" value="Is read only" />
+    <Localized key="is_read_only" lang="Dutch" value="Is alleen-lezen" />
     <Localized key="imported_ontologies" lang="English" value="Imported ontologies" />
     <Localized key="imported_ontologies" lang="French" value="Ontologies importées" />
-    <Localized key="imported_ontologies" lang="Dutch" value="Imported ontologies" />
+    <Localized key="imported_ontologies" lang="Dutch" value="Geïmporteerde ontologieën" />
   </LocalizedDictionary>
   <Parameter name="title" value="Abstract ontology" />
 </Panel>

@@ -25,7 +25,7 @@
     <Localized id="28" lang="French" value="Valider" key="validate" />
     <Localized id="29" lang="French" value="Libellé" key="label" />
     <Localized id="30" lang="French" value="Annuler" key="Cancel" />
-    <Localized id="31" lang="Dutch" value="Validate" key="validate" />
+    <Localized id="31" lang="Dutch" value="Valideren" key="validate" />
     <Localized id="32" lang="Dutch" value="Label" key="label" />
     <Localized id="33" lang="English" value="Please enter title for newly created view" key="no_view_title_defined" />
     <Localized id="34" lang="English" value="No folder defined" key="no_folder_defined" />
@@ -35,41 +35,41 @@
     <Localized id="38" lang="French" value="Ce nom de vue est déjà utilisé, veuillez en choisir un autre." key="a_view_with_that_name_already_exists" />
     <Localized id="39" lang="English" value="Example diagram" key="example_diagram" />
     <Localized id="40" lang="French" value="Diagrame d'exemple" key="example_diagram" />
-    <Localized id="41" lang="Dutch" value="example_diagram" key="example_diagram" />
+    <Localized id="41" lang="Dutch" value="Voorbeelddiagram" key="example_diagram" />
     <Localized id="42" lang="English" value="Cancel" key="Cancel" />
     <Localized id="43" lang="Dutch" value="Cancel" key="Cancel" />
     <Localized id="44" lang="French" value="Veuillez entrer un titre" key="no_view_title_defined" />
     <Localized id="45" lang="English" value="No name defined for this view" key="no_view_name_defined" />
     <Localized id="46" lang="English" value="Virtual model" key="virtual_model" />
     <Localized id="47" lang="French" value="Modèle virtual" key="virtual_model" />
-    <Localized id="48" lang="Dutch" value="virtual_model" key="virtual_model" />
+    <Localized id="48" lang="Dutch" value="VirtualModel" key="virtual_model" />
     <Localized id="49" lang="English" value="Instanciate a virtual model" key="instanciate_virtual_model" />
     <Localized id="50" lang="French" value="Instancier un modèle virtuel" key="instanciate_virtual_model" />
-    <Localized id="51" lang="Dutch" value="instanciate_virtual_model" key="instanciate_virtual_model" />
+    <Localized id="51" lang="Dutch" value="Een VirtualModel instantiëren" key="instanciate_virtual_model" />
     <Localized id="52" lang="English" value="Virtual model name" key="virtual_model_name" />
     <Localized id="53" lang="French" value="Nom du modèle virtuel" key="virtual_model_name" />
-    <Localized id="54" lang="Dutch" value="virtual_model_name" key="virtual_model_name" />
+    <Localized id="54" lang="Dutch" value="Naam van het VirtualModel" key="virtual_model_name" />
     <Localized id="55" lang="English" value="Virtual model title" key="virtual_model_title" />
     <Localized id="56" lang="French" value="Titre du modèle virtuel" key="virtual_model_title" />
-    <Localized id="57" lang="Dutch" value="virtual_model_title" key="virtual_model_title" />
+    <Localized id="57" lang="Dutch" value="Titel van het VirtualModel" key="virtual_model_title" />
     <Localized id="58" lang="English" value="Finish" key="finish" />
     <Localized id="59" lang="French" value="Terminer" key="finish" />
-    <Localized id="60" lang="Dutch" value="Finish" key="finish" />
+    <Localized id="60" lang="Dutch" value="Voltooien" key="finish" />
     <Localized id="61" lang="English" value="&lt;&lt; Back" key="back" />
     <Localized id="62" lang="French" value="&lt;&lt; Précédent" key="back" />
-    <Localized id="63" lang="Dutch" value="back" key="back" />
+    <Localized id="63" lang="Dutch" value="&lt;&lt; Terug" key="back" />
     <Localized id="64" lang="English" value="&gt;&gt; Next" key="next" />
     <Localized id="65" lang="French" value="&gt;&gt; Suivant" key="next" />
-    <Localized id="66" lang="Dutch" value="next" key="next" />
+    <Localized id="66" lang="Dutch" value="&gt;&gt; Volgende" key="next" />
     <Localized id="67" lang="English" value="No name defined for this virtual model" key="no_virtual_model_name_defined" />
     <Localized id="68" lang="French" value="Aucun nom défini pour ce nouveau modèle virtuel" key="no_virtual_model_name_defined" />
-    <Localized id="69" lang="Dutch" value="no_virtual_model_name_defined" key="no_virtual_model_name_defined" />
+    <Localized id="69" lang="Dutch" value="Geen naam gedefinieerd voor dit VirtualModel" key="no_virtual_model_name_defined" />
     <Localized id="70" lang="English" value="Please enter title for newly created virtual_model" key="no_virtual_model_title_defined" />
     <Localized id="71" lang="French" value="Veuillez entrer un titre pour le nouveau modèle virtuel" key="no_virtual_model_title_defined" />
-    <Localized id="72" lang="Dutch" value="no_virtual_model_title_defined" key="no_virtual_model_title_defined" />
+    <Localized id="72" lang="Dutch" value="Geef een titel op voor het nieuw gemaakte VirtualModel" key="no_virtual_model_title_defined" />
     <Localized id="73" lang="English" value="Invalid name for this virtual model" key="invalid_name_for_new_virtual_model" />
     <Localized id="74" lang="French" value="Ce nom n'est pas valide pour ce nouveau modèle virtuel" key="invalid_name_for_new_virtual_model" />
-    <Localized id="75" lang="Dutch" value="invalid_name_for_new_virtual_model" key="invalid_name_for_new_virtual_model" />
+    <Localized id="75" lang="Dutch" value="Ongeldige naam voor dit VirtualModel" key="invalid_name_for_new_virtual_model" />
     <Localized id="79" lang="English" value="No virtual model type selected, please choose one" key="no_virtual_model_type_selected" />
     <Localized id="80" lang="French" value="Veuillez sélectionner un type de modèle virtuel" key="no_virtual_model_type_selected" />
     <Localized id="81" lang="Dutch" value="no_virtual_model_type" key="no_virtual_model_type_selected" />

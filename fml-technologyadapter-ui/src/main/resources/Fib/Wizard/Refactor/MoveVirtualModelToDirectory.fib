@@ -11,7 +11,7 @@
   </Custom>
   <LocalizedDictionary id="9">
     <Localized id="10" lang="English" value="Target directory" key="target_directory" />
-    <Localized id="11" lang="Dutch" value="Target directory" key="target_directory" />
+    <Localized id="11" lang="Dutch" value="Doelmap" key="target_directory" />
     <Localized id="12" lang="French" value="Répertoire" key="target_directory" />
   </LocalizedDictionary>
   <FIBVariable id="13" type="org.openflexo.fml.controller.action.MoveVirtualModelToDirectoryWizard$MoveVirtualModelInfo" name="data" />

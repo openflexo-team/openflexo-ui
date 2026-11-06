@@ -27,16 +27,16 @@
     <Localized id="24" lang="Dutch" value="Taal" key="language" />
     <Localized id="25" lang="French" value="Langue" key="language" />
     <Localized id="26" lang="English" value="Auto save" key="auto_save" />
-    <Localized id="27" lang="Dutch" value="Auto save" key="auto_save" />
+    <Localized id="27" lang="Dutch" value="Automatisch opslaan" key="auto_save" />
     <Localized id="28" lang="French" value="Sauvegarde automatique" key="auto_save" />
     <Localized id="29" lang="English" value="Enable auto-save" key="enable_auto_save" />
     <Localized id="30" lang="Dutch" value="Activeer automatisch opslagen" key="enable_auto_save" />
     <Localized id="31" lang="French" value="Activer la sauvegarde automatique" key="enable_auto_save" />
     <Localized id="32" lang="English" value="Auto save interval (minutes)" key="auto_save_interval_(minutes)" />
-    <Localized id="33" lang="Dutch" value="Auto save interval (minutes)" key="auto_save_interval_(minutes)" />
+    <Localized id="33" lang="Dutch" value="Interval voor automatisch opslaan (minuten)" key="auto_save_interval_(minutes)" />
     <Localized id="34" lang="French" value="Intervalle de sauvegarde (minutes)" key="auto_save_interval_(minutes)" />
     <Localized id="35" lang="English" value="Auto save limit" key="auto_save_limit" />
-    <Localized id="36" lang="Dutch" value="Auto save limit" key="auto_save_limit" />
+    <Localized id="36" lang="Dutch" value="Limiet voor automatisch opslaan" key="auto_save_limit" />
     <Localized id="37" lang="French" value="Limite" key="auto_save_limit" />
   </LocalizedDictionary>
 </Panel>

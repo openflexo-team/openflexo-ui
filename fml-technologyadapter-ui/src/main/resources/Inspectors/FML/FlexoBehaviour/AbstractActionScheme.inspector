@@ -62,10 +62,10 @@
 	<LocalizedDictionary>
 		<Localized key="visible" lang="English" value="Visible" />
 		<Localized key="visible" lang="French" value="Visible" />
-		<Localized key="visible" lang="Dutch" value="Visible" />
+		<Localized key="visible" lang="Dutch" value="Zichtbaar" />
 		<Localized key="enable" lang="English" value="Enable" />
 		<Localized key="enable" lang="French" value="Activé" />
-		<Localized key="enable" lang="Dutch" value="Enable" />
+		<Localized key="enable" lang="Dutch" value="Activeren" />
 	</LocalizedDictionary>
 	<Parameter name="title" value="Abstract Action Scheme" />
 </Panel>

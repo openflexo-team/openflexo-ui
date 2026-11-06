@@ -21,10 +21,10 @@
     <Localized id="18" lang="Dutch" value="Container" key="container" />
     <Localized id="19" lang="French" value="Conteneur" key="container" />
     <Localized id="20" lang="English" value="Flexo concept" key="flexo_concept" />
-    <Localized id="21" lang="Dutch" value="Flexo concept" key="flexo_concept" />
+    <Localized id="21" lang="Dutch" value="FlexoConcept" key="flexo_concept" />
     <Localized id="22" lang="French" value="Concept" key="flexo_concept" />
     <Localized id="23" lang="English" value="Creation scheme" key="creation_scheme" />
-    <Localized id="24" lang="Dutch" value="Creation scheme" key="creation_scheme" />
+    <Localized id="24" lang="Dutch" value="CreationScheme" key="creation_scheme" />
     <Localized id="25" lang="French" value="CreationScheme" key="creation_scheme" />
   </LocalizedDictionary>
   <FIBVariable id="26" type="org.openflexo.fml.rt.controller.action.CreateFlexoConceptInstanceWizard$DescribeFlexoConceptInstance" name="data" />

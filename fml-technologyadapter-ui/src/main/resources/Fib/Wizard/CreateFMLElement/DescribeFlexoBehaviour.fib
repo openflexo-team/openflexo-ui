@@ -12,10 +12,10 @@
   <TextArea id="10" rows="2" columns="6" text="TextArea" localize="true" data="data.description" useScrollBar="true" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=true;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=1.0)" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" index="12" name="TextArea" />
   <LocalizedDictionary id="11">
     <Localized id="15" lang="English" value="Behaviour type" key="behaviour_type" />
-    <Localized id="16" lang="Dutch" value="Behaviour type" key="behaviour_type" />
+    <Localized id="16" lang="Dutch" value="Gedragstype" key="behaviour_type" />
     <Localized id="17" lang="French" value="Type de comportement" key="behaviour_type" />
     <Localized id="18" lang="English" value="Visibility" key="visibility" />
-    <Localized id="19" lang="Dutch" value="Visibility" key="visibility" />
+    <Localized id="19" lang="Dutch" value="Zichtbaarheid" key="visibility" />
     <Localized id="20" lang="French" value="Visibilité" key="visibility" />
     <Localized id="21" lang="English" value="Is abstract" key="is_abstract" />
     <Localized id="22" lang="Dutch" value="Is abstract" key="is_abstract" />

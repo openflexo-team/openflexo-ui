@@ -102,7 +102,7 @@
 			key="creates_model_slot" />
 		<Localized id="31" value="Créer un Model Slot" lang="French"
 			key="creates_model_slot" />
-		<Localized id="32" value="Create Model Slot" lang="Dutch"
+		<Localized id="32" value="ModelSlot maken" lang="Dutch"
 			key="creates_model_slot" />
 		<Localized id="33" value="Model Slot type" lang="English"
 			key="model_slot_type" />
@@ -112,10 +112,10 @@
 			key="model_slot_type" />
 		<Localized id="36" value="Required" lang="English" key="required" />
 		<Localized id="37" value="Exigé" lang="French" key="required" />
-		<Localized id="38" value="Required" lang="Dutch" key="required" />
+		<Localized id="38" value="Verplicht" lang="Dutch" key="required" />
 		<Localized id="39" value="Read only" lang="English" key="read_only" />
 		<Localized id="40" value="Lecture seule" lang="French" key="read_only" />
-		<Localized id="41" value="Read only" lang="Dutch" key="read_only" />
+		<Localized id="41" value="Alleen-lezen" lang="Dutch" key="read_only" />
 		<Localized id="42"
 			value="Openflexo built-in diagram technology adapter" lang="English"
 			key="Openflexo built-in diagram technology adapter" />
@@ -123,25 +123,25 @@
 			value="Adaptateur technologique de diagramme intégré à OpenFlexo" lang="French"
 			key="Openflexo built-in diagram technology adapter" />
 		<Localized id="44"
-			value="Openflexo built-in diagram technology adapter" lang="Dutch"
+			value="In OpenFlexo ingebouwde diagram-technologie-adapter" lang="Dutch"
 			key="Openflexo built-in diagram technology adapter" />
 		<Localized id="45" value="EMF technology adapter" lang="English"
 			key="EMF technology adapter" />
 		<Localized id="46" value="Adaptateur technologique EMF" lang="French"
 			key="EMF technology adapter" />
-		<Localized id="47" value="EMF technology adapter" lang="Dutch"
+		<Localized id="47" value="EMF-technologie-adapter" lang="Dutch"
 			key="EMF technology adapter" />
 		<Localized id="48" value="OWL technology adapter" lang="English"
 			key="OWL technology adapter" />
 		<Localized id="49" value="Adaptateur technologique OWL" lang="French"
 			key="OWL technology adapter" />
-		<Localized id="50" value="OWL technology adapter" lang="Dutch"
+		<Localized id="50" value="OWL-technologie-adapter" lang="Dutch"
 			key="OWL technology adapter" />
 		<Localized id="51" value="XSD/XML technology adapter" lang="English"
 			key="XSD/XML technology adapter" />
 		<Localized id="52" value="Adaptateur technologique XSD/XML" lang="French"
 			key="XSD/XML technology adapter" />
-		<Localized id="53" value="XSD/XML technology adapter" lang="Dutch"
+		<Localized id="53" value="XSD/XML-technologie-adapter" lang="Dutch"
 			key="XSD/XML technology adapter" />
 		<Localized id="54"
 			value="Openflexo built-in virtual model technology adapter" lang="English"
@@ -150,36 +150,36 @@
 			value="Adaptateur technologique de VirtualModel intégré à OpenFlexo" lang="French"
 			key="Openflexo built-in virtual model technology adapter" />
 		<Localized id="56"
-			value="Openflexo built-in virtual model technology adapter" lang="Dutch"
+			value="In OpenFlexo ingebouwde VirtualModel-technologie-adapter" lang="Dutch"
 			key="Openflexo built-in virtual model technology adapter" />
 		<Localized id="57" value="Excel technology adapter" lang="English"
 			key="Excel technology adapter" />
 		<Localized id="58" value="Adaptateur technologique Excel" lang="French"
 			key="Excel technology adapter" />
-		<Localized id="59" value="Excel technology adapter" lang="Dutch"
+		<Localized id="59" value="Excel-technologie-adapter" lang="Dutch"
 			key="Excel technology adapter" />
 		<Localized id="60" value="Openflexo diagram" lang="English"
 			key="Openflexo diagram" />
 		<Localized id="61" value="Diagramme OpenFlexo" lang="French"
 			key="Openflexo diagram" />
-		<Localized id="62" value="Openflexo diagram" lang="Dutch"
+		<Localized id="62" value="OpenFlexo-diagram" lang="Dutch"
 			key="Openflexo diagram" />
 		<Localized id="63" value="Openflexo virtual model" lang="English"
 			key="Openflexo virtual model" />
 		<Localized id="64" value="VirtualModel OpenFlexo" lang="French"
 			key="Openflexo virtual model" />
-		<Localized id="65" value="Openflexo virtual model" lang="Dutch"
+		<Localized id="65" value="OpenFlexo-VirtualModel" lang="Dutch"
 			key="Openflexo virtual model" />
 		<Localized id="66" value="Technology adapter" lang="English"
 			key="technology_adapter" />
-		<Localized id="67" value="Technology adapter" lang="Dutch"
+		<Localized id="67" value="Technologie-adapter" lang="Dutch"
 			key="technology_adapter" />
 		<Localized id="68" value="Adaptateur technologique" lang="French"
 			key="technology_adapter" />
 		<Localized id="71" value="Nom" lang="French" key="name" />
 		<Localized id="72" value="Virtual model" lang="English"
 			key="virtual_model" />
-		<Localized id="73" value="Virtual model" lang="Dutch"
+		<Localized id="73" value="VirtualModel" lang="Dutch"
 			key="virtual_model" />
 		<Localized id="74" value="VirtualModel" lang="French"
 			key="virtual_model" />
@@ -188,7 +188,7 @@
 		<Localized id="77" value="Métamodèle" lang="French" key="metamodel" />
 		<Localized id="80" value="Description" lang="French" key="description" />
 		<Localized id="81" value="New entry" lang="English" key="new_entry" />
-		<Localized id="82" value="New entry" lang="Dutch" key="new_entry" />
+		<Localized id="82" value="Nieuwe invoer" lang="Dutch" key="new_entry" />
 		<Localized id="83" value="Nouvelle entrée" lang="French" key="new_entry" />
 	</LocalizedDictionary>
 </Panel>

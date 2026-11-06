@@ -303,67 +303,67 @@
 		<Localized id="82" value="Paramètre" lang="French" key="parameter" />
 		<Localized id="83" value="Add parameter" lang="English"
 			key="add_parameter" />
-		<Localized id="84" value="Add parameter" lang="Dutch"
+		<Localized id="84" value="Parameter toevoegen" lang="Dutch"
 			key="add_parameter" />
 		<Localized id="85" value="Ajouter un paramètre" lang="French"
 			key="add_parameter" />
 		<Localized id="86" value="Delete" lang="English" key="delete" />
-		<Localized id="87" value="Delete" lang="Dutch" key="delete" />
+		<Localized id="87" value="Verwijderen" lang="Dutch" key="delete" />
 		<Localized id="88" value="Supprimer" lang="French" key="delete" />
 		<Localized id="89" value="Parameter name" lang="English"
 			key="parameter_name" />
-		<Localized id="90" value="Parameter name" lang="Dutch"
+		<Localized id="90" value="Naam van de parameter" lang="Dutch"
 			key="parameter_name" />
 		<Localized id="91" value="Nom du paramètre" lang="French"
 			key="parameter_name" />
 		<Localized id="92" value="Parameter type" lang="English"
 			key="parameter_type" />
-		<Localized id="93" value="Parameter type" lang="Dutch"
+		<Localized id="93" value="Type van de parameter" lang="Dutch"
 			key="parameter_type" />
 		<Localized id="94" value="Type du paramètre" lang="French"
 			key="parameter_type" />
 		<Localized id="95" value="Widget" lang="English" key="widget" />
-		<Localized id="96" value="Widget" lang="Dutch" key="widget" />
+		<Localized id="96" value="Grafisch element" lang="Dutch" key="widget" />
 		<Localized id="97" value="Élément graphique" lang="French" key="widget" />
 		<Localized id="98" value="Container" lang="English" key="container" />
 		<Localized id="99" value="Container" lang="Dutch" key="container" />
 		<Localized id="100" value="Conteneur" lang="French" key="container" />
 		<Localized id="101" value="Default value" lang="English"
 			key="default_value" />
-		<Localized id="102" value="Default value" lang="Dutch"
+		<Localized id="102" value="Standaardwaarde" lang="Dutch"
 			key="default_value" />
 		<Localized id="103" value="Valeur par défaut" lang="French"
 			key="default_value" />
 		<Localized id="104" value="List of values" lang="English"
 			key="list_of_values" />
-		<Localized id="105" value="List of values" lang="Dutch"
+		<Localized id="105" value="Lijst met waarden" lang="Dutch"
 			key="list_of_values" />
 		<Localized id="106" value="LIste de valeurs" lang="French"
 			key="list_of_values" />
 		<Localized id="107" value="Required value" lang="English"
 			key="required" />
-		<Localized id="108" value="Required value" lang="Dutch" key="required" />
+		<Localized id="108" value="Verplicht" lang="Dutch" key="required" />
 		<Localized id="109" value="Valeur requise" lang="French"
 			key="required" />
 		<Localized id="113" value="Skip confirmation panel when possible"
 			lang="English" key="skip_confirmation_panel_when_possible" />
-		<Localized id="114" value="Skip confirmation panel when possible"
+		<Localized id="114" value="Bevestigingspaneel overslaan indien mogelijk"
 			lang="Dutch" key="skip_confirmation_panel_when_possible" />
 		<Localized id="115"
 			value="Ne pas afficher de panneau de confirmation si possible" lang="French"
 			key="skip_confirmation_panel_when_possible" />
 		<Localized id="116" value="Define popup size" lang="English"
 			key="define_popup_size" />
-		<Localized id="117" value="Define popup size" lang="Dutch"
+		<Localized id="117" value="Grootte van het pop-upvenster definiëren" lang="Dutch"
 			key="define_popup_size" />
 		<Localized id="118" value="Définir une taille de popup"
 			lang="French" key="define_popup_size" />
 		<Localized id="119" value="X" lang="English" key="x" />
-		<Localized id="120" value="X" lang="Dutch" key="x" />
+		<Localized id="120" value="Positie x" lang="Dutch" key="x" />
 		<Localized id="121" value="x" lang="French" key="x" />
 		<Localized id="122" value="Flexo concept" lang="English"
 			key="flexo_concept" />
-		<Localized id="123" value="Flexo concept" lang="Dutch"
+		<Localized id="123" value="FlexoConcept" lang="Dutch"
 			key="flexo_concept" />
 		<Localized id="124" value="FlexoConcept" lang="French"
 			key="flexo_concept" />

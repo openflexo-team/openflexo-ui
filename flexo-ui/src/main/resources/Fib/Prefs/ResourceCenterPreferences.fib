@@ -28,31 +28,31 @@
   </Panel>
   <LocalizedDictionary id="24">
     <Localized id="25" lang="English" value="Icon" key="icon" />
-    <Localized id="26" lang="Dutch" value="Icon" key="icon" />
+    <Localized id="26" lang="Dutch" value="Pictogram" key="icon" />
     <Localized id="27" lang="French" value="Icône" key="icon" />
     <Localized id="28" lang="English" value="Resource Center" key="Resource Center" />
-    <Localized id="29" lang="Dutch" value="Resource Center" key="Resource Center" />
+    <Localized id="29" lang="Dutch" value="Bronnencentrum" key="Resource Center" />
     <Localized id="30" lang="French" value="Centre de resources" key="Resource Center" />
     <Localized id="31" lang="English" value="Type" key="type" />
     <Localized id="32" lang="Dutch" value="Type" key="type" />
     <Localized id="33" lang="French" value="Type" key="type" />
     <Localized id="34" lang="English" value="Directory" key="directory" />
-    <Localized id="35" lang="Dutch" value="Directory" key="directory" />
+    <Localized id="35" lang="Dutch" value="Map" key="directory" />
     <Localized id="36" lang="French" value="Répertoire" key="directory" />
     <Localized id="37" lang="English" value="Enable resource center" key="enable_resource_center" />
-    <Localized id="38" lang="Dutch" value="Enable resource center" key="enable_resource_center" />
+    <Localized id="38" lang="Dutch" value="Bronnencentrum activeren" key="enable_resource_center" />
     <Localized id="39" lang="French" value="Activer le centre de resources" key="enable_resource_center" />
     <Localized id="40" lang="English" value="Allows editing" key="allows_editing" />
-    <Localized id="41" lang="Dutch" value="Allows editing" key="allows_editing" />
+    <Localized id="41" lang="Dutch" value="Staat bewerken toe" key="allows_editing" />
     <Localized id="42" lang="French" value="Autoriser l'édition" key="allows_editing" />
     <Localized id="43" lang="English" value="Allows publishing" key="allows_publishing" />
-    <Localized id="44" lang="Dutch" value="Allows publishing" key="allows_publishing" />
+    <Localized id="44" lang="Dutch" value="Staat publiceren toe" key="allows_publishing" />
     <Localized id="45" lang="French" value="Autoriser la publication" key="allows_publishing" />
     <Localized id="46" lang="English" value="Watch resource center every" key="watch_resource_center_every" />
-    <Localized id="47" lang="Dutch" value="Watch resource center every" key="watch_resource_center_every" />
+    <Localized id="47" lang="Dutch" value="Bronnencentrum controleren elke" key="watch_resource_center_every" />
     <Localized id="48" lang="French" value="Surveiller les resources toutes les " key="watch_resource_center_every" />
     <Localized id="49" lang="English" value="Seconds" key="seconds" />
-    <Localized id="50" lang="Dutch" value="Seconds" key="seconds" />
+    <Localized id="50" lang="Dutch" value="seconden" key="seconds" />
     <Localized id="51" lang="French" value="secondes" key="seconds" />
   </LocalizedDictionary>
   <FIBVariable id="52" type="org.openflexo.prefs.ResourceCenterPreferences" name="data" />

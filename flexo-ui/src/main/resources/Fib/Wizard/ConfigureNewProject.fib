@@ -10,7 +10,7 @@
     <Localized id="8" lang="English" value="Project name" key="project_name" />
     <Localized id="9" lang="French" value="Nom du projet" key="project_name" />
     <Localized id="10" lang="English" value="Project uri" key="project_uri" />
-    <Localized id="11" lang="Dutch" value="project_uri" key="project_uri" />
+    <Localized id="11" lang="Dutch" value="URI van het project" key="project_uri" />
     <Localized id="12" lang="French" value="URI du projet" key="project_uri" />
     <Localized id="15" lang="French" value="Description du projet" key="description" />
   </LocalizedDictionary>

@@ -35,10 +35,10 @@
     <Localized id="26" lang="French" value="Terminer" key="finish" />
     <Localized id="28" lang="Dutch" value="Annuleren" key="cancel" />
     <Localized id="30" lang="English" value="Next &gt;&gt;" key="next" />
-    <Localized id="31" lang="Dutch" value="next" key="next" />
+    <Localized id="31" lang="Dutch" value="&gt;&gt; Volgende" key="next" />
     <Localized id="32" lang="French" value="Suivant &gt;&gt;" key="next" />
     <Localized id="33" lang="English" value="&lt;&lt; Back" key="back" />
-    <Localized id="34" lang="Dutch" value="back" key="back" />
+    <Localized id="34" lang="Dutch" value="&lt;&lt; Terug" key="back" />
     <Localized id="35" lang="French" value="&lt;&lt; Précédent" key="back" />
   </LocalizedDictionary>
 </Panel>

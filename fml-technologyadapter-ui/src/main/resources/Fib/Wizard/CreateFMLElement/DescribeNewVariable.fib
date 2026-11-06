@@ -10,16 +10,16 @@
   <TextField id="8" columns="7" enable="data.declareType" data="data.typeDeclarationName" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="data.isDeclarableType" name="TextField2" />
   <LocalizedDictionary id="9">
     <Localized id="10" lang="English" value="New variable name" key="new_variable_name" />
-    <Localized id="11" lang="Dutch" value="New variable name" key="new_variable_name" />
+    <Localized id="11" lang="Dutch" value="Naam van de nieuwe variabele" key="new_variable_name" />
     <Localized id="12" lang="French" value="Nom de la variable" key="new_variable_name" />
     <Localized id="13" lang="English" value="Variable type" key="variable_type" />
-    <Localized id="14" lang="Dutch" value="Variable type" key="variable_type" />
+    <Localized id="14" lang="Dutch" value="Type van de variabele" key="variable_type" />
     <Localized id="15" lang="French" value="Type de la variable" key="variable_type" />
     <Localized id="16" lang="English" value="Define type in declarations" key="define_type_in_declarations" />
-    <Localized id="17" lang="Dutch" value="Define type in declarations" key="define_type_in_declarations" />
+    <Localized id="17" lang="Dutch" value="Het type in de declaraties definiëren" key="define_type_in_declarations" />
     <Localized id="18" lang="French" value="Déclarer ce type" key="define_type_in_declarations" />
     <Localized id="19" lang="English" value="Type name" key="type_name" />
-    <Localized id="20" lang="Dutch" value="Type name" key="type_name" />
+    <Localized id="20" lang="Dutch" value="Typenaam" key="type_name" />
     <Localized id="21" lang="French" value="Nom du type" key="type_name" />
   </LocalizedDictionary>
   <FIBVariable id="22" type="org.openflexo.fml.controller.action.DeclareNewVariableActionWizard$DescribeNewVariable" name="data" />

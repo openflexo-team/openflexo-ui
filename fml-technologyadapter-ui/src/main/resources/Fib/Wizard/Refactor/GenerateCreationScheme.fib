@@ -8,13 +8,13 @@
   <CheckboxList id="6" autoSelectFirstRow="true" staticList="" iteratorClassName="org.openflexo.foundation.fml.FlexoProperty&lt;?&gt;" showText="true" list="data.action.propertiesToConsider" showIcon="true" icon="controller.iconForObject(object)" format="object.name" data="data.action.selectedProperties" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=5;location=right)" name="CheckboxList" />
   <LocalizedDictionary id="7">
     <Localized id="8" lang="English" value="Creation scheme name" key="creation_scheme_name" />
-    <Localized id="9" lang="Dutch" value="Creation scheme name" key="creation_scheme_name" />
+    <Localized id="9" lang="Dutch" value="Naam van het CreationScheme" key="creation_scheme_name" />
     <Localized id="10" lang="French" value="Nom du CreationScheme" key="creation_scheme_name" />
     <Localized id="11" lang="English" value="Visibility" key="visibility" />
-    <Localized id="12" lang="Dutch" value="Visibility" key="visibility" />
+    <Localized id="12" lang="Dutch" value="Zichtbaarheid" key="visibility" />
     <Localized id="13" lang="French" value="Visibilité" key="visibility" />
     <Localized id="14" lang="English" value="Properties to consider" key="properties_to_consider" />
-    <Localized id="15" lang="Dutch" value="Properties to consider" key="properties_to_consider" />
+    <Localized id="15" lang="Dutch" value="In aanmerking te nemen eigenschappen" key="properties_to_consider" />
     <Localized id="16" lang="French" value="Propriétés à considérer" key="properties_to_consider" />
   </LocalizedDictionary>
   <FIBVariable id="17" type="org.openflexo.fml.controller.action.GenerateCreationSchemeWizard$GenerateCreationSchemeInfo" name="data" />

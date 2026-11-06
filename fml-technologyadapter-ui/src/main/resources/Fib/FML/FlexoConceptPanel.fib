@@ -11,19 +11,19 @@
 			key="constraint" />
 		<Localized id="3" value="Contrainte" lang="French"
 			key="constraint" />
-		<Localized id="4" value="constraint" lang="Dutch"
+		<Localized id="4" value="Beperking" lang="Dutch"
 			key="constraint" />
 		<Localized id="5" value="Add constraint" lang="English"
 			key="add_constraint" />
 		<Localized id="6" value="Ajouter une contrainte" lang="French"
 			key="add_constraint" />
-		<Localized id="7" value="add_constraint" lang="Dutch"
+		<Localized id="7" value="Beperking toevoegen" lang="Dutch"
 			key="add_constraint" />
 		<Localized id="8" value="Delete constraint" lang="English"
 			key="delete_constraint" />
 		<Localized id="9" value="Supprimer la contrainte" lang="French"
 			key="delete_constraint" />
-		<Localized id="10" value="delete_constraint" lang="Dutch"
+		<Localized id="10" value="Beperking verwijderen" lang="Dutch"
 			key="delete_constraint" />
 		<Localized id="11" value="Parent" lang="English"
 			key="parent" />
@@ -33,7 +33,7 @@
 			key="model_slot" />
 		<Localized id="15" value="ModelSlot" lang="French"
 			key="model_slot" />
-		<Localized id="16" value="Model Slot" lang="Dutch"
+		<Localized id="16" value="ModelSlot" lang="Dutch"
 			key="model_slot" />
 		<Localized id="17" value="Type" lang="English" key="type" />
 		<Localized id="18" value="Type" lang="French" key="type" />
@@ -48,7 +48,7 @@
 			key="createFlexoRole" />
 		<Localized id="24" value="Créer un FlexoRole" lang="French"
 			key="createFlexoRole" />
-		<Localized id="25" value="createFlexoRole" lang="Dutch"
+		<Localized id="25" value="FlexoRole maken" lang="Dutch"
 			key="createFlexoRole" />
 		<Localized id="26" value="Constraints" lang="English"
 			key="constraints" />
@@ -58,7 +58,7 @@
 			key="constraints" />
 		<Localized id="29" value="Parent concepts" lang="English"
 			key="parent_concepts" />
-		<Localized id="30" value="parent_concepts" lang="Dutch"
+		<Localized id="30" value="Bovenliggende concepten" lang="Dutch"
 			key="parent_concepts" />
 		<Localized id="31" value="Concepts parents" lang="French"
 			key="parent_concepts" />
@@ -67,7 +67,7 @@
 		<Localized id="34" value="icône" lang="French" key="icon" />
 		<Localized id="35" value="AddParentFlexoConcept"
 			lang="English" key="addParentFlexoConcept" />
-		<Localized id="36" value="addParentFlexoConcept"
+		<Localized id="36" value="Bovenliggend FlexoConcept toevoegen"
 			lang="Dutch" key="addParentFlexoConcept" />
 		<Localized id="37" value="Ajouter un FlexoConcept parent"
 			lang="French" key="addParentFlexoConcept" />
@@ -76,19 +76,19 @@
 		<Localized id="40" value="Rôles" lang="French" key="roles" />
 		<Localized id="41" value="Concept" lang="English"
 			key="flexo_concept" />
-		<Localized id="42" value="flexo_concept" lang="Dutch"
+		<Localized id="42" value="FlexoConcept" lang="Dutch"
 			key="flexo_concept" />
 		<Localized id="43" value="FlexoConcept" lang="French"
 			key="flexo_concept" />
 		<Localized id="44" value="Flexo role" lang="English"
 			key="flexo_role" />
-		<Localized id="45" value="flexo_role" lang="Dutch"
+		<Localized id="45" value="FlexoRole" lang="Dutch"
 			key="flexo_role" />
 		<Localized id="46" value="FlexoRole" lang="French"
 			key="flexo_role" />
 		<Localized id="47" value="Parent concept" lang="English"
 			key="parent_concept" />
-		<Localized id="48" value="parent_concept" lang="Dutch"
+		<Localized id="48" value="Bovenliggend concept" lang="Dutch"
 			key="parent_concept" />
 		<Localized id="49" value="Concept parent" lang="French"
 			key="parent_concept" />

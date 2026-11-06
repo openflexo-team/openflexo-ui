@@ -21,28 +21,28 @@
   <FIBVariable id="17" name="data" type="org.openflexo.prefs.PresentationPreferences" />
   <LocalizedDictionary id="18">
     <Localized id="19" value="LookAndFeel" lang="English" key="look_an_feel" />
-    <Localized id="20" value="LookAndFeel" lang="Dutch" key="look_an_feel" />
+    <Localized id="20" value="Uiterlijk" lang="Dutch" key="look_an_feel" />
     <Localized id="21" value="Apparence" lang="French" key="look_an_feel" />
     <Localized id="22" value="Browsers" lang="English" key="browsers" />
     <Localized id="23" value="Browsers" lang="Dutch" key="browsers" />
     <Localized id="24" value="Navigateurs" lang="French" key="browsers" />
     <Localized id="25" value="Hide empty folders" lang="English" key="hide_empty_folders" />
-    <Localized id="26" value="Hide empty folders" lang="Dutch" key="hide_empty_folders" />
+    <Localized id="26" value="Lege mappen verbergen" lang="Dutch" key="hide_empty_folders" />
     <Localized id="27" value="Cacher les répertoires vides" lang="French" key="hide_empty_folders" />
     <Localized id="28" value="Synchronize browsers" lang="English" key="synchronize_browsers" />
-    <Localized id="29" value="Synchronize browsers" lang="Dutch" key="synchronize_browsers" />
+    <Localized id="29" value="Browsers synchroniseren" lang="Dutch" key="synchronize_browsers" />
     <Localized id="30" value="Synchroniser les navigateurs" lang="French" key="synchronize_browsers" />
     <Localized id="31" value="Browser Font" lang="English" key="browser_font" />
     <Localized id="32" value="Browser lettertype" lang="Dutch" key="browser_font" />
     <Localized id="33" value="Police des navigateurs" lang="French" key="browser_font" />
     <Localized id="34" value="Inspectors" lang="English" key="inspectors" />
-    <Localized id="35" value="Inspectors" lang="Dutch" key="inspectors" />
+    <Localized id="35" value="Inspecteurs" lang="Dutch" key="inspectors" />
     <Localized id="36" value="Inspecteurs" lang="French" key="inspectors" />
     <Localized id="37" value="Always on top" lang="English" key="always_on_top" />
-    <Localized id="38" value="Always on top" lang="Dutch" key="always_on_top" />
+    <Localized id="38" value="Altijd bovenaan" lang="Dutch" key="always_on_top" />
     <Localized id="39" value="Toujours visibles au dessus" lang="French" key="always_on_top" />
     <Localized id="40" value="Inspectors visible" lang="English" key="inspectors_visible" />
-    <Localized id="41" value="Inspectors visible" lang="Dutch" key="inspectors_visible" />
+    <Localized id="41" value="Inspecteurs zichtbaar" lang="Dutch" key="inspectors_visible" />
     <Localized id="42" value="Inspecteurs visibles" lang="French" key="inspectors_visible" />
   </LocalizedDictionary>
 </Panel>

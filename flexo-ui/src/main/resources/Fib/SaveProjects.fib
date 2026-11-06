@@ -3,13 +3,13 @@
   <LocalizedDictionary id="1">
     <Localized id="2" value="Select all" lang="English" key="select_all" />
     <Localized id="3" value="Sélectionner tout" lang="French" key="select_all" />
-    <Localized id="4" value="Select all" lang="Dutch" key="select_all" />
+    <Localized id="4" value="Alles selecteren" lang="Dutch" key="select_all" />
     <Localized id="5" value="Deselect all" lang="English" key="deselect_all" />
     <Localized id="6" value="Déselectionner tout" lang="French" key="deselect_all" />
-    <Localized id="7" value="Deselect all" lang="Dutch" key="deselect_all" />
+    <Localized id="7" value="Alles deselecteren" lang="Dutch" key="deselect_all" />
     <Localized id="8" value="Save" lang="English" key="Save" />
     <Localized id="9" value="Sauver" lang="French" key="Save" />
-    <Localized id="10" value="Save" lang="Dutch" key="Save" />
+    <Localized id="10" value="Opslaan" lang="Dutch" key="Save" />
     <Localized id="11" value="Cancel" lang="English" key="Cancel" />
     <Localized id="12" value="Annuler" lang="French" key="Cancel" />
     <Localized id="13" value="Cancel" lang="Dutch" key="Cancel" />

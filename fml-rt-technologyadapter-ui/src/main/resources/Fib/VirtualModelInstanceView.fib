@@ -203,24 +203,24 @@
 		<Localized id="36" lang="French"
 			value="Instances de FlexoConcept" key="flexo_concept_instances" />
 		<Localized id="37" lang="Dutch"
-			value="flexo_concept_instances" key="flexo_concept_instances" />
+			value="FlexoConcept-instanties" key="flexo_concept_instances" />
 		<Localized id="38" lang="English" value="Virtual Model"
 			key="virtual_model" />
 		<Localized id="39" lang="French" value="VirtualModel"
 			key="virtual_model" />
-		<Localized id="40" lang="Dutch" value="virtual_model"
+		<Localized id="40" lang="Dutch" value="VirtualModel"
 			key="virtual_model" />
 		<Localized id="41" lang="English" value="Synchronize..."
 			key="synchronize" />
 		<Localized id="42" lang="French" value="Synchroniser..."
 			key="synchronize" />
-		<Localized id="43" lang="Dutch" value="Synchronize..."
+		<Localized id="43" lang="Dutch" value="Synchroniseren..."
 			key="synchronize" />
 		<Localized id="44" lang="English" value="Id" key="id" />
 		<Localized id="45" lang="French" value="Id" key="id" />
 		<Localized id="46" lang="Dutch" value="Id" key="id" />
 		<Localized id="50" lang="English" value="Actor" key="actor" />
 		<Localized id="51" lang="French" value="Acteur" key="actor" />
-		<Localized id="52" lang="Dutch" value="actor" key="actor" />
+		<Localized id="52" lang="Dutch" value="Actor" key="actor" />
 	</LocalizedDictionary>
 </Panel>

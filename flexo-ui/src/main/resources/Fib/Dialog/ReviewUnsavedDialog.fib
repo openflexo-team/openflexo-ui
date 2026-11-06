@@ -21,7 +21,7 @@
     <Localized key="type" lang="French" value="Type" />
     <Localized key="save" lang="French" value="Sauver" />
     <Localized key="type" lang="Dutch" value="Type" />
-    <Localized key="save" lang="Dutch" value="Save" />
+    <Localized key="save" lang="Dutch" value="Opslaan" />
     <Localized key="modified" lang="French" value="Modifié" />
     <Localized key="modified" lang="English" value="Modified" />
     <Localized key="modified_resources_text" lang="French" value="Les resources suivantes ont été gérées au cours de la session courante. Veuillez sélectionner les resources à sauver." />

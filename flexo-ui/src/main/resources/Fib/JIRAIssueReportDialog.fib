@@ -47,10 +47,10 @@
   <FIBVariable id="41" name="data" type="org.openflexo.br.ui.JIRAIssueReportDialog" />
   <LocalizedDictionary id="42">
     <Localized id="43" value="Summary" lang="English" key="summary" />
-    <Localized id="44" value="Summary" lang="Dutch" key="summary" />
+    <Localized id="44" value="Samenvatting" lang="Dutch" key="summary" />
     <Localized id="45" value="Résumé" lang="French" key="summary" />
     <Localized id="46" value="Issue type" lang="English" key="issue_type" />
-    <Localized id="47" value="Issue type" lang="Dutch" key="issue_type" />
+    <Localized id="47" value="Type probleem" lang="Dutch" key="issue_type" />
     <Localized id="48" value="Type d'anomalie" lang="French" key="issue_type" />
     <Localized id="49" value="Label" lang="English" key="label" />
     <Localized id="50" value="Label" lang="Dutch" key="label" />
@@ -62,41 +62,41 @@
     <Localized id="59" value="Scherm" lang="Dutch" key="component" />
     <Localized id="60" value="Composant" lang="French" key="component" />
     <Localized id="61" value="Issue version" lang="English" key="issue_version" />
-    <Localized id="62" value="Issue version" lang="Dutch" key="issue_version" />
+    <Localized id="62" value="Versie van het probleem" lang="Dutch" key="issue_version" />
     <Localized id="63" value="Détecté en version" lang="French" key="issue_version" />
     <Localized id="64" value="Fix version" lang="English" key="fix_version" />
-    <Localized id="65" value="Fix version" lang="Dutch" key="fix_version" />
+    <Localized id="65" value="Herstelversie" lang="Dutch" key="fix_version" />
     <Localized id="66" value="A corriger en version" lang="French" key="fix_version" />
     <Localized id="67" value="Send logs" lang="English" key="send_logs" />
-    <Localized id="68" value="Send logs" lang="Dutch" key="send_logs" />
+    <Localized id="68" value="Logs verzenden" lang="Dutch" key="send_logs" />
     <Localized id="69" value="Envoyer les logs" lang="French" key="send_logs" />
     <Localized id="70" value="Send system properties" lang="English" key="send_system_properties" />
-    <Localized id="71" value="Send system properties" lang="Dutch" key="send_system_properties" />
+    <Localized id="71" value="Systeemeigenschappen verzenden" lang="Dutch" key="send_system_properties" />
     <Localized id="72" value="Envoyer les propriétés du système" lang="French" key="send_system_properties" />
     <Localized id="73" value="Send screenshots" lang="English" key="send_screenshots" />
-    <Localized id="74" value="Send screenshots" lang="Dutch" key="send_screenshots" />
+    <Localized id="74" value="Schermafbeeldingen verzenden" lang="Dutch" key="send_screenshots" />
     <Localized id="75" value="Envoyer des screenshots" lang="French" key="send_screenshots" />
     <Localized id="76" value="Send current project" lang="English" key="send_current_project" />
-    <Localized id="77" value="Send current project" lang="Dutch" key="send_current_project" />
+    <Localized id="77" value="Huidig project verzenden" lang="Dutch" key="send_current_project" />
     <Localized id="78" value="Envoyer le projet courant" lang="French" key="send_current_project" />
     <Localized id="79" value="Attach file" lang="English" key="attach_file" />
-    <Localized id="80" value="Attach file" lang="Dutch" key="attach_file" />
+    <Localized id="80" value="Bestand bijvoegen" lang="Dutch" key="attach_file" />
     <Localized id="81" value="Attacher un fichier" lang="French" key="attach_file" />
     <Localized id="82" value="Send bug report" lang="English" key="send_bug_report" />
-    <Localized id="83" value="Send bug report" lang="Dutch" key="send_bug_report" />
+    <Localized id="83" value="Foutrapport verzenden" lang="Dutch" key="send_bug_report" />
     <Localized id="84" value="Envoyer le rapport d'anomalie" lang="French" key="send_bug_report" />
     <Localized id="86" value="Annuleren" lang="Dutch" key="cancel" />
     <Localized id="88" value="Submit bug report or feature request" lang="English" key="submit_bug_report_or_feature_request" />
-    <Localized id="89" value="Submit bug report or feature request" lang="Dutch" key="submit_bug_report_or_feature_request" />
+    <Localized id="89" value="Een foutrapport of functieverzoek indienen" lang="Dutch" key="submit_bug_report_or_feature_request" />
     <Localized id="90" value="Soumettre un rapport d'anomalie ou une demande d'évolution" lang="French" key="submit_bug_report_or_feature_request" />
     <Localized id="91" value="Priority" lang="English" key="Priority" />
-    <Localized id="92" value="Priority" lang="Dutch" key="Priority" />
+    <Localized id="92" value="Prioriteit" lang="Dutch" key="Priority" />
     <Localized id="93" value="Priorité" lang="French" key="Priority" />
     <Localized id="94" value="Component Field" lang="English" key="Component Field" />
-    <Localized id="95" value="Component Field" lang="Dutch" key="Component Field" />
+    <Localized id="95" value="Onderdeelveld" lang="Dutch" key="Component Field" />
     <Localized id="96" value="Champ du composant" lang="French" key="Component Field" />
     <Localized id="97" value="Please provide a precise and reproducible scenario" lang="English" key="please_provide_a_precise_and_reproducible_scenario" />
-    <Localized id="98" value="Please provide a precise and reproducible scenario" lang="Dutch" key="please_provide_a_precise_and_reproducible_scenario" />
+    <Localized id="98" value="Geef een nauwkeurig en reproduceerbaar scenario op" lang="Dutch" key="please_provide_a_precise_and_reproducible_scenario" />
     <Localized id="99" value="Veuillez fournir un scénario précis et reproductible" lang="French" key="please_provide_a_precise_and_reproducible_scenario" />
   </LocalizedDictionary>
 </Panel>
