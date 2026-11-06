@@ -28,7 +28,7 @@
 	</TabPanel>
 	<LocalizedDictionary>
 		<Localized key="virtual_model" lang="English" value="Virtual model" />
-		<Localized key="virtual_model" lang="French" value="Virtual model" />
+		<Localized key="virtual_model" lang="French" value="VirtualModel" />
 		<Localized key="virtual_model" lang="Dutch" value="Virtual model" />
 	</LocalizedDictionary>
 	<Parameter name="title" value="Virtual model instance" />

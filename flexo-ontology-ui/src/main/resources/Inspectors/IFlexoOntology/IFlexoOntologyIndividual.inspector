@@ -13,7 +13,7 @@
   </TabPanel>
   <LocalizedDictionary>
     <Localized key="ontology_super_classes" lang="English" value="Super classes" />
-    <Localized key="ontology_super_classes" lang="French" value="Super classes" />
+    <Localized key="ontology_super_classes" lang="French" value="Super-classes" />
     <Localized key="ontology_super_classes" lang="Dutch" value="Super classes" />
   </LocalizedDictionary>
   <Parameter name="title" value="Ontologic individual" />

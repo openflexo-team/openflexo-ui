@@ -201,7 +201,7 @@
     <Localized id="151" lang="French" value="Type de model slot" key="model_slot_type" />
     <Localized id="152" lang="English" value="Virtual model" key="virtual_model" />
     <Localized id="153" lang="Dutch" value="Virtual model" key="virtual_model" />
-    <Localized id="154" lang="French" value="Virtual model" key="virtual_model" />
+    <Localized id="154" lang="French" value="VirtualModel" key="virtual_model" />
     <Localized id="155" lang="English" value="Meta model" key="meta_model" />
     <Localized id="156" lang="Dutch" value="Meta model" key="meta_model" />
     <Localized id="157" lang="French" value="Méta-modèle" key="meta_model" />

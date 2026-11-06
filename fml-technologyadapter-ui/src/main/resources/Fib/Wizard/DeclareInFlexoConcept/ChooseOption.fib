@@ -58,7 +58,7 @@
 			key="virtual_model" />
 		<Localized id="21" value="virtual_model" lang="Dutch"
 			key="virtual_model" />
-		<Localized id="22" value="Virtual model" lang="French"
+		<Localized id="22" value="VirtualModel" lang="French"
 			key="virtual_model" />
 		<Localized id="23" value="Please select an option" lang="English"
 			key="please_select_an_option" />

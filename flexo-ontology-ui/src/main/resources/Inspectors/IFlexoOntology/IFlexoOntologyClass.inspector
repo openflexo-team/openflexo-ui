@@ -13,10 +13,10 @@
   </TabPanel>
   <LocalizedDictionary>
     <Localized key="ontology_super_classes" lang="English" value="Super classes" />
-    <Localized key="ontology_super_classes" lang="French" value="Super classes" />
+    <Localized key="ontology_super_classes" lang="French" value="Super-classes" />
     <Localized key="ontology_super_classes" lang="Dutch" value="Super classes" />
     <Localized key="ontology_sub_classes" lang="English" value="Sub classes" />
-    <Localized key="ontology_sub_classes" lang="French" value="Sub classes" />
+    <Localized key="ontology_sub_classes" lang="French" value="Sous-classes" />
     <Localized key="ontology_sub_classes" lang="Dutch" value="Sub classes" />
   </LocalizedDictionary>
   <Parameter name="title" value="Ontologic class" />

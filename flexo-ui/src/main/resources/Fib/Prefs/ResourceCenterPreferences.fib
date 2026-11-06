@@ -29,7 +29,7 @@
   <LocalizedDictionary id="24">
     <Localized id="25" lang="English" value="Icon" key="icon" />
     <Localized id="26" lang="Dutch" value="Icon" key="icon" />
-    <Localized id="27" lang="French" value="icon" key="icon" />
+    <Localized id="27" lang="French" value="Icône" key="icon" />
     <Localized id="28" lang="English" value="Resource Center" key="Resource Center" />
     <Localized id="29" lang="Dutch" value="Resource Center" key="Resource Center" />
     <Localized id="30" lang="French" value="Centre de resources" key="Resource Center" />

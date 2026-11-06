@@ -42,28 +42,28 @@
     <Localized key="Value" lang="French" value="Valeur" />
     <Localized key="Value" lang="Dutch" value="Value" />
     <Localized key="add_comment" lang="English" value="add_comment" />
-    <Localized key="add_comment" lang="French" value="add_comment" />
+    <Localized key="add_comment" lang="French" value="Ajouter un commentaire" />
     <Localized key="add_comment" lang="Dutch" value="add_comment" />
     <Localized key="add_label" lang="English" value="add_label" />
-    <Localized key="add_label" lang="French" value="add_label" />
+    <Localized key="add_label" lang="French" value="Ajouter un libellé" />
     <Localized key="add_label" lang="Dutch" value="add_label" />
     <Localized key="delete_action" lang="English" value="Delete action" />
     <Localized key="delete_action" lang="French" value="Supprimer l'action" />
     <Localized key="delete_action" lang="Dutch" value="Delete action" />
     <Localized key="add_see_also" lang="English" value="add_see_also" />
-    <Localized key="add_see_also" lang="French" value="add_see_also" />
+    <Localized key="add_see_also" lang="French" value="Ajouter « voir aussi »" />
     <Localized key="add_see_also" lang="Dutch" value="add_see_also" />
     <Localized key="add_is_defined_by" lang="English" value="add_is_defined_by" />
-    <Localized key="add_is_defined_by" lang="French" value="add_is_defined_by" />
+    <Localized key="add_is_defined_by" lang="French" value="Ajouter « est défini par »" />
     <Localized key="add_is_defined_by" lang="Dutch" value="add_is_defined_by" />
     <Localized key="Annotation statements" lang="English" value="Annotation statements" />
-    <Localized key="Annotation statements" lang="French" value="Annotation statements" />
+    <Localized key="Annotation statements" lang="French" value="Déclarations d'annotation" />
     <Localized key="Annotation statements" lang="Dutch" value="Annotation statements" />
     <Localized key="super_properties" lang="English" value="Super properties" />
     <Localized key="super_properties" lang="French" value="Propriétés parentes" />
     <Localized key="super_properties" lang="Dutch" value="super_properties" />
     <Localized key="range" lang="English" value="range" />
-    <Localized key="range" lang="French" value="range" />
+    <Localized key="range" lang="French" value="Étendue" />
     <Localized key="range" lang="Dutch" value="range" />
     <Localized key="domain" lang="English" value="Domain" />
     <Localized key="domain" lang="French" value="Domaine" />
@@ -75,7 +75,7 @@
     <Localized key="Semantic" lang="French" value="Sémantique" />
     <Localized key="Semantic" lang="Dutch" value="Semantic" />
     <Localized key="data_property" lang="English" value="Data property" />
-    <Localized key="data_property" lang="French" value="Data property" />
+    <Localized key="data_property" lang="French" value="Propriété de donnée" />
     <Localized key="data_property" lang="Dutch" value="data_property" />
     <Localized key="URI" lang="English" value="URI" />
     <Localized key="URI" lang="French" value="URI" />

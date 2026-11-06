@@ -201,12 +201,12 @@
 		<Localized id="35" lang="English"
 			value="FlexoConcept instances" key="flexo_concept_instances" />
 		<Localized id="36" lang="French"
-			value="FlexoConcept instances" key="flexo_concept_instances" />
+			value="Instances de FlexoConcept" key="flexo_concept_instances" />
 		<Localized id="37" lang="Dutch"
 			value="flexo_concept_instances" key="flexo_concept_instances" />
 		<Localized id="38" lang="English" value="Virtual Model"
 			key="virtual_model" />
-		<Localized id="39" lang="French" value="Virtual Model"
+		<Localized id="39" lang="French" value="VirtualModel"
 			key="virtual_model" />
 		<Localized id="40" lang="Dutch" value="virtual_model"
 			key="virtual_model" />

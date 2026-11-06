@@ -48,7 +48,7 @@
 	</TabPanel>
 	<LocalizedDictionary>
 		<Localized key="flexo_id" lang="English" value="OpenFlexo ID" />
-		<Localized key="flexo_id" lang="French" value="OpenFlexo ID" />
+		<Localized key="flexo_id" lang="French" value="Identifiant OpenFlexo" />
 		<Localized key="flexo_id" lang="Dutch" value="OpenFlexo ID" />
 		<Localized key="custom_properties" lang="English" value="Custom properties" />
 		<Localized key="custom_properties" lang="French"
@@ -58,7 +58,7 @@
 		<Localized key="dont_generate" lang="French" value="Ne pas générer" />
 		<Localized key="dont_generate" lang="Dutch" value="Don't generate doc" />
 		<Localized key="EP refs" lang="English" value="EP refs" />
-		<Localized key="EP refs" lang="French" value="EP refs" />
+		<Localized key="EP refs" lang="French" value="Références EP" />
 		<Localized key="EP refs" lang="Dutch" value="EP refs" />
 		<Localized key="Id" lang="English" value="Id" />
 		<Localized key="Id" lang="French" value="Id" />

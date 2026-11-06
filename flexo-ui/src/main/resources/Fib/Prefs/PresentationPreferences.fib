@@ -22,7 +22,7 @@
   <LocalizedDictionary id="18">
     <Localized id="19" value="LookAndFeel" lang="English" key="look_an_feel" />
     <Localized id="20" value="LookAndFeel" lang="Dutch" key="look_an_feel" />
-    <Localized id="21" value="LookAndFeel" lang="French" key="look_an_feel" />
+    <Localized id="21" value="Apparence" lang="French" key="look_an_feel" />
     <Localized id="22" value="Browsers" lang="English" key="browsers" />
     <Localized id="23" value="Browsers" lang="Dutch" key="browsers" />
     <Localized id="24" value="Navigateurs" lang="French" key="browsers" />

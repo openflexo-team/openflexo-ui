@@ -16,7 +16,7 @@
   <LocalizedDictionary id="12">
     <Localized id="13" lang="English" value="Icon" key="icon" />
     <Localized id="14" lang="Dutch" value="Icon" key="icon" />
-    <Localized id="15" lang="French" value="icon" key="icon" />
+    <Localized id="15" lang="French" value="Icône" key="icon" />
     <Localized id="16" lang="English" value="Technology adapter" key="technology_adapter" />
     <Localized id="17" lang="Dutch" value="Technology adapter" key="technology_adapter" />
     <Localized id="18" lang="French" value="Connecteur technique" key="technology_adapter" />

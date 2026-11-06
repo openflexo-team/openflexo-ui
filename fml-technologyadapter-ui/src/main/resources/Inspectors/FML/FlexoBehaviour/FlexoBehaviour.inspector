@@ -324,7 +324,7 @@
 			key="parameter_type" />
 		<Localized id="95" value="Widget" lang="English" key="widget" />
 		<Localized id="96" value="Widget" lang="Dutch" key="widget" />
-		<Localized id="97" value="Widget" lang="French" key="widget" />
+		<Localized id="97" value="Élément graphique" lang="French" key="widget" />
 		<Localized id="98" value="Container" lang="English" key="container" />
 		<Localized id="99" value="Container" lang="Dutch" key="container" />
 		<Localized id="100" value="Conteneur" lang="French" key="container" />
@@ -365,7 +365,7 @@
 			key="flexo_concept" />
 		<Localized id="123" value="Flexo concept" lang="Dutch"
 			key="flexo_concept" />
-		<Localized id="124" value="Flexo concept" lang="French"
+		<Localized id="124" value="FlexoConcept" lang="French"
 			key="flexo_concept" />
 	</LocalizedDictionary>
 </Inspector>

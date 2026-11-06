@@ -120,26 +120,26 @@
 			value="Openflexo built-in diagram technology adapter" lang="English"
 			key="Openflexo built-in diagram technology adapter" />
 		<Localized id="43"
-			value="Openflexo built-in diagram technology adapter" lang="French"
+			value="Adaptateur technologique de diagramme intégré à OpenFlexo" lang="French"
 			key="Openflexo built-in diagram technology adapter" />
 		<Localized id="44"
 			value="Openflexo built-in diagram technology adapter" lang="Dutch"
 			key="Openflexo built-in diagram technology adapter" />
 		<Localized id="45" value="EMF technology adapter" lang="English"
 			key="EMF technology adapter" />
-		<Localized id="46" value="EMF technology adapter" lang="French"
+		<Localized id="46" value="Adaptateur technologique EMF" lang="French"
 			key="EMF technology adapter" />
 		<Localized id="47" value="EMF technology adapter" lang="Dutch"
 			key="EMF technology adapter" />
 		<Localized id="48" value="OWL technology adapter" lang="English"
 			key="OWL technology adapter" />
-		<Localized id="49" value="OWL technology adapter" lang="French"
+		<Localized id="49" value="Adaptateur technologique OWL" lang="French"
 			key="OWL technology adapter" />
 		<Localized id="50" value="OWL technology adapter" lang="Dutch"
 			key="OWL technology adapter" />
 		<Localized id="51" value="XSD/XML technology adapter" lang="English"
 			key="XSD/XML technology adapter" />
-		<Localized id="52" value="XSD/XML technology adapter" lang="French"
+		<Localized id="52" value="Adaptateur technologique XSD/XML" lang="French"
 			key="XSD/XML technology adapter" />
 		<Localized id="53" value="XSD/XML technology adapter" lang="Dutch"
 			key="XSD/XML technology adapter" />
@@ -147,26 +147,26 @@
 			value="Openflexo built-in virtual model technology adapter" lang="English"
 			key="Openflexo built-in virtual model technology adapter" />
 		<Localized id="55"
-			value="Openflexo built-in virtual model technology adapter" lang="French"
+			value="Adaptateur technologique de VirtualModel intégré à OpenFlexo" lang="French"
 			key="Openflexo built-in virtual model technology adapter" />
 		<Localized id="56"
 			value="Openflexo built-in virtual model technology adapter" lang="Dutch"
 			key="Openflexo built-in virtual model technology adapter" />
 		<Localized id="57" value="Excel technology adapter" lang="English"
 			key="Excel technology adapter" />
-		<Localized id="58" value="Excel technology adapter" lang="French"
+		<Localized id="58" value="Adaptateur technologique Excel" lang="French"
 			key="Excel technology adapter" />
 		<Localized id="59" value="Excel technology adapter" lang="Dutch"
 			key="Excel technology adapter" />
 		<Localized id="60" value="Openflexo diagram" lang="English"
 			key="Openflexo diagram" />
-		<Localized id="61" value="Openflexo diagram" lang="French"
+		<Localized id="61" value="Diagramme OpenFlexo" lang="French"
 			key="Openflexo diagram" />
 		<Localized id="62" value="Openflexo diagram" lang="Dutch"
 			key="Openflexo diagram" />
 		<Localized id="63" value="Openflexo virtual model" lang="English"
 			key="Openflexo virtual model" />
-		<Localized id="64" value="Openflexo virtual model" lang="French"
+		<Localized id="64" value="VirtualModel OpenFlexo" lang="French"
 			key="Openflexo virtual model" />
 		<Localized id="65" value="Openflexo virtual model" lang="Dutch"
 			key="Openflexo virtual model" />
@@ -174,21 +174,21 @@
 			key="technology_adapter" />
 		<Localized id="67" value="Technology adapter" lang="Dutch"
 			key="technology_adapter" />
-		<Localized id="68" value="technology_adapter" lang="French"
+		<Localized id="68" value="Adaptateur technologique" lang="French"
 			key="technology_adapter" />
-		<Localized id="71" value="name" lang="French" key="name" />
+		<Localized id="71" value="Nom" lang="French" key="name" />
 		<Localized id="72" value="Virtual model" lang="English"
 			key="virtual_model" />
 		<Localized id="73" value="Virtual model" lang="Dutch"
 			key="virtual_model" />
-		<Localized id="74" value="virtual_model" lang="French"
+		<Localized id="74" value="VirtualModel" lang="French"
 			key="virtual_model" />
 		<Localized id="75" value="Metamodel" lang="English" key="metamodel" />
 		<Localized id="76" value="Metamodel" lang="Dutch" key="metamodel" />
-		<Localized id="77" value="metamodel" lang="French" key="metamodel" />
-		<Localized id="80" value="description" lang="French" key="description" />
+		<Localized id="77" value="Métamodèle" lang="French" key="metamodel" />
+		<Localized id="80" value="Description" lang="French" key="description" />
 		<Localized id="81" value="New entry" lang="English" key="new_entry" />
 		<Localized id="82" value="New entry" lang="Dutch" key="new_entry" />
-		<Localized id="83" value="new_entry" lang="French" key="new_entry" />
+		<Localized id="83" value="Nouvelle entrée" lang="French" key="new_entry" />
 	</LocalizedDictionary>
 </Panel>

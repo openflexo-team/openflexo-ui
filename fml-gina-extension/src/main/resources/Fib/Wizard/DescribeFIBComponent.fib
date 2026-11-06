@@ -82,6 +82,6 @@
 		<Localized key="label" lang="English" value="Label" />
 		<Localized key="label" lang="French" value="Libellé" />
 		<Localized key="widget" lang="English" value="Widget" />
-		<Localized key="widget" lang="French" value="Widget" />
+		<Localized key="widget" lang="French" value="Élément graphique" />
 	</LocalizedDictionary>
 </Panel>

@@ -18,12 +18,12 @@
   <Label id="15" label="label" align="left" data="data.creationScheme.description" visible="((virtualModelSelector.value.compilationUnit != null) &amp;&amp;(virtualModelSelector.value.compilationUnit.virtualModel.creationSchemes.size &gt; 0))" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)" font="SansSerif,2,11" name="Label" />
   <FIBVariable id="16" type="org.openflexo.fml.rt.controller.action.CreateBasicVirtualModelInstanceWizard$ChooseVirtualModel" name="data" />
   <LocalizedDictionary id="17">
-    <Localized id="24" lang="French" value="Flexo concept" key="flexo_concept" />
+    <Localized id="24" lang="French" value="FlexoConcept" key="flexo_concept" />
     <Localized id="25" lang="English" value="Flexo concept" key="flexo_concept" />
     <Localized id="26" lang="English" value="Validate" key="validate" />
     <Localized id="27" lang="English" value="Label" key="label" />
     <Localized id="28" lang="French" value="Valider" key="validate" />
-    <Localized id="29" lang="French" value="Label" key="label" />
+    <Localized id="29" lang="French" value="Libellé" key="label" />
     <Localized id="30" lang="French" value="Annuler" key="Cancel" />
     <Localized id="31" lang="Dutch" value="Validate" key="validate" />
     <Localized id="32" lang="Dutch" value="Label" key="label" />
@@ -70,9 +70,6 @@
     <Localized id="73" lang="English" value="Invalid name for this virtual model" key="invalid_name_for_new_virtual_model" />
     <Localized id="74" lang="French" value="Ce nom n'est pas valide pour ce nouveau modèle virtuel" key="invalid_name_for_new_virtual_model" />
     <Localized id="75" lang="Dutch" value="invalid_name_for_new_virtual_model" key="invalid_name_for_new_virtual_model" />
-    <Localized id="76" lang="English" value="No virtual model type" key="no_virtual_model_type" />
-    <Localized id="77" lang="French" value="Pas de type de modèle virtuel" key="no_virtual_model_type" />
-    <Localized id="78" lang="Dutch" value="no_virtual_model_type" key="no_virtual_model_type" />
     <Localized id="79" lang="English" value="No virtual model type selected, please choose one" key="no_virtual_model_type_selected" />
     <Localized id="80" lang="French" value="Veuillez sélectionner un type de modèle virtuel" key="no_virtual_model_type_selected" />
     <Localized id="81" lang="Dutch" value="no_virtual_model_type" key="no_virtual_model_type_selected" />

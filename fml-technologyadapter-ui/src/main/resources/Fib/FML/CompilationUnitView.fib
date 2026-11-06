@@ -441,7 +441,7 @@
 	</SplitPanel>
 	<LocalizedDictionary id="96">
 		<Localized id="97" lang="French"
-			value="remove_flexo_concept" key="remove_flexo_concept" />
+			value="Supprimer le FlexoConcept" key="remove_flexo_concept" />
 		<Localized id="98" lang="English"
 			value="Add action in GET control graph"
 			key="add_action_in_GET_control_graph" />
@@ -449,7 +449,7 @@
 			value="Add action in GET control graph"
 			key="add_action_in_GET_control_graph" />
 		<Localized id="100" lang="French"
-			value="add_action_in_GET_control_graph"
+			value="Ajouter une action dans le graphe de contrôle GET"
 			key="add_action_in_GET_control_graph" />
 		<Localized id="101" lang="English"
 			value="Add action in SET control graph"
@@ -458,20 +458,20 @@
 			value="Add action in SET control graph"
 			key="add_action_in_SET_control_graph" />
 		<Localized id="103" lang="French"
-			value="add_action_in_SET_control_graph"
+			value="Ajouter une action dans le graphe de contrôle SET"
 			key="add_action_in_SET_control_graph" />
 		<Localized id="104" lang="English" value="Delete action"
 			key="delete_action" />
 		<Localized id="105" lang="Dutch" value="Delete action"
 			key="delete_action" />
-		<Localized id="106" lang="French" value="delete_action"
+		<Localized id="106" lang="French" value="Supprimer l'action"
 			key="delete_action" />
 		<Localized id="107" lang="English"
 			value="Add action inside iteration" key="add_action_inside_iteration" />
 		<Localized id="108" lang="Dutch"
 			value="Add action inside iteration" key="add_action_inside_iteration" />
 		<Localized id="109" lang="French"
-			value="add_action_inside_iteration" key="add_action_inside_iteration" />
+			value="Ajouter une action dans l'itération" key="add_action_inside_iteration" />
 		<Localized id="110" lang="English"
 			value="Add action in then control graph"
 			key="add_action_in_then_control_graph" />
@@ -479,7 +479,7 @@
 			value="Add action in then control graph"
 			key="add_action_in_then_control_graph" />
 		<Localized id="112" lang="French"
-			value="add_action_in_then_control_graph"
+			value="Ajouter une action dans le graphe de contrôle then"
 			key="add_action_in_then_control_graph" />
 		<Localized id="113" lang="English"
 			value="Add action in else control graph"
@@ -488,20 +488,20 @@
 			value="Add action in else control graph"
 			key="add_action_in_else_control_graph" />
 		<Localized id="115" lang="French"
-			value="add_action_in_else_control_graph"
+			value="Ajouter une action dans le graphe de contrôle else"
 			key="add_action_in_else_control_graph" />
 		<Localized id="116" lang="English"
 			value="Add inspector entry" key="add_inspector_entry" />
 		<Localized id="117" lang="Dutch" value="Add inspector entry"
 			key="add_inspector_entry" />
 		<Localized id="118" lang="French"
-			value="add_inspector_entry" key="add_inspector_entry" />
+			value="Ajouter une entrée d'inspecteur" key="add_inspector_entry" />
 		<Localized id="119" lang="English"
 			value="New technology role" key="new_technology_role" />
 		<Localized id="120" lang="Dutch" value="New technology role"
 			key="new_technology_role" />
 		<Localized id="121" lang="French"
-			value="new_technology_role" key="new_technology_role" />
+			value="Nouveau rôle technologique" key="new_technology_role" />
 		<Localized id="122" lang="English"
 			value="New flexo concept instance role"
 			key="new_flexo_concept_instance_role" />
@@ -509,52 +509,52 @@
 			value="New flexo concept instance role"
 			key="new_flexo_concept_instance_role" />
 		<Localized id="124" lang="French"
-			value="new_flexo_concept_instance_role"
+			value="Nouveau rôle d'instance de FlexoConcept"
 			key="new_flexo_concept_instance_role" />
 		<Localized id="125" lang="English"
 			value="New primitive role" key="new_primitive_role" />
 		<Localized id="126" lang="Dutch" value="New primitive role"
 			key="new_primitive_role" />
-		<Localized id="127" lang="French" value="new_primitive_role"
+		<Localized id="127" lang="French" value="Nouveau rôle primitif"
 			key="new_primitive_role" />
 		<Localized id="128" lang="English"
 			value="New abstract property" key="new_abstract_property" />
 		<Localized id="129" lang="Dutch"
 			value="New abstract property" key="new_abstract_property" />
 		<Localized id="130" lang="French"
-			value="new_abstract_property" key="new_abstract_property" />
+			value="Nouvelle propriété abstraite" key="new_abstract_property" />
 		<Localized id="131" lang="English"
 			value="New expression property" key="new_expression_property" />
 		<Localized id="132" lang="Dutch"
 			value="New expression property" key="new_expression_property" />
 		<Localized id="133" lang="French"
-			value="new_expression_property" key="new_expression_property" />
+			value="Nouvelle propriété expression" key="new_expression_property" />
 		<Localized id="134" lang="English"
 			value="New get set property" key="new_get_set_property" />
 		<Localized id="135" lang="Dutch"
 			value="New get set property" key="new_get_set_property" />
 		<Localized id="136" lang="French"
-			value="new_get_set_property" key="new_get_set_property" />
+			value="Nouvelle propriété en lecture/écriture" key="new_get_set_property" />
 		<Localized id="137" lang="English" value="Delete"
 			key="delete" />
 		<Localized id="138" lang="Dutch" value="Delete" key="delete" />
-		<Localized id="139" lang="French" value="delete"
+		<Localized id="139" lang="French" value="Supprimer"
 			key="delete" />
 		<Localized id="140" lang="English" value="New behaviour"
 			key="new_behaviour" />
 		<Localized id="141" lang="Dutch" value="New behaviour"
 			key="new_behaviour" />
-		<Localized id="142" lang="French" value="new_behaviour"
+		<Localized id="142" lang="French" value="Nouveau comportement"
 			key="new_behaviour" />
 		<Localized id="143" lang="English" value="Add flexo concept"
 			key="add_flexo_concept" />
 		<Localized id="144" lang="Dutch" value="Add flexo concept"
 			key="add_flexo_concept" />
-		<Localized id="145" lang="French" value="add_flexo_concept"
+		<Localized id="145" lang="French" value="Ajouter un FlexoConcept"
 			key="add_flexo_concept" />
 		<Localized id="146" lang="English" value="Label" key="label" />
 		<Localized id="147" lang="Dutch" value="Label" key="label" />
-		<Localized id="148" lang="French" value="label" key="label" />
+		<Localized id="148" lang="French" value="Libellé" key="label" />
 		<Localized id="149" lang="English"
 			value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;Show errors/warnings&lt;/a&gt;&lt;/html&gt;"
 			key="&lt;html&gt;&lt;a href=&quot;&quot;&gt;show_errors_warnings&lt;/a&gt;&lt;/html&gt;" />
@@ -562,7 +562,7 @@
 			value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;Voir les erreurs&lt;/a&gt;&lt;/html&gt;"
 			key="&lt;html&gt;&lt;a href=&quot;&quot;&gt;show_errors_warnings&lt;/a&gt;&lt;/html&gt;" />
 		<Localized id="151" lang="French"
-			value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;Show errors/warnings&lt;/a&gt;&lt;/html&gt;"
+			value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;Afficher les erreurs/avertissements&lt;/a&gt;&lt;/html&gt;"
 			key="&lt;html&gt;&lt;a href=&quot;&quot;&gt;show_errors_warnings&lt;/a&gt;&lt;/html&gt;" />
 		<Localized id="152" lang="English"
 			value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;Hide errors/warnings&lt;/a&gt;&lt;/html&gt;"
@@ -584,12 +584,12 @@
 			key="&lt;html&gt;&lt;a href=&quot;&quot;&gt;revalidate&lt;/a&gt;&lt;/html&gt;" />
 		<Localized id="158" lang="English" value="Icon" key="icon" />
 		<Localized id="159" lang="Dutch" value="Icon" key="icon" />
-		<Localized id="160" lang="French" value="icon" key="icon" />
+		<Localized id="160" lang="French" value="Icône" key="icon" />
 		<Localized id="161" lang="English" value="Errors/warnings"
 			key="errors/warnings" />
 		<Localized id="162" lang="Dutch" value="Errors/warnings"
 			key="errors/warnings" />
-		<Localized id="163" lang="French" value="errors/warnings"
+		<Localized id="163" lang="French" value="Erreurs/avertissements"
 			key="errors/warnings" />
 	</LocalizedDictionary>
 	<FIBVariable id="164"

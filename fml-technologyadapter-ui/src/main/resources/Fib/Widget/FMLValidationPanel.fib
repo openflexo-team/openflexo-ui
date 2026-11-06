@@ -89,12 +89,12 @@
 			key="&lt;html&gt;&lt;a href=&quot;&quot;&gt;revalidate&lt;/a&gt;&lt;/html&gt;" />
 		<Localized id="158" lang="English" value="Icon" key="icon" />
 		<Localized id="159" lang="Dutch" value="Icon" key="icon" />
-		<Localized id="160" lang="French" value="icon" key="icon" />
+		<Localized id="160" lang="French" value="Icône" key="icon" />
 		<Localized id="161" lang="English" value="Errors/warnings"
 			key="errors/warnings" />
 		<Localized id="162" lang="Dutch" value="Errors/warnings"
 			key="errors/warnings" />
-		<Localized id="163" lang="French" value="errors/warnings"
+		<Localized id="163" lang="French" value="Erreurs/avertissements"
 			key="errors/warnings" />
 		<Localized id="170" lang="English"
 			value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;Synchronize&lt;/a&gt;&lt;/html&gt;"

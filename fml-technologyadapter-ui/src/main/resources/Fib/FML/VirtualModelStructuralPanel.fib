@@ -110,10 +110,10 @@
 		<Localized key="example_diagram" lang="French" value="Diagramme exemple" />
 		<Localized key="example_diagram" lang="Dutch" value="example_diagram" />
 		<Localized key="pattern_role" lang="English" value="Pattern Role" />
-		<Localized key="pattern_role" lang="French" value="Pattern Role" />
+		<Localized key="pattern_role" lang="French" value="Rôle de motif" />
 		<Localized key="pattern_role" lang="Dutch" value="Pattern Role" />
 		<Localized key="model_slot" lang="English" value="Model Slot" />
-		<Localized key="model_slot" lang="French" value="Model Slot" />
+		<Localized key="model_slot" lang="French" value="ModelSlot" />
 		<Localized key="model_slot" lang="Dutch" value="model_slot" />
 		<Localized key="type" lang="English" value="Type" />
 		<Localized key="type" lang="French" value="Type" />
@@ -122,7 +122,7 @@
 		<Localized key="delete" lang="French" value="Supprimer" />
 		<Localized key="delete" lang="Dutch" value="Delete" />
 		<Localized key="createFlexoRole" lang="English" value="createFlexoRole" />
-		<Localized key="createFlexoRole" lang="French" value="createFlexoRole" />
+		<Localized key="createFlexoRole" lang="French" value="Créer un FlexoRole" />
 		<Localized key="createFlexoRole" lang="Dutch" value="createFlexoRole" />
 	</LocalizedDictionary>
 </Panel>
