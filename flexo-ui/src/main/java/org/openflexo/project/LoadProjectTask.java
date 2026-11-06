@@ -51,6 +51,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.task.FlexoApplicationTask;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.components.FlexoUILocalization;
 
 /**
  * A task used to load a Flexo project
@@ -113,7 +114,7 @@ public class LoadProjectTask extends FlexoApplicationTask {
 		if (!asImportedProject) {
 			// Adds to recent project
 			Progress.progress(
-					FlexoLocalization.getMainLocalizer().localizedForKey("preinitialize_project") + projectDirectory.getAbsolutePath());
+					FlexoUILocalization.locales().localizedForKey("preinitialize_project") + projectDirectory.getAbsolutePath());
 			projectLoader.preInitialization(projectDirectory);
 		}
 		for (Entry<FlexoProject, FlexoEditor> e : projectLoader.getEditors().entrySet()) {

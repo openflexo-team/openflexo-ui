@@ -106,7 +106,7 @@ public class SplashWindow extends JDialog {
 		businessLabel.setBounds(200, 95, 280, 15);
 
 		JLabel versionLabel = new JLabel(
-				"Version " + FlexoCst.BUSINESS_APPLICATION_VERSION + " (build " + ApplicationVersion.BUILD_ID + ")", SwingConstants.LEFT);
+				FlexoUILocalization.locales().localizedForKey("version") + " " + FlexoCst.BUSINESS_APPLICATION_VERSION + " (" + FlexoUILocalization.locales().localizedForKey("build").toLowerCase() + " " + ApplicationVersion.BUILD_ID + ")", SwingConstants.LEFT);
 		versionLabel.setForeground(Color.DARK_GRAY);
 		versionLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
 		getContentPane().add(versionLabel);

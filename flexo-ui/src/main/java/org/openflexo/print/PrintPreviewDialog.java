@@ -57,6 +57,7 @@ import org.openflexo.localization.LocalizedSwing;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.view.FlexoDialog;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.components.FlexoUILocalization;
 
 public class PrintPreviewDialog extends FlexoDialog {
 
@@ -79,7 +80,7 @@ public class PrintPreviewDialog extends FlexoDialog {
 		_controller = controller;
 		_printableComponent = printableProcessView;
 
-		setTitle(FlexoLocalization.getMainLocalizer().localizedForKey("print_preview", this));
+		setTitle(FlexoUILocalization.locales().localizedForKey("print_preview", this));
 
 		JPanel topPanel = new JPanel(new FlowLayout());
 		JButton plusScale = new JButton("+");
@@ -158,7 +159,7 @@ public class PrintPreviewDialog extends FlexoDialog {
 		};
 		previewScaleSlider.addChangeListener(previewScaleChangeListener);
 
-		final JCheckBox showPages = LocalizedSwing.bind(new JCheckBox(FlexoLocalization.getMainLocalizer().localizedForKey("show_pages"),
+		final JCheckBox showPages = LocalizedSwing.bind(new JCheckBox(FlexoUILocalization.locales().localizedForKey("show_pages"),
 				_printableComponent.getPrintableDelegate().showPages()), FlexoLocalization.getMainLocalizer(), "show_pages");
 		showPages.addActionListener(new ActionListener() {
 			@Override
@@ -168,7 +169,7 @@ public class PrintPreviewDialog extends FlexoDialog {
 				_printableComponent.getPrintableDelegate().refresh();
 			}
 		});
-		final JCheckBox showTitle = LocalizedSwing.bind(new JCheckBox(FlexoLocalization.getMainLocalizer().localizedForKey("show_title"),
+		final JCheckBox showTitle = LocalizedSwing.bind(new JCheckBox(FlexoUILocalization.locales().localizedForKey("show_title"),
 				_printableComponent.getPrintableDelegate().showTitles()), FlexoLocalization.getMainLocalizer(), "show_title");
 		showTitle.addActionListener(new ActionListener() {
 			@Override
@@ -233,7 +234,7 @@ public class PrintPreviewDialog extends FlexoDialog {
 		});
 
 		JButton pageSetupButton = new JButton();
-		pageSetupButton.setText(FlexoLocalization.getMainLocalizer().localizedForKey("page_setup", pageSetupButton));
+		pageSetupButton.setText(FlexoUILocalization.locales().localizedForKey("page_setup", pageSetupButton));
 		pageSetupButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -247,7 +248,7 @@ public class PrintPreviewDialog extends FlexoDialog {
 		});
 
 		JButton fitToPageButton = new JButton();
-		fitToPageButton.setText(FlexoLocalization.getMainLocalizer().localizedForKey("fit_to_page", fitToPageButton));
+		fitToPageButton.setText(FlexoUILocalization.locales().localizedForKey("fit_to_page", fitToPageButton));
 		fitToPageButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -322,7 +323,7 @@ public class PrintPreviewDialog extends FlexoDialog {
 							+ FileUtils.BAD_CHARACTERS_FOR_FILE_NAME_REG_EXP);
 				}
 				FlexoController
-						.notify(FlexoLocalization.getMainLocalizer().localizedForKey("file_name_cannot_contain_\\___&_#_{_}_[_]_%_~"));
+						.notify(FlexoUILocalization.locales().localizedForKey("file_name_cannot_contain_\\___&_#_{_}_[_]_%_~"));
 			}
 		}
 		else {

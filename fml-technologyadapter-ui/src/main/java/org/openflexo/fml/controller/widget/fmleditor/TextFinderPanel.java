@@ -53,6 +53,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
 import org.openflexo.icon.IconLibrary;
+import org.openflexo.localization.LocalizedSwing;
 
 /**
  * Widget allowing find text
@@ -94,10 +95,10 @@ public class TextFinderPanel extends JToolBar implements ActionListener {
 		prevButton.addActionListener(this);
 		prevButton.setBorder(BorderFactory.createEmptyBorder());
 		add(prevButton);
-		regexCB = new JCheckBox("Regex");
+		regexCB = LocalizedSwing.bind(new JCheckBox(FMLEditorLocalization.locales().localizedForKey("regex")), FMLEditorLocalization.locales(), "regex");
 		regexCB.setFont(getFont().deriveFont(11f));
 		add(regexCB);
-		matchCaseCB = new JCheckBox("Match Case");
+		matchCaseCB = LocalizedSwing.bind(new JCheckBox(FMLEditorLocalization.locales().localizedForKey("match_case")), FMLEditorLocalization.locales(), "match_case");
 		matchCaseCB.setFont(getFont().deriveFont(11f));
 		add(matchCaseCB);
 	}
@@ -131,7 +132,7 @@ public class TextFinderPanel extends JToolBar implements ActionListener {
 
 		boolean found = SearchEngine.find(getTextArea(), context).wasFound();
 		if (!found) {
-			JOptionPane.showMessageDialog(TextFinderPanel.this, "Text not found");
+			JOptionPane.showMessageDialog(TextFinderPanel.this, FMLEditorLocalization.locales().localizedForKey("text_not_found"));
 		}
 
 	}

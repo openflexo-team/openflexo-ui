@@ -198,6 +198,7 @@ import org.openflexo.view.menu.FlexoMenuBar;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import org.openflexo.components.FlexoUILocalization;
 
 /**
  * General controller managing an application module (see {@link FlexoModule}).<br>
@@ -1504,9 +1505,9 @@ public abstract class FlexoController implements PropertyChangeListener, HasProp
 			if (e.getMessage().indexOf("Location") > -1) {
 				location = e.getMessage().substring(e.getMessage().indexOf("Location") + 9).trim();
 			}
-			FlexoController.notify(FlexoLocalization.getMainLocalizer().localizedForKey("could_not_connect_to_web_sevice") + ": "
-					+ FlexoLocalization.getMainLocalizer().localizedForKey("the_url_seems_incorrect")
-					+ (location != null ? "\n" + FlexoLocalization.getMainLocalizer().localizedForKey("try_with_this_one") + " " + location
+			FlexoController.notify(FlexoUILocalization.locales().localizedForKey("could_not_connect_to_web_sevice") + ": "
+					+ FlexoUILocalization.locales().localizedForKey("the_url_seems_incorrect")
+					+ (location != null ? "\n" + FlexoUILocalization.locales().localizedForKey("try_with_this_one") + " " + location
 							: ""));
 			return false;
 		} /*
@@ -1515,46 +1516,46 @@ public abstract class FlexoController implements PropertyChangeListener, HasProp
 			Object entity = wae.getResponse().getEntity();
 			switch (wae.getResponse().getStatus()) {
 			case 500:
-				return FlexoController.confirm(FlexoLocalization.localizedForKey("webservice_remote_error") + entity + "\n"
-						+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
+				return FlexoController.confirm(FlexoUILocalization.locales().localizedForKey("webservice_remote_error") + entity + "\n"
+						+ FlexoUILocalization.locales().localizedForKey("would_you_like_to_try_again?"));
 			case 401:
-				return FlexoController.confirm(FlexoLocalization.localizedForKey("unauthorized_action_on_the_server") + entity + "\n"
-						+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
+				return FlexoController.confirm(FlexoUILocalization.locales().localizedForKey("unauthorized_action_on_the_server") + entity + "\n"
+						+ FlexoUILocalization.locales().localizedForKey("would_you_like_to_try_again?"));
 			default:
 				if (entity != null) {
 					return FlexoController.confirm(entity.toString() + "\n"
-							+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
+							+ FlexoUILocalization.locales().localizedForKey("would_you_like_to_try_again?"));
 				} else {
-					return FlexoController.confirm(FlexoLocalization.localizedForKey("unexpected_error_occured_while_connecting_to_server")
-							+ "\n" + FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
+					return FlexoController.confirm(FlexoUILocalization.locales().localizedForKey("unexpected_error_occured_while_connecting_to_server")
+							+ "\n" + FlexoUILocalization.locales().localizedForKey("would_you_like_to_try_again?"));
 				}
 			}
 			}
 			*/
 		if (e.getCause() instanceof ConnectException) {
-			return FlexoController.confirm(FlexoLocalization.getMainLocalizer().localizedForKey("connection_error")
+			return FlexoController.confirm(FlexoUILocalization.locales().localizedForKey("connection_error")
 					+ (e.getCause().getMessage() != null ? " (" + e.getCause().getMessage() + ")" : "") + "\n"
-					+ FlexoLocalization.getMainLocalizer().localizedForKey("would_you_like_to_try_again?"));
+					+ FlexoUILocalization.locales().localizedForKey("would_you_like_to_try_again?"));
 		}
 		else if (e.getMessage() != null && "(500)Apple WebObjects".equals(e.getMessage())
 				|| e.getMessage().startsWith("No such operation")) {
-			return FlexoController.confirm(FlexoLocalization.getMainLocalizer().localizedForKey("could_not_connect_to_web_sevice") + ": "
-					+ FlexoLocalization.getMainLocalizer().localizedForKey("the_url_seems_incorrect") + "\n"
-					+ FlexoLocalization.getMainLocalizer().localizedForKey("would_you_like_to_try_again?"));
+			return FlexoController.confirm(FlexoUILocalization.locales().localizedForKey("could_not_connect_to_web_sevice") + ": "
+					+ FlexoUILocalization.locales().localizedForKey("the_url_seems_incorrect") + "\n"
+					+ FlexoUILocalization.locales().localizedForKey("would_you_like_to_try_again?"));
 		}
 		else if (e.toString() != null && e.toString().startsWith("javax.net.ssl.SSLHandshakeException")) {
-			return FlexoController.confirm(FlexoLocalization.getMainLocalizer().localizedForKey("connection_error") + ": " + e + "\n"
-					+ FlexoLocalization.getMainLocalizer().localizedForKey("would_you_like_to_try_again?"));
+			return FlexoController.confirm(FlexoUILocalization.locales().localizedForKey("connection_error") + ": " + e + "\n"
+					+ FlexoUILocalization.locales().localizedForKey("would_you_like_to_try_again?"));
 		}
 		else if (e instanceof SocketTimeoutException) {
-			return FlexoController.confirm(FlexoLocalization.getMainLocalizer().localizedForKey("connection_timeout") + "\n"
-					+ FlexoLocalization.getMainLocalizer().localizedForKey("would_you_like_to_try_again?"));
+			return FlexoController.confirm(FlexoUILocalization.locales().localizedForKey("connection_timeout") + "\n"
+					+ FlexoUILocalization.locales().localizedForKey("would_you_like_to_try_again?"));
 		}
 		else if (e instanceof IOException || e.getCause() instanceof IOException) {
 			IOException ioEx = (IOException) (e instanceof IOException ? e : e.getCause());
-			return FlexoController.confirm(FlexoLocalization.getMainLocalizer().localizedForKey("connection_error") + ": "
+			return FlexoController.confirm(FlexoUILocalization.locales().localizedForKey("connection_error") + ": "
 					+ FlexoLocalization.getMainLocalizer().localizedForKey(ioEx.getClass().getSimpleName()) + " " + ioEx.getMessage() + "\n"
-					+ FlexoLocalization.getMainLocalizer().localizedForKey("would_you_like_to_try_again?"));
+					+ FlexoUILocalization.locales().localizedForKey("would_you_like_to_try_again?"));
 		}
 		else {
 			if (e.getMessage() != null && e.getMessage().indexOf("Content is not allowed in prolog") > -1) {
@@ -1563,15 +1564,15 @@ public abstract class FlexoController implements PropertyChangeListener, HasProp
 				return false;
 			}
 			else {
-				return FlexoController.confirm(FlexoLocalization.getMainLocalizer().localizedForKey("webservice_remote_error") + " \n"
+				return FlexoController.confirm(FlexoUILocalization.locales().localizedForKey("webservice_remote_error") + " \n"
 						+ (e.getMessage() == null || "java.lang.NullPointerException".equals(e.getMessage())
 								? "Check your connection parameters.\nThe service may be temporary unavailable."
 								: e.getMessage())
-						+ "\n" + FlexoLocalization.getMainLocalizer().localizedForKey("would_you_like_to_try_again?"));
+						+ "\n" + FlexoUILocalization.locales().localizedForKey("would_you_like_to_try_again?"));
 			}
 		}
-		/*FlexoController.notify(FlexoLocalization.localizedForKey("webservice_connection_failed"));
-		FlexoController.notify(FlexoLocalization.localizedForKey("webservice_authentification_failed") + ": "
+		/*FlexoController.notify(FlexoUILocalization.locales().localizedForKey("webservice_connection_failed"));
+		FlexoController.notify(FlexoUILocalization.locales().localizedForKey("webservice_authentification_failed") + ": "
 				+ FlexoLocalization.localizedForKey(e.getMessage1()));*/
 	}
 

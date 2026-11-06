@@ -69,6 +69,7 @@ import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.view.FlexoRelativeWindow;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.ControllerModel;
+import org.openflexo.components.FlexoUILocalization;
 
 /**
  * Automatic builded 'Windows' menu for modules
@@ -431,7 +432,7 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 		public void actionPerformed(ActionEvent arg0) {
 			if (isShowed) {
 				getController().hideControlPanel();
-				_item.setText(FlexoLocalization.getMainLocalizer().localizedForKey("show_control_panel", _item));
+				_item.setText(FlexoUILocalization.locales().localizedForKey("show_control_panel", _item));
 				isShowed = false;
 			}
 			else {
@@ -501,7 +502,7 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 
 		private void updateText() {
 			if (!getController().getControllerModel().isLeftViewVisible()) {
-				setText(FlexoLocalization.getMainLocalizer().localizedForKey("show_browser"));
+				setText(FlexoUILocalization.locales().localizedForKey("show_browser"));
 			}
 			else {
 				setText(FlexoLocalization.getMainLocalizer().localizedForKey("hide_browser"));

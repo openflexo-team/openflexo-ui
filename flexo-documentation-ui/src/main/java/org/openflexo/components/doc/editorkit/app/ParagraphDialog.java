@@ -27,6 +27,8 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import javax.swing.text.StyledEditorKit;
+import org.openflexo.localization.LocalizedSwing;
+import org.openflexo.components.doc.editorkit.DocumentEditorKitLocalization;
 
 /**
  * This class implements a paragraph settings functionality. Such as alignment, indentation, spacing and other paragraph attributes.
@@ -95,27 +97,27 @@ public class ParagraphDialog extends JDialog {
 	 *            parent window frame
 	 */
 	public ParagraphDialog(JFrame parent) {
-		super(parent, "Paragraph properties", true);
+		super(parent, DocumentEditorKitLocalization.locales().localizedForKey("paragraph_properties"), true);
 		setModal(true);
 		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
 		JPanel p = new JPanel(new GridLayout(1, 2, 5, 2));
 
 		JPanel ps = new JPanel(new GridLayout(3, 2, 10, 2));
-		ps.setBorder(new TitledBorder(new EtchedBorder(), "Space"));
-		ps.add(new JLabel("Line spacing"));
+		ps.setBorder(new TitledBorder(new EtchedBorder(), DocumentEditorKitLocalization.locales().localizedForKey("space")));
+		ps.add(LocalizedSwing.bind(new JLabel(DocumentEditorKitLocalization.locales().localizedForKey("line_spacing")), DocumentEditorKitLocalization.locales(), "line_spacing"));
 		// space between lines
 		m_lineSpacing = new DoubleSpinEdit();
 		m_lineSpacing.setMinValue(1);
 		m_lineSpacing.setMaxValue(5);
 		ps.add(m_lineSpacing);
-		ps.add(new JLabel("Space above"));
+		ps.add(LocalizedSwing.bind(new JLabel(DocumentEditorKitLocalization.locales().localizedForKey("space_above")), DocumentEditorKitLocalization.locales(), "space_above"));
 		// space above the paragraph
 		m_spaceAbove = new DoubleSpinEdit();
 		m_spaceAbove.setMinValue(0);
 		m_spaceAbove.setMaxValue(500);
 		ps.add(m_spaceAbove);
-		ps.add(new JLabel("Space below"));
+		ps.add(LocalizedSwing.bind(new JLabel(DocumentEditorKitLocalization.locales().localizedForKey("space_below")), DocumentEditorKitLocalization.locales(), "space_below"));
 		// space below the paragraph
 		m_spaceBelow = new DoubleSpinEdit();
 		m_spaceBelow.setMinValue(0);
@@ -124,20 +126,20 @@ public class ParagraphDialog extends JDialog {
 		p.add(ps);
 
 		JPanel pi = new JPanel(new GridLayout(3, 2, 10, 2));
-		pi.setBorder(new TitledBorder(new EtchedBorder(), "Indent"));
-		pi.add(new JLabel("First line indent"));
+		pi.setBorder(new TitledBorder(new EtchedBorder(), DocumentEditorKitLocalization.locales().localizedForKey("indent")));
+		pi.add(LocalizedSwing.bind(new JLabel(DocumentEditorKitLocalization.locales().localizedForKey("first_line_indent")), DocumentEditorKitLocalization.locales(), "first_line_indent"));
 		// ident before first line
 		m_firstIndent = new DoubleSpinEdit();
 		m_firstIndent.setMinValue(-500);
 		m_firstIndent.setMaxValue(500);
 		pi.add(m_firstIndent);
-		pi.add(new JLabel("Left indent"));
+		pi.add(LocalizedSwing.bind(new JLabel(DocumentEditorKitLocalization.locales().localizedForKey("left_indent")), DocumentEditorKitLocalization.locales(), "left_indent"));
 		// left paragraph ident
 		m_leftIndent = new DoubleSpinEdit();
 		m_leftIndent.setMinValue(0);
 		m_leftIndent.setMaxValue(500);
 		pi.add(m_leftIndent);
-		pi.add(new JLabel("Right indent"));
+		pi.add(LocalizedSwing.bind(new JLabel(DocumentEditorKitLocalization.locales().localizedForKey("right_indent")), DocumentEditorKitLocalization.locales(), "right_indent"));
 		// right paragraph ident
 		m_rightIndent = new DoubleSpinEdit();
 		m_rightIndent.setMinValue(0);
@@ -148,26 +150,26 @@ public class ParagraphDialog extends JDialog {
 
 		p = new JPanel();
 		p.setLayout(new BoxLayout(p, BoxLayout.X_AXIS));
-		p.add(new JLabel("Alignment"));
+		p.add(LocalizedSwing.bind(new JLabel(DocumentEditorKitLocalization.locales().localizedForKey("alignment")), DocumentEditorKitLocalization.locales(), "alignment"));
 
 		ButtonGroup bg = new ButtonGroup();
-		m_btLeft = new JToggleButton("Left");
+		m_btLeft = LocalizedSwing.bind(new JToggleButton(DocumentEditorKitLocalization.locales().localizedForKey("left")), DocumentEditorKitLocalization.locales(), "left");
 		bg.add(m_btLeft);
 		p.add(m_btLeft);
-		m_btCenter = new JToggleButton("Center");
+		m_btCenter = LocalizedSwing.bind(new JToggleButton(DocumentEditorKitLocalization.locales().localizedForKey("center")), DocumentEditorKitLocalization.locales(), "center");
 		bg.add(m_btCenter);
 		p.add(m_btCenter);
-		m_btRight = new JToggleButton("Right");
+		m_btRight = LocalizedSwing.bind(new JToggleButton(DocumentEditorKitLocalization.locales().localizedForKey("right")), DocumentEditorKitLocalization.locales(), "right");
 		bg.add(m_btRight);
 		p.add(m_btRight);
-		m_btJustified = new JToggleButton("Justified");
+		m_btJustified = LocalizedSwing.bind(new JToggleButton(DocumentEditorKitLocalization.locales().localizedForKey("justified")), DocumentEditorKitLocalization.locales(), "justified");
 		bg.add(m_btJustified);
 		p.add(m_btJustified);
 		getContentPane().add(p);
 
 		p = new JPanel();
 		p.setLayout(new BorderLayout());
-		p.setBorder(new TitledBorder(new EtchedBorder(), "Preview"));
+		p.setBorder(new TitledBorder(new EtchedBorder(), DocumentEditorKitLocalization.locales().localizedForKey("preview")));
 		m_preview = new JEditorPane();
 		m_preview.setEditorKit(new StyledEditorKit());
 		m_preview.setEnabled(false);
@@ -184,7 +186,7 @@ public class ParagraphDialog extends JDialog {
 
 		p = new JPanel(); // new FlowLayout());
 		// JPanel p1 = new JPanel(new GridLayout(1, 2, 10, 2));
-		JButton btOK = new JButton("Ok");
+		JButton btOK = LocalizedSwing.bind(new JButton(DocumentEditorKitLocalization.locales().localizedForKey("ok")), DocumentEditorKitLocalization.locales(), "ok");
 		ActionListener lst = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -199,7 +201,7 @@ public class ParagraphDialog extends JDialog {
 		// p1.add(btOK);
 		p.add(btOK);
 
-		JButton btCancel = new JButton("Cancel");
+		JButton btCancel = LocalizedSwing.bind(new JButton(DocumentEditorKitLocalization.locales().localizedForKey("cancel")), DocumentEditorKitLocalization.locales(), "cancel");
 		lst = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

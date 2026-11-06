@@ -41,8 +41,8 @@ package org.openflexo.rm;
 import org.openflexo.foundation.task.Progress;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.task.FlexoApplicationTask;
+import org.openflexo.components.FlexoUILocalization;
 
 /**
  * A task used to disactivate a {@link TechnologyAdapter}
@@ -57,7 +57,7 @@ public class DisactivateTechnologyAdapterTask<TA extends TechnologyAdapter<TA>> 
 
 	public DisactivateTechnologyAdapterTask(TechnologyAdapterService taService, TA technologyAdapter) {
 		super("DisactivateTechnologyAdapter",
-				FlexoLocalization.getMainLocalizer().localizedForKey("disactivate_technology") + " " + technologyAdapter.getName(),
+				FlexoUILocalization.locales().localizedForKey("disactivate_technology") + " " + technologyAdapter.getName(),
 				taService.getServiceManager());
 		this.taService = taService;
 		this.technologyAdapter = technologyAdapter;

@@ -62,6 +62,7 @@ import org.openflexo.utils.TooManyFailedAttemptException;
 import org.openflexo.view.FlexoDialog;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.components.FlexoUILocalization;
 
 /**
  * Represents the current Flexo Application
@@ -168,7 +169,7 @@ public class FlexoApplication {
 				}
 				if (exception instanceof TooManyFailedAttemptException || exception.getCause() instanceof TooManyFailedAttemptException) {
 					FlexoController.showError(
-							FlexoLocalization.getMainLocalizer().localizedForKey("too_many_failed_attempt_to_authenticate_to_proxy"));
+							FlexoUILocalization.locales().localizedForKey("too_many_failed_attempt_to_authenticate_to_proxy"));
 					return;
 				}
 
@@ -189,7 +190,7 @@ public class FlexoApplication {
 							message = "InvalidParametersException: " + exception.getMessage() + ". Edit a bug report ?";
 						}
 						else if (exception instanceof NotImplementedException) {
-							message = FlexoLocalization.getMainLocalizer().localizedForKey("feature_not_implemented:_")
+							message = FlexoUILocalization.locales().localizedForKey("feature_not_implemented:_")
 									+ exception.getMessage() + " "
 									+ FlexoLocalization.getMainLocalizer().localizedForKey("would_you_like_to_send_a_report");
 						}

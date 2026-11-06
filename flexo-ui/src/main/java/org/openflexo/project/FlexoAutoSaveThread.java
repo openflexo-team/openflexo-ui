@@ -60,6 +60,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.components.FlexoUILocalization;
 
 /**
  * @author gpolet
@@ -348,8 +349,8 @@ public class FlexoAutoSaveThread extends Thread {
 			if (autoSaveFailedNotified) {
 				return;
 			}
-			FlexoController.showError(FlexoLocalization.getMainLocalizer().localizedForKey("auto_save_action_failed"),
-					FlexoLocalization.getMainLocalizer().localizedForKey("auto_save_action_could_not_be_performed") + "\n"
+			FlexoController.showError(FlexoUILocalization.locales().localizedForKey("auto_save_action_failed"),
+					FlexoUILocalization.locales().localizedForKey("auto_save_action_could_not_be_performed") + "\n"
 							+ FlexoLocalization.getMainLocalizer()
 									.localizedForKey("verify_that_your_disk_is_not_full_and_that_you_can_write_in_the_temp_directory."));
 			autoSaveFailedNotified = true;
@@ -398,10 +399,10 @@ public class FlexoAutoSaveThread extends Thread {
 			long current = System.currentTimeMillis();
 			long offset = current - creationDate.getTime();
 			if (offset < 60 * 60 * 1000) {
-				return FlexoLocalization.getMainLocalizer().localizedForKeyWithParams("($minutes) minutes_ago", this);
+				return FlexoUILocalization.locales().localizedForKeyWithParams("($minutes) minutes_ago", this);
 			}
 			else if (offset < 24 * 60 * 60 * 1000) {
-				return FlexoLocalization.getMainLocalizer().localizedForKeyWithParams("($hours) hours_ago_and_($minutesOverHours)_minutes",
+				return FlexoUILocalization.locales().localizedForKeyWithParams("($hours) hours_ago_and_($minutesOverHours)_minutes",
 						this);
 			}
 			else {

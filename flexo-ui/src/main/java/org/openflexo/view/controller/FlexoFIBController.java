@@ -113,6 +113,7 @@ import org.openflexo.pamela.validation.ValidationWarning;
 import org.openflexo.prefs.PresentationPreferences;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.toolbox.FileUtils;
+import org.openflexo.components.FlexoUILocalization;
 
 /**
  * Represents the controller of a FIBComponent in Openflexo graphical context (at this time, Swing)<br>
@@ -453,7 +454,7 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 	@Override
 	public boolean handleException(Throwable t) {
 		if (t instanceof InvalidNameException) {
-			FlexoController.showError(FlexoLocalization.getMainLocalizer().localizedForKey("invalid_name") + " : "
+			FlexoController.showError(FlexoUILocalization.locales().localizedForKey("invalid_name") + " : "
 					+ ((InvalidNameException) t).getExplanation());
 			return true;
 		}

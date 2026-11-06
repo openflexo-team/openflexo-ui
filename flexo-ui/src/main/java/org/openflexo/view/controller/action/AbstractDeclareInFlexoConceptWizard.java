@@ -53,6 +53,7 @@ import org.openflexo.foundation.fml.rm.CompilationUnitResource;
 import org.openflexo.gina.annotation.FIBPanel;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.components.FlexoUILocalization;
 
 public abstract class AbstractDeclareInFlexoConceptWizard<A extends AbstractDeclareInFlexoConcept<A, ?, ?>>
 		extends AbstractTransformationWizard<A> {
@@ -227,7 +228,7 @@ public abstract class AbstractDeclareInFlexoConceptWizard<A extends AbstractDecl
 				return false;
 			}
 			if (getCreationStrategy() == null) {
-				setIssueMessage(getAction().getLocales().localizedForKey("please_choose_a_creation_strategy"), IssueMessageType.ERROR);
+				setIssueMessage(FlexoUILocalization.locales().localizedForKey("please_choose_a_creation_strategy"), IssueMessageType.ERROR);
 				return false;
 			}
 			return true;

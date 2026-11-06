@@ -8,6 +8,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import org.openflexo.localization.LocalizedSwing;
+import org.openflexo.components.doc.editorkit.DocumentEditorKitLocalization;
 
 /**
  * Represents margins object (top, bottom, left and right margins).
@@ -26,13 +28,13 @@ public class MarginsControl extends JPanel {
      */
     public MarginsControl() {
         super();
-        setBorder(new TitledBorder(new EtchedBorder(), "Margins:"));
+        setBorder(new TitledBorder(new EtchedBorder(), DocumentEditorKitLocalization.locales().localizedForKey("margins:")));
 
         setLayout(new GridBagLayout());
-        add(new JLabel("Left:"),new GridBagConstraints(0,0,1,1,0,0,GridBagConstraints.NORTHEAST,GridBagConstraints.BOTH,new Insets(0,0,0,0),0,0));
-        add(new JLabel("Right:"),new GridBagConstraints(0,1,1,1,0,0,GridBagConstraints.NORTHEAST,GridBagConstraints.BOTH,new Insets(0,0,0,0),0,0));
-        add(new JLabel("Top:"),new GridBagConstraints(0,2,1,1,0,0,GridBagConstraints.NORTHEAST,GridBagConstraints.BOTH,new Insets(0,0,0,0),0,0));
-        add(new JLabel("Bottom:"),new GridBagConstraints(0,3,1,1,0,0,GridBagConstraints.NORTHEAST,GridBagConstraints.BOTH,new Insets(0,0,0,0),0,0));
+        add(LocalizedSwing.bind(new JLabel(DocumentEditorKitLocalization.locales().localizedForKey("left:")), DocumentEditorKitLocalization.locales(), "left:"),new GridBagConstraints(0,0,1,1,0,0,GridBagConstraints.NORTHEAST,GridBagConstraints.BOTH,new Insets(0,0,0,0),0,0));
+        add(LocalizedSwing.bind(new JLabel(DocumentEditorKitLocalization.locales().localizedForKey("right:")), DocumentEditorKitLocalization.locales(), "right:"),new GridBagConstraints(0,1,1,1,0,0,GridBagConstraints.NORTHEAST,GridBagConstraints.BOTH,new Insets(0,0,0,0),0,0));
+        add(LocalizedSwing.bind(new JLabel(DocumentEditorKitLocalization.locales().localizedForKey("top:")), DocumentEditorKitLocalization.locales(), "top:"),new GridBagConstraints(0,2,1,1,0,0,GridBagConstraints.NORTHEAST,GridBagConstraints.BOTH,new Insets(0,0,0,0),0,0));
+        add(LocalizedSwing.bind(new JLabel(DocumentEditorKitLocalization.locales().localizedForKey("bottom:")), DocumentEditorKitLocalization.locales(), "bottom:"),new GridBagConstraints(0,3,1,1,0,0,GridBagConstraints.NORTHEAST,GridBagConstraints.BOTH,new Insets(0,0,0,0),0,0));
 
         add(marginLeft,new GridBagConstraints(1,0,1,1,1,0,GridBagConstraints.NORTHEAST,GridBagConstraints.BOTH,new Insets(0,0,0,0),0,0));
         add(marginRight,new GridBagConstraints(1,1,1,1,1,0,GridBagConstraints.NORTHEAST,GridBagConstraints.BOTH,new Insets(0,0,0,0),0,0));

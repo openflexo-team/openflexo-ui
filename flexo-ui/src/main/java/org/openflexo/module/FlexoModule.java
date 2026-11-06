@@ -88,6 +88,7 @@ import org.openflexo.prefs.ModulePreferences;
 import org.openflexo.rm.ResourceLocator;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.components.FlexoUILocalization;
 
 /**
  * Abstract class defining a Flexo Module. A Flexo Module is an application component part of the Openflexo Diatomee and dedicated to a
@@ -385,7 +386,7 @@ public abstract class FlexoModule<M extends FlexoModule<M>> implements DataFlexo
 		}
 		// A stable order, so that the progress history of the project matches from one loading to the next
 		resources.sort(Comparator.comparing(r -> String.valueOf(r.getURI())));
-		String step = getApplicationContext().getLocalizationService().getFlexoLocalizer().localizedForKey("loading_project_resource");
+		String step = FlexoUILocalization.locales().localizedForKey("loading_project_resource");
 		for (FlexoResource<?> resource : resources) {
 			if (!resource.isLoaded()) {
 				Progress.progress(step + " " + resource.getName());

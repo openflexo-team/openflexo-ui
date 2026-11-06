@@ -67,6 +67,7 @@ import org.openflexo.project.FlexoAutoSaveThread.FlexoAutoSaveFile;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.view.FlexoDialog;
 import org.openflexo.view.FlexoFrame;
+import org.openflexo.components.FlexoUILocalization;
 
 /**
  * AutoSave service working with the {@link InteractiveProjectLoader}<br>
@@ -171,14 +172,14 @@ public class AutoSaveService implements PropertyChangeListener {
 		final FlexoDialog dialog = new FlexoDialog(FlexoFrame.getActiveFrame(), true);
 		/*final ParameterDefinition[] parameters = new ParameterDefinition[2];
 		parameters[0] = new ReadOnlyTextFieldParameter("directory", "save_directory", autoSaveThread.getTempDirectory().getAbsolutePath());
-		parameters[1] = new PropertyListParameter<FlexoAutoSaveFile>("backUps", FlexoLocalization.localizedForKey("back-ups"),
+		parameters[1] = new PropertyListParameter<FlexoAutoSaveFile>("backUps", FlexoUILocalization.locales().localizedForKey("back-ups"),
 				autoSaveThread.getProjects(), 20, 12);
 		((PropertyListParameter) parameters[1]).addReadOnlyTextFieldColumn("creationDateAsAString", "creation_date", 100, true);
 		((PropertyListParameter) parameters[1]).addReadOnlyTextFieldColumn("offset", "offset", 100, true);
 		((PropertyListParameter) parameters[1]).addReadOnlyTextFieldColumn("path", "path", 450, true);*/
 		JPanel north = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		north.setBackground(Color.WHITE);
-		JLabel label = new JLabel("<html>" + FlexoLocalization.getMainLocalizer().localizedForKey("time_travel_info") + "</html>",
+		JLabel label = new JLabel("<html>" + FlexoUILocalization.locales().localizedForKey("time_travel_info") + "</html>",
 				IconLibrary.TIME_TRAVEL_ICON, SwingConstants.LEFT);
 		north.add(label);
 		// AskParametersPanel panel = new AskParametersPanel(project, parameters);
@@ -191,17 +192,17 @@ public class AutoSaveService implements PropertyChangeListener {
 				resume();
 			}
 		});
-		JButton ok = LocalizedSwing.bind(new JButton(FlexoLocalization.getMainLocalizer().localizedForKey("restore")), FlexoLocalization.getMainLocalizer(), "restore");
+		JButton ok = LocalizedSwing.bind(new JButton(FlexoUILocalization.locales().localizedForKey("restore")), FlexoLocalization.getMainLocalizer(), "restore");
 		ok.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dialog.dispose();
 				/*FlexoAutoSaveFile autoSaveFile = (FlexoAutoSaveFile) ((PropertyListParameter) parameters[1]).getSelectedObject();
 				if (autoSaveFile != null) {
-					if (FlexoController.confirm(FlexoLocalization.localizedForKey("are_you_sure_that_you_want_to_revert_to_that_version?"))) {
+					if (FlexoController.confirm(FlexoUILocalization.locales().localizedForKey("are_you_sure_that_you_want_to_revert_to_that_version?"))) {
 						try {
 							ProgressWindow.showProgressWindow(FlexoFrame.getActiveFrame(),
-									FlexoLocalization.localizedForKey("project_restoration"), 4);
+									FlexoUILocalization.locales().localizedForKey("project_restoration"), 4);
 							restoreAutoSaveProject(autoSaveFile, ProgressWindow.instance());
 						} catch (IOException e1) {
 							e1.printStackTrace();
@@ -233,7 +234,7 @@ public class AutoSaveService implements PropertyChangeListener {
 		dialog.getContentPane().add(new JLabel("Please reimplement this"));
 		dialog.getContentPane().add(north, BorderLayout.NORTH);
 		dialog.getContentPane().add(south, BorderLayout.SOUTH);
-		dialog.setTitle(FlexoLocalization.getMainLocalizer().localizedForKey("time_traveler", dialog));
+		dialog.setTitle(FlexoUILocalization.locales().localizedForKey("time_traveler", dialog));
 		dialog.validate();
 		dialog.pack();
 		dialog.show();

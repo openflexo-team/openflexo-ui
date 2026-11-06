@@ -48,6 +48,7 @@ import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.components.FlexoUILocalization;
 
 public class FullInteractiveProjectLoadingHandler extends InteractiveProjectLoadingHandler {
 
@@ -67,14 +68,14 @@ public class FullInteractiveProjectLoadingHandler extends InteractiveProjectLoad
 			return true;
 		}
 
-		String CONVERT_ALL = FlexoLocalization.getMainLocalizer().localizedForKey("convert_all_resources");
-		String CONVERT = FlexoLocalization.getMainLocalizer().localizedForKey("convert_this_resource");
-		String DONT_CONVERT = FlexoLocalization.getMainLocalizer().localizedForKey("don't_convert_this_resource");
+		String CONVERT_ALL = FlexoUILocalization.locales().localizedForKey("convert_all_resources");
+		String CONVERT = FlexoUILocalization.locales().localizedForKey("convert_this_resource");
+		String DONT_CONVERT = FlexoUILocalization.locales().localizedForKey("don't_convert_this_resource");
 		String CANCEL = FlexoLocalization.getMainLocalizer().localizedForKey("cancel");
 		int choice = FlexoController.selectOption("<html><center>" + IconLibrary.UNFIXABLE_WARNING_ICON.getHTMLImg() + "<b>&nbsp;"
 				+ FlexoLocalization.getMainLocalizer().localizedForKey("warning") + "</b></center><br>"
 				+ FlexoLocalization.getMainLocalizer().localizedForKey("resource") + " <b>" + resource.getURI() + "</b><br>"
-				+ FlexoLocalization.getMainLocalizer().localizedForKey(
+				+ FlexoUILocalization.locales().localizedForKey(
 						"this_resource_has_been_serialized_with_an_older_version_than_the_one_declared_as_current_application_version")
 				+ "<br>" + FlexoLocalization.getMainLocalizer()
 						.localizedForKey("should_i_convert_this_resource_to_latest_version_(recommanded_choice)")
@@ -110,14 +111,14 @@ public class FullInteractiveProjectLoadingHandler extends InteractiveProjectLoad
 			return useOlderMappingHashtable.get(resource);
 		}
 
-		String TRY_TO_RECOVER = FlexoLocalization.getMainLocalizer().localizedForKey("try_to_recover_resource");
+		String TRY_TO_RECOVER = FlexoUILocalization.locales().localizedForKey("try_to_recover_resource");
 		String CANCEL = FlexoLocalization.getMainLocalizer().localizedForKey("cancel");
 		int choice = FlexoController.selectOption("<html><center>" + IconLibrary.UNFIXABLE_WARNING_ICON.getHTMLImg() + "<b>&nbsp;"
 				+ FlexoLocalization.getMainLocalizer().localizedForKey("warning") + "</b></center><br>"
 				+ FlexoLocalization.getMainLocalizer().localizedForKey("resource") + " <b>" + resource.getURI() + "</b><br>"
-				+ FlexoLocalization.getMainLocalizer().localizedForKey("this_resource_could_not_be_deserialized_with_declared_version")
-				+ "<br>" + FlexoLocalization.getMainLocalizer().localizedForKey("should_i_try_to_recover_by_using_older_versions") + "<br>"
-				+ "<i>" + FlexoLocalization.getMainLocalizer().localizedForKey("you_may_loose_some_informations") + "</i><br></html>",
+				+ FlexoUILocalization.locales().localizedForKey("this_resource_could_not_be_deserialized_with_declared_version")
+				+ "<br>" + FlexoUILocalization.locales().localizedForKey("should_i_try_to_recover_by_using_older_versions") + "<br>"
+				+ "<i>" + FlexoUILocalization.locales().localizedForKey("you_may_loose_some_informations") + "</i><br></html>",
 				TRY_TO_RECOVER, TRY_TO_RECOVER, CANCEL);
 
 		if (choice == 0) {
@@ -164,13 +165,13 @@ public class FullInteractiveProjectLoadingHandler extends InteractiveProjectLoad
 		ReturnedStatus status;
 	
 		ProjectConversionDialog(FlexoProject project, Vector<ResourceToConvert> resourcesToConvert) {
-			super((JFrame) null, FlexoLocalization.localizedForKey("project_conversion"), true);
+			super((JFrame) null, FlexoUILocalization.locales().localizedForKey("project_conversion"), true);
 			LabelParameter infoLabel = new LabelParameter("info", "info", "<html><center>"
 					+ IconLibrary.UNFIXABLE_WARNING_ICON.getHTMLImg() + "<b>&nbsp;" + FlexoLocalization.localizedForKey("warning")
 					+ "</b></center><br>" + "<center>" + project.getProjectDirectory().getName() + "</center><br>"
-					+ FlexoLocalization.localizedForKey("this_project_seems_to_have_been_created_with_an_older_version_of_flexo") + "<br>"
-					+ FlexoLocalization.localizedForKey("would_you_like_to_convert_entire_project_to_new_version_of_flexo_(recommanded)")
-					+ "<br>" + "<i>" + FlexoLocalization.localizedForKey("following_resources_will_be_converted") + "</i>" + "</html>",
+					+ FlexoUILocalization.locales().localizedForKey("this_project_seems_to_have_been_created_with_an_older_version_of_flexo") + "<br>"
+					+ FlexoUILocalization.locales().localizedForKey("would_you_like_to_convert_entire_project_to_new_version_of_flexo_(recommanded)")
+					+ "<br>" + "<i>" + FlexoUILocalization.locales().localizedForKey("following_resources_will_be_converted") + "</i>" + "</html>",
 					false);
 			final PropertyListParameter<ResourceToConvert> resourcesParam = new PropertyListParameter<ResourceToConvert>("resources",
 					"resources_to_convert", resourcesToConvert, 20, 10);
@@ -196,7 +197,7 @@ public class FullInteractiveProjectLoadingHandler extends InteractiveProjectLoad
 			});
 			controlPanel.add(cancelButton);
 			JButton skipConversionButton = new JButton();
-			skipConversionButton.setText(FlexoLocalization.localizedForKey("skip_conversion", skipConversionButton));
+			skipConversionButton.setText(FlexoUILocalization.locales().localizedForKey("skip_conversion", skipConversionButton));
 			skipConversionButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -206,7 +207,7 @@ public class FullInteractiveProjectLoadingHandler extends InteractiveProjectLoad
 			});
 			controlPanel.add(skipConversionButton);
 			JButton convertAllResources = new JButton();
-			convertAllResources.setText(FlexoLocalization.localizedForKey("convert_all_resources", convertAllResources));
+			convertAllResources.setText(FlexoUILocalization.locales().localizedForKey("convert_all_resources", convertAllResources));
 			convertAllResources.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {

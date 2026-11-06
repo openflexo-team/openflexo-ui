@@ -96,6 +96,7 @@ import org.openflexo.utils.CancelException;
 import org.openflexo.utils.TooManyFailedAttemptException;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.components.FlexoUILocalization;
 
 /**
  * Main class of the Flexo Application Suite
@@ -352,7 +353,7 @@ public class Flexo {
 			} catch (ModuleLoadingException e) {
 				e.printStackTrace();
 				FlexoController
-						.notify(applicationContext.getLocalizationService().getFlexoLocalizer().localizedForKey("could_not_load_module")
+						.notify(FlexoUILocalization.locales().localizedForKey("could_not_load_module")
 								+ " " + e.getModule());
 				showWelcomeDialog(applicationContext, null);
 			}

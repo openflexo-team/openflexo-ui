@@ -43,8 +43,8 @@ import java.io.IOException;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.task.Progress;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.task.FlexoApplicationTask;
+import org.openflexo.components.FlexoUILocalization;
 
 /**
  * A task used to load a Flexo module
@@ -61,7 +61,7 @@ public class RefreshResourceCenterTask extends FlexoApplicationTask {
 
 	public RefreshResourceCenterTask(FlexoResourceCenterService rcService, FlexoResourceCenter<?> resourceCenter) {
 		super("RefreshResourceCenter",
-				FlexoLocalization.getMainLocalizer().localizedForKey("refreshing_resource_center") + " " + resourceCenter.toString(),
+				FlexoUILocalization.locales().localizedForKey("refreshing_resource_center") + " " + resourceCenter.toString(),
 				rcService.getServiceManager());
 		this.rcService = rcService;
 		this.resourceCenter = resourceCenter;

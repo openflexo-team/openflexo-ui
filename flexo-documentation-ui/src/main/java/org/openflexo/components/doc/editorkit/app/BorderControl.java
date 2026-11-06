@@ -13,6 +13,8 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import org.openflexo.components.doc.editorkit.BorderAttributes;
+import org.openflexo.localization.LocalizedSwing;
+import org.openflexo.components.doc.editorkit.DocumentEditorKitLocalization;
 
 /**
  * Contains border attributes properties. BorderColor and values.
@@ -23,24 +25,24 @@ public class BorderControl extends JPanel {
 
 	public JComboBox<Color> colorCombo;
 
-	public JCheckBox checkLeft = new JCheckBox("Left", true);
-	public JCheckBox checkRight = new JCheckBox("Right", true);
-	public JCheckBox checkTop = new JCheckBox("Top", true);
-	public JCheckBox checkBottom = new JCheckBox("Bottom", true);
-	public JCheckBox checkHorizontal = new JCheckBox("Horizontal", true);
-	public JCheckBox checkVertical = new JCheckBox("Vertical", true);
+	public JCheckBox checkLeft = LocalizedSwing.bind(new JCheckBox(DocumentEditorKitLocalization.locales().localizedForKey("left"), true), DocumentEditorKitLocalization.locales(), "left");
+	public JCheckBox checkRight = LocalizedSwing.bind(new JCheckBox(DocumentEditorKitLocalization.locales().localizedForKey("right"), true), DocumentEditorKitLocalization.locales(), "right");
+	public JCheckBox checkTop = LocalizedSwing.bind(new JCheckBox(DocumentEditorKitLocalization.locales().localizedForKey("top"), true), DocumentEditorKitLocalization.locales(), "top");
+	public JCheckBox checkBottom = LocalizedSwing.bind(new JCheckBox(DocumentEditorKitLocalization.locales().localizedForKey("bottom"), true), DocumentEditorKitLocalization.locales(), "bottom");
+	public JCheckBox checkHorizontal = LocalizedSwing.bind(new JCheckBox(DocumentEditorKitLocalization.locales().localizedForKey("horizontal"), true), DocumentEditorKitLocalization.locales(), "horizontal");
+	public JCheckBox checkVertical = LocalizedSwing.bind(new JCheckBox(DocumentEditorKitLocalization.locales().localizedForKey("vertical"), true), DocumentEditorKitLocalization.locales(), "vertical");
 
 	/**
 	 * Constructs new instance
 	 */
 	public BorderControl() {
 		super();
-		setBorder(new TitledBorder(new EtchedBorder(), "Borders:"));
+		setBorder(new TitledBorder(new EtchedBorder(), DocumentEditorKitLocalization.locales().localizedForKey("borders:")));
 
 		colorCombo = new JComboBox<>(new Color[] { Color.black, Color.red, Color.green, Color.blue, Color.white });
 		colorCombo.setRenderer(new ColorComboRenderer());
 		setLayout(new GridBagLayout());
-		add(new JLabel("Color"), new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE,
+		add(LocalizedSwing.bind(new JLabel(DocumentEditorKitLocalization.locales().localizedForKey("color")), DocumentEditorKitLocalization.locales(), "color"), new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE,
 				new Insets(0, 0, 0, 0), 0, 0));
 		add(colorCombo, new GridBagConstraints(1, 0, 1, 1, 1, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.BOTH,
 				new Insets(0, 0, 0, 0), 0, 0));

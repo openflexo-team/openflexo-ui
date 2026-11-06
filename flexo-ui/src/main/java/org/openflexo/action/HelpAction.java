@@ -46,6 +46,7 @@ import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionFactory;
 import org.openflexo.foundation.action.FlexoGUIAction;
+import org.openflexo.components.FlexoUILocalization;
 
 public class HelpAction extends FlexoGUIAction<HelpAction, FlexoObject, FlexoObject> {
 
@@ -87,7 +88,7 @@ public class HelpAction extends FlexoGUIAction<HelpAction, FlexoObject, FlexoObj
 			 String extClassName = getFocusedObject().getClass().getName();
 			 StringTokenizer st = new StringTokenizer(extClassName,".");
 			 while (st.hasMoreTokens()) shortClassName = st.nextToken();*/
-			return getLocales().localizedForKey("help_on") + " " + getLocales().localizedForKey(getFocusedObject().getClass().getName());
+			return FlexoUILocalization.locales().localizedForKey("help_on") + " " + getLocales().localizedForKey(getFocusedObject().getClass().getName());
 		}
 		return null;
 	}

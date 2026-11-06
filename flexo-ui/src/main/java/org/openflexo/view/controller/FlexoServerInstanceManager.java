@@ -48,11 +48,11 @@ import java.util.List;
 import org.jdom2.JDOMException;
 import org.openflexo.ApplicationContext;
 import org.openflexo.foundation.FlexoServiceImpl;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.pamela.exceptions.InvalidDataException;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.pamela.factory.PamelaModelFactory;
 import org.openflexo.toolbox.FileUtils;
+import org.openflexo.components.FlexoUILocalization;
 
 public class FlexoServerInstanceManager extends FlexoServiceImpl {
 
@@ -81,7 +81,7 @@ public class FlexoServerInstanceManager extends FlexoServiceImpl {
 		FlexoServerInstance other = factory.newInstance(FlexoServerInstance.class);
 		other.setID(FlexoServerInstance.OTHER_ID);
 		other.setName("Other");
-		other.setURL(FlexoLocalization.getMainLocalizer().localizedForKey("manual_entry"));
+		other.setURL(FlexoUILocalization.locales().localizedForKey("manual_entry"));
 		other.setWSURL("");
 		return other;
 	}

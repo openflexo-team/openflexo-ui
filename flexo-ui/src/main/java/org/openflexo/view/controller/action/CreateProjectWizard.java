@@ -56,6 +56,7 @@ import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.components.FlexoUILocalization;
 
 public class CreateProjectWizard extends FlexoActionWizard<CreateProject> {
 
@@ -124,7 +125,7 @@ public class CreateProjectWizard extends FlexoActionWizard<CreateProject> {
 				return false;
 			}
 			if (StringUtils.isEmpty(getProjectURI())) {
-				setIssueMessage(getAction().getLocales().localizedForKey("you_must_define_project_uri"), IssueMessageType.ERROR);
+				setIssueMessage(FlexoUILocalization.locales().localizedForKey("you_must_define_project_uri"), IssueMessageType.ERROR);
 				return false;
 			}
 			if (getAction().isDefaultProjectURI()) {

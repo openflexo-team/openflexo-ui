@@ -52,6 +52,7 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.components.FlexoUILocalization;
 
 public class CutActionInitializer extends ActionInitializer<CutAction, FlexoObject, FlexoObject> {
 	public static KeyStroke ACCELERATOR = KeyStroke.getKeyStroke(KeyEvent.VK_X, FlexoCst.META_MASK);
@@ -62,7 +63,7 @@ public class CutActionInitializer extends ActionInitializer<CutAction, FlexoObje
 
 	@Override
 	protected FlexoActionRunnable<CutAction, FlexoObject, FlexoObject> getDefaultInitializer() {
-		return (e, action) -> FlexoController.confirm(action.getLocales().localizedForKey("would_you_like_to_cut_those_objects"));
+		return (e, action) -> FlexoController.confirm(FlexoUILocalization.locales().localizedForKey("would_you_like_to_cut_those_objects"));
 	}
 
 	@Override

@@ -103,7 +103,7 @@ public class NewProjectComponent extends ProjectChooserComponent {
 					logger.warning("Invalid project name. The following characters are not allowed: "
 							+ FileUtils.BAD_CHARACTERS_FOR_FILE_NAME_REG_EXP);
 				}
-				FlexoController.notify(getLocales(applicationContext).localizedForKey("project_name_cannot_contain_\\___&_#_{_}_[_]_%_~"));
+				FlexoController.notify(FlexoUILocalization.locales().localizedForKey("project_name_cannot_contain_\\___&_#_{_}_[_]_%_~"));
 			}
 		}
 		else {

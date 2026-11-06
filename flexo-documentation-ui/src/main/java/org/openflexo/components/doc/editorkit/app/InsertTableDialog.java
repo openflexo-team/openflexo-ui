@@ -14,6 +14,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import org.openflexo.localization.LocalizedSwing;
+import org.openflexo.components.doc.editorkit.DocumentEditorKitLocalization;
 
 /**
  * This class constructs simple dialog for inserting tables.
@@ -55,7 +57,7 @@ public class InsertTableDialog extends JDialog {
 	 */
 	protected void init() {
 		setModal(true);
-		this.setTitle("Insert table dialog");
+		this.setTitle(DocumentEditorKitLocalization.locales().localizedForKey("insert_table_dialog", this));
 
 		Color[] colors = new Color[4];
 		colors[0] = Color.black;
@@ -65,11 +67,11 @@ public class InsertTableDialog extends JDialog {
 		cbColors = new JComboBox(colors);
 		cbColors.setRenderer(new ColorComboRenderer());
 		this.getContentPane().setLayout(new GridBagLayout());
-		this.getContentPane().add(new JLabel("Row count:"), new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.NORTHWEST,
+		this.getContentPane().add(LocalizedSwing.bind(new JLabel(DocumentEditorKitLocalization.locales().localizedForKey("row_count:")), DocumentEditorKitLocalization.locales(), "row_count:"), new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.NORTHWEST,
 				GridBagConstraints.NONE, new Insets(5, 5, 0, 0), 0, 0));
-		this.getContentPane().add(new JLabel("Column count:"), new GridBagConstraints(0, 1, 1, 1, 0, 0, GridBagConstraints.NORTHWEST,
+		this.getContentPane().add(LocalizedSwing.bind(new JLabel(DocumentEditorKitLocalization.locales().localizedForKey("column_count:")), DocumentEditorKitLocalization.locales(), "column_count:"), new GridBagConstraints(0, 1, 1, 1, 0, 0, GridBagConstraints.NORTHWEST,
 				GridBagConstraints.NONE, new Insets(0, 5, 0, 0), 0, 0));
-		this.getContentPane().add(new JLabel("Border color:"), new GridBagConstraints(0, 2, 1, 1, 0, 0, GridBagConstraints.NORTHWEST,
+		this.getContentPane().add(LocalizedSwing.bind(new JLabel(DocumentEditorKitLocalization.locales().localizedForKey("border_color:")), DocumentEditorKitLocalization.locales(), "border_color:"), new GridBagConstraints(0, 2, 1, 1, 0, 0, GridBagConstraints.NORTHWEST,
 				GridBagConstraints.NONE, new Insets(0, 5, 0, 0), 0, 0));
 
 		this.getContentPane().add(cbRowCount, new GridBagConstraints(1, 0, 2, 1, 1, 0, GridBagConstraints.NORTHWEST,
@@ -80,7 +82,7 @@ public class InsertTableDialog extends JDialog {
 				new Insets(0, 0, 0, 5), 0, 0));
 
 		JPanel p = new JPanel();
-		JButton b = new JButton("Ok");
+		JButton b = LocalizedSwing.bind(new JButton(DocumentEditorKitLocalization.locales().localizedForKey("ok")), DocumentEditorKitLocalization.locales(), "ok");
 		p.add(b);
 		ActionListener lst = new ActionListener() {
 			@Override
@@ -91,7 +93,7 @@ public class InsertTableDialog extends JDialog {
 		};
 		b.addActionListener(lst);
 
-		b = new JButton("Cancel");
+		b = LocalizedSwing.bind(new JButton(DocumentEditorKitLocalization.locales().localizedForKey("cancel")), DocumentEditorKitLocalization.locales(), "cancel");
 		lst = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

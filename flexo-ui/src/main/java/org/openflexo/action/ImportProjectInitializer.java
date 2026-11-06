@@ -60,6 +60,7 @@ import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.components.FlexoUILocalization;
 
 public class ImportProjectInitializer extends ActionInitializer<ImportProject, FlexoProjectObject<?>, FlexoProjectObject<?>> {
 	public ImportProjectInitializer(ControllerActionInitializer actionInitializer) {
@@ -81,7 +82,7 @@ public class ImportProjectInitializer extends ActionInitializer<ImportProject, F
 	protected FlexoActionRunnable<ImportProject, FlexoProjectObject<?>, FlexoProjectObject<?>> getDefaultFinalizer() {
 		return (event, action) -> {
 			if (action.hasActionExecutionSucceeded()) {
-				FlexoController.notify(action.getLocales().localizedForKey("successfully_imported_project") + " "
+				FlexoController.notify(FlexoUILocalization.locales().localizedForKey("successfully_imported_project") + " "
 						+ action.getProjectToImport().getProjectName());
 			}
 			return true;

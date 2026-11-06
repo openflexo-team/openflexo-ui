@@ -22,6 +22,8 @@ import org.openflexo.components.doc.editorkit.BorderAttributes;
 import org.openflexo.components.doc.editorkit.element.CellElement;
 import org.openflexo.components.doc.editorkit.element.RowElement;
 import org.openflexo.components.doc.editorkit.element.TableElement;
+import org.openflexo.localization.LocalizedSwing;
+import org.openflexo.components.doc.editorkit.DocumentEditorKitLocalization;
 
 /**
  * Represents dialog of table and table's elements properties. User can set table to reflect table's attributes. Row to reflect row's
@@ -40,9 +42,9 @@ public class TableProperties extends JDialog {
 	RowElement<?, ?> row = null;
 	CellElement<?, ?> cell = null;
 
-	JToggleButton alignLeft = new JToggleButton("Left");
-	JToggleButton alignCenter = new JToggleButton("Center");
-	JToggleButton alignRight = new JToggleButton("Right");
+	JToggleButton alignLeft = LocalizedSwing.bind(new JToggleButton(DocumentEditorKitLocalization.locales().localizedForKey("left")), DocumentEditorKitLocalization.locales(), "left");
+	JToggleButton alignCenter = LocalizedSwing.bind(new JToggleButton(DocumentEditorKitLocalization.locales().localizedForKey("center")), DocumentEditorKitLocalization.locales(), "center");
+	JToggleButton alignRight = LocalizedSwing.bind(new JToggleButton(DocumentEditorKitLocalization.locales().localizedForKey("right")), DocumentEditorKitLocalization.locales(), "right");
 
 	ButtonGroup group = new ButtonGroup();
 
@@ -60,7 +62,7 @@ public class TableProperties extends JDialog {
 	protected void init() {
 		getContentPane().setLayout(new GridBagLayout());
 		JPanel pAlign = new JPanel();
-		pAlign.setBorder(new TitledBorder(new EtchedBorder(), "Align:"));
+		pAlign.setBorder(new TitledBorder(new EtchedBorder(), DocumentEditorKitLocalization.locales().localizedForKey("align:")));
 		pAlign.add(alignLeft);
 		pAlign.add(alignCenter);
 		pAlign.add(alignRight);
@@ -74,11 +76,11 @@ public class TableProperties extends JDialog {
 		getContentPane().add(bc, new GridBagConstraints(0, 1, 1, 3, 1, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.BOTH,
 				new Insets(0, 0, 0, 0), 0, 0));
 
-		getContentPane().add(new JLabel("Width:"), new GridBagConstraints(1, 1, 1, 1, 0, 0, GridBagConstraints.NORTHEAST,
+		getContentPane().add(LocalizedSwing.bind(new JLabel(DocumentEditorKitLocalization.locales().localizedForKey("width:")), DocumentEditorKitLocalization.locales(), "width:"), new GridBagConstraints(1, 1, 1, 1, 0, 0, GridBagConstraints.NORTHEAST,
 				GridBagConstraints.NONE, new Insets(10, 0, 0, 0), 0, 0));
 		getContentPane().add(widthSpin, new GridBagConstraints(2, 1, 1, 1, 1, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.BOTH,
 				new Insets(10, 0, 0, 0), 0, 0));
-		getContentPane().add(new JLabel("Height:"), new GridBagConstraints(1, 2, 1, 1, 0, 0, GridBagConstraints.NORTHEAST,
+		getContentPane().add(LocalizedSwing.bind(new JLabel(DocumentEditorKitLocalization.locales().localizedForKey("height:")), DocumentEditorKitLocalization.locales(), "height:"), new GridBagConstraints(1, 2, 1, 1, 0, 0, GridBagConstraints.NORTHEAST,
 				GridBagConstraints.NONE, new Insets(0, 0, 10, 0), 0, 0));
 		getContentPane().add(heightSpin, new GridBagConstraints(2, 2, 1, 1, 1, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.BOTH,
 				new Insets(0, 0, 10, 0), 0, 0));
@@ -86,7 +88,7 @@ public class TableProperties extends JDialog {
 				new Insets(0, 0, 0, 0), 0, 0));
 
 		JPanel p = new JPanel(new GridLayout(1, 2));
-		JButton bOk = new JButton("Ok");
+		JButton bOk = LocalizedSwing.bind(new JButton(DocumentEditorKitLocalization.locales().localizedForKey("ok")), DocumentEditorKitLocalization.locales(), "ok");
 		p.add(bOk);
 		ActionListener lst = new ActionListener() {
 			@Override
@@ -97,7 +99,7 @@ public class TableProperties extends JDialog {
 		};
 		bOk.addActionListener(lst);
 
-		JButton bCancel = new JButton("Cancel");
+		JButton bCancel = LocalizedSwing.bind(new JButton(DocumentEditorKitLocalization.locales().localizedForKey("cancel")), DocumentEditorKitLocalization.locales(), "cancel");
 		p.add(bCancel);
 		lst = new ActionListener() {
 			@Override
@@ -123,7 +125,7 @@ public class TableProperties extends JDialog {
 	 *            table element
 	 */
 	public void setTable(Element el) {
-		setTitle("Table properties");
+		setTitle(DocumentEditorKitLocalization.locales().localizedForKey("table_properties", this));
 		table = (TableElement<?, ?>) el;
 		widthSpin.setValue(table.getWidth());
 		widthSpin.setEnabled(false);
@@ -160,7 +162,7 @@ public class TableProperties extends JDialog {
 	 *            row element
 	 */
 	public void setRow(Element el) {
-		setTitle("Row properties");
+		setTitle(DocumentEditorKitLocalization.locales().localizedForKey("row_properties", this));
 		row = (RowElement<?, ?>) el;
 		widthSpin.setValue(row.getWidth());
 		widthSpin.setEnabled(false);
@@ -182,7 +184,7 @@ public class TableProperties extends JDialog {
 	 *            cell element
 	 */
 	public void setCell(Element el) {
-		setTitle("Cell properties");
+		setTitle(DocumentEditorKitLocalization.locales().localizedForKey("cell_properties", this));
 		cell = (CellElement<?, ?>) el;
 		widthSpin.setValue(cell.getWidth());
 		widthSpin.setEnabled(true);

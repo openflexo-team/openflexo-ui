@@ -66,6 +66,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.ControllerModel;
+import org.openflexo.components.FlexoUILocalization;
 
 /**
  * This service manages modules<br>
@@ -507,8 +508,8 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, HasP
 				saveModifiedProjects();
 			} catch (SaveResourceExceptionList e) {
 				e.printStackTrace();
-				if (FlexoController.confirm(FlexoLocalization.getMainLocalizer().localizedForKey("error_during_saving") + "\n"
-						+ FlexoLocalization.getMainLocalizer().localizedForKey("would_you_like_to_exit_anyway"))) {
+				if (FlexoController.confirm(FlexoUILocalization.locales().localizedForKey("error_during_saving") + "\n"
+						+ FlexoUILocalization.locales().localizedForKey("would_you_like_to_exit_anyway"))) {
 					proceedQuitWithoutConfirmation();
 				}
 			}
@@ -549,15 +550,15 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, HasP
 		}
 
 		/*if (allowsDocSubmission() && !isAvailable(Module.DRE_MODULE) && DocResourceManager.instance().getSessionSubmissions().size() > 0) {
-		if (FlexoController.confirm(FlexoLocalization.localizedForKey("you_have_submitted_documentation_without_having_saved_report")
-				+ "\n" + FlexoLocalization.localizedForKey("would_you_like_to_save_your_submissions"))) {
+		if (FlexoController.confirm(FlexoUILocalization.locales().localizedForKey("you_have_submitted_documentation_without_having_saved_report")
+				+ "\n" + FlexoUILocalization.locales().localizedForKey("would_you_like_to_save_your_submissions"))) {
 			new ToolsMenu.SaveDocSubmissionAction().actionPerformed(null);
 		}
 		}
 		if (isAvailable(Module.DRE_MODULE)) {
 		if (DocResourceManager.instance().needSaving()) {
-			if (FlexoController.confirm(FlexoLocalization.localizedForKey("documentation_resource_center_not_saved") + "\n"
-					+ FlexoLocalization.localizedForKey("would_you_like_to_save_documenation_resource_center"))) {
+			if (FlexoController.confirm(FlexoUILocalization.locales().localizedForKey("documentation_resource_center_not_saved") + "\n"
+					+ FlexoUILocalization.locales().localizedForKey("would_you_like_to_save_documenation_resource_center"))) {
 				DocResourceManager.instance().save();
 			}
 		}

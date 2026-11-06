@@ -59,6 +59,7 @@ import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.components.FlexoUILocalization;
 
 public abstract class InteractiveProjectLoadingHandler implements ProjectLoadingHandler {
 
@@ -137,11 +138,11 @@ public abstract class InteractiveProjectLoadingHandler implements ProjectLoading
 			}
 			if (!GraphicsEnvironment.isHeadless()) {
 				JOptionPane.showMessageDialog(null,
-						FlexoLocalization.getMainLocalizer().localizedForKey("could_not_open_resource_manager_file") + "\n"
-								+ FlexoLocalization.getMainLocalizer().localizedForKey("to_avoid_damaging_the_project_flexo_will_exit")
-								+ "\n" + FlexoLocalization.getMainLocalizer().localizedForKey("error_is_caused_by_file") + " : '"
+						FlexoUILocalization.locales().localizedForKey("could_not_open_resource_manager_file") + "\n"
+								+ FlexoUILocalization.locales().localizedForKey("to_avoid_damaging_the_project_flexo_will_exit")
+								+ "\n" + FlexoUILocalization.locales().localizedForKey("error_is_caused_by_file") + " : '"
 								+ r.getFile().getAbsolutePath() + "'",
-						FlexoLocalization.getMainLocalizer().localizedForKey("error_during_opening_project"), JOptionPane.ERROR_MESSAGE);
+						FlexoUILocalization.locales().localizedForKey("error_during_opening_project"), JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}

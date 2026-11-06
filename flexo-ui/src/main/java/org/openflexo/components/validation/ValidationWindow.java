@@ -55,6 +55,7 @@ import org.openflexo.pamela.validation.ValidationModel;
 import org.openflexo.pamela.validation.ValidationReport;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.components.FlexoUILocalization;
 
 /**
  * Non-modal window displaying a {@link ValidationDialogPanel} for a {@link FlexoObject}<br>
@@ -73,7 +74,7 @@ public class ValidationWindow extends JDialog {
 	private boolean isDisposed = false;
 
 	public ValidationWindow(JFrame frame, FlexoController controller) {
-		super(frame, controller.getFlexoLocales().localizedForKey("validation"), ModalityType.MODELESS);
+		super(frame, FlexoUILocalization.locales().localizedForKey("validation"), ModalityType.MODELESS);
 		this.controller = controller;
 		validationPanel = new FlexoValidationPanel(null, controller.getApplicationContext(), FlexoLocalization.getMainLocalizer());
 		getContentPane().add(validationPanel);

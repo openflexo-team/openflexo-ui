@@ -51,13 +51,13 @@ import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.gina.model.FIBComponent;
 import org.openflexo.gina.view.GinaViewFactory;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.LoadModuleTask;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.NatureSpecificModule;
 import org.openflexo.project.InteractiveProjectLoader;
+import org.openflexo.components.FlexoUILocalization;
 
 public class WelcomePanelController extends FlexoFIBController {
 
@@ -101,7 +101,7 @@ public class WelcomePanelController extends FlexoFIBController {
 			validateAndDispose();
 		} catch (ModuleLoadingException e) {
 			e.printStackTrace();
-			FlexoController.notify(FlexoLocalization.getMainLocalizer().localizedForKey("could_not_load_module") + " " + e.getModule());
+			FlexoController.notify(FlexoUILocalization.locales().localizedForKey("could_not_load_module") + " " + e.getModule());
 			show();
 		}
 	}
@@ -123,7 +123,7 @@ public class WelcomePanelController extends FlexoFIBController {
 			loadModuleTask = getModuleLoader().switchToModule(module);
 		} catch (ModuleLoadingException e) {
 			e.printStackTrace();
-			FlexoController.notify(FlexoLocalization.getMainLocalizer().localizedForKey("could_not_load_module") + " " + e.getModule());
+			FlexoController.notify(FlexoUILocalization.locales().localizedForKey("could_not_load_module") + " " + e.getModule());
 			show();
 		}
 
@@ -147,7 +147,7 @@ public class WelcomePanelController extends FlexoFIBController {
 			loadModuleTask = getModuleLoader().switchToModule(module);
 		} catch (ModuleLoadingException e) {
 			e.printStackTrace();
-			FlexoController.notify(FlexoLocalization.getMainLocalizer().localizedForKey("could_not_load_module") + " " + e.getModule());
+			FlexoController.notify(FlexoUILocalization.locales().localizedForKey("could_not_load_module") + " " + e.getModule());
 			show();
 		}
 

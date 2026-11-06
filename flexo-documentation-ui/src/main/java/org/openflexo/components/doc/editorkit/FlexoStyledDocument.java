@@ -244,7 +244,7 @@ public class FlexoStyledDocument<D extends FlexoDocument<D, TA>, TA extends Tech
 			insertString(pos, " ", attrs);
 		} catch (BadLocationException e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Can't insert image!");
+			JOptionPane.showMessageDialog(null, DocumentEditorKitLocalization.locales().localizedForKey("cant_insert_image"));
 		}
 	}
 
@@ -284,7 +284,7 @@ public class FlexoStyledDocument<D extends FlexoDocument<D, TA>, TA extends Tech
 				this.fireRemoveUpdate(e);
 			} catch (Exception ex) {
 				ex.printStackTrace();
-				JOptionPane.showMessageDialog(null, "Can't delete table! " + ex.getMessage());
+				JOptionPane.showMessageDialog(null, DocumentEditorKitLocalization.locales().localizedForKey("cant_delete_table") + " " + ex.getMessage());
 			}
 		}
 	}
@@ -331,7 +331,7 @@ public class FlexoStyledDocument<D extends FlexoDocument<D, TA>, TA extends Tech
 				this.fireRemoveUpdate(e);
 			} catch (Exception ex) {
 				ex.printStackTrace();
-				JOptionPane.showMessageDialog(null, "Can't delete row! " + ex.getMessage());
+				JOptionPane.showMessageDialog(null, DocumentEditorKitLocalization.locales().localizedForKey("cant_delete_row") + " " + ex.getMessage());
 			}
 		}
 	}

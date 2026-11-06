@@ -66,6 +66,8 @@ import org.openflexo.inspector.ModuleInspectorController.MultipleSelectionActiva
 import org.openflexo.inspector.ModuleInspectorController.NewInspectorsLoaded;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.FlexoFIBController;
+import org.openflexo.localization.LocalizedSwing;
+import org.openflexo.components.FlexoUILocalization;
 
 /**
  * Represent a {@link JPanel} showing inspector for the selection managed by an instance of ModuleInspectorController
@@ -102,9 +104,9 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 		resetViews();
 
 		EMPTY_CONTENT = new JPanel(new BorderLayout());
-		EMPTY_CONTENT.add(new JLabel("No selection", SwingConstants.CENTER), BorderLayout.CENTER);
+		EMPTY_CONTENT.add(LocalizedSwing.bind(new JLabel(FlexoUILocalization.locales().localizedForKey("no_selection"), SwingConstants.CENTER), FlexoUILocalization.locales(), "no_selection"), BorderLayout.CENTER);
 		MULTIPLE_SELECTION_CONTENT = new JPanel(new BorderLayout());
-		MULTIPLE_SELECTION_CONTENT.add(new JLabel("Multiple selection", SwingConstants.CENTER), BorderLayout.CENTER);
+		MULTIPLE_SELECTION_CONTENT.add(LocalizedSwing.bind(new JLabel(FlexoUILocalization.locales().localizedForKey("multiple_selection"), SwingConstants.CENTER), FlexoUILocalization.locales(), "multiple_selection"), BorderLayout.CENTER);
 
 		switchToEmptyContent();
 
@@ -121,7 +123,7 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 
 		/*for (Class<?> c : inspectorController.getInspectors().keySet()) {
 			JFIBInspector inspector = inspectorController.getInspectors().get(c);
-			FIBViewImpl<?, ?, ?> inspectorView = FIBController.makeView(inspector, FlexoLocalization.getMainLocalizer());
+			FIBViewImpl<?, ?, ?> inspectorView = FIBController.makeView(inspector, FlexoUILocalization.locales());
 			FlexoLocalization.addToLocalizationListeners(inspectorView);
 			inspectorViews.put(inspector, inspectorView);
 			if (logger.isLoggable(Level.FINE)) {

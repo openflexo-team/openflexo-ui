@@ -76,6 +76,7 @@ import org.openflexo.terminal.FMLTerminal;
 import org.openflexo.view.FMLConsoleViewer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.ControllerModel;
+import org.openflexo.components.FlexoUILocalization;
 
 /**
  * Automatic builded 'Tools' menu for modules
@@ -717,8 +718,8 @@ public class ToolsMenu extends FlexoMenu {
 				autoSaveService.showTimeTravelerDialog();
 			}
 			else {
-				if (FlexoController.confirm(FlexoLocalization.getMainLocalizer().localizedForKey("time_traveling_is_disabled") + ". "
-						+ FlexoLocalization.getMainLocalizer().localizedForKey("would_you_like_to_activate_it_now?"))) {
+				if (FlexoController.confirm(FlexoUILocalization.locales().localizedForKey("time_traveling_is_disabled") + ". "
+						+ FlexoUILocalization.locales().localizedForKey("would_you_like_to_activate_it_now?"))) {
 					getController().getApplicationContext().getGeneralPreferences().setAutoSaveEnabled(true);
 					getController().getApplicationContext().getPreferencesService().savePreferences();
 					getAutoSaveService().showTimeTravelerDialog();

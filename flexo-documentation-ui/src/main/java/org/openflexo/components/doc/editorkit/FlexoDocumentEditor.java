@@ -77,6 +77,7 @@ import org.openflexo.foundation.doc.TextSelection;
 import org.openflexo.foundation.doc.TextSelection.TextMarker;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
+import org.openflexo.localization.LocalizedSwing;
 
 /**
  * A Wysiwyg editor for {@link FlexoDocument} API
@@ -241,9 +242,9 @@ public class FlexoDocumentEditor<D extends FlexoDocument<D, TA>, TA extends Tech
 			this.add(toolBar, BorderLayout.NORTH);
 			this.add(new JScrollPane(jEditorPane), BorderLayout.CENTER);
 			infoBar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-			writableLabel = new JLabel("Writable");
+			writableLabel = LocalizedSwing.bind(new JLabel(DocumentEditorKitLocalization.locales().localizedForKey("writable")), DocumentEditorKitLocalization.locales(), "writable");
 			writableLabel.setFont(FlexoCst.SMALL_FONT);
-			modeLabel = new JLabel("Smart Insert");
+			modeLabel = LocalizedSwing.bind(new JLabel(DocumentEditorKitLocalization.locales().localizedForKey("smart_insert")), DocumentEditorKitLocalization.locales(), "smart_insert");
 			modeLabel.setFont(FlexoCst.SMALL_FONT);
 			textSelectionLabel = new JLabel();
 			textSelectionLabel.setFont(FlexoCst.SMALL_FONT);

@@ -58,6 +58,7 @@ import org.openflexo.task.FlexoApplicationTask;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.components.FlexoUILocalization;
 
 /**
  * Task that opens the bug report form and, once validated, delegates submission to
@@ -104,7 +105,7 @@ public class SendBugReportServiceTask extends FlexoApplicationTask {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 			FlexoController
-					.showError(serviceManager.getLocalizationService().getFlexoLocalizer().localizedForKey("cannot_open_bug_report_dialog")
+					.showError(FlexoUILocalization.locales().localizedForKey("cannot_open_bug_report_dialog")
 							+ ": " + e1.getMessage());
 		}
 	}

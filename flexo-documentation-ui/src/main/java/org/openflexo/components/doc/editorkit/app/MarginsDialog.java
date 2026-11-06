@@ -12,6 +12,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import org.openflexo.localization.LocalizedSwing;
+import org.openflexo.components.doc.editorkit.DocumentEditorKitLocalization;
 
 
 /**
@@ -51,13 +53,13 @@ public class MarginsDialog extends JDialog {
      */
     protected void init() {
         setModal(true);
-        this.setTitle("Document margins");
+        this.setTitle(DocumentEditorKitLocalization.locales().localizedForKey("document_margins", this));
 
         this.getContentPane().setLayout(new GridBagLayout());
-        this.getContentPane().add(new JLabel("Top:"),new GridBagConstraints(0,0,1,1,0,0,GridBagConstraints.NORTHWEST,GridBagConstraints.NONE,new Insets(5,5,0,0),0,0));
-        this.getContentPane().add(new JLabel("Bottom:"),new GridBagConstraints(0,1,1,1,0,0,GridBagConstraints.NORTHWEST,GridBagConstraints.NONE,new Insets(0,5,0,0),0,0));
-        this.getContentPane().add(new JLabel("Left:"),new GridBagConstraints(0,2,1,1,0,0,GridBagConstraints.NORTHWEST,GridBagConstraints.NONE,new Insets(0,5,0,0),0,0));
-        this.getContentPane().add(new JLabel("Right:"),new GridBagConstraints(0,3,1,1,0,0,GridBagConstraints.NORTHWEST,GridBagConstraints.NONE,new Insets(0,5,0,0),0,0));
+        this.getContentPane().add(LocalizedSwing.bind(new JLabel(DocumentEditorKitLocalization.locales().localizedForKey("top:")), DocumentEditorKitLocalization.locales(), "top:"),new GridBagConstraints(0,0,1,1,0,0,GridBagConstraints.NORTHWEST,GridBagConstraints.NONE,new Insets(5,5,0,0),0,0));
+        this.getContentPane().add(LocalizedSwing.bind(new JLabel(DocumentEditorKitLocalization.locales().localizedForKey("bottom:")), DocumentEditorKitLocalization.locales(), "bottom:"),new GridBagConstraints(0,1,1,1,0,0,GridBagConstraints.NORTHWEST,GridBagConstraints.NONE,new Insets(0,5,0,0),0,0));
+        this.getContentPane().add(LocalizedSwing.bind(new JLabel(DocumentEditorKitLocalization.locales().localizedForKey("left:")), DocumentEditorKitLocalization.locales(), "left:"),new GridBagConstraints(0,2,1,1,0,0,GridBagConstraints.NORTHWEST,GridBagConstraints.NONE,new Insets(0,5,0,0),0,0));
+        this.getContentPane().add(LocalizedSwing.bind(new JLabel(DocumentEditorKitLocalization.locales().localizedForKey("right:")), DocumentEditorKitLocalization.locales(), "right:"),new GridBagConstraints(0,3,1,1,0,0,GridBagConstraints.NORTHWEST,GridBagConstraints.NONE,new Insets(0,5,0,0),0,0));
 
         this.getContentPane().add(top,new GridBagConstraints(1,0,2,1,1,0,GridBagConstraints.NORTHWEST,GridBagConstraints.BOTH,new Insets(5,0,0,5),0,0));
         this.getContentPane().add(bottom,new GridBagConstraints(1,1,2,1,1,0,GridBagConstraints.NORTHWEST,GridBagConstraints.BOTH,new Insets(0,0,0,5),0,0));
@@ -65,7 +67,7 @@ public class MarginsDialog extends JDialog {
         this.getContentPane().add(right,new GridBagConstraints(1,3,2,1,1,0,GridBagConstraints.NORTHWEST,GridBagConstraints.BOTH,new Insets(0,0,0,5),0,0));
 
         JPanel p=new JPanel();
-        JButton b=new JButton("Ok");
+        JButton b=LocalizedSwing.bind(new JButton(DocumentEditorKitLocalization.locales().localizedForKey("ok")), DocumentEditorKitLocalization.locales(), "ok");
         p.add(b);
         ActionListener lst=new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -75,7 +77,7 @@ public class MarginsDialog extends JDialog {
         };
         b.addActionListener(lst);
 
-        b=new JButton("Cancel");
+        b=LocalizedSwing.bind(new JButton(DocumentEditorKitLocalization.locales().localizedForKey("cancel")), DocumentEditorKitLocalization.locales(), "cancel");
         lst=new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         option=JOptionPane.CANCEL_OPTION;

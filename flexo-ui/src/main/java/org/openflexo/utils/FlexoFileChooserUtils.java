@@ -48,6 +48,7 @@ import javax.swing.filechooser.FileView;
 
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.components.FlexoUILocalization;
 
 public class FlexoFileChooserUtils {
 
@@ -63,7 +64,7 @@ public class FlexoFileChooserUtils {
 	
 		@Override
 		public String getDescription() {
-			return FlexoLocalization.localizedForKey("flexo_palettes");
+			return FlexoUILocalization.locales().localizedForKey("flexo_palettes");
 		}
 	
 	}*/
