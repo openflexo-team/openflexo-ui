@@ -127,9 +127,9 @@ public abstract class InteractiveProjectLoadingHandler implements ProjectLoading
 			FileIODelegate r = (FileIODelegate) (resource.getIODelegate());
 			if (e.getMessage().indexOf("JDOMParseException") > -1 && !GraphicsEnvironment.isHeadless()) {
 				JOptionPane.showMessageDialog(null,
-						"Could not load project: file '" + r.getFile().getAbsolutePath() + "' contains invalid XML!\n" + e.getMessage()
+						FlexoUILocalization.locales().localizedForKeyWithParams("could_not_load_project_file_($0)_contains_invalid_xml", r.getFile().getAbsolutePath()) + "\n" + e.getMessage()
 								.substring(e.getMessage().indexOf("JDOMParseException") + 20, e.getMessage().indexOf("StackTrace") - 1),
-						"XML error", JOptionPane.ERROR_MESSAGE);
+						FlexoUILocalization.locales().localizedForKey("xml_error"), JOptionPane.ERROR_MESSAGE);
 
 			}
 			e.printStackTrace();
