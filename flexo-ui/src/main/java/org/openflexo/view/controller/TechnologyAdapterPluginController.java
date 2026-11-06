@@ -118,9 +118,11 @@ public abstract class TechnologyAdapterPluginController<TA extends TechnologyAda
 	}
 
 	private void initLocales() {
-		locales = new LocalizedDelegateImpl(ResourceLocator.locateResource(getLocalizationDirectory()),
+		LocalizedDelegateImpl pluginLocales = new LocalizedDelegateImpl(ResourceLocator.locateResource(getLocalizationDirectory()),
 				getServiceManager().getLocalizationService().getFlexoLocalizer(),
 				getServiceManager().getLocalizationService().getAutomaticSaving(), true);
+		pluginLocales.setContext("plugin:" + getClass().getSimpleName());
+		locales = pluginLocales;
 	}
 
 	protected abstract String getLocalizationDirectory();

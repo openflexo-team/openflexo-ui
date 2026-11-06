@@ -37,6 +37,32 @@ Status legend: `TODO` · `IN PROGRESS` · `BLOCKED` · `DONE` · `DEFERRED`.
 - before the Welcome: about 8 s building the GINA FIB editor (palettes, inspectors) that nobody asked for, about 4.7 s activating the FML technology (resource center scan);
 - Welcome → module opened: 12.3 s in `LoadModuleTask`, 78 % of it in `TechnologyAdapterController.activate`, mostly the Diana inspectors built in advance by the Diagram technology adapter controller.
 
+**Inventory of the long tasks** (2026-11-06). How to measure and treat one: the `long-task-progress` Claude skill. *Timed* = progress replayed from the previous execution; *counted* = the former counted steps.
+
+| Long task | Where | Runs on | Progress now | State |
+|---|---|---|---|---|
+| Startup, before the Welcome | `Flexo.main`, `ApplicationContext` | main | timed, on the splash (`Startup`) | DONE (24 s → 15 s) |
+| Loading a module | `LoadModuleTask` | task | timed (`LoadModule.<module>`) | DONE (FME 15.8 s → 13.2 s) |
+| Loading a project | `LoadProjectTask`, `ProjectLoader` | task | timed (`LoadProject.<module>.<project>`) | DONE (FME 9.0 s → 6.2 s) |
+| Opening a project from the menus / a module welcome panel | `FileMenu`, `FlexoModule.WelcomePanelImpl` | was EDT, now task | timed | DONE |
+| Validation of loaded FML / FML-RT resources | `FMLTechnologyAdapterController`, `FMLRTTechnologyAdapterController` | background task (hidden) | none (hidden) | DONE |
+| Opening a free model diagram (fme-diagram) | `DiagramFMEExtension.createModuleView` | EDT (Swing/Diana) | none possible | DEFERRED: ~2.5 s fixed cost for 4 shapes (editor, tools, palettes) |
+| Opening a slideshow / a PowerPoint free model | `PowerpointSlideshowView` | EDT (Swing/Diana) | none possible | DONE by removing waste (PPTX-F-7, 7.6 s → 3.7 s) |
+| Adding / removing / refreshing a resource center | `AddResourceCenterTask`, `RemoveResourceCenterTask`, `RefreshResourceCenterTask` | task | counted (announced steps wrong) | TODO |
+| Activating / deactivating a technology adapter | `ActivateTechnologyAdapterTask`, `DisactivateTechnologyAdapterTask` | task | counted | TODO |
+| Creating a project, giving it a nature | `NewProjectTask`, `Gives*NatureInitializer` (FME, EA, formod, xxx) | task | counted | TODO |
+| Restoring an auto-saved project | `AutoSaveService` | ? | counted | TODO (check the thread) |
+| Validating on demand, revalidating | `ValidationTask`, `RevalidationTask`, `ValidateProject` | task | counted (from validation events) | TODO |
+| FML creation actions | `CreateTopLevelVirtualModel`, `CreateContainedVirtualModel`, `AbstractCreateFlexoConcept`, `CreateFlexoBehaviour`, `CreateFMLControlled{Diagram,FIB}VirtualModel`, `CreateJDBCVirtualModel`, formod `ImportDocXDocument` (`LongRunningAction`) | task | counted | TODO |
+| FML long-running action schemes | `LongRunningActionSchemeAction`, `NotifyProgressAction` (user FML) | task | counted, driven by the FML | TODO (keep driven by FML) |
+| Loading a resource on demand | `LoadResourceAction`; pdf, docx, markdown resources | task | one step | TODO |
+| Opening the FIB editor of a component / of a FML-controlled view | `LoadFIBEditor` (gina-ta-ui, `FMLGINAPlugin`), `OpenFIBEditor` | task | indeterminate | TODO |
+| Loading the editor of a selector widget | `LoadEditor` (doc image / fragment / table selectors, `FIBCellRangeSelector`) | task | indeterminate | TODO |
+| Selecting and focusing an object | `SelectAndFocusObjectTask` | task | indeterminate | TODO (probably to hide) |
+| Bug report service, sending a report | `ActivateBugReportServiceTask`, `SendBugReportServiceTask` | task | counted | TODO |
+| Retrieving REST objects | `RestObjectRetrieverTask` (rest-ta) | task | indeterminate | TODO |
+| Saving, closing, unloading a project | save actions, `InteractiveProjectLoader` | probably EDT, no task | none | TODO (measure first) |
+
 **Done.**
 - The application FIB editor is built on first use (Tools menu, Alt+click on a component), no longer at startup: the Welcome appears after 15 s instead of 24 s.
 - Progress linear in time, replayed from the previous execution (flexo-foundation, `ProgressHistory`): a `FlexoTask` that returns a `getProgressHistoryKey()` records its milestones (its `Progress.progress(name)` calls) with their times, in `<application data directory>/ProgressHistory/<key>.properties`. The next execution sets its bar, at each milestone reached again, at the fraction of the total duration it had the previous time, and moves it with time in between; the bar never goes back and stays below 99 % until the end. Without history, the bar tends towards 100 % along `getDefaultExpectedDuration()`. Tasks without a key keep their counted steps.
@@ -54,7 +80,7 @@ Status legend: `TODO` · `IN PROGRESS` · `BLOCKED` · `DONE` · `DEFERRED`.
 - Other modules (Openflexo Modeller, the EA editor, formod): check what their views load in the event dispatch thread when a project is shown, and override `loadProjectContents` if needed.
 - A project opened from the command line (`Flexo.main`) may start loading before its module is active: no preloading then, and a history without module.
 - Default histories shipped with the application, for the first execution (not through `ResourceLocator.locateResource`, which prints a stack trace for every resource it does not find).
-- The other long tasks (resource centers, technology activation, validation, FML creation actions).
+- The rows `TODO` of the inventory.
 - The Diana inspector panel of the Diagram controller (`JDianaInspectors`, shown at the bottom right of diagram views) is still built at module loading: most of the 4.7 s spent before the first Diagram inspector (13.2 s for the whole loading of the Free Modelling Editor). Building it on demand would move this cost to the opening of the first diagram, in the event dispatch thread.
 
 **Acceptance.** Between the Welcome and the opened module, and while a project loads, the bar moves forward without going back, and in near-linear time from the second execution on.
