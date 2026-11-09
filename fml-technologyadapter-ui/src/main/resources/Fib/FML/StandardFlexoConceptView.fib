@@ -34,7 +34,6 @@
 				dataClassName="org.openflexo.foundation.fml.FlexoConcept" icon="controller.iconForObject(flexoConcept)"
 				label="flexoConcept.name" editableLabel="flexoConcept.name"
 				isEditable="false" name="flexoConcept">
-				<Children id="8" data="flexoConcept.inspector" name="inspector" />
 				<Children id="9" data="flexoConcept.structuralFacet" name="structural" />
 				<Children id="10" data="flexoConcept.behaviouralFacet"
 					name="behavioural" />
@@ -204,13 +203,6 @@
 					method="controller.createEditionAction(selected)" name="add_action" />
 				<BrowserRemoveAction id="58"
 					method="controller.deleteFlexoConceptObject(selected)" name="delete_action" />
-			</BrowserElement>
-			<BrowserElement id="59"
-				dataClassName="org.openflexo.foundation.fml.inspector.FlexoConceptInspector"
-				icon="controller.iconForObject(inspector)" label="&quot;Inspector&quot;"
-				isEditable="false" name="inspector">
-				<BrowserAddAction id="60"
-					method="controller.createInspectorEntry(selected)" name="add_inspector_entry" />
 			</BrowserElement>
 			<BrowserElement id="61"
 				dataClassName="org.openflexo.foundation.fml.controlgraph.ControlStructureAction"
@@ -386,12 +378,6 @@
 			key="add_action_in_else_control_graph" />
 		<Localized id="116" lang="French" value="Ajouter une action dans le graphe de contrôle else"
 			key="add_action_in_else_control_graph" />
-		<Localized id="117" lang="English" value="Add inspector entry"
-			key="add_inspector_entry" />
-		<Localized id="118" lang="Dutch" value="Inspecteurinvoer toevoegen"
-			key="add_inspector_entry" />
-		<Localized id="119" lang="French" value="Ajouter une entrée d'inspecteur"
-			key="add_inspector_entry" />
 		<Localized id="120" lang="English" value="New technology role"
 			key="new_technology_role" />
 		<Localized id="121" lang="Dutch" value="Nieuwe technologierol"

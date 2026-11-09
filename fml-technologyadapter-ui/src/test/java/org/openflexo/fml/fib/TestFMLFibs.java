@@ -55,11 +55,6 @@ public class TestFMLFibs extends GenericFIBTestCase {
 	}
 
 	@Test
-	public void testFlexoConceptInspectorPanel() {
-		validateFIB("Fib/FML/FlexoConceptInspectorPanel.fib");
-	}
-
-	@Test
 	public void testFlexoConceptPanel() {
 		validateFIB("Fib/FML/FlexoConceptPanel.fib");
 	}

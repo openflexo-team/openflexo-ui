@@ -85,8 +85,6 @@ import org.openflexo.foundation.fml.editionaction.LogAction;
 import org.openflexo.foundation.fml.editionaction.NotifyProgressAction;
 import org.openflexo.foundation.fml.editionaction.NotifyPropertyChangedAction;
 import org.openflexo.foundation.fml.editionaction.TechnologySpecificAction;
-import org.openflexo.foundation.fml.inspector.FlexoConceptInspector;
-import org.openflexo.foundation.fml.inspector.InspectorEntry;
 import org.openflexo.foundation.fml.rm.CompilationUnitResource;
 import org.openflexo.foundation.fml.rt.editionaction.FinalizeMatching;
 import org.openflexo.foundation.fml.rt.editionaction.InitiateMatching;
@@ -367,9 +365,6 @@ public class FMLIconLibrary extends IconLibrary {
 				return tac.getIconForFlexoRole((Class<? extends FlexoRole<?>>) object.getClass());
 			}
 		}
-		else if (object instanceof FlexoConceptInspector) {
-			return INSPECT_ICON;
-		}
 		else if (object instanceof AbstractInvariant) {
 			return CONSTRAINT_ICON;
 		}
@@ -514,23 +509,6 @@ public class FMLIconLibrary extends IconLibrary {
 		}
 		else if (object instanceof FlexoRole) {
 			return FLEXO_ROLE_ICON;
-		}
-		else if (object instanceof InspectorEntry) {
-			InspectorEntry entry = (InspectorEntry) object;
-			if (TypeUtils.isString(entry.getType())) {
-				return FMLIconLibrary.STRING_PRIMITIVE_ICON;
-			}
-			if (TypeUtils.isBoolean(entry.getType())) {
-				return FMLIconLibrary.BOOLEAN_PRIMITIVE_ICON;
-			}
-			if (TypeUtils.isInteger(entry.getType()) || TypeUtils.isLong(entry.getType()) || TypeUtils.isShort(entry.getType())
-					|| TypeUtils.isByte(entry.getType())) {
-				return FMLIconLibrary.INTEGER_PRIMITIVE_ICON;
-			}
-			if (TypeUtils.isFloat(entry.getType()) || TypeUtils.isDouble(entry.getType())) {
-				return FMLIconLibrary.DOUBLE_PRIMITIVE_ICON;
-			}
-			return FLEXO_CONCEPT_PARAMETER_ICON;
 		}
 		else if (object instanceof TechnologyObject) {
 			return FlexoController.statelessIconForTechnologyObject((TechnologyObject<?>) object);

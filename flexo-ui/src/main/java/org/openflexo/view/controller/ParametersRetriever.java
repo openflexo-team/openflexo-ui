@@ -114,9 +114,7 @@ public class ParametersRetriever<ES extends FlexoBehaviour> {
 				applicationContext.getModuleLoader().getActiveModule().getFlexoFrame(), true, new ParametersRetrieverController(component,
 						SwingViewFactory.INSTANCE, applicationContext.getModuleLoader().getActiveModule().getController()));
 		dialog.setTitle(action.getLocalizedName());
-		if (!action.getFlexoBehaviour().getDefinePopupDefaultSize()) {
-			dialog.setMinimumSize(new Dimension(500, 50));
-		}
+		dialog.setMinimumSize(new Dimension(500, 50));
 
 		dialog.showDialog();
 		return dialog.getStatus() == Status.VALIDATED;
@@ -171,11 +169,6 @@ public class ParametersRetriever<ES extends FlexoBehaviour> {
 		returned.setBorderRight(10);
 		returned.setBorderLeft(10);
 		returned.setControllerClass(ParametersRetrieverController.class);
-
-		if (flexoBehaviour.getDefinePopupDefaultSize()) {
-			returned.setMinWidth(flexoBehaviour.getWidth());
-			returned.setMinHeight(flexoBehaviour.getHeight());
-		}
 
 		LocalizedDelegate dict = flexoBehaviour.getDeclaringCompilationUnit().getLocalizedDictionary();
 

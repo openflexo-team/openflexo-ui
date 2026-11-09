@@ -21,27 +21,6 @@
 			<TextField index="5" data="data.resource.version.toString"
 				constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)"
 				name="Version" readOnly="true" localize="true" columns="10" /> -->
-			<!--  <Label label="uses" index="6" data=""
-				constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)"
-				localize="true" />
-			<Table
-			    lookAndFeel="FlatDesign" showHeader="false"
-				iteratorClassName="org.openflexo.foundation.technologyadapter.UseModelSlotDeclaration"
-				autoSelectFirstRow="false" createNewRowOnClick="false"
-				boundToSelectionManager="true" showFooter="true"
-				selectionMode="MultipleIntervalSelection" name="UsesTable" index="7"
-				data="data.useDeclarations" localize="true"
-				constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)">
-				<IconColumn data="controller.iconForObject(iterator)"
-					title="icon" columnWidth="25" resizable="false"
-					displayTitle="false" name="icon" />
-				<LabelColumn data="iterator.modelSlotClass.simpleName" title="model_slot_class"
-					columnWidth="50" resizable="true" displayTitle="true" name="label" />
-				<RemoveAction method="data.removeFromUseDeclarations(selected)"
-					name="deleteUseDeclarations" />
-				<AddAction method="controller.addToUseDeclarations(data)"
-					name="addToUseDeclarations" />
-			</Table>-->
 			<!--  <Label label="model_slot_nature" index="8" visible="data.useDeclarations.size &gt; 0"
 				constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)"
 				localize="true" />

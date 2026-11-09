@@ -52,9 +52,9 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionFactory;
 import org.openflexo.foundation.fml.FMLCompilationUnit;
 import org.openflexo.foundation.fml.FMLObject;
+import org.openflexo.foundation.fml.FlexoBehaviourParameter;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.FlexoProperty;
-import org.openflexo.foundation.fml.inspector.InspectorEntry;
 import org.openflexo.foundation.fml.rm.CompilationUnitResource;
 import org.openflexo.foundation.fml.rm.FIBComponentResource;
 import org.openflexo.foundation.fml.rm.FIBComponentResourceFactory;
@@ -88,9 +88,9 @@ import org.openflexo.view.controller.TechnologyAdapterControllerService;
  * <p>
  * The widget of a property is not chosen here: each {@link TechnologyAdapterController} is asked in turn, and the first to answer wins -
  * which is how a technology adapter contributes its own selectors (a VirtualModelInstance, a FlexoConcept, an ontology individual…) rather
- * than a bare text field. That call takes a <code>WidgetContext</code>, and the only implementation of it is the deprecated
- * {@link InspectorEntry}: these actions therefore build throwaway entries, use them as scaffolding, and discard them. They are never
- * attached to the concept and never serialized.
+ * than a bare text field. That call takes a <code>WidgetContext</code>: these actions therefore build a throwaway
+ * {@link FlexoBehaviourParameter} carrying the name and widget kind of each property, use it as scaffolding, and discard it. It is never
+ * attached to a behaviour and never serialized.
  *
  * <p>
  * What differs between the two actions - a tabbed layout for an inspector, a named variant for a component - is declared here with neutral
@@ -364,21 +364,19 @@ public abstract class AbstractCreateFIBComponent<A extends AbstractCreateFIBComp
 	 * gets that technology's own selector.
 	 *
 	 * <p>
-	 * The {@link InspectorEntry} built here is scaffolding: it exists only to carry the label, type and widget kind into
-	 * {@link TechnologyAdapterController#makeWidget}, whose parameter type has no other implementation. It is never added to the concept.
+	 * The {@link FlexoBehaviourParameter} built here is scaffolding: it exists only to carry the name and widget kind into
+	 * {@link TechnologyAdapterController#makeWidget}. It is never added to a behaviour.
 	 */
 	private FIBWidget makeWidget(InspectorEntryConfiguration entry, FIBModelFactory factory, boolean[] expand, FlexoConcept concept) {
 
-		InspectorEntry scaffolding = concept.getFMLModelFactory().newInspectorEntry();
+		FlexoBehaviourParameter scaffolding = concept.getFMLModelFactory().newInstance(FlexoBehaviourParameter.class);
 		try {
 			scaffolding.setName(entry.getPropertyName());
 		} catch (InvalidNameException e) {
 			// The property name is already a valid FML identifier; nothing to recover from
 			logger.log(Level.FINE, "Unexpected invalid name " + entry.getPropertyName(), e);
 		}
-		scaffolding.setLabel(entry.getLabel());
 		scaffolding.setWidget(entry.getWidget());
-		scaffolding.setData(new DataBinding<>(entry.getPropertyName()));
 
 		// Raw type deliberately, as ModuleInspectorController does: the static accessor is parameterized on the adapter's
 		// own type, which a wildcard cannot satisfy

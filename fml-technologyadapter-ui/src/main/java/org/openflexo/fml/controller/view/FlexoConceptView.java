@@ -52,7 +52,6 @@ import org.openflexo.foundation.fml.controlgraph.FMLControlGraph;
 import org.openflexo.foundation.fml.controlgraph.IterationAction;
 import org.openflexo.foundation.fml.editionaction.AbstractAssignationAction;
 import org.openflexo.foundation.fml.editionaction.FetchRequestCondition;
-import org.openflexo.foundation.fml.inspector.InspectorEntry;
 import org.openflexo.gina.swing.view.widget.JFIBBrowserWidget;
 import org.openflexo.localization.LocalizedDelegate;
 import org.openflexo.rm.Resource;
@@ -104,9 +103,6 @@ public abstract class FlexoConceptView extends FIBModuleView<FlexoConcept> {
 		}
 		else {
 
-			if (object instanceof InspectorEntry) {
-				object = ((InspectorEntry) object).getInspector();
-			}
 			if (object instanceof FetchRequestCondition) {
 				object = ((FetchRequestCondition) object).getAction();
 			}

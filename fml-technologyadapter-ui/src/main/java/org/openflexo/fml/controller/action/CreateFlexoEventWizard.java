@@ -66,14 +66,12 @@ public class CreateFlexoEventWizard extends AbstractCreateFlexoConceptWizard<Cre
 	private final DescribeFlexoEvent describeFlexoEvent;
 	private final ConfigurePropertiesForNewFlexoConcept configurePropertiesForNewFlexoConcept;
 	private final ConfigureBehavioursForNewFlexoConcept configureBehavioursForNewFlexoConcept;
-	private final ConfigureInspectorForNewFlexoConcept configureInspectorForNewFlexoConcept;
 
 	public CreateFlexoEventWizard(CreateFlexoEvent action, FlexoController controller) {
 		super(action, controller);
 		addStep(describeFlexoEvent = new DescribeFlexoEvent());
 		addStep(configurePropertiesForNewFlexoConcept = new ConfigurePropertiesForNewFlexoConcept());
 		addStep(configureBehavioursForNewFlexoConcept = new ConfigureBehavioursForNewFlexoConcept());
-		addStep(configureInspectorForNewFlexoConcept = new ConfigureInspectorForNewFlexoConcept());
 	}
 
 	@Override
@@ -98,11 +96,6 @@ public class CreateFlexoEventWizard extends AbstractCreateFlexoConceptWizard<Cre
 	@Override
 	public ConfigureBehavioursForNewFlexoConcept getConfigureBehavioursForNewFlexoConcept() {
 		return configureBehavioursForNewFlexoConcept;
-	}
-
-	@Override
-	public ConfigureInspectorForNewFlexoConcept getConfigureInspectorForNewFlexoConcept() {
-		return configureInspectorForNewFlexoConcept;
 	}
 
 	/**

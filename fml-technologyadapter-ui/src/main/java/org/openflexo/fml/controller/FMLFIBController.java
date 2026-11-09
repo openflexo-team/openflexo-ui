@@ -89,7 +89,6 @@ import org.openflexo.foundation.fml.action.CreateFlexoConceptInstanceRole;
 import org.openflexo.foundation.fml.action.CreateFlexoEnumValue;
 import org.openflexo.foundation.fml.action.CreateGenericBehaviourParameter;
 import org.openflexo.foundation.fml.action.CreateGetSetProperty;
-import org.openflexo.foundation.fml.action.CreateInspectorEntry;
 import org.openflexo.foundation.fml.action.CreateModelSlot;
 import org.openflexo.foundation.fml.action.CreatePrimitiveRole;
 import org.openflexo.foundation.fml.action.CreateTechnologyRole;
@@ -106,8 +105,6 @@ import org.openflexo.foundation.fml.controlgraph.IterationAction;
 import org.openflexo.foundation.fml.controlgraph.WhileAction;
 import org.openflexo.foundation.fml.editionaction.EditionAction;
 import org.openflexo.foundation.fml.editionaction.TechnologySpecificAction;
-import org.openflexo.foundation.fml.inspector.FlexoConceptInspector;
-import org.openflexo.foundation.fml.inspector.InspectorEntry;
 import org.openflexo.foundation.fml.rm.CompilationUnitResource;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
 import org.openflexo.foundation.resource.FlexoResource;
@@ -632,12 +629,6 @@ public class FMLFIBController extends FlexoFIBController {
 		flexoBehaviour.removeFromParameters(parameterToDelete);
 		parameterToDelete.delete();
 		return parameterToDelete;
-	}
-
-	public InspectorEntry createInspectorEntry(FlexoConceptInspector inspector) {
-		CreateInspectorEntry createInspectorEntry = CreateInspectorEntry.actionType.makeNewAction(inspector, null, getEditor());
-		createInspectorEntry.doAction();
-		return createInspectorEntry.getNewEntry();
 	}
 
 	public boolean isFlexoBehaviour(Object selectedObject, FlexoBehaviour context) {

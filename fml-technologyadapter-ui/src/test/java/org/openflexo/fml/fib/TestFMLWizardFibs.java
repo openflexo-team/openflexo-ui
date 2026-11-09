@@ -66,11 +66,6 @@ public class TestFMLWizardFibs extends GenericFIBTestCase {
 	}
 
 	@Test
-	public void testConfigureInspectorForNewFlexoConcept() {
-		validateFIB("Fib/Wizard/CreateFMLElement/ConfigureInspectorForNewFlexoConcept.fib");
-	}
-
-	@Test
 	public void testConfigurePropertiesForNewFlexoConcept() {
 		validateFIB("Fib/Wizard/CreateFMLElement/ConfigurePropertiesForNewFlexoConcept.fib");
 	}
@@ -133,11 +128,6 @@ public class TestFMLWizardFibs extends GenericFIBTestCase {
 	@Test
 	public void testDescribeIndividualRole() {
 		validateFIB("Fib/Wizard/CreateFMLElement/DescribeIndividualRole.fib");
-	}
-
-	@Test
-	public void testDescribeInspectorEntry() {
-		validateFIB("Fib/Wizard/CreateFMLElement/DescribeInspectorEntry.fib");
 	}
 
 	@Test

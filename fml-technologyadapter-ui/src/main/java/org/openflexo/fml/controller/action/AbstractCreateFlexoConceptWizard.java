@@ -78,7 +78,6 @@ public abstract class AbstractCreateFlexoConceptWizard<A extends AbstractCreateF
 
 	private ConfigurePropertiesForNewFlexoConcept configurePropertiesForNewFlexoConcept;
 	private ConfigureBehavioursForNewFlexoConcept configureBehavioursForNewFlexoConcept;
-	private ConfigureInspectorForNewFlexoConcept configureInspectorForNewFlexoConcept;
 
 	public AbstractCreateFlexoConceptWizard(A action, FlexoController controller) {
 		super(action, controller);
@@ -87,7 +86,6 @@ public abstract class AbstractCreateFlexoConceptWizard<A extends AbstractCreateF
 	protected void createAdditionalSteps() {
 		addStep(configurePropertiesForNewFlexoConcept = new ConfigurePropertiesForNewFlexoConcept());
 		addStep(configureBehavioursForNewFlexoConcept = new ConfigureBehavioursForNewFlexoConcept());
-		addStep(configureInspectorForNewFlexoConcept = new ConfigureInspectorForNewFlexoConcept());
 	}
 
 	public ConfigurePropertiesForNewFlexoConcept getConfigurePropertiesForNewFlexoConcept() {
@@ -96,10 +94,6 @@ public abstract class AbstractCreateFlexoConceptWizard<A extends AbstractCreateF
 
 	public ConfigureBehavioursForNewFlexoConcept getConfigureBehavioursForNewFlexoConcept() {
 		return configureBehavioursForNewFlexoConcept;
-	}
-
-	public ConfigureInspectorForNewFlexoConcept getConfigureInspectorForNewFlexoConcept() {
-		return configureInspectorForNewFlexoConcept;
 	}
 
 	@Override
@@ -253,51 +247,6 @@ public abstract class AbstractCreateFlexoConceptWizard<A extends AbstractCreateF
 
 		public ImageIcon getCloningSchemeIcon() {
 			return FMLIconLibrary.CLONING_SCHEME_ICON;
-		}
-	}
-
-	/**
-	 * This step is used to define some properties to be created for new {@link FlexoConcept}
-	 * 
-	 * @author sylvain
-	 *
-	 */
-	@FIBPanel("Fib/Wizard/CreateFMLElement/ConfigureInspectorForNewFlexoConcept.fib")
-	public class ConfigureInspectorForNewFlexoConcept extends WizardStep {
-
-		public ApplicationContext getServiceManager() {
-			return getController().getApplicationContext();
-		}
-
-		public AbstractCreateFlexoConcept getAction() {
-			return AbstractCreateFlexoConceptWizard.this.getAction();
-		}
-
-		@Override
-		public String getTitle() {
-			return getAction().getLocales().localizedForKey("configure_new_flexo_concept_inspector");
-		}
-
-		@Override
-		public boolean isValid() {
-
-			return true;
-		}
-
-		public boolean getDefineInspector() {
-			return getAction().getDefineInspector();
-		}
-
-		public void setDefineInspector(boolean defineInspector) {
-			if (defineInspector != getDefineInspector()) {
-				getAction().setDefineInspector(defineInspector);
-				getPropertyChangeSupport().firePropertyChange("defineInspector", !defineInspector, defineInspector);
-				checkValidity();
-			}
-		}
-
-		public Icon getIconForProperty(PropertyEntry entry) {
-			return getIconFor(entry);
 		}
 	}
 

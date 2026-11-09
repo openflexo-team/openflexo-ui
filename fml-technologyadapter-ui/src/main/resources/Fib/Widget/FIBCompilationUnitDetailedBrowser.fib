@@ -253,14 +253,6 @@
 					method="controller.deleteFlexoConceptObject(selected)"
 					name="delete_action" />
 			</BrowserElement>
-			<BrowserElement id="60"
-				dataClassName="org.openflexo.foundation.fml.inspector.FlexoConceptInspector"
-				icon="controller.iconForObject(inspector)"
-				label="&quot;Inspector&quot;" isEditable="false" name="inspector">
-				<BrowserAddAction id="61"
-					method="controller.createInspectorEntry(selected)"
-					name="add_inspector_entry" />
-			</BrowserElement>
 			<BrowserElement id="62"
 				dataClassName="org.openflexo.foundation.fml.controlgraph.ControlStructureAction"
 				icon="controller.iconForObject(controlStructureAction)"

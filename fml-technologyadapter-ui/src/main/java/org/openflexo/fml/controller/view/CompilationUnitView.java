@@ -48,7 +48,6 @@ import org.openflexo.foundation.fml.controlgraph.FMLControlGraph;
 import org.openflexo.foundation.fml.controlgraph.IterationAction;
 import org.openflexo.foundation.fml.editionaction.AbstractAssignationAction;
 import org.openflexo.foundation.fml.editionaction.FetchRequestCondition;
-import org.openflexo.foundation.fml.inspector.InspectorEntry;
 import org.openflexo.rm.Resource;
 import org.openflexo.view.FIBModuleView;
 import org.openflexo.view.controller.FlexoController;
@@ -90,9 +89,6 @@ public abstract class CompilationUnitView extends FIBModuleView<FMLCompilationUn
 		}
 		else {
 
-			if (object instanceof InspectorEntry) {
-				object = ((InspectorEntry) object).getInspector();
-			}
 			if (object instanceof FetchRequestCondition) {
 				object = ((FetchRequestCondition) object).getAction();
 			}

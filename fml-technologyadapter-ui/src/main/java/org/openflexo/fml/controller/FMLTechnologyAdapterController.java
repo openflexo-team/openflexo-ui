@@ -73,7 +73,6 @@ import org.openflexo.fml.controller.action.CreateFlexoEventInitializer;
 import org.openflexo.fml.controller.action.CreateGenericBehaviourParameterInitializer;
 import org.openflexo.fml.controller.action.CreateGetSetPropertyInitializer;
 import org.openflexo.fml.controller.action.CreateIndividualRoleInitializer;
-import org.openflexo.fml.controller.action.CreateInspectorEntryInitializer;
 import org.openflexo.fml.controller.action.CreateModelSlotInitializer;
 import org.openflexo.fml.controller.action.CreatePrimitiveRoleInitializer;
 import org.openflexo.fml.controller.action.CreateTechnologyRoleInitializer;
@@ -301,7 +300,6 @@ public class FMLTechnologyAdapterController extends TechnologyAdapterController<
 		new CreateFlexoEnumInitializer(actionInitializer);
 		new CreateFlexoEnumValueInitializer(actionInitializer);
 		new CreateGenericBehaviourParameterInitializer(actionInitializer);
-		new CreateInspectorEntryInitializer(actionInitializer);
 
 		new CreateContextualEditionActionInitializer(actionInitializer);
 

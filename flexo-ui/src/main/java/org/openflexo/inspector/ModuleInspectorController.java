@@ -73,8 +73,6 @@ import org.openflexo.gina.controller.CustomTypeEditorProvider;
 import org.openflexo.gina.model.container.layout.ComponentConstraints;
 import org.openflexo.gina.model.container.FIBTabPanel;
 import org.openflexo.foundation.fml.FlexoConcept;
-import org.openflexo.foundation.fml.inspector.FlexoConceptInspector;
-import org.openflexo.foundation.fml.inspector.InspectorEntry;
 import org.openflexo.foundation.fml.rm.FIBComponentResource;
 import org.openflexo.foundation.fml.rm.FMLFIBComponent;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
@@ -420,8 +418,8 @@ public class ModuleInspectorController extends Observable implements Observer {
 
 	/**
 	 * Internally called to build an inspector for a given {@link FlexoConceptInstance}<br>
-	 * Inspector is build from {@link FlexoConceptInstance} classical inspector augmented with tab as defined in
-	 * {@link FlexoConceptInspector}
+	 * Inspector is build from {@link FlexoConceptInstance} classical inspector augmented with the <code>.inspector</code> components
+	 * of the hierarchy of its concept
 	 * 
 	 * @param conceptInstance
 	 * @return
@@ -445,8 +443,8 @@ public class ModuleInspectorController extends Observable implements Observer {
 			returned = (FIBInspector) returned.cloneObject();
 			returned.setLocales(getFlexoController().getModuleLocales());
 
-			// A .inspector shipped by the container of the concept wins over the tab generated from the deprecated
-			// FlexoConceptInspector entries. append() merges by component name, so its <TabPanel name="Tab"> lands in
+			// A .inspector shipped by the container of the concept is merged in. append() merges by component name, so its
+			// <TabPanel name="Tab"> lands in
 			// the TabPanel this inspector already has - the same way a super inspector is merged in.
 			// The inspector is ADDITIVE: the components of the whole hierarchy, ancestors first, then the concept's own
 			List<FIBComponent> loaded = new ArrayList<>();
@@ -467,63 +465,13 @@ public class ModuleInspectorController extends Observable implements Observer {
 				mergeContainerInspectors(returned, containers, concept, customTypeEditorProvider(), hidesStandardInspectorTabs());
 				listenToContainerComponent(concept);
 				flexoConceptInspectors.put(concept, returned);
-				// No FlexoConceptInstanceInspectorUpdater here: there are no InspectorEntry to listen to, and asking
-				// for concept.getInspector() would lazily create an empty one.
 				return returned;
 			}
 
-			if (concept.getInspector() == null) {
-				// The concept ships no .inspector and declares no deprecated inspector either: the basic inspector is all there is
-				flexoConceptInspectors.put(concept, returned);
-				return returned;
-			}
-
-			// And append tab matching FlexoConceptInspector
-			appendFlexoConceptInspector(concept, returned);
+			// The concept ships no .inspector: the basic inspector is all there is
 			flexoConceptInspectors.put(concept, returned);
-
-			FlexoConceptInstanceInspectorUpdater updater = new FlexoConceptInstanceInspectorUpdater(returned, concept);
-			concept.getInspector().getPropertyChangeSupport().addPropertyChangeListener(updater);
-			for (InspectorEntry entry : concept.getInspector().getEntries()) {
-				entry.getPropertyChangeSupport().addPropertyChangeListener(updater);
-			}
-
 			return returned;
 		}
-	}
-
-	/**
-	 * Internal listener of an inspector tab of a FlexoConcept
-	 * 
-	 * @author sylvain
-	 *
-	 */
-	class FlexoConceptInstanceInspectorUpdater implements PropertyChangeListener {
-
-		private FIBInspector inspector;
-		private FlexoConcept concept;
-
-		public FlexoConceptInstanceInspectorUpdater(FIBInspector inspector, FlexoConcept concept) {
-			this.inspector = inspector;
-			this.concept = concept;
-		}
-
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getSource() == concept.getInspector() && evt.getPropertyName().equals(FlexoConceptInspector.ENTRIES_KEY)) {
-				updateFlexoConceptInspector(concept, inspector);
-				if (evt.getNewValue() instanceof InspectorEntry) {
-					((InspectorEntry) evt.getNewValue()).getPropertyChangeSupport().addPropertyChangeListener(this);
-				}
-				else if (evt.getOldValue() instanceof InspectorEntry) {
-					((InspectorEntry) evt.getOldValue()).getPropertyChangeSupport().removePropertyChangeListener(this);
-				}
-			}
-			if (evt.getSource() instanceof InspectorEntry) {
-				updateFlexoConceptInspector(concept, inspector);
-			}
-		}
-
 	}
 
 	public FIBInspectorDialog getInspectorDialog() {
@@ -782,8 +730,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 	 * VirtualModel declaring that concept, or null when the container ships none.
 	 *
 	 * <p>
-	 * This is the replacement for the tab generated from the deprecated {@link FlexoConceptInspector} entries: rather than being built
-	 * widget by widget from the FML model, the inspector of a concept is an ordinary GINA component stored beside the FML source, in the
+	 * The inspector of a concept is an ordinary GINA component stored beside the FML source, in the
 	 * <code>Xxx.fml/</code> container. See {@link FlexoConcept#getInspectorComponentResource()} for how it is named and found.
 	 *
 	 * @return the component its resource holds, which is SHARED - with the GINA editor and with every sub-concept inheriting it. Never merge
@@ -840,7 +787,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 	 * resource's component listing children that now belong to another. So a clone is merged, never the original;</li>
 	 * <li>the component comes in either shape. A <code>&lt;TabPanel name="Tab"&gt;</code> is merged by that name into the tabs the
 	 * platform shows. A PLAIN panel - what the CreateInspector action generates by default - is wrapped into one tab of its own, titled
-	 * after the concept and put first, where the tab generated from the deprecated FlexoConceptInspector goes. Appended as it is, its first
+	 * after the concept and put first. Appended as it is, its first
 	 * widget lands in front of the TabPanel, which is where {@link FIBInspector#getTabPanel()} used to expect it;</li>
 	 * <li><code>append()</code> carries sub-components only. The <code>data</code> variable typed by the concept and the FML binding factory,
 	 * which {@link FMLControlledComponent#bindToConcept} set on the root of the container, stay behind on it - and every
@@ -908,7 +855,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 			tab.addToSubComponents(child, constraints);
 		}
 
-		// Parent first, as appendFlexoConceptInspector() does: bindings of the tab resolve through it while it is being added
+		// Parent first: bindings of the tab resolve through it while it is being added
 		tab.setParent(classTabPanel);
 		classTabPanel.addToSubComponents(tab, null, 0);
 
@@ -1073,34 +1020,6 @@ public class ModuleInspectorController extends Observable implements Observer {
 	 */
 	private static final String CONTAINER_TAB_PANEL_NAME = "Tab";
 
-	private FIBTab appendFlexoConceptInspector(FlexoConcept concept, FIBInspector inspector) {
-		FIBTab newTab = makeFIBTab(concept);
-		// TODO: we have to set the parent first, otherwise in FIBViewImpl.java
-		// The value of FIBVariable fci is still invalid when component beeing added
-		// Thus, this is not listened
-		newTab.setParent(inspector.getTabPanel());
-		inspector.getTabPanel().addToSubComponents(newTab, null, 0);
-		return newTab;
-	}
-
-	private FIBTab updateFlexoConceptInspector(FlexoConcept concept, FIBInspector inspector) {
-		Object wasInspected = currentInspectedObject;
-		if (concept != null && inspector != null && inspector.getTabPanel() != null
-				&& inspector.getTabPanel().getSubComponents().size() > 0) {
-			FIBTab existingTab = (FIBTab) inspector.getTabPanel().getSubComponents().get(0);
-			if (concept.getInspector() != null && existingTab.getTitle().equals(concept.getInspector().getInspectorTitle())) {
-				inspector.getTabPanel().removeFromSubComponents(existingTab);
-			}
-		}
-
-		FIBTab returned = appendFlexoConceptInspector(concept, inspector);
-		if (wasInspected != null) {
-			switchToEmptyContent();
-			inspectObject(wasInspected);
-		}
-		return returned;
-	}
-
 	private Map<FlexoConcept, FIBPanel> flexoConceptInspectorPanels = new HashMap<>();
 
 	/** Same as {@link #containerComponentsOfInspectors}, for {@link #flexoConceptInspectorPanels} */
@@ -1152,175 +1071,9 @@ public class ModuleInspectorController extends Observable implements Observer {
 		inspector.addToVariables(dataVariable);
 		inspector.setName(flexoConcept.getName() + "Panel");
 
-		logger.info("Building inspector for " + flexoConcept);
-		appendInspectorEntries(flexoConcept, inspector);
-		logger.info("Built inspector for " + flexoConcept);
 		inspector.finalizeDeserialization();
 
 		return inspector;
-	}
-
-	/**
-	 * Internally called to create {@link FIBTab} matching inspector of supplied {@link FlexoConcept}
-	 * 
-	 * @param flexoConcept
-	 * @param inspector
-	 * @return
-	 */
-	private FIBTab makeFIBTab(FlexoConcept flexoConcept) {
-		FIBTab newTab = getFactory().newFIBTab();
-		newTab.setTitle(flexoConcept.getInspector() != null ? flexoConcept.getInspector().getInspectorTitle() : flexoConcept.getName());
-		newTab.setLayout(Layout.twocols);
-		newTab.setUseScrollBar(true);
-
-		// We create a variable for inspector data
-		// This variable is called fci, with type FlexoConceptInstanceType<FlexoConcept>, and value 'data' (which is the
-		// FlexoConceptInstance)
-		// The goal of that variable definition is to provide type for inspected FlexoConceptInstance
-		FIBVariable<?> dataVariable = getFactory().newFIBVariable(newTab, "fci", flexoConcept.getInstanceType());
-		dataVariable.setValue(new DataBinding<>("data"));
-		newTab.addToVariables(dataVariable);
-		newTab.setName(flexoConcept.getName() + "Panel");
-
-		appendInspectorEntries(flexoConcept, newTab);
-		newTab.finalizeDeserialization();
-
-		/*for (FIBComponent c : newTab.getSubComponents()) {
-			System.out.println("> component " + c);
-			if (c instanceof FIBWidget) {
-				System.out.println("value=" + ((FIBWidget) c).getData());
-				System.out.println(
-						"valid=" + ((FIBWidget) c).getData().isValid() + " reason=" + ((FIBWidget) c).getData().invalidBindingReason());
-			}
-		}*/
-
-		return newTab;
-	}
-
-	/**
-	 * Internally called to append all entries of supplied flexo concept
-	 * 
-	 * @param flexoConcept
-	 * @param newTab
-	 */
-	private void appendInspectorEntries(FlexoConcept flexoConcept, FIBPanel newTab) {
-		if (flexoConcept == null) {
-			logger.warning("Unexpected null concept ");
-			return;
-		}
-		for (FlexoConcept parentEP : flexoConcept.getParentFlexoConcepts()) {
-			appendInspectorEntries(parentEP, newTab);
-		}
-		if (flexoConcept.getDeclaringCompilationUnit() == null) {
-			logger.warning("Unexpected null virtual model for concept " + flexoConcept);
-			return;
-		}
-		LocalizedDelegate localizedDictionary = flexoConcept.getDeclaringCompilationUnit().getLocalizedDictionary();
-		if (flexoConcept.getInspector() == null) {
-			return;
-		}
-		for (final InspectorEntry entry : flexoConcept.getInspector().getEntries()) {
-			FIBLabel label = getFactory().newFIBLabel();
-			String entryLabel = localizedDictionary.localizedForKeyAndLanguage(entry.getLabel(), FlexoLocalization.getCurrentLanguage());
-			if (entryLabel == null) {
-				entryLabel = entry.getLabel();
-			}
-			label.setLabel(entryLabel);
-			newTab.addToSubComponentsNoNotification(label, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-			FIBWidget widget = makeWidget(entry, newTab);
-			if (widget != null) {
-				widget.setBindingFactory(entry.getBindingFactory());
-				String bindingPath = entry.getData().toString();
-				String normalizedBindingPath = normalizeBindingPath(bindingPath, widget);
-				widget.setData(new DataBinding<>(normalizedBindingPath));
-				widget.setReadOnly(entry.getIsReadOnly());
-			}
-			/*System.out.println("Widget " + widget + " data=" + entry.getData());
-			System.out.println("valid:" + entry.getData().isValid());
-			System.out.println("reason=" + entry.getData().invalidBindingReason());
-			System.out.println("Widget data " + widget.getData());
-			System.out.println("valid:" + widget.getData().isValid());
-			System.out.println("reason=" + widget.getData().invalidBindingReason());*/
-		}
-
-		newTab.fireSubComponentsChanged();
-
-		// System.out.println("Je retourne " + getFactory().stringRepresentation(newTab));
-	}
-
-	/**
-	 * Normalized BindingPath so that all {@link BindingPath} starts with 'fci.' (name of FCI beeing represented)
-	 * 
-	 * @param bindingPath
-	 * @return
-	 */
-	private static String normalizeBindingPath(String bindingPath, Bindable bindable) {
-		Expression expression = null;
-		try {
-
-			expression = bindable.getBindingFactory().parseExpression(bindingPath, bindable);
-
-			expression = expression.transform(new ExpressionTransformer() {
-				@Override
-				public Expression performTransformation(Expression e) throws TransformException {
-					if (e instanceof BindingPath) {
-						BindingPath bindingPath = (BindingPath) e;
-						if (bindingPath.getBindingVariable() == null) {
-							UnresolvedBindingVariable objectBV = new UnresolvedBindingVariable("fci");
-							bindingPath.setBindingVariable(objectBV);
-							return bindingPath;
-						}
-						else if (!bindingPath.getBindingVariable().getVariableName().equals("fci")) {
-							UnresolvedBindingVariable objectBV = new UnresolvedBindingVariable("fci");
-							List<BindingPathElement> bp2 = new ArrayList<>(bindingPath.getBindingPath());
-							bp2.add(0, bindable.getBindingFactory().makeSimplePathElement(objectBV,
-									bindingPath.getBindingVariable().getVariableName(), bindable));
-							bindingPath.setBindingVariable(objectBV);
-							bindingPath.setBindingPath(bp2);
-						}
-						return bindingPath;
-					}
-					return e;
-				}
-			});
-
-			return expression.toString();
-		} catch (ParseException e) {
-			System.out.println("Could not parse: " + bindingPath);
-			e.printStackTrace();
-			return bindingPath;
-		} catch (TransformException e) {
-			System.out.println("TransformException while parsing: " + bindingPath);
-			e.printStackTrace();
-			return bindingPath;
-		}
-	}
-
-	/**
-	 * Factory method used to instanciate a technology-specific FIBWidget for a given {@link InspectorEntry}<br>
-	 * We iterate on all known technologies to use the delegated {@link TechnologyAdapterController}
-	 * 
-	 * @param entry
-	 * @param newTab
-	 * @param factory
-	 * @return
-	 */
-	private FIBWidget makeWidget(final InspectorEntry entry, FIBPanel newTab) {
-		for (TechnologyAdapter ta : flexoController.getApplicationContext().getTechnologyAdapterService().getTechnologyAdapters()) {
-			TechnologyAdapterController<?> tac = FlexoController.getTechnologyAdapterController(ta);
-			boolean[] expand = { true, false };
-			FIBWidget returned = tac.makeWidget(entry, null, getFactory(), "fci", expand);
-			if (returned != null) {
-				newTab.addToSubComponentsNoNotification(returned,
-						new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, expand[0], expand[1]));
-				return returned;
-			}
-			else {
-				logger.warning("Cannot make widget for inspector entry " + entry);
-			}
-		}
-
-		return null;
 	}
 
 	public FIBModelFactory getFactory() {

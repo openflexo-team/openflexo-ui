@@ -125,7 +125,7 @@ public class FIBInspectorDialog extends JDialog implements Observer {
 			if (object instanceof FlexoConceptInstance) {
 				FlexoConcept concept = ((FlexoConceptInstance) object).getFlexoConcept();
 				if (concept != null) {
-					setTitle(concept.getInspector() != null ? concept.getInspector().getInspectorTitle() : concept.getName());
+					setTitle(concept.getName());
 				}
 			} /*else if (getInspectorPanel() != null && getInspectorPanel().getCurrentlyDisplayedInspector() != null) {
 				setTitle(getInspectorPanel().getCurrentlyDisplayedInspector().getParameter("title"));
