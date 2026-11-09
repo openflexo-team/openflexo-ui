@@ -42,7 +42,7 @@
 					boundToSelectionManager="true" index="0" localize="true"
 					font="SansSerif.plain,0,11"
 					constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=1.0;x=0;y=0)"
-					iteratorClassName="org.openflexo.foundation.fml.FlexoBehaviourParameter"
+					iteratorClassName="org.openflexo.foundation.fml.FlexoBehaviourArgument"
 					backgroundNonSelectionColor="255,255,255" autoSelectFirstRow="true"
 					name="parametersTable" backgroundSecondarySelectionColor="178,215,255">
 					<IconColumn id="11" data="controller.iconForObject(iterator)"
@@ -128,7 +128,7 @@
 						localize="true"
 						constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)"
 						showText="true"
-						iteratorClassName="org.openflexo.foundation.fml.FlexoBehaviourParameter$WidgetType"
+						iteratorClassName="org.openflexo.foundation.fml.FlexoBehaviourArgument$WidgetType"
 						showIcon="false" autoSelectFirstRow="true" name="dropdown"
 						list="parametersTable.selected.availableWidgetTypes" />
 					<Label id="32"

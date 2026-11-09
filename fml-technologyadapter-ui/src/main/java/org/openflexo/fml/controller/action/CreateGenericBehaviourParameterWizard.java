@@ -50,8 +50,8 @@ import org.openflexo.connie.annotations.NotificationUnsafe;
 import org.openflexo.connie.type.TypeUtils;
 import org.openflexo.foundation.fml.FMLObject;
 import org.openflexo.foundation.fml.FlexoBehaviourObject;
-import org.openflexo.foundation.fml.FlexoBehaviourParameter.FlexoBehaviourParameterImpl;
-import org.openflexo.foundation.fml.FlexoBehaviourParameter.WidgetType;
+import org.openflexo.foundation.fml.FlexoBehaviourArgument.FlexoBehaviourArgumentImpl;
+import org.openflexo.foundation.fml.FlexoBehaviourArgument.WidgetType;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.action.CreateGenericBehaviourParameter;
 import org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstance;
@@ -200,7 +200,7 @@ public class CreateGenericBehaviourParameterWizard
 		}
 
 		public List<WidgetType> getAvailableWidgetTypes() {
-			return FlexoBehaviourParameterImpl.getAvailableWidgetTypes(getParameterType());
+			return FlexoBehaviourArgumentImpl.getAvailableWidgetTypes(getParameterType());
 		}
 
 		public boolean isList() {

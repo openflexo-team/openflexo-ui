@@ -52,7 +52,7 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionFactory;
 import org.openflexo.foundation.fml.FMLCompilationUnit;
 import org.openflexo.foundation.fml.FMLObject;
-import org.openflexo.foundation.fml.FlexoBehaviourParameter;
+import org.openflexo.foundation.fml.FlexoBehaviourArgument;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.FlexoProperty;
 import org.openflexo.foundation.fml.rm.CompilationUnitResource;
@@ -89,7 +89,7 @@ import org.openflexo.view.controller.TechnologyAdapterControllerService;
  * The widget of a property is not chosen here: each {@link TechnologyAdapterController} is asked in turn, and the first to answer wins -
  * which is how a technology adapter contributes its own selectors (a VirtualModelInstance, a FlexoConcept, an ontology individual…) rather
  * than a bare text field. That call takes a <code>WidgetContext</code>: these actions therefore build a throwaway
- * {@link FlexoBehaviourParameter} carrying the name and widget kind of each property, use it as scaffolding, and discard it. It is never
+ * {@link FlexoBehaviourArgument} carrying the name and widget kind of each property, use it as scaffolding, and discard it. It is never
  * attached to a behaviour and never serialized.
  *
  * <p>
@@ -364,12 +364,12 @@ public abstract class AbstractCreateFIBComponent<A extends AbstractCreateFIBComp
 	 * gets that technology's own selector.
 	 *
 	 * <p>
-	 * The {@link FlexoBehaviourParameter} built here is scaffolding: it exists only to carry the name and widget kind into
+	 * The {@link FlexoBehaviourArgument} built here is scaffolding: it exists only to carry the name and widget kind into
 	 * {@link TechnologyAdapterController#makeWidget}. It is never added to a behaviour.
 	 */
 	private FIBWidget makeWidget(InspectorEntryConfiguration entry, FIBModelFactory factory, boolean[] expand, FlexoConcept concept) {
 
-		FlexoBehaviourParameter scaffolding = concept.getFMLModelFactory().newInstance(FlexoBehaviourParameter.class);
+		FlexoBehaviourArgument scaffolding = concept.getFMLModelFactory().newInstance(FlexoBehaviourArgument.class);
 		try {
 			scaffolding.setName(entry.getPropertyName());
 		} catch (InvalidNameException e) {

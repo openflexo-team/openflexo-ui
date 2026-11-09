@@ -59,7 +59,7 @@ import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.fml.FMLTechnologyAdapter;
 import org.openflexo.foundation.fml.FlexoBehaviour;
-import org.openflexo.foundation.fml.FlexoBehaviourParameter;
+import org.openflexo.foundation.fml.FlexoBehaviourArgument;
 import org.openflexo.foundation.fml.FlexoRole;
 import org.openflexo.foundation.fml.WidgetContext;
 import org.openflexo.foundation.fml.controlgraph.ConditionalAction;
@@ -569,7 +569,7 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<T
 	}
 
 	/**
-	 * Factory method used to instantiate a technology-specific FIBWidget for a given {@link FlexoBehaviourParameter}<br>
+	 * Factory method used to instantiate a technology-specific FIBWidget for a given {@link FlexoBehaviourArgument}<br>
 	 * Provides a hook to specialize this method in a given technology
 	 * 
 	 * @param object
@@ -645,11 +645,11 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<T
 	}
 
 	/**
-	 * Provides a hook to handle specific {@link FlexoBehaviourParameter} for a given technology
+	 * Provides a hook to handle specific {@link FlexoBehaviourArgument} for a given technology
 	 * 
 	 * @param availableParameterTypes
 	 */
-	public void appendSpecificFlexoBehaviourParameters(List<Class<? extends FlexoBehaviourParameter>> availableParameterTypes) {
+	public void appendSpecificFlexoBehaviourParameters(List<Class<? extends FlexoBehaviourArgument>> availableParameterTypes) {
 	}
 
 	protected CustomTypeEditor makeCustomTypeEditor(Class<? extends CustomType> typeClass) {

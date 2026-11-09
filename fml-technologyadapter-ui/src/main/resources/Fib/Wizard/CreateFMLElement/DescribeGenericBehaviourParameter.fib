@@ -26,7 +26,7 @@
 	<DropDown id="7" data="data.widgetType" localize="true" index="6"
 		constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;location=right)"
 		showText="true"
-		iteratorClassName="org.openflexo.foundation.fml.FlexoBehaviourParameter$WidgetType"
+		iteratorClassName="org.openflexo.foundation.fml.FlexoBehaviourArgument$WidgetType"
 		showIcon="false" autoSelectFirstRow="true" name="WidgetTypeDD"
 		list="data.availableWidgetTypes" />
 	<Label id="8" visible="(data.widgetType == &quot;CUSTOM_WIDGET&quot;)"

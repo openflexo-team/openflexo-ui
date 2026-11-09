@@ -58,7 +58,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.fml.FMLCompilationUnit;
 import org.openflexo.foundation.fml.FlexoConceptBehaviouralFacet;
-import org.openflexo.foundation.fml.JavaRole;
+import org.openflexo.foundation.fml.FMLVariable;
 import org.openflexo.foundation.fml.PrimitiveRole;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.VirtualModelLibrary;
@@ -211,7 +211,7 @@ public class TestFMLEditor5 extends OpenflexoFIBTestCase {
 		System.out.println("defaultValue: " + pr.getDefaultValue());
 		assertTrue(pr.getDefaultValue().isValid());
 
-		JavaRole<?> jr = (JavaRole<?>) cu.getVirtualModel().getAccessibleProperty("stringList");
+		FMLVariable<?> jr = (FMLVariable<?>) cu.getVirtualModel().getAccessibleProperty("stringList");
 		System.out.println("defaultValue: " + jr.getDefaultValue());
 		assertTrue(jr.getDefaultValue().isValid());
 

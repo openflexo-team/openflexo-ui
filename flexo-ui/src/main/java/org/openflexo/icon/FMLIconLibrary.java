@@ -54,7 +54,7 @@ import org.openflexo.foundation.fml.ExpressionProperty;
 import org.openflexo.foundation.fml.FMLCompilationUnit;
 import org.openflexo.foundation.fml.FMLObject;
 import org.openflexo.foundation.fml.FlexoBehaviour;
-import org.openflexo.foundation.fml.FlexoBehaviourParameter;
+import org.openflexo.foundation.fml.FlexoBehaviourArgument;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.FlexoConceptInstanceRole;
 import org.openflexo.foundation.fml.FlexoEnum;
@@ -64,7 +64,7 @@ import org.openflexo.foundation.fml.FlexoProperty;
 import org.openflexo.foundation.fml.FlexoRole;
 import org.openflexo.foundation.fml.GetProperty;
 import org.openflexo.foundation.fml.GetSetProperty;
-import org.openflexo.foundation.fml.JavaRole;
+import org.openflexo.foundation.fml.FMLVariable;
 import org.openflexo.foundation.fml.NavigationScheme;
 import org.openflexo.foundation.fml.PrimitiveRole;
 import org.openflexo.foundation.fml.SynchronizationScheme;
@@ -332,7 +332,7 @@ public class FMLIconLibrary extends IconLibrary {
 			}
 			return MODEL_SLOT_ICON;
 		}
-		else if (object instanceof JavaRole) {
+		else if (object instanceof FMLVariable) {
 			return FMLIconLibrary.JAVA_ROLE_ICON;
 		}
 		else if (object instanceof PrimitiveRole) {
@@ -456,7 +456,7 @@ public class FMLIconLibrary extends IconLibrary {
 		else if (object instanceof FlexoConcept) {
 			return FLEXO_CONCEPT_ICON;
 		}
-		else if (object instanceof FlexoBehaviourParameter) {
+		else if (object instanceof FlexoBehaviourArgument) {
 			return FLEXO_CONCEPT_PARAMETER_ICON;
 		}
 		else if (object instanceof FlexoBehaviour) {

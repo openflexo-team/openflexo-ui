@@ -60,7 +60,7 @@ import org.openflexo.foundation.fml.ActionScheme;
 import org.openflexo.foundation.fml.CreationScheme;
 import org.openflexo.foundation.fml.DeletionScheme;
 import org.openflexo.foundation.fml.FlexoBehaviour;
-import org.openflexo.foundation.fml.FlexoBehaviourParameter;
+import org.openflexo.foundation.fml.FlexoBehaviourArgument;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.NavigationScheme;
 import org.openflexo.foundation.fml.VirtualModel;
@@ -210,7 +210,7 @@ public class TestFlexoBehaviourPanel extends OpenflexoFIBTestCase {
 		createParameter.setParameterName("aFlag");
 		createParameter.setParameterType(Boolean.class);
 		createParameter.doAction();
-		FlexoBehaviourParameter param = createParameter.getNewParameter();
+		FlexoBehaviourArgument param = createParameter.getNewParameter();
 		assertNotNull(param);
 		assertTrue(actionScheme.getParameters().contains(param));
 

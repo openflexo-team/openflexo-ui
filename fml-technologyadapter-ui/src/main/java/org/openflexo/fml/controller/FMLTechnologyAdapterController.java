@@ -117,7 +117,7 @@ import org.openflexo.foundation.fml.FMLTechnologyAdapter;
 import org.openflexo.foundation.fml.FMLValidationModel;
 import org.openflexo.foundation.fml.FMLValidationReport;
 import org.openflexo.foundation.fml.FlexoBehaviour;
-import org.openflexo.foundation.fml.FlexoBehaviourParameter.WidgetType;
+import org.openflexo.foundation.fml.FlexoBehaviourArgument.WidgetType;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.FlexoConceptInstanceType;
 import org.openflexo.foundation.fml.FlexoEnum;
@@ -624,8 +624,8 @@ public class FMLTechnologyAdapterController extends TechnologyAdapterController<
 	}
 
 	/*private boolean needsVirtualModelInstanceContext(WidgetContext object) {
-		return object instanceof FlexoBehaviourParameter
-				&& ((FlexoBehaviourParameter) object).getFlexoBehaviour() instanceof CreationScheme;
+		return object instanceof FlexoBehaviourArgument
+				&& ((FlexoBehaviourArgument) object).getFlexoBehaviour() instanceof CreationScheme;
 	}*/
 
 	private static String getContainerBinding(WidgetContext widgetContext, String variableName) {

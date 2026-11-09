@@ -103,7 +103,7 @@
 				enterPressedAction="" valueChangedAction="" valueTransform=""
 				valueValidator="" />
 			<Table
-				iteratorClassName="org.openflexo.foundation.fml.FlexoBehaviourParameter"
+				iteratorClassName="org.openflexo.foundation.fml.FlexoBehaviourArgument"
 				visibleRowCount="4" rowHeight="18" autoSelectFirstRow="false"
 				createNewRowOnClick="false" boundToSelectionManager="false"
 				showFooter="false" selectionMode="MultipleIntervalSelection"

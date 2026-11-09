@@ -39,7 +39,7 @@ package org.openflexo.fml.gina.action;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.foundation.fml.FlexoBehaviourParameter.WidgetType;
+import org.openflexo.foundation.fml.FlexoBehaviourArgument.WidgetType;
 import org.openflexo.foundation.fml.FlexoProperty;
 import org.openflexo.foundation.fml.Visibility;
 
@@ -48,7 +48,7 @@ import org.openflexo.foundation.fml.Visibility;
  *
  * <p>
  * This is what the wizard lets the user select, deselect and edit. The defaults come from the property itself - its name as the label, and
- * the first widget type {@link org.openflexo.foundation.fml.FlexoBehaviourParameter#getAvailableWidgetTypes(Type)} offers for its type,
+ * the first widget type {@link org.openflexo.foundation.fml.FlexoBehaviourArgument#getAvailableWidgetTypes(Type)} offers for its type,
  * which is the platform's own answer to "which widget represents this type".
  *
  * @author sylvain
@@ -76,7 +76,7 @@ public class InspectorEntryConfiguration {
 	}
 
 	private static WidgetType defaultWidgetFor(Type type) {
-		java.util.List<WidgetType> available = org.openflexo.foundation.fml.FlexoBehaviourParameter.FlexoBehaviourParameterImpl.getAvailableWidgetTypes(type);
+		java.util.List<WidgetType> available = org.openflexo.foundation.fml.FlexoBehaviourArgument.FlexoBehaviourArgumentImpl.getAvailableWidgetTypes(type);
 		return available != null && available.size() > 0 ? available.get(0) : WidgetType.CUSTOM_WIDGET;
 	}
 
@@ -119,7 +119,7 @@ public class InspectorEntryConfiguration {
 
 	/** The widgets that make sense for this property's type - what the wizard offers in its dropdown. */
 	public java.util.List<WidgetType> getAvailableWidgetTypes() {
-		return org.openflexo.foundation.fml.FlexoBehaviourParameter.FlexoBehaviourParameterImpl.getAvailableWidgetTypes(getType());
+		return org.openflexo.foundation.fml.FlexoBehaviourArgument.FlexoBehaviourArgumentImpl.getAvailableWidgetTypes(getType());
 	}
 
 	@Override

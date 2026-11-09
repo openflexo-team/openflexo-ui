@@ -48,7 +48,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.fml.FlexoBehaviour;
-import org.openflexo.foundation.fml.FlexoBehaviourParameter;
+import org.openflexo.foundation.fml.FlexoBehaviourArgument;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.rt.action.FlexoBehaviourAction;
 import org.openflexo.gina.annotation.FIBPanel;
@@ -160,7 +160,7 @@ public abstract class FlexoBehaviourActionWizard<A extends FlexoBehaviourAction<
 				return false;
 			}
 
-			for (FlexoBehaviourParameter parameter : getFlexoBehaviour().getParameters()) {
+			for (FlexoBehaviourArgument parameter : getFlexoBehaviour().getParameters()) {
 
 				if (!parameter.isValid(getAction(), getAction().getParameterValue(parameter))) {
 					// System.out.println(

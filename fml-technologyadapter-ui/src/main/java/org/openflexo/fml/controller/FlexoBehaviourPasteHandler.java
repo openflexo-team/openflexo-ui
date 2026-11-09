@@ -49,7 +49,7 @@ import org.openflexo.foundation.action.copypaste.FlexoPasteHandler;
 import org.openflexo.foundation.action.copypaste.PastingContext;
 import org.openflexo.foundation.fml.FlexoBehaviour;
 import org.openflexo.foundation.fml.FlexoBehaviourObject;
-import org.openflexo.foundation.fml.FlexoBehaviourParameter;
+import org.openflexo.foundation.fml.FlexoBehaviourArgument;
 import org.openflexo.pamela.factory.Clipboard;
 import org.openflexo.toolbox.StringUtils;
 
@@ -76,9 +76,9 @@ public class FlexoBehaviourPasteHandler extends FlexoPasteHandler<FlexoBehaviour
 		if (!(focusedObject instanceof FlexoBehaviourObject)) {
 			return null;
 		}
-		// Paste a FlexoBehaviourParameter from a FlexoBehaviourParameter
-		if (focusedObject instanceof FlexoBehaviourParameter) {
-			return new DefaultPastingContext<>(((FlexoBehaviourParameter) focusedObject).getFlexoBehaviour());
+		// Paste a FlexoBehaviourArgument from a FlexoBehaviourArgument
+		if (focusedObject instanceof FlexoBehaviourArgument) {
+			return new DefaultPastingContext<>(((FlexoBehaviourArgument) focusedObject).getFlexoBehaviour());
 		}
 
 		return null;

@@ -52,7 +52,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.fml.CreationScheme;
-import org.openflexo.foundation.fml.FlexoBehaviourParameter;
+import org.openflexo.foundation.fml.FlexoBehaviourArgument;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.FlexoEnum;
 import org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstance;
@@ -298,7 +298,7 @@ public class CreateFlexoConceptInstanceWizard extends FlexoActionWizard<CreateFl
 				return false;
 			}
 
-			for (FlexoBehaviourParameter parameter : getAction().getCreationScheme().getParameters()) {
+			for (FlexoBehaviourArgument parameter : getAction().getCreationScheme().getParameters()) {
 
 				if (!parameter.isValid(getAction().getCreationSchemeAction(),
 						getAction().getCreationSchemeAction().getParameterValue(parameter))) {

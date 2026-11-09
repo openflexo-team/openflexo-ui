@@ -71,7 +71,7 @@ public abstract class FlexoOntologyTechnologyAdapterController<TA extends Techno
 	}
 
 	/**
-	 * Factory method used to instanciate a technology-specific FIBWidget for a given {@link FlexoBehaviourParameter}<br>
+	 * Factory method used to instanciate a technology-specific FIBWidget for a given {@link FlexoBehaviourArgument}<br>
 	 * Provides a hook to specialize this method in a given technology
 	 * 
 	 * @param parameter
@@ -242,12 +242,12 @@ public abstract class FlexoOntologyTechnologyAdapterController<TA extends Techno
 	}*/
 
 	/**
-	 * Provides a hook to handle specific {@link FlexoBehaviourParameter} for a given technology
+	 * Provides a hook to handle specific {@link FlexoBehaviourArgument} for a given technology
 	 * 
 	 * @param availableParameterTypes
 	 */
 	/*@Override
-	public void appendSpecificFlexoBehaviourParameters(List<Class<? extends FlexoBehaviourParameter>> availableParameterTypes) {
+	public void appendSpecificFlexoBehaviourParameters(List<Class<? extends FlexoBehaviourArgument>> availableParameterTypes) {
 		super.appendSpecificFlexoBehaviourParameters(availableParameterTypes);
 		availableParameterTypes.add(IndividualParameter.class);
 		availableParameterTypes.add(ClassParameter.class);

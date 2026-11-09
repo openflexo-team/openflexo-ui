@@ -246,8 +246,8 @@ public class TestFMLInspectors extends GenericFIBInspectorTestCase {
 	}
 
 	@Test
-	public void testFlexoBehaviourParameterInspector() {
-		validateFIB("Inspectors/FML/FlexoBehaviourParameter/FlexoBehaviourParameter.inspector");
+	public void testFlexoBehaviourArgumentInspector() {
+		validateFIB("Inspectors/FML/FlexoBehaviourArgument/FlexoBehaviourArgument.inspector");
 	}
 
 	@Test

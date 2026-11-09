@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.gina.utils.FIBInspector" layout="border"
 	titleFont="SansSerif,0,12" darkLevel="0"
-	dataClassName="org.openflexo.foundation.fml.FlexoBehaviourParameter"
+	dataClassName="org.openflexo.foundation.fml.FlexoBehaviourArgument"
 	controllerClassName="org.openflexo.fml.controller.FMLFIBInspectorController"
 	font="SansSerif,0,12" name="Inspector">
 	<TabPanel name="Tab" constraints="border(location=center)">
@@ -33,7 +33,7 @@
 			<DropDown data="data.widget" localize="true" index="7"
 				constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)"
 				showText="true"
-				iteratorClassName="org.openflexo.foundation.fml.FlexoBehaviourParameter$WidgetType"
+				iteratorClassName="org.openflexo.foundation.fml.FlexoBehaviourArgument$WidgetType"
 				showIcon="false" autoSelectFirstRow="true" name="dropdown"
 				list="data.availableWidgetTypes" />
 			<Label label="required" align="right" index="8"

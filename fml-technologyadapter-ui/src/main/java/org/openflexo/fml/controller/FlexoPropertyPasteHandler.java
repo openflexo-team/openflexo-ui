@@ -73,9 +73,9 @@ public class FlexoPropertyPasteHandler extends FlexoPasteHandler<FlexoProperty> 
 		if (!(focusedObject instanceof FlexoProperty)) {
 			return null;
 		}
-		// Paste a FlexoBehaviourParameter from a FlexoBehaviourParameter
-		/*if (focusedObject instanceof FlexoBehaviourParameter) {
-			return new DefaultPastingContext<FlexoBehaviour>(((FlexoBehaviourParameter) focusedObject).getFlexoBehaviour(), event);
+		// Paste a FlexoBehaviourArgument from a FlexoBehaviourArgument
+		/*if (focusedObject instanceof FlexoBehaviourArgument) {
+			return new DefaultPastingContext<FlexoBehaviour>(((FlexoBehaviourArgument) focusedObject).getFlexoBehaviour(), event);
 		}*/
 
 		return null;

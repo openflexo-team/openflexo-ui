@@ -47,7 +47,7 @@ import org.openflexo.connie.DataBinding;
 import org.openflexo.connie.annotations.NotificationUnsafe;
 import org.openflexo.foundation.fml.FlexoBehaviour;
 import org.openflexo.foundation.fml.FlexoBehaviourActionType;
-import org.openflexo.foundation.fml.FlexoBehaviourParameter;
+import org.openflexo.foundation.fml.FlexoBehaviourArgument;
 import org.openflexo.foundation.fml.rt.action.FlexoBehaviourAction;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.gina.controller.FIBController.Status;
@@ -120,7 +120,7 @@ public class ParametersRetriever<ES extends FlexoBehaviour> {
 		return dialog.getStatus() == Status.VALIDATED;
 	}
 
-	private FIBComponent makeWidget(final FlexoBehaviourParameter parameter, FIBPanel panel, int index) {
+	private FIBComponent makeWidget(final FlexoBehaviourArgument parameter, FIBPanel panel, int index) {
 		if (applicationContext != null) {
 			for (TechnologyAdapter ta : applicationContext.getTechnologyAdapterService().getTechnologyAdapters()) {
 				TechnologyAdapterController<?> tac = applicationContext.getTechnologyAdapterControllerService()
@@ -200,8 +200,8 @@ public class ParametersRetriever<ES extends FlexoBehaviour> {
 			}
 		}
 
-		Hashtable<FlexoBehaviourParameter, FIBComponent> widgets = new Hashtable<>();
-		for (final FlexoBehaviourParameter parameter : flexoBehaviour.getParameters()) {
+		Hashtable<FlexoBehaviourArgument, FIBComponent> widgets = new Hashtable<>();
+		for (final FlexoBehaviourArgument parameter : flexoBehaviour.getParameters()) {
 			FIBLabel label = fibModelFactory.newFIBLabel();
 			label.setLabel(dict.localizedForKey(parameter.getName()));
 			returned.addToSubComponents(label, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false), index++);
@@ -214,12 +214,12 @@ public class ParametersRetriever<ES extends FlexoBehaviour> {
 				logger.warning("Cannot instanciate widget for " + parameter + " of " + (parameter != null ? parameter.getClass() : "null"));
 			}
 		}
-		/*for (final FlexoBehaviourParameter parameter : flexoBehaviour.getParameters()) {
+		/*for (final FlexoBehaviourArgument parameter : flexoBehaviour.getParameters()) {
 			if (parameter instanceof URIParameter) {
 				FIBPanel uriPanel = (FIBPanel) widgets.get(parameter);
-				List<FlexoBehaviourParameter> dependancies = ((URIParameter) parameter).getDependancies();
+				List<FlexoBehaviourArgument> dependancies = ((URIParameter) parameter).getDependancies();
 				if (dependancies != null) {
-					for (FlexoBehaviourParameter dep : dependancies) {
+					for (FlexoBehaviourArgument dep : dependancies) {
 						FIBComponent dependingComponent = widgets.get(dep);
 						uriPanel.getComponentNamed("tf").addToExplicitDependancies(fibModelFactory.newFIBDependancy(dependingComponent));
 					}
