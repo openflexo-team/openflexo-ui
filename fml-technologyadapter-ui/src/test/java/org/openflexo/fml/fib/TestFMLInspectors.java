@@ -76,28 +76,8 @@ public class TestFMLInspectors extends GenericFIBInspectorTestCase {
 	}
 
 	@Test
-	public void testAddClassInstanceInspector() {
-		validateFIB("Inspectors/FML/EditionAction/AddClassInstance.inspector");
-	}
-
-	@Test
-	public void testAddFlexoConceptInstanceInspector() {
-		validateFIB("Inspectors/FML/EditionAction/AddFlexoConceptInstance.inspector");
-	}
-
-	@Test
 	public void testAddIndividualInspector() {
 		validateFIB("Inspectors/FML/EditionAction/AddIndividual.inspector");
-	}
-
-	@Test
-	public void testAddToListActionInspector() {
-		validateFIB("Inspectors/FML/EditionAction/AddToListAction.inspector");
-	}
-
-	@Test
-	public void testAbstractAddVirtualModelInstanceInspector() {
-		validateFIB("Inspectors/FML/EditionAction/AbstractAddVirtualModelInstance.inspector");
 	}
 
 	@Test
@@ -146,16 +126,6 @@ public class TestFMLInspectors extends GenericFIBInspectorTestCase {
 	}
 
 	@Test
-	public void testFireEventActionInspector() {
-		validateFIB("Inspectors/FML/EditionAction/FireEventAction.inspector");
-	}
-
-	@Test
-	public void testIncrementalIterationActionInspector() {
-		validateFIB("Inspectors/FML/EditionAction/IncrementalIterationAction.inspector");
-	}
-
-	@Test
 	public void testInitiateMatchingInspector() {
 		validateFIB("Inspectors/FML/EditionAction/InitiateMatching.inspector");
 	}
@@ -178,11 +148,6 @@ public class TestFMLInspectors extends GenericFIBInspectorTestCase {
 	@Test
 	public void testNotifyPropertyChangedActionInspector() {
 		validateFIB("Inspectors/FML/EditionAction/NotifyPropertyChangedAction.inspector");
-	}
-
-	@Test
-	public void testRemoveFromListActionInspector() {
-		validateFIB("Inspectors/FML/EditionAction/RemoveFromListAction.inspector");
 	}
 
 	@Test

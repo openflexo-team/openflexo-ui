@@ -102,7 +102,6 @@ import org.openflexo.foundation.fml.controlgraph.ConditionalAction;
 import org.openflexo.foundation.fml.controlgraph.EmptyControlGraph;
 import org.openflexo.foundation.fml.controlgraph.ExpressionIterationAction;
 import org.openflexo.foundation.fml.controlgraph.FMLControlGraph;
-import org.openflexo.foundation.fml.controlgraph.IncrementalIterationAction;
 import org.openflexo.foundation.fml.controlgraph.IterationAction;
 import org.openflexo.foundation.fml.controlgraph.WhileAction;
 import org.openflexo.foundation.fml.editionaction.EditionAction;
@@ -431,20 +430,6 @@ public class FMLFIBController extends FlexoFIBController {
 	}
 
 	public EditionAction createEditionActionInWhileAction(WhileAction iteration) {
-		if (iteration != null) {
-			if (iteration.getControlGraph() == null) {
-				EmptyControlGraph cg = iteration.getFMLModelFactory().newEmptyControlGraph();
-				iteration.setControlGraph(cg);
-			}
-			CreateEditionAction createEditionAction = CreateEditionAction.actionType.makeNewAction(iteration.getControlGraph(), null,
-					getEditor());
-			createEditionAction.doAction();
-			return createEditionAction.getNewEditionAction();
-		}
-		return null;
-	}
-
-	public EditionAction createEditionActionInIncrementalIterationAction(IncrementalIterationAction iteration) {
 		if (iteration != null) {
 			if (iteration.getControlGraph() == null) {
 				EmptyControlGraph cg = iteration.getFMLModelFactory().newEmptyControlGraph();

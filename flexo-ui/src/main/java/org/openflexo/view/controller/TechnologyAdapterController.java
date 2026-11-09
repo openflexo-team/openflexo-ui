@@ -64,11 +64,8 @@ import org.openflexo.foundation.fml.FlexoRole;
 import org.openflexo.foundation.fml.WidgetContext;
 import org.openflexo.foundation.fml.controlgraph.ConditionalAction;
 import org.openflexo.foundation.fml.controlgraph.ExpressionIterationAction;
-import org.openflexo.foundation.fml.controlgraph.IncrementalIterationAction;
 import org.openflexo.foundation.fml.controlgraph.IterationAction;
 import org.openflexo.foundation.fml.controlgraph.WhileAction;
-import org.openflexo.foundation.fml.editionaction.AddClassInstance;
-import org.openflexo.foundation.fml.editionaction.AddToListAction;
 import org.openflexo.foundation.fml.editionaction.ConnectAction;
 import org.openflexo.foundation.fml.editionaction.DeleteAction;
 import org.openflexo.foundation.fml.editionaction.EditionAction;
@@ -76,13 +73,8 @@ import org.openflexo.foundation.fml.editionaction.ExpressionAction;
 import org.openflexo.foundation.fml.editionaction.LogAction;
 import org.openflexo.foundation.fml.editionaction.NotifyProgressAction;
 import org.openflexo.foundation.fml.editionaction.NotifyPropertyChangedAction;
-import org.openflexo.foundation.fml.editionaction.RemoveFromListAction;
 import org.openflexo.foundation.fml.rt.action.FlexoBehaviourAction;
-import org.openflexo.foundation.fml.rt.editionaction.AddFlexoConceptInstance;
-import org.openflexo.foundation.fml.rt.editionaction.AddVirtualModelInstance;
-import org.openflexo.foundation.fml.rt.editionaction.CreateTopLevelVirtualModelInstance;
 import org.openflexo.foundation.fml.rt.editionaction.FinalizeMatching;
-import org.openflexo.foundation.fml.rt.editionaction.FireEventAction;
 import org.openflexo.foundation.fml.rt.editionaction.InitiateMatching;
 import org.openflexo.foundation.fml.rt.editionaction.MatchFlexoConceptInstance;
 import org.openflexo.foundation.fml.rt.editionaction.SelectFlexoConceptInstance;
@@ -390,19 +382,7 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<T
 	 */
 	public ImageIcon getIconForEditionAction(Class<? extends EditionAction> editionActionClass) {
 
-		if (AddFlexoConceptInstance.class.isAssignableFrom(editionActionClass)) {
-			return IconFactory.getImageIcon(FMLRTIconLibrary.FLEXO_CONCEPT_INSTANCE_ICON, IconLibrary.DUPLICATE);
-		}
-		else if (CreateTopLevelVirtualModelInstance.class.isAssignableFrom(editionActionClass)) {
-			return IconFactory.getImageIcon(FMLRTIconLibrary.VIRTUAL_MODEL_INSTANCE_ICON, IconLibrary.DUPLICATE);
-		}
-		else if (AddVirtualModelInstance.class.isAssignableFrom(editionActionClass)) {
-			return IconFactory.getImageIcon(FMLRTIconLibrary.VIRTUAL_MODEL_INSTANCE_ICON, IconLibrary.DUPLICATE);
-		}
-		else if (AddClassInstance.class.isAssignableFrom(editionActionClass)) {
-			return IconFactory.getImageIcon(FMLRTIconLibrary.FLEXO_CLASS_INSTANCE_ICON, IconLibrary.DUPLICATE);
-		}
-		else if (SelectFlexoConceptInstance.class.isAssignableFrom(editionActionClass)) {
+		if (SelectFlexoConceptInstance.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(FMLRTIconLibrary.FLEXO_CONCEPT_INSTANCE_ICON, IconLibrary.IMPORT);
 		}
 		else if (SelectUniqueFlexoConceptInstance.class.isAssignableFrom(editionActionClass)) {
@@ -423,12 +403,6 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<T
 		else if (FinalizeMatching.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(FMLRTIconLibrary.FLEXO_CONCEPT_INSTANCE_ICON, IconLibrary.SYNC);
 		}
-		else if (AddToListAction.class.isAssignableFrom(editionActionClass)) {
-			return IconFactory.getImageIcon(FMLIconLibrary.LIST_ICON, IconLibrary.POSITIVE_MARKER);
-		}
-		else if (RemoveFromListAction.class.isAssignableFrom(editionActionClass)) {
-			return IconFactory.getImageIcon(FMLIconLibrary.LIST_ICON, IconLibrary.NEGATIVE_MARKER);
-		}
 		else if (DeleteAction.class.isAssignableFrom(editionActionClass)) {
 			return FMLIconLibrary.DELETE_ICON;
 		}
@@ -442,9 +416,6 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<T
 			return FMLIconLibrary.ITERATION_ACTION_ICON;
 		}
 		else if (WhileAction.class.isAssignableFrom(editionActionClass)) {
-			return FMLIconLibrary.ITERATION_ACTION_ICON;
-		}
-		else if (IncrementalIterationAction.class.isAssignableFrom(editionActionClass)) {
 			return FMLIconLibrary.ITERATION_ACTION_ICON;
 		}
 		else if (ExpressionAction.class.isAssignableFrom(editionActionClass)) {
@@ -461,9 +432,6 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<T
 		}
 		else if (NotifyPropertyChangedAction.class.isAssignableFrom(editionActionClass)) {
 			return FMLIconLibrary.NOTIFY_PROPERTY_CHANGED_ACTION_ICON;
-		}
-		else if (FireEventAction.class.isAssignableFrom(editionActionClass)) {
-			return IconFactory.getImageIcon(FMLIconLibrary.FLEXO_EVENT_ICON, IconLibrary.NEW_MARKER);
 		}
 		return null;
 

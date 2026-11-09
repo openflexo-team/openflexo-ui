@@ -62,3 +62,16 @@ Status legend: `TODO` · `IN PROGRESS` · `BLOCKED` · `DONE` · `DEFERRED`.
 **Cause.** A module that activates technologies in its `initModule()` reaches `TechnologyAdapterController.activate(module)` twice: through `TechnologyAdapterController.activate()`, which goes over the loaded modules (the module being loaded is already one of them), then through the `ModuleLoaded` notification. Each call initialized the inspectors, the actions and the advanced actions again.
 
 **Fix.** Inspectors and actions are initialized once per module controller; activable plugins are still checked at each call. Loading the Free Modelling Editor now takes 13.4 s (measured under Eclipse, 2026-11-05), each inspector being loaded once.
+
+---
+
+### UI-D-6 — `TestMultiProcessChallengeFMLEditor` loads a VirtualModel that no longer exists  ·  `TODO`
+
+**Symptom.** Its five UI tests fail (`uiTest` of fml-technologyadapter-ui): `loadFMLResource` finds no VirtualModel
+`http://www.openflexo.org/test/MultiProcessChallengeMetaModel.fml`, the four next steps fail with a `NullPointerException`.
+
+**Verified (2026-11-08).** No model of the workspace has this URI. The multi-process challenge now lives in
+openflexo-integration-tests (`http://openflexo.org/multi-process-challenge/FML/MetaModel.fml`), which fml-technologyadapter-ui does
+not depend on. Unrelated to CORE-F-8: without that model the test cannot pass, whatever the platform does.
+
+**Options.** Repoint it to a model of flexo-test-resources of the same size, or delete it.

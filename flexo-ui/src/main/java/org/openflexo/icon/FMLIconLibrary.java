@@ -73,12 +73,9 @@ import org.openflexo.foundation.fml.TypeDeclaration;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.controlgraph.ConditionalAction;
 import org.openflexo.foundation.fml.controlgraph.ExpressionIterationAction;
-import org.openflexo.foundation.fml.controlgraph.IncrementalIterationAction;
 import org.openflexo.foundation.fml.controlgraph.IterationAction;
 import org.openflexo.foundation.fml.controlgraph.WhileAction;
 import org.openflexo.foundation.fml.editionaction.AbstractAssignationAction;
-import org.openflexo.foundation.fml.editionaction.AddClassInstance;
-import org.openflexo.foundation.fml.editionaction.AddToListAction;
 import org.openflexo.foundation.fml.editionaction.ConnectAction;
 import org.openflexo.foundation.fml.editionaction.DeleteAction;
 import org.openflexo.foundation.fml.editionaction.EditionAction;
@@ -87,14 +84,11 @@ import org.openflexo.foundation.fml.editionaction.FetchRequestCondition;
 import org.openflexo.foundation.fml.editionaction.LogAction;
 import org.openflexo.foundation.fml.editionaction.NotifyProgressAction;
 import org.openflexo.foundation.fml.editionaction.NotifyPropertyChangedAction;
-import org.openflexo.foundation.fml.editionaction.RemoveFromListAction;
 import org.openflexo.foundation.fml.editionaction.TechnologySpecificAction;
 import org.openflexo.foundation.fml.inspector.FlexoConceptInspector;
 import org.openflexo.foundation.fml.inspector.InspectorEntry;
 import org.openflexo.foundation.fml.rm.CompilationUnitResource;
-import org.openflexo.foundation.fml.rt.editionaction.AddFlexoConceptInstance;
 import org.openflexo.foundation.fml.rt.editionaction.FinalizeMatching;
-import org.openflexo.foundation.fml.rt.editionaction.FireEventAction;
 import org.openflexo.foundation.fml.rt.editionaction.InitiateMatching;
 import org.openflexo.foundation.fml.rt.editionaction.MatchFlexoConceptInstance;
 import org.openflexo.foundation.fml.rt.editionaction.MatchingCriteria;
@@ -400,10 +394,7 @@ public class FMLIconLibrary extends IconLibrary {
 					}
 				}
 			}
-			if (object instanceof AddFlexoConceptInstance) {
-				return IconFactory.getImageIcon(FMLRTIconLibrary.FLEXO_CONCEPT_INSTANCE_ICON, IconLibrary.DUPLICATE);
-			}
-			else if (object instanceof SelectFlexoConceptInstance) {
+			if (object instanceof SelectFlexoConceptInstance) {
 				return IconFactory.getImageIcon(FMLRTIconLibrary.FLEXO_CONCEPT_INSTANCE_ICON, IconLibrary.IMPORT);
 			}
 			else if (object instanceof InitiateMatching) {
@@ -418,17 +409,8 @@ public class FMLIconLibrary extends IconLibrary {
 			else if (object instanceof SelectVirtualModelInstance) {
 				return IconFactory.getImageIcon(FMLRTIconLibrary.VIRTUAL_MODEL_INSTANCE_ICON, IconLibrary.IMPORT);
 			}
-			else if (object instanceof AddToListAction) {
-				return IconFactory.getImageIcon(LIST_ICON, IconLibrary.POSITIVE_MARKER);
-			}
-			else if (object instanceof RemoveFromListAction) {
-				return IconFactory.getImageIcon(LIST_ICON, IconLibrary.NEGATIVE_MARKER);
-			}
 			else if (object instanceof ExpressionAction) {
 				return EXPRESSION_ACTION_ICON;
-			}
-			else if (object instanceof AddClassInstance) {
-				return IconFactory.getImageIcon(FMLRTIconLibrary.FLEXO_CLASS_INSTANCE_ICON, IconLibrary.DUPLICATE);
 			}
 			else if (object instanceof LogAction) {
 				return LOG_ACTION_ICON;
@@ -441,9 +423,6 @@ public class FMLIconLibrary extends IconLibrary {
 			}
 			else if (object instanceof NotifyPropertyChangedAction) {
 				return NOTIFY_PROPERTY_CHANGED_ACTION_ICON;
-			}
-			else if (object instanceof FireEventAction) {
-				return IconFactory.getImageIcon(FLEXO_EVENT_ICON, IconLibrary.NEW_MARKER);
 			}
 			else if (object instanceof AbstractAssignationAction) {
 				return iconForObject(((AbstractAssignationAction) object).getAssignableAction());
@@ -458,9 +437,6 @@ public class FMLIconLibrary extends IconLibrary {
 				return ITERATION_ACTION_ICON;
 			}
 			else if (object instanceof WhileAction) {
-				return ITERATION_ACTION_ICON;
-			}
-			else if (object instanceof IncrementalIterationAction) {
 				return ITERATION_ACTION_ICON;
 			}
 			else if (object instanceof DeleteAction) {
