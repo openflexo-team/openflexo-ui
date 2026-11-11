@@ -105,7 +105,7 @@ public class TestFMLUpdateWith extends OpenflexoTestCase {
 	}
 
 	public TestFMLUpdateWith(TestInfo testInfo, String name) {
-		System.out.println("********* TestFMLMigration " + testInfo.fmlResource + " name=" + name);
+		System.out.println("********* TestFMLUpdateWith " + testInfo.fmlResource + " name=" + name);
 		this.testInfo = testInfo;
 	}
 
