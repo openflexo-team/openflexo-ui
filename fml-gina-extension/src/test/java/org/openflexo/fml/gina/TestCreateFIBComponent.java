@@ -317,8 +317,8 @@ public class TestCreateFIBComponent extends OpenflexoTestCase {
 	}
 
 	/**
-	 * Compare line by line, reporting the first difference with its context rather than two whole files. Exact, except for the indentation
-	 * of a line that follows an annotation in either text - see {@link #withoutAnnotations(String)}.
+	 * Compare line by line, reporting the first difference with its context rather than two whole files. Exact, indentation included (an
+	 * annotation added to an indented concept used to push the concept to column 0: P2PP-D-1, fixed in p2pp-core).
 	 */
 	private static void assertSameLines(String message, List<SourceLine> expected, List<SourceLine> actual) {
 		int max = Math.max(expected.size(), actual.size());
@@ -328,9 +328,6 @@ public class TestCreateFIBComponent extends OpenflexoTestCase {
 			boolean same;
 			if (e == null || a == null) {
 				same = false;
-			}
-			else if (e.followsAnnotation || a.followsAnnotation) {
-				same = e.text.replaceAll("^\\s+", "").equals(a.text.replaceAll("^\\s+", ""));
 			}
 			else {
 				same = e.text.equals(a.text);
@@ -350,12 +347,6 @@ public class TestCreateFIBComponent extends OpenflexoTestCase {
 	/**
 	 * The lines of supplied FML source minus its <code>@UI</code> annotations, each line remembering whether it directly followed one.
 	 *
-	 * <p>
-	 * The indentation of such a line is the one tolerance of the comparison, and it is a known defect of the pretty-printer, not of the
-	 * declaration: a child inserted in front of an indented node - an annotation added to a concept - takes the place of the node's first
-	 * fragment, AFTER its indentation, so the declaration that follows restarts at column 0. The source stays valid FML. See "Inserting
-	 * a child in front of an indented node" in <code>p2pp/p2pp-core/KNOWN_DEFECTS.md</code>. Every other line is compared
-	 * exactly.
 	 */
 	private static List<SourceLine> withoutAnnotations(String fml) {
 		List<SourceLine> returned = new ArrayList<>();
