@@ -573,7 +573,24 @@ public class FMLEditor extends JPanel implements PropertyChangeListener, Hyperli
 	 * 
 	 * We first check that FML really change, and update text accordingly, preventing the parser to be called again
 	 */
+	private boolean updatingFMLAsText = false;
+
 	private void updateFMLAsText() {
+
+		if (updatingFMLAsText) {
+			// A notification raised while printing (a node linked to a new object): the print in progress already takes it into account.
+			// Printing again from here loops until the stack overflows.
+			return;
+		}
+		updatingFMLAsText = true;
+		try {
+			doUpdateFMLAsText();
+		} finally {
+			updatingFMLAsText = false;
+		}
+	}
+
+	private void doUpdateFMLAsText() {
 
 		if (!fmlResource.getCompilationUnit().isFMLPrettyPrintAvailable()) {
 			// In this case, we don't care
