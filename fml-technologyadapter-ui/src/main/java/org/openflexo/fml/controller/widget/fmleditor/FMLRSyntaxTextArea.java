@@ -1,11 +1,21 @@
 package org.openflexo.fml.controller.widget.fmleditor;
 
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
 import java.util.List;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import org.openflexo.localization.LocalizedSwing;
 
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -27,6 +37,8 @@ public class FMLRSyntaxTextArea extends RSyntaxTextArea implements DocumentListe
 		super();
 		this.editor = editor;
 		getDocument().addDocumentListener(this);
+		getInputMap().put(REINDENT_KEY_STROKE, REINDENT);
+		getActionMap().put(REINDENT, getReindentAction());
 		addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -39,6 +51,36 @@ public class FMLRSyntaxTextArea extends RSyntaxTextArea implements DocumentListe
 				// unregisterParser();
 			}
 		});
+	}
+
+	private static final String REINDENT = "reindent";
+
+	/** Cmd+I on macOS, Ctrl+I elsewhere: "Correct Indentation" of Eclipse */
+	static final KeyStroke REINDENT_KEY_STROKE = KeyStroke.getKeyStroke(KeyEvent.VK_I,
+			Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
+
+	private Action reindentAction;
+
+	/** Re-indent the selection, or the whole text when nothing is selected */
+	private Action getReindentAction() {
+		if (reindentAction == null) {
+			reindentAction = new AbstractAction(FMLEditorLocalization.locales().localizedForKey(REINDENT)) {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					editor.reindent();
+				}
+			};
+			reindentAction.putValue(Action.ACCELERATOR_KEY, REINDENT_KEY_STROKE);
+		}
+		return reindentAction;
+	}
+
+	@Override
+	protected JPopupMenu createPopupMenu() {
+		JPopupMenu popup = super.createPopupMenu();
+		popup.addSeparator();
+		popup.add(LocalizedSwing.bind(new JMenuItem(getReindentAction()), FMLEditorLocalization.locales(), REINDENT));
+		return popup;
 	}
 
 	public FMLEditor getEditor() {

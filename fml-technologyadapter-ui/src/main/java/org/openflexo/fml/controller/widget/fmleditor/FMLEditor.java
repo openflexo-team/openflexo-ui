@@ -98,6 +98,9 @@ import org.openflexo.foundation.fml.FMLTechnologyAdapter;
 import org.openflexo.foundation.fml.FMLValidationReport;
 import org.openflexo.foundation.fml.parser.FMLObjectNode;
 import org.openflexo.foundation.fml.parser.fmlnodes.FMLCompilationUnitNode;
+import org.openflexo.p2pp.P2PPNode;
+import org.openflexo.p2pp.Reindenter;
+import org.openflexo.p2pp.Reindenter.RowIndentation;
 import org.openflexo.foundation.fml.rm.CompilationUnitResource;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
@@ -484,6 +487,83 @@ public class FMLEditor extends JPanel implements PropertyChangeListener, Hyperli
 
 	public void parseImmediately() {
 		parser.parse((RSyntaxDocument) textArea.getDocument(), textArea.getSyntaxEditingStyle());
+	}
+
+	/**
+	 * The rows to re-indent, numbered from 1, both included: those of the selection, or every row when nothing is selected. A selection
+	 * ending at the very start of a row does not take that row.
+	 */
+	static int[] rowsToReindent(String text, int selectionStart, int selectionEnd) {
+		int rows = 1;
+		for (int i = 0; i < text.length(); i++) {
+			if (text.charAt(i) == '\n') {
+				rows++;
+			}
+		}
+		if (selectionStart == selectionEnd) {
+			return new int[] { 1, rows };
+		}
+		int start = Math.max(0, Math.min(selectionStart, selectionEnd));
+		int end = Math.min(text.length(), Math.max(selectionStart, selectionEnd));
+		int from = 1 + count(text, start);
+		int to = 1 + count(text, end);
+		if (to > from && text.charAt(end - 1) == '\n') {
+			to--;
+		}
+		return new int[] { from, to };
+	}
+
+	private static int count(String text, int end) {
+		int n = 0;
+		for (int i = 0; i < end; i++) {
+			if (text.charAt(i) == '\n') {
+				n++;
+			}
+		}
+		return n;
+	}
+
+	/**
+	 * Re-indent the rows of the selection, or the whole text when nothing is selected, from the structure of the FML (P2PP-F-1): only the
+	 * leading whitespace of rows changes, with tabs, in a single edit that can be undone. The text is parsed into a unit of its own, so that
+	 * the model is not touched (the parser of the editor then parses the edited text as after any edit). A text that does not parse cannot
+	 * be re-indented: nothing changes.
+	 */
+	public void reindent() {
+		String text = textArea.getText();
+		FMLCompilationUnit parsed;
+		try {
+			parsed = parser.getFMLParser().parse(text, getFactory(), modelSlotClasses -> fmlResource.updateFMLModelFactory(modelSlotClasses),
+					true);
+		} catch (Exception e) {
+			logger.info("Cannot re-indent FML that does not parse: " + e.getMessage());
+			UIManager.getLookAndFeel().provideErrorFeedback(textArea);
+			return;
+		}
+		if (!(parsed.getPrettyPrintDelegate() instanceof P2PPNode)) {
+			UIManager.getLookAndFeel().provideErrorFeedback(textArea);
+			return;
+		}
+		int[] rows = rowsToReindent(text, textArea.getSelectionStart(), textArea.getSelectionEnd());
+		List<RowIndentation> edits = new Reindenter((P2PPNode<?, ?>) parsed.getPrettyPrintDelegate(), "\t").computeIndentations(rows[0],
+				rows[1]);
+		if (edits.isEmpty()) {
+			return;
+		}
+		textArea.beginAtomicEdit();
+		try {
+			// from the last row up, so that the offsets of the rows still to change stay valid
+			for (int i = edits.size() - 1; i >= 0; i--) {
+				RowIndentation edit = edits.get(i);
+				int rowStart = textArea.getLineStartOffset(edit.getLine() - 1);
+				textArea.getDocument().remove(rowStart, edit.getOldLength());
+				textArea.getDocument().insertString(rowStart, edit.getNewIndentation(), null);
+			}
+		} catch (BadLocationException e) {
+			logger.warning("Unexpected " + e);
+		} finally {
+			textArea.endAtomicEdit();
+		}
 	}
 
 	private String lastFML;
