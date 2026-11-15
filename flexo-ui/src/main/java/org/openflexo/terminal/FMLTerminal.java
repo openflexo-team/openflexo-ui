@@ -1,5 +1,10 @@
 package org.openflexo.terminal;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.openflexo.foundation.fml.rt.error.FMLErrorReporter;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -49,6 +54,9 @@ import org.openflexo.toolbox.StringUtils;
 //TODO: Keep a global StringBuilder to decrease memory footprint
 
 public class FMLTerminal extends JFrame {
+
+	private static final Logger logger = Logger.getLogger(FMLTerminal.class.getPackage().getName());
+
 	private JTextPane textPane;
 	private JScrollPane scrollPane;
 	private final String LINE_SEPARATOR = System.lineSeparator();
@@ -520,7 +528,12 @@ public class FMLTerminal extends JFrame {
 		} catch (ParseException e) {
 			commandInterpreter.getErrStream().println("Syntax error : " + e.getMessage());
 		} catch (FMLCommandExecutionException e) {
-			commandInterpreter.getErrStream().println("Execution error : " + e.getMessage());
+			// Kind, message and FML stack of the failure (CORE-F-11)
+			commandInterpreter.getErrStream().println(e.describe());
+		} catch (RuntimeException e) {
+			// A defect of the platform: reported, and the terminal goes on
+			commandInterpreter.getErrStream().println(FMLErrorReporter.describe("Unexpected failure", e));
+			logger.log(Level.SEVERE, "Unexpected failure of command " + commandWithoutLineSeparator, e);
 		}
 		if (StringUtils.isNotEmpty(commandWithoutLineSeparator.trim())) {
 			history.add(commandWithoutLineSeparator);
