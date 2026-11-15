@@ -54,6 +54,7 @@ import org.openflexo.br.ui.SendBugReportServiceTask;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
+import org.openflexo.foundation.fml.rt.error.FMLErrorReporter;
 import org.openflexo.jedit.JEditTextArea;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLoggingManager;
@@ -165,6 +166,10 @@ public class FlexoApplication {
 				}
 
 				if (exception instanceof CancelException || exception.getCause() instanceof CancelException) {
+					return;
+				}
+				// The failure of an action, already reported by the editor (console, and the bug report for a defect) (CORE-F-11)
+				if (FMLErrorReporter.isReported(exception)) {
 					return;
 				}
 				if (exception instanceof TooManyFailedAttemptException || exception.getCause() instanceof TooManyFailedAttemptException) {

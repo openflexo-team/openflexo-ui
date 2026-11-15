@@ -42,8 +42,6 @@ import javax.swing.Icon;
 
 import org.openflexo.foundation.action.FlexoActionFactory;
 import org.openflexo.foundation.action.FlexoActionRunnable;
-import org.openflexo.foundation.action.FlexoExceptionHandler;
-import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.fml.SynchronizationScheme;
 import org.openflexo.foundation.fml.rt.VirtualModelInstance;
 import org.openflexo.foundation.fml.rt.VirtualModelInstanceObject;
@@ -51,7 +49,6 @@ import org.openflexo.foundation.fml.rt.action.SynchronizationSchemeAction;
 import org.openflexo.icon.FMLIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.ParametersRetriever;
 
 public class SynchronizationSchemeActionInitializer
@@ -81,16 +78,6 @@ public class SynchronizationSchemeActionInitializer
 		};
 	}
 
-	@Override
-	protected FlexoExceptionHandler<SynchronizationSchemeAction, VirtualModelInstance<?, ?>, VirtualModelInstanceObject> getDefaultExceptionHandler() {
-		return (exception, action) -> {
-			if (exception instanceof NotImplementedException) {
-				FlexoController.notify(action.getLocales().localizedForKey("not_implemented_yet"));
-				return true;
-			}
-			return false;
-		};
-	}
 
 	@Override
 	protected Icon getEnabledIcon(

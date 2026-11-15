@@ -18,6 +18,7 @@
         <LabelColumn id="15" data="iterator.millisAsString" color="data.getColorForLogRecord(iterator)" resizable="true" title="millis" displayTitle="true" bgColor="data.getBgColorForLogRecord(iterator)" columnWidth="80" showIcon="false" name="label" />
         <LabelColumn id="16" data="iterator.threadAsString" color="data.getColorForLogRecord(iterator)" resizable="true" title="thread" displayTitle="true" bgColor="data.getBgColorForLogRecord(iterator)" columnWidth="50" showIcon="false" name="label" />
         <CustomAction id="17" method="data.refresh()" name="refresh" />
+        <CustomAction id="400" method="data.openInFMLEditor(selected)" isAvailable="data.canOpenInFMLEditor(selected)" name="open_in_fml_editor" />
       </Table>
       <Panel id="18" align="left" borderTop="2" borderTitle="" borderLeft="2" trackViewPortHeight="true" trackViewPortWidth="true" borderBottom="2" border="empty" sizeAdjustment="OriginalSize" titleFont="LucidaGrande,0,10" layout="gridbag" borderRight="2" index="2" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" font="LucidaGrande,0,10" name="FIBPanel2">
         <Button id="19" buttonType="Trigger" action="data.clear()" label="clear" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="ClearButton" />
@@ -382,5 +383,8 @@
     <Localized id="397" lang="English" value="OnlyKeep" key="OnlyKeep" />
     <Localized id="398" lang="French" value="Garder seulement" key="OnlyKeep" />
     <Localized id="399" lang="Dutch" value="Alleen bewaren" key="OnlyKeep" />
+    <Localized id="401" lang="English" value="Open in the FML editor" key="open_in_fml_editor" />
+    <Localized id="402" lang="French" value="Ouvrir dans l'éditeur FML" key="open_in_fml_editor" />
+    <Localized id="403" lang="Dutch" value="Openen in de FML-editor" key="open_in_fml_editor" />
   </LocalizedDictionary>
 </Panel>

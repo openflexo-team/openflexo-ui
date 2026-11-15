@@ -43,8 +43,6 @@ import javax.swing.Icon;
 import org.openflexo.components.wizard.WizardDialog;
 import org.openflexo.foundation.action.FlexoActionFactory;
 import org.openflexo.foundation.action.FlexoActionRunnable;
-import org.openflexo.foundation.action.FlexoExceptionHandler;
-import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
 import org.openflexo.foundation.fml.rt.VirtualModelInstanceObject;
 import org.openflexo.foundation.fml.rt.action.ActionSchemeAction;
@@ -52,7 +50,6 @@ import org.openflexo.gina.controller.FIBController.Status;
 import org.openflexo.icon.FMLIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
 
 public class ActionSchemeActionInitializer extends ActionInitializer<ActionSchemeAction, FlexoConceptInstance, VirtualModelInstanceObject> {
 	public ActionSchemeActionInitializer(ControllerActionInitializer actionInitializer) {
@@ -92,16 +89,6 @@ public class ActionSchemeActionInitializer extends ActionInitializer<ActionSchem
 		};
 	}
 
-	@Override
-	protected FlexoExceptionHandler<ActionSchemeAction, FlexoConceptInstance, VirtualModelInstanceObject> getDefaultExceptionHandler() {
-		return (exception, action) -> {
-			if (exception instanceof NotImplementedException) {
-				FlexoController.notify(action.getLocales().localizedForKey("not_implemented_yet"));
-				return true;
-			}
-			return false;
-		};
-	}
 
 	@Override
 	protected Icon getEnabledIcon(FlexoActionFactory<ActionSchemeAction, FlexoConceptInstance, VirtualModelInstanceObject> actionType) {

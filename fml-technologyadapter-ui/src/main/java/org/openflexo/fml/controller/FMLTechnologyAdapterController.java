@@ -46,6 +46,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
 
 import org.fife.rsta.ac.LanguageSupportFactory;
 import org.fife.ui.rsyntaxtextarea.folding.CurlyFoldParser;
@@ -90,6 +91,7 @@ import org.openflexo.fml.controller.action.MoveVirtualModelToDirectoryInitialize
 import org.openflexo.fml.controller.action.RenameCompilationUnitInitializer;
 import org.openflexo.fml.controller.action.RenameFlexoConceptInitializer;
 import org.openflexo.fml.controller.validation.ValidateActionizer;
+import org.openflexo.fml.controller.view.FMLCompilationUnitView;
 import org.openflexo.fml.controller.view.FMLLocalizedDictionaryView;
 import org.openflexo.fml.controller.view.StandardCompilationUnitView;
 import org.openflexo.fml.controller.widget.FIBCompilationUnitBrowser;
@@ -173,6 +175,7 @@ import org.openflexo.toolbox.StringUtils;
 import org.openflexo.view.EmptyPanel;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FMLSourceNavigator;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.TechnologyAdapterController;
 import org.openflexo.view.controller.TechnologyAdapterPluginController;
@@ -184,7 +187,7 @@ import org.openflexo.view.controller.model.FlexoPerspective;
  * @author sylvain
  *
  */
-public class FMLTechnologyAdapterController extends TechnologyAdapterController<FMLTechnologyAdapter> {
+public class FMLTechnologyAdapterController extends TechnologyAdapterController<FMLTechnologyAdapter> implements FMLSourceNavigator {
 
 	private static final Logger logger = Logger.getLogger(FMLTechnologyAdapterController.class.getPackage().getName());
 
@@ -1052,4 +1055,56 @@ public class FMLTechnologyAdapterController extends TechnologyAdapterController<
 		return FMLPreferences.class;
 	}
 
+
+	/** The FML perspective of supplied controller, or null when its module has none */
+	private static FMLTechnologyPerspective getFMLPerspective(FlexoController controller) {
+		if (controller == null || controller.getControllerModel() == null) {
+			return null;
+		}
+		for (FlexoPerspective perspective : controller.getControllerModel().getPerspectives()) {
+			if (perspective instanceof FMLTechnologyPerspective) {
+				return (FMLTechnologyPerspective) perspective;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public boolean canShowFMLSource(FlexoController controller, String virtualModelURI) {
+		if (virtualModelURI == null || getFMLPerspective(controller) == null || getServiceManager() == null) {
+			return false;
+		}
+		return getServiceManager().getVirtualModelLibrary().getCompilationUnitResource(virtualModelURI) != null;
+	}
+
+	/**
+	 * Show the compilation unit in the FML perspective of supplied controller, and the line in its FML editor (CORE-F-11)
+	 */
+	@Override
+	public void showFMLSource(FlexoController controller, String virtualModelURI, int line) {
+		FMLTechnologyPerspective perspective = getFMLPerspective(controller);
+		if (perspective == null) {
+			return;
+		}
+		VirtualModel virtualModel;
+		try {
+			virtualModel = getServiceManager().getVirtualModelLibrary().getVirtualModel(virtualModelURI);
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "Cannot load " + virtualModelURI, e);
+			return;
+		}
+		if (virtualModel == null || virtualModel.getCompilationUnit() == null) {
+			return;
+		}
+		FMLCompilationUnit compilationUnit = virtualModel.getCompilationUnit();
+		controller.switchToPerspective(perspective);
+		controller.setCurrentEditedObject(compilationUnit, perspective);
+		// The editor scrolls with the size of its view: once it is laid out
+		SwingUtilities.invokeLater(() -> {
+			ModuleView<?> view = controller.moduleViewForObject(compilationUnit);
+			if (view instanceof FMLCompilationUnitView) {
+				((FMLCompilationUnitView) view).getEditor().highlightLine(line);
+			}
+		});
+	}
 }

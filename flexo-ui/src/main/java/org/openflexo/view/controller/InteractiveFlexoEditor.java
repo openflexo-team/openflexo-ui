@@ -41,6 +41,7 @@ package org.openflexo.view.controller;
 
 import java.util.EventObject;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -66,6 +67,10 @@ import org.openflexo.foundation.action.FlexoUndoManager;
 import org.openflexo.foundation.action.LongRunningAction;
 import org.openflexo.foundation.fml.rt.action.ActionSchemeActionFactory;
 import org.openflexo.foundation.fml.rt.action.DeletionSchemeActionFactory;
+import org.openflexo.foundation.fml.rt.action.FlexoBehaviourAction;
+import org.openflexo.foundation.fml.rt.error.FMLCancellation;
+import org.openflexo.foundation.fml.rt.error.FMLErrorReporter;
+import org.openflexo.foundation.fml.rt.error.FMLErrorReporter.ExecutionScope;
 import org.openflexo.foundation.nature.FlexoNature;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.ResourceUpdateHandler;
@@ -173,46 +178,102 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 		// If action is embedded and valid, we skip initializer
 		boolean confirmDoAction = (action.isEmbedded() && action.isValid() && !action.getForceExecuteConfirmationPanel()) ? true
 				: runInitializer(action, event);
-		if (confirmDoAction) {
-			if (action instanceof LongRunningAction && (!action.isEmbedded()) && SwingUtilities.isEventDispatchThread()) {
-				LongRunningActionTask task = new LongRunningActionTask((LongRunningAction) action) {
-					@Override
-					public void performTask() throws InterruptedException {
-						Progress.setExpectedProgressSteps(((LongRunningAction) action).getExpectedProgressSteps());
+		if (!confirmDoAction) {
+			if (action instanceof FlexoBehaviourAction) {
+				// The user cancelled the behaviour (its parameters dialog): a calling action is cancelled too, and the edits of the
+				// initializer are undone (CORE-F-11)
+				action.cancelExecution(new FMLCancellation("Cancelled by the user: " + action.getLocalizedName()));
+				if (!action.isEmbedded()) {
+					actionHasBeenPerformed(action, false);
+				}
+			}
+			else if (!action.isEmbedded()) {
+				// Another action not executed: its recording is closed, the edits of its initializer kept
+				getUndoManager().actionHasNotBeenPerformed(action);
+			}
+			return action;
+		}
+		if (action instanceof LongRunningAction && (!action.isEmbedded()) && SwingUtilities.isEventDispatchThread()) {
+			LongRunningActionTask task = new LongRunningActionTask((LongRunningAction) action) {
+				@Override
+				public void performTask() throws InterruptedException {
+					Progress.setExpectedProgressSteps(((LongRunningAction) action).getExpectedProgressSteps());
+					try {
 						doExecuteAction(action, event);
+					} catch (RuntimeException e) {
+						// Already reported by doExecuteAction, and nobody waits for the outcome of a task
+						if (!FMLErrorReporter.isReported(e)) {
+							throw e;
+						}
 					}
-				};
-				applicationContext.getTaskManager().scheduleExecution(task);
-			}
-			else {
-				// Do it now, in this thread
-				doExecuteAction(action, event);
-			}
+				}
+			};
+			applicationContext.getTaskManager().scheduleExecution(task);
+		}
+		else {
+			// Do it now, in this thread
+			doExecuteAction(action, event);
 		}
 
 		return action;
 	}
 
+	/**
+	 * Execute supplied action, whose initializer accepted it. When it fails, its edits are undone, then its failure goes to the exception
+	 * handler of its initializer, if any, otherwise it is reported once, by the outermost action run on this thread (CORE-F-11); a nested
+	 * action leaves it to its caller. An unforeseen failure is rethrown once reported. The finalizer runs once the action has left its
+	 * execution scope, so that the actions it starts are outermost ones.
+	 */
 	private <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> void doExecuteAction(final A action,
 			final EventObject event) {
+		ExecutionScope scope = FMLErrorReporter.enterAction();
+		boolean outermost = (scope != null);
+		boolean succeeded = false;
+		boolean handled = false;
 		try {
 			runAction(action);
+			succeeded = true;
 		} catch (FlexoException exception) {
-			System.out.println("Unexpected exception raised during action execution: " + action);
-			exception.printStackTrace();
-			if (!runExceptionHandler(exception, action)) {
-				return;
+			if (!action.isEmbedded()) {
+				actionHasBeenPerformed(action, false); // Action failed: its edits are undone before reporting
+			}
+			if (runExceptionHandler(exception, action)) {
+				// The exception has been handled, we may still have to execute finalizer, if any
+				handled = true;
+			}
+			else if (!outermost) {
+				// A nested action leaves its failure to its caller
+				FMLErrorReporter.currentScope().nestedActionFailed(action);
+			}
+			else {
+				getFMLErrorReporter().report(action, exception);
+			}
+		} catch (RuntimeException | Error exception) {
+			// Unforeseen failure: a defect of the platform, never swallowed
+			if (!action.isEmbedded()) {
+				actionHasBeenPerformed(action, false);
+			}
+			if (outermost) {
+				getFMLErrorReporter().report(action, exception);
+			}
+			throw exception;
+		} finally {
+			if (outermost) {
+				FMLErrorReporter.exitOutermostAction();
+				List<FlexoAction<?, ?, ?>> unreported = FMLErrorReporter.unreportedNestedFailures(scope, action);
+				if (!unreported.isEmpty()) {
+					getFMLErrorReporter().reportIgnoredFailures(unreported);
+				}
 			}
 		}
-		if (!action.isEmbedded()) {
+		if ((succeeded || handled) && !action.isEmbedded()) {
 			runFinalizer(action, event);
 		}
 
 		// We do it later to embed eventual finalizer execution in the record session of the undo manager
-		if (!action.isEmbedded()) {
+		if (succeeded && !action.isEmbedded()) {
 			actionHasBeenPerformed(action, true); // Action succeeded
 		}
-
 	}
 
 	private <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> boolean runInitializer(A action,
@@ -243,27 +304,25 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 		}
 	}
 
+	/**
+	 * Give the failure of supplied action to the exception handler of its initializer, if any
+	 * 
+	 * @return true when the handler handled it: nothing else reports it
+	 */
 	private <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> boolean runExceptionHandler(
 			FlexoException exception, final A action) {
-		actionHasBeenPerformed(action, false); // Action failed
-		FlexoExceptionHandler<A, ?, ?> exceptionHandler = null;
 		ActionInitializer<A, ?, ?> actionInitializer = getActionInitializer(action);
-		if (actionInitializer != null) {
-			exceptionHandler = actionInitializer.getDefaultExceptionHandler();
-		}
-		if (exceptionHandler != null) {
-			if (exceptionHandler.handleException(exception, action)) {
-				// The exception has been handled, we may still have to execute finalizer, if any
-				return true;
-			}
-			else {
-				return false;
-			}
+		FlexoExceptionHandler<A, ?, ?> exceptionHandler = actionInitializer != null ? actionInitializer.getDefaultExceptionHandler() : null;
+		return exceptionHandler != null && exceptionHandler.handleException(exception, action);
+	}
 
-		}
-		else {
-			return false;
-		}
+	/**
+	 * The reporter of this editor presents the failures to the user: a dialog for a foreseen failure, the bug report for a defect of
+	 * the platform (CORE-F-11)
+	 */
+	@Override
+	protected FMLErrorReporter makeFMLErrorReporter() {
+		return new InteractiveFMLErrorReporter(this);
 	}
 
 	@Override
@@ -322,7 +381,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 	}
 
 	private ControllerActionInitializer getCurrentControllerActionInitializer() {
-		if (getModuleLoader().getActiveModule() != null) {
+		if (getModuleLoader() != null && getModuleLoader().getActiveModule() != null) {
 			return actionInitializers.get(getModuleLoader().getActiveModule());
 		}
 		return null;

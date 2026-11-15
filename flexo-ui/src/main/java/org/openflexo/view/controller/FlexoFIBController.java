@@ -58,6 +58,7 @@ import javax.swing.SwingUtilities;
 import org.openflexo.ApplicationContext;
 import org.openflexo.connie.annotations.NotificationUnsafe;
 import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
@@ -81,6 +82,8 @@ import org.openflexo.foundation.fml.rm.CompilationUnitResourceFactory;
 import org.openflexo.foundation.fml.rt.FMLRTTechnologyAdapter;
 import org.openflexo.foundation.fml.rt.FMLRTValidationReport;
 import org.openflexo.foundation.fml.rt.VirtualModelInstanceObject;
+import org.openflexo.foundation.fml.rt.error.FMLErrorReporter;
+import org.openflexo.foundation.fml.rt.error.FMLExecutionFailure;
 import org.openflexo.foundation.project.FlexoProjectReference;
 import org.openflexo.foundation.project.FlexoProjectResource;
 import org.openflexo.foundation.resource.DirectoryBasedIODelegate;
@@ -456,6 +459,16 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 		if (t instanceof InvalidNameException) {
 			FlexoController.showError(FlexoUILocalization.locales().localizedForKey("invalid_name") + " : "
 					+ ((InvalidNameException) t).getExplanation());
+			return true;
+		}
+		// The failure of an FML execution invoked by a widget: to the console of the editor, once (an action that failed reported it
+		// already), never in a dialog (CORE-F-11). Any other failure (Java code of a controller, a binding of the component) is logged with
+		// its Java stack by GINA
+		if (FMLErrorReporter.isReported(t)) {
+			return true;
+		}
+		if (FMLExecutionFailure.findFailure(t) != null && getEditor() instanceof DefaultFlexoEditor) {
+			((DefaultFlexoEditor) getEditor()).getFMLErrorReporter().reportToConsole("Failure in the user interface", t);
 			return true;
 		}
 		return super.handleException(t);

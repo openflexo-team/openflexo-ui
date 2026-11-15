@@ -62,6 +62,7 @@ import org.openflexo.rm.Resource;
 import org.openflexo.rm.ResourceLocator;
 import org.openflexo.toolbox.PropertyChangedSupportDefaultImplementation;
 import org.openflexo.toolbox.StringUtils;
+import org.openflexo.view.controller.FMLSourceNavigator;
 
 public class FMLConsoleViewer extends PropertyChangedSupportDefaultImplementation {
 
@@ -191,6 +192,19 @@ public class FMLConsoleViewer extends PropertyChangedSupportDefaultImplementatio
 		StringTokenizer st = new StringTokenizer(record.getStackTraceAsString(), StringUtils.LINE_SEPARATOR);
 		while (st.hasMoreTokens()) {
 			System.err.println("\t" + st.nextToken());
+		}
+	}
+
+	/** Tell if the FML source of the failure reported by supplied record can be shown in the FML editor (CORE-F-11) */
+	public boolean canOpenInFMLEditor(FMLLogRecord record) {
+		return record != null && FMLSourceNavigator.firstShowableFrame(console.getFlexoEditor(), record.getFMLStack()) != null;
+	}
+
+	/** Show the FML source of the innermost frame of the failure reported by supplied record that can be shown */
+	public void openInFMLEditor(FMLLogRecord record) {
+		if (record != null) {
+			FMLSourceNavigator.show(console.getFlexoEditor(),
+					FMLSourceNavigator.firstShowableFrame(console.getFlexoEditor(), record.getFMLStack()));
 		}
 	}
 

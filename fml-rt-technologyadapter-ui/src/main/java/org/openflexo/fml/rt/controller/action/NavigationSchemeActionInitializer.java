@@ -43,8 +43,6 @@ import javax.swing.Icon;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionFactory;
 import org.openflexo.foundation.action.FlexoActionRunnable;
-import org.openflexo.foundation.action.FlexoExceptionHandler;
-import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.fml.NavigationScheme;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
 import org.openflexo.foundation.fml.rt.VirtualModelInstanceObject;
@@ -52,7 +50,6 @@ import org.openflexo.foundation.fml.rt.action.NavigationSchemeAction;
 import org.openflexo.icon.FMLIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.ParametersRetriever;
 
 public class NavigationSchemeActionInitializer
@@ -101,16 +98,6 @@ public class NavigationSchemeActionInitializer
 		getEditor().focusOn(targetObject, action.getFlexoBehaviour().getDisplayNature(targetObject));
 	}
 
-	@Override
-	protected FlexoExceptionHandler<NavigationSchemeAction, FlexoConceptInstance, VirtualModelInstanceObject> getDefaultExceptionHandler() {
-		return (exception, action) -> {
-			if (exception instanceof NotImplementedException) {
-				FlexoController.notify(action.getLocales().localizedForKey("not_implemented_yet"));
-				return true;
-			}
-			return false;
-		};
-	}
 
 	@Override
 	protected Icon getEnabledIcon(FlexoActionFactory<NavigationSchemeAction, FlexoConceptInstance, VirtualModelInstanceObject> actionType) {
