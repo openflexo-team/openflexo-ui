@@ -131,7 +131,15 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 		if (action != null) {
 			FlexoActionFactory<A, T1, T2> at = action.getActionFactory();
 			if (at != null) {
-				if (!action.getActionFactory().isEnabled(action.getFocusedObject(), action.getGlobalSelection())) {
+				// A condition that fails is not taken as disabled: the execution raises its failure and sets the status of the action
+				// (CORE-F-11)
+				boolean enabled;
+				try {
+					enabled = at.isEnabledForExecution(action.getFocusedObject(), action.getGlobalSelection());
+				} catch (FlexoException | RuntimeException failure) {
+					enabled = true;
+				}
+				if (!enabled) {
 					return null;
 				}
 				executeAction(action, e);
