@@ -252,6 +252,7 @@ URL						= (((https?|f(tp|ile))"://"|"www.")({URLCharacters}{URLEndCharacter})?)
 "as" |
 "assert" |
 "begin" |
+"catch" |
 "concept" |
 "connect" |
 "define" |
@@ -260,7 +261,9 @@ URL						= (((https?|f(tp|ile))"://"|"www.")({URLCharacters}{URLEndCharacter})?)
 "end" |
 "enum" |
 "event" |
+"exception" |
 "extends" |
+"finally" |
 "fire" |
 "for" |
 "from" |
@@ -283,6 +286,9 @@ URL						= (((https?|f(tp|ile))"://"|"www.")({URLCharacters}{URLEndCharacter})?)
 "set" |
 "super" |
 "then" |
+"throw" |
+"throws" |
+"try" |
 "typedef" |
 "unique" |
 "use" |

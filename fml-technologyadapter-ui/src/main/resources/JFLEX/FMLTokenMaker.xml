@@ -19,6 +19,7 @@
     <keyword>as</keyword>
     <keyword>assert</keyword>
     <keyword>begin</keyword>
+    <keyword>catch</keyword>
     <keyword>concept</keyword>
     <keyword>connect</keyword>
     <keyword>define</keyword>
@@ -27,7 +28,9 @@
     <keyword>end</keyword>
     <keyword>enum</keyword>
     <keyword>event</keyword>
+    <keyword>exception</keyword>
     <keyword>extends</keyword>
+    <keyword>finally</keyword>
     <keyword>fire</keyword>
     <keyword>for</keyword>
     <keyword>from</keyword>
@@ -50,6 +53,9 @@
     <keyword>set</keyword>
     <keyword>super</keyword>
     <keyword>then</keyword>
+    <keyword>throw</keyword>
+    <keyword>throws</keyword>
+    <keyword>try</keyword>
     <keyword>typedef</keyword>
     <keyword>unique</keyword>
     <keyword>use</keyword>
