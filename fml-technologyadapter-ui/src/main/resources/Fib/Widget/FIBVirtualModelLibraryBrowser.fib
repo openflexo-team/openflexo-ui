@@ -43,7 +43,7 @@
 		<BrowserElement id="21"
 			dataClassName="org.openflexo.foundation.fml.rm.CompilationUnitResource"
 			icon="controller.iconForObject(virtualModel)"
-			label="(virtualModel.name + &quot;.fml&quot;)"
+			label="(virtualModel.isModified ? &quot;&gt; &quot; : &quot;&quot;) + virtualModel.name + &quot;.fml&quot;"
 			enabled="virtualModel.isLoaded" editableLabel="virtualModel.name"
 			name="virtualModel">
 			<Children id="22" visible="virtualModel.isLoaded"
