@@ -28,7 +28,7 @@
 			<Children data="folder.resources" name="resources" />
 		</BrowserElement>
 		<BrowserElement dataClassName="org.openflexo.foundation.resource.FlexoResource"
-			label="resource.name" icon="controller.iconForObject(resource)"
+			label="(resource.isModified ? &quot;&gt; &quot; : &quot;&quot;) + resource.name" icon="controller.iconForObject(resource)"
 			isEditable="false" filtered="false" defaultVisible="true" name="resource"
 			enabled="resource.isLoaded">
 			<Children data="resource.contents" visible="resource.isLoaded" cast="" name="subResources" />
