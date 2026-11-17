@@ -462,7 +462,36 @@ public abstract class FlexoController implements PropertyChangeListener, HasProp
 	public void initInspectors() {
 		moduleInspectorGroup = loadInspectorGroup(getModule().getShortName().toUpperCase(), getModuleLocales(), getCoreInspectorGroup());
 		getSelectionManager().addObserver(getModuleInspectorController());
+		getSelectionManager().addObserver(resourceIssuesObserver);
 	}
+
+	private String resourceIssuesMessage;
+
+	/**
+	 * Shows, in the message area at the bottom of the main window, the errors of the selected resource (missing VirtualModel, dependency
+	 * or technology adapter): they are carried by the resource, which does not need to be loaded.
+	 */
+	private final java.util.Observer resourceIssuesObserver = (o, notification) -> {
+		FlexoObject focused = getSelectionManager().getFocusedObject();
+		String message = null;
+		if (focused instanceof FlexoResource && ((FlexoResource<?>) focused).hasErrors()) {
+			message = ((FlexoResource<?>) focused).getIssuesMessage();
+			if (message != null) {
+				message = message.replace('\n', ' ');
+			}
+		}
+		final String shown = message;
+		SwingUtilities.invokeLater(() -> {
+			if (shown != null) {
+				resourceIssuesMessage = shown;
+				setInfoMessage(shown);
+			}
+			else if (resourceIssuesMessage != null) {
+				resourceIssuesMessage = null;
+				setInfoMessage(getModule() != null ? getModule().getName() : "");
+			}
+		});
+	};
 
 	public ModuleInspectorController getModuleInspectorController() {
 		if (mainInspectorController == null) {
@@ -1426,6 +1455,7 @@ public abstract class FlexoController implements PropertyChangeListener, HasProp
 	public void dispose() {
 
 		getSelectionManager().deleteObserver(getModuleInspectorController());
+		getSelectionManager().deleteObserver(resourceIssuesObserver);
 
 		manager.delete();
 		getApplicationContext().getGeneralPreferences().getPropertyChangeSupport().removePropertyChangeListener(this);
@@ -2189,7 +2219,7 @@ public abstract class FlexoController implements PropertyChangeListener, HasProp
 			return tempInfoMessage;
 		}
 		if (infoMessage == null) {
-			return getModule().getName();
+			return getModule() != null ? getModule().getName() : "";
 		}
 		return infoMessage;
 	}

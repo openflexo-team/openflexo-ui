@@ -55,6 +55,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
@@ -119,6 +120,12 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 	private JComponent moduleViewContainerPanel;
 
 	private JComponent footer;
+
+	/** Bottom of the window: the footer of the perspective (center) above the status bar (south) */
+	private JPanel southPanel;
+
+	/** Whether the status bar (info message of the controller) is displayed at the bottom of the window */
+	private static final boolean SHOW_STATUS_BAR = false;
 
 	private MultiSplitLayout centerLayout;
 
@@ -219,6 +226,16 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 			}
 		});
 		add(topBar = new MainPaneTopBar(controller), BorderLayout.NORTH);
+		southPanel = new JPanel(new BorderLayout());
+		// Status bar common to all perspectives: shows the info message of the controller (what is selected, copy/paste, undo...), among
+		// them the errors of the selected resource
+		// Not displayed for now (SHOW_STATUS_BAR): the code is kept to be put back later
+		if (SHOW_STATUS_BAR) {
+			JLabel statusBar = controller.makeInfoLabel();
+			statusBar.setBorder(BorderFactory.createEmptyBorder(2, 6, 2, 6));
+			southPanel.add(statusBar, BorderLayout.SOUTH);
+		}
+		add(southPanel, BorderLayout.SOUTH);
 		add(centerPanel = new JXMultiSplitPane(centerLayout));
 		centerPanel.setDividerSize(DIVIDER_SIZE);
 		centerPanel.setDividerPainter(new DividerPainter() {
@@ -407,11 +424,12 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 	private void updateFooter() {
 		if (footer != controller.getCurrentPerspective().getFooter()) {
 			if (footer != null) {
-				remove(footer);
+				southPanel.remove(footer);
 			}
 			if (controller.getCurrentPerspective().getFooter() != null) {
-				add(controller.getCurrentPerspective().getFooter(), BorderLayout.SOUTH);
+				southPanel.add(controller.getCurrentPerspective().getFooter(), BorderLayout.CENTER);
 			}
+			southPanel.revalidate();
 			footer = controller.getCurrentPerspective().getFooter();
 		}
 	}

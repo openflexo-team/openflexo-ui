@@ -37,7 +37,7 @@
 		</BrowserElement>
 		<BrowserElement id="7"
 			dataClassName="org.openflexo.foundation.fml.rm.CompilationUnitResource"
-			icon="controller.iconForObject(virtualModelResource)"
+			icon="controller.iconForObject(virtualModelResource)" tooltip="virtualModelResource.issuesMessage"
 			label="(virtualModelResource.isModified ? &quot;&gt; &quot; : &quot;&quot;) + virtualModelResource.name + &quot;.fml&quot;"
 			enabled="virtualModelResource.isLoaded"
 			editableLabel="virtualModelResource.name" isEditable="false"
@@ -66,7 +66,7 @@
 		<BrowserElement id="22"
 			visible="controller.isVisibleInBrowser(resource)"
 			dataClassName="org.openflexo.foundation.resource.FlexoResource"
-			icon="controller.iconForObject(resource)"
+			icon="controller.iconForObject(resource)" tooltip="resource.issuesMessage"
 			label="(resource.isModified ? &quot;&gt; &quot; : &quot;&quot;) + resource.displayName" enabled="resource.isLoaded"
 			isEditable="false" name="resource">
 			<Children id="23" visible="controller.shouldDisplayContents(resource)"

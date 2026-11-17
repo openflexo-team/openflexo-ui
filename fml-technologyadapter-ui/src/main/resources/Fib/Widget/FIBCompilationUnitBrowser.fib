@@ -46,7 +46,7 @@
 		visible="controller.viewMode.name==&quot;Embedding&quot;">
 		<BrowserElement
 			dataClassName="org.openflexo.foundation.fml.rm.CompilationUnitResource"
-			icon="controller.iconForObject(compilationUnitResource)"
+			icon="controller.iconForObject(compilationUnitResource)" tooltip="compilationUnitResource.issuesMessage"
 			label="(compilationUnitResource.name + &quot;.fml&quot;)"
 			enabled="compilationUnitResource.isLoaded"
 			editableLabel="compilationUnitResource.name" isEditable="false"
@@ -146,7 +146,7 @@
 		visible="controller.viewMode.name==&quot;Hierarchical&quot;">
 		<BrowserElement
 			dataClassName="org.openflexo.foundation.fml.rm.CompilationUnitResource"
-			icon="controller.iconForObject(compilationUnitResource)"
+			icon="controller.iconForObject(compilationUnitResource)" tooltip="compilationUnitResource.issuesMessage"
 			label="(compilationUnitResource.name + &quot;.fml&quot;)"
 			enabled="compilationUnitResource.isLoaded"
 			editableLabel="compilationUnitResource.name" isEditable="false"
@@ -246,7 +246,7 @@
 		visible="controller.viewMode.name==&quot;Flat&quot;">
 		<BrowserElement
 			dataClassName="org.openflexo.foundation.fml.rm.CompilationUnitResource"
-			icon="controller.iconForObject(compilationUnitResource)"
+			icon="controller.iconForObject(compilationUnitResource)" tooltip="compilationUnitResource.issuesMessage"
 			label="(compilationUnitResource.name + &quot;.fml&quot;)"
 			enabled="compilationUnitResource.isLoaded"
 			editableLabel="compilationUnitResource.name" isEditable="false"

@@ -32,7 +32,7 @@
 		</BrowserElement>
 		<BrowserElement id="36"
 			dataClassName="org.openflexo.foundation.fml.rt.rm.FMLRTVirtualModelInstanceResource"
-			icon="controller.iconForObject(virtualModelInstanceResource)" label="(virtualModelInstanceResource.isModified ? &quot;&gt; &quot; : &quot;&quot;) + virtualModelInstanceResource.name"
+			icon="controller.iconForObject(virtualModelInstanceResource)" tooltip="virtualModelInstanceResource.issuesMessage" label="(virtualModelInstanceResource.isModified ? &quot;&gt; &quot; : &quot;&quot;) + virtualModelInstanceResource.name"
 			enabled="virtualModelInstanceResource.isLoaded" isEditable="false"
 			name="virtualModelInstanceResource">
 			<Children id="24" visible="virtualModelInstanceResource.isLoaded" data="virtualModelInstanceResource.contents"

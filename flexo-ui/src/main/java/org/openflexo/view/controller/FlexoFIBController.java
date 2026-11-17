@@ -260,6 +260,16 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 	@NotificationUnsafe
 	public final ImageIcon iconForObject(Object object) {
 
+		// A resource in error (missing VirtualModel, dependency or technology adapter) is marked as such, loaded or not: the error is
+		// carried by the resource layer. Not cached, as the issues of a resource change when what it waits for appears
+		if (object instanceof FlexoResource && ((FlexoResource<?>) object).hasErrors()) {
+			ImageIcon base = ((FlexoResource<?>) object).isLoaded() ? iconForObject(((FlexoResource<?>) object).getLoadedResourceData())
+					: retrieveIconForObject(object);
+			if (base != null) {
+				return IconFactory.getImageIcon(base, IconLibrary.ERROR);
+			}
+		}
+
 		if (object instanceof FlexoResource && ((FlexoResource<?>) object).isLoaded()) {
 			return iconForObject(((FlexoResource<?>) object).getLoadedResourceData());
 		}

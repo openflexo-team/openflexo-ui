@@ -59,6 +59,7 @@ import org.openflexo.view.controller.action.DeleteRepositoryFolderInitializer;
 import org.openflexo.view.controller.action.InspectActionizer;
 import org.openflexo.view.controller.action.LoadAllImportedProjectInitializer;
 import org.openflexo.view.controller.action.LoadResourceActionInitializer;
+import org.openflexo.view.controller.action.ValidateProjectInitializer;
 
 /**
  * A software component, generally associated to a {@link FlexoModule}, and providing hooks for the execution of {@link FlexoAction} in a
@@ -198,6 +199,7 @@ public class ControllerActionInitializer implements EditorProvider {
 	public void initializeActions() {
 		new InspectActionizer(this);
 		new LoadResourceActionInitializer(this);
+		new ValidateProjectInitializer(this);
 		new ImportProjectInitializer(this);
 		new RemoveImportedProjectInitializer(this);
 

@@ -44,6 +44,7 @@ import javax.swing.JFrame;
 import org.openflexo.ApplicationContext;
 import org.openflexo.editor.SelectAndFocusObjectTask;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.validation.ResourceIssueError;
 import org.openflexo.gina.model.FIBComponent;
 import org.openflexo.gina.swing.editor.validation.ComponentValidationWindow;
 import org.openflexo.gina.swing.editor.validation.ValidationDialogPanel;
@@ -87,7 +88,12 @@ public class ValidationWindow extends JDialog {
 
 	protected void performSelect(ValidationIssue<?, ?> validationIssue) {
 
-		if (validationIssue != null && validationIssue.getValidable() instanceof FlexoObject) {
+		// An error of a resource selects the resource that carries it, not the project that was validated
+		if (validationIssue instanceof ResourceIssueError) {
+			SelectAndFocusObjectTask task = new SelectAndFocusObjectTask(getController(), ((ResourceIssueError) validationIssue).getResource());
+			getController().getApplicationContext().getTaskManager().scheduleExecution(task);
+		}
+		else if (validationIssue != null && validationIssue.getValidable() instanceof FlexoObject) {
 			SelectAndFocusObjectTask task = new SelectAndFocusObjectTask(getController(), (FlexoObject) validationIssue.getValidable());
 			getController().getApplicationContext().getTaskManager().scheduleExecution(task);
 		}

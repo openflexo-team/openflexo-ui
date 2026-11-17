@@ -33,7 +33,7 @@
 		</BrowserElement>
 		<BrowserElement dataClassName="org.openflexo.foundation.resource.FlexoResource"
 			label="(resource.isModified ? &quot;&gt; &quot; : &quot;&quot;) + resource.name" icon="controller.iconForObject(resource)"
-			tooltip="" enabled="resource.isLoaded" visible="!(resource.isDeleted)"
+			tooltip="resource.issuesMessage" enabled="resource.isLoaded" visible="!(resource.isDeleted)"
 			isEditable="false" editableLabel="" filtered="false" defaultVisible="true"
 			name="resource">
 			<Children data="resource.contents" visible="resource.isLoaded"
