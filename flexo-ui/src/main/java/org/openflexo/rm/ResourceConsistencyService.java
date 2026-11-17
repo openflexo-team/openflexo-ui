@@ -40,6 +40,7 @@ package org.openflexo.rm;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openflexo.ApplicationContext;
@@ -63,6 +64,8 @@ import org.openflexo.view.controller.FlexoController;
  *
  */
 public class ResourceConsistencyService extends FlexoServiceImpl {
+
+	private static final Logger logger = Logger.getLogger(ResourceConsistencyService.class.getPackage().getName());
 
 	// The whole set of conflicts
 	private List<ConflictedResourceSet> conflictedResourceSets;
@@ -188,16 +191,12 @@ public class ResourceConsistencyService extends FlexoServiceImpl {
 	}
 
 	/**
-	 * Inform that a viewpoint is missing
-	 * 
-	 * @param resource
+	 * A missing VirtualModel is no longer announced in a modal dialog: the instance, once loaded, is reported by its validation (see
+	 * VirtualModelInstance.VirtualModelMustBeFound). It is only logged here.
 	 */
 	private static void informOfViewPointMissing(FMLRTVirtualModelInstanceResourceImpl resource) {
 		if (resource != null) {
-			Thread.dumpStack();
-			FlexoController.notify("<html> " + "<h3>VirtualModel resource is missing!</h3>"
-					+ "<p>FMLRTVirtualModelInstance <font color=\"red\">" + resource.getURI() + "</font><br>requires VirtualModel: "
-					+ resource.getVirtualModelURI() + "<br>Please add resources in resource centers and restart Openflexo</html>");
+			logger.warning("VirtualModel " + resource.getVirtualModelURI() + " required by " + resource.getURI() + " is missing");
 		}
 	}
 
