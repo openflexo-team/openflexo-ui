@@ -45,7 +45,7 @@ import java.util.logging.Logger;
 import org.openflexo.connie.DataBinding;
 import org.openflexo.fml.gina.FMLGINAPlugin;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.InvalidNameException;
 import org.openflexo.foundation.action.FlexoAction;
@@ -149,7 +149,7 @@ public abstract class AbstractCreateFIBComponent<A extends AbstractCreateFIBComp
 	}
 
 	/** Called once the component is written. Nothing by default. */
-	protected void componentCreated(FlexoConcept concept, CompilationUnitResource compilationUnitResource) throws FlexoException {
+	protected void componentCreated(FlexoConcept concept, CompilationUnitResource compilationUnitResource) throws OpenflexoRuntimeException {
 	}
 
 	public String getComponentName() {
@@ -256,7 +256,7 @@ public abstract class AbstractCreateFIBComponent<A extends AbstractCreateFIBComp
 	}
 
 	@Override
-	protected void doAction(Object context) throws FlexoException {
+	protected void doAction(Object context) throws OpenflexoRuntimeException {
 
 		FlexoConcept concept = getFlexoConcept();
 		CompilationUnitResource compilationUnitResource = (CompilationUnitResource) concept.getDeclaringCompilationUnit().getResource();
@@ -267,7 +267,7 @@ public abstract class AbstractCreateFIBComponent<A extends AbstractCreateFIBComp
 			newComponentResource.getResourceData().setComponent(buildComponent());
 			newComponentResource.save();
 		} catch (Exception e) {
-			throw new FlexoException("Could not fill " + newComponentResource.getURI(), e);
+			throw new OpenflexoRuntimeException("Could not fill " + newComponentResource.getURI(), e);
 		}
 
 		logger.info("Created " + newComponentResource.getURI() + " for " + concept);
@@ -277,7 +277,7 @@ public abstract class AbstractCreateFIBComponent<A extends AbstractCreateFIBComp
 
 	@SuppressWarnings("unchecked")
 	private <I> FIBComponentResource makeResource(CompilationUnitResource compilationUnitResource, FlexoResourceCenter<I> resourceCenter)
-			throws FlexoException {
+			throws OpenflexoRuntimeException {
 
 		// The component goes beside the FML source, in the Xxx.fml/ container, which is where the naming convention and the @UI /
 		// @Inspector annotations of FlexoConcept look for it
@@ -291,7 +291,7 @@ public abstract class AbstractCreateFIBComponent<A extends AbstractCreateFIBComp
 		try {
 			return factory.makeResource(artefact, resourceCenter, true);
 		} catch (Exception e) {
-			throw new FlexoException("Could not create " + getComponentName() + " in " + containerDirectory, e);
+			throw new OpenflexoRuntimeException("Could not create " + getComponentName() + " in " + containerDirectory, e);
 		}
 	}
 
@@ -302,7 +302,7 @@ public abstract class AbstractCreateFIBComponent<A extends AbstractCreateFIBComp
 	 * <p>
 	 * Public because it writes nothing: it is what a test can assert on without creating a file in a resource center.
 	 */
-	public FIBComponent buildComponent() throws FlexoException {
+	public FIBComponent buildComponent() throws OpenflexoRuntimeException {
 
 		FlexoConcept concept = getFlexoConcept();
 		FIBModelFactory factory = makeFIBModelFactory(concept);
@@ -393,11 +393,11 @@ public abstract class AbstractCreateFIBComponent<A extends AbstractCreateFIBComp
 		return null;
 	}
 
-	private FIBModelFactory makeFIBModelFactory(FlexoConcept concept) throws FlexoException {
+	private FIBModelFactory makeFIBModelFactory(FlexoConcept concept) throws OpenflexoRuntimeException {
 		try {
 			return new FIBModelFactory(null, getServiceManager().getTechnologyAdapterService(), FIBInspector.class);
 		} catch (Exception e) {
-			throw new FlexoException("Could not build a model factory for a component of " + concept, e);
+			throw new OpenflexoRuntimeException("Could not build a model factory for a component of " + concept, e);
 		}
 	}
 }

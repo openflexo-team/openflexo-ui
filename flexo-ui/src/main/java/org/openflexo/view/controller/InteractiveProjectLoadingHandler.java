@@ -50,7 +50,7 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.resource.FileIODelegate;
 import org.openflexo.foundation.resource.FlexoResource;
@@ -111,7 +111,7 @@ public abstract class InteractiveProjectLoadingHandler implements ProjectLoading
 					e.printStackTrace();
 				} catch (ResourceLoadingCancelledException e) {
 					e.printStackTrace();
-				} catch (FlexoException e) {
+				} catch (OpenflexoRuntimeException e) {
 					e.printStackTrace();
 				} // Converts the resource by loading it.
 			}
@@ -182,7 +182,7 @@ public abstract class InteractiveProjectLoadingHandler implements ProjectLoading
 				e.printStackTrace();
 			} catch (ResourceLoadingCancelledException e) {
 				e.printStackTrace();
-			} catch (FlexoException e) {
+			} catch (OpenflexoRuntimeException e) {
 				e.printStackTrace();
 			}
 		}

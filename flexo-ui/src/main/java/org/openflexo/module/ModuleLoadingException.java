@@ -39,10 +39,10 @@
 
 package org.openflexo.module;
 
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 
 @SuppressWarnings("serial")
-public class ModuleLoadingException extends FlexoException {
+public class ModuleLoadingException extends OpenflexoRuntimeException {
 
 	private final Module<?> module;
 

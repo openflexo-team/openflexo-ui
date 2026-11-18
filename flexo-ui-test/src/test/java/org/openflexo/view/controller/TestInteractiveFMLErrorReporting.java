@@ -53,7 +53,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.fml.rt.error.FMLCancellation;
@@ -80,7 +80,7 @@ public class TestInteractiveFMLErrorReporting {
 	private static class TestAction extends FlexoAction<TestAction, FlexoObject, FlexoObject> {
 
 		interface Body {
-			void run() throws FlexoException;
+			void run() throws OpenflexoRuntimeException;
 		}
 
 		private final Body body;
@@ -91,7 +91,7 @@ public class TestInteractiveFMLErrorReporting {
 		}
 
 		@Override
-		protected void doAction(Object context) throws FlexoException {
+		protected void doAction(Object context) throws OpenflexoRuntimeException {
 			body.run();
 		}
 	}

@@ -40,7 +40,7 @@ package org.openflexo.fml.gina.action;
 import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.action.FlexoActionFactory;
@@ -134,7 +134,7 @@ public class CreateInspector extends AbstractCreateFIBComponent<CreateInspector>
 	}
 
 	@Override
-	protected void componentCreated(FlexoConcept concept, CompilationUnitResource compilationUnitResource) throws FlexoException {
+	protected void componentCreated(FlexoConcept concept, CompilationUnitResource compilationUnitResource) throws OpenflexoRuntimeException {
 		declareInspector(concept);
 	}
 

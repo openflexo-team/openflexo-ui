@@ -88,7 +88,7 @@ import org.openflexo.toolbox.FileUtils;
 import org.openflexo.fml.controller.widget.FIBCompilationUnitDetailedBrowser;
 import org.openflexo.fml.controller.widget.FMLValidationPanel;
 import org.openflexo.fml.rstasupport.FMLLanguageSupport;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.fml.FMLCompilationUnit;
 import org.openflexo.foundation.fml.FMLModelFactory;
@@ -252,7 +252,7 @@ public class FMLEditor extends JPanel implements PropertyChangeListener, Hyperli
 		} catch (ResourceLoadingCancelledException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (FlexoException e) {
+		} catch (OpenflexoRuntimeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

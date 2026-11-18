@@ -41,7 +41,7 @@ import java.util.Vector;
 import java.util.regex.Pattern;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.action.FlexoActionFactory;
@@ -211,7 +211,7 @@ public class CreateFIBComponent extends AbstractCreateFIBComponent<CreateFIBComp
 	 * saved: the declaration is an edit of the model like any other, which marks it modified and is saved when the user asks for it.
 	 */
 	@Override
-	protected void componentCreated(FlexoConcept concept, CompilationUnitResource compilationUnitResource) throws FlexoException {
+	protected void componentCreated(FlexoConcept concept, CompilationUnitResource compilationUnitResource) throws OpenflexoRuntimeException {
 		declareComponent(concept, getDeclareAsVariant() ? getVariantName() : FlexoConcept.DEFAULT_VARIANT);
 	}
 

@@ -54,7 +54,7 @@ import javax.swing.text.TabSet;
 import javax.swing.text.TabStop;
 
 import org.openflexo.components.doc.editorkit.element.DocumentElement;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.doc.FlexoDocObject;
 import org.openflexo.foundation.doc.FlexoDocParagraph;
 import org.openflexo.foundation.doc.FlexoDocTable;
@@ -107,7 +107,7 @@ public class FlexoDocumentEditorFactory<D extends FlexoDocument<D, TA>, TA exten
 	 *
 	 * @param doc
 	 *            document for reading to.
-	 * @throws FlexoException
+	 * @throws OpenflexoRuntimeException
 	 * @throws ResourceLoadingCancelledException
 	 * @throws BadLocationException
 	 * @throws IOException

@@ -44,7 +44,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
@@ -196,7 +196,7 @@ public abstract class SelectionSynchronizedFIBJPanel<T> extends FIBJPanel<T> imp
 				e.printStackTrace();
 			} catch (ResourceLoadingCancelledException e) {
 				e.printStackTrace();
-			} catch (FlexoException e) {
+			} catch (OpenflexoRuntimeException e) {
 				e.printStackTrace();
 			}
 		}

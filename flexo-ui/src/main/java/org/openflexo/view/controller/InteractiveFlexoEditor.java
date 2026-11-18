@@ -53,7 +53,7 @@ import javax.swing.SwingUtilities;
 import org.openflexo.ApplicationContext;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -141,7 +141,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 				boolean enabled;
 				try {
 					enabled = at.isEnabledForExecution(action.getFocusedObject(), action.getGlobalSelection());
-				} catch (FlexoException | RuntimeException failure) {
+				} catch (OpenflexoRuntimeException | RuntimeException failure) {
 					enabled = true;
 				}
 				if (!enabled) {
@@ -233,7 +233,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 		try {
 			runAction(action);
 			succeeded = true;
-		} catch (FlexoException exception) {
+		} catch (OpenflexoRuntimeException exception) {
 			if (!action.isEmbedded()) {
 				actionHasBeenPerformed(action, false); // Action failed: its edits are undone before reporting
 			}
@@ -289,7 +289,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 	}
 
 	private <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> void runAction(final A action)
-			throws FlexoException {
+			throws OpenflexoRuntimeException {
 		action.doActionInContext();
 	}
 
@@ -310,7 +310,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 	 * @return true when the handler handled it: nothing else reports it
 	 */
 	private <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> boolean runExceptionHandler(
-			FlexoException exception, final A action) {
+			OpenflexoRuntimeException exception, final A action) {
 		ActionInitializer<A, ?, ?> actionInitializer = getActionInitializer(action);
 		FlexoExceptionHandler<A, ?, ?> exceptionHandler = actionInitializer != null ? actionInitializer.getDefaultExceptionHandler() : null;
 		return exceptionHandler != null && exceptionHandler.handleException(exception, action);

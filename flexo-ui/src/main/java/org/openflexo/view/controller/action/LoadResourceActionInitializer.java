@@ -44,7 +44,7 @@ import java.io.FileNotFoundException;
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionRunnable;
 import org.openflexo.foundation.action.LoadResourceAction;
@@ -74,7 +74,7 @@ public class LoadResourceActionInitializer extends ActionInitializer<LoadResourc
 				e1.printStackTrace();
 			} catch (ResourceLoadingCancelledException e1) {
 				e1.printStackTrace();
-			} catch (FlexoException e1) {
+			} catch (OpenflexoRuntimeException e1) {
 				e1.printStackTrace();
 			}
 			return true;

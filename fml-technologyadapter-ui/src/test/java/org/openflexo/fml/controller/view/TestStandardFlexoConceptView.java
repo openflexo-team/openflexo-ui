@@ -56,7 +56,7 @@ import org.openflexo.connie.type.PrimitiveType;
 import org.openflexo.fml.controller.FMLFIBController;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.fml.ActionScheme;
 import org.openflexo.foundation.fml.CreationScheme;
 import org.openflexo.foundation.fml.DeletionScheme;
@@ -136,7 +136,7 @@ public class TestStandardFlexoConceptView extends OpenflexoFIBTestCase {
 	@Test
 	@TestOrder(3)
 	@Category(UITest.class)
-	public void loadConcepts() throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+	public void loadConcepts() throws FileNotFoundException, ResourceLoadingCancelledException, OpenflexoRuntimeException {
 
 		VirtualModelLibrary vpLib = serviceManager.getVirtualModelLibrary();
 		assertNotNull(vpLib);

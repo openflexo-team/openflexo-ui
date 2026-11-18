@@ -45,7 +45,7 @@ import javax.swing.Icon;
 
 import org.openflexo.fml.gina.FMLGINAIconLibrary;
 import org.openflexo.fml.gina.action.SaveFIBComponent;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionFactory;
 import org.openflexo.foundation.action.FlexoExceptionHandler;

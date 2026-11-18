@@ -56,7 +56,7 @@ import org.junit.runner.RunWith;
 import org.openflexo.fml.controller.FMLFIBController;
 import org.openflexo.fml.controller.widget.fmleditor.FMLEditor;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.fml.FMLCompilationUnit;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.VirtualModel;
@@ -107,7 +107,7 @@ public class TestFMLEditor8 extends OpenflexoFIBTestCase {
 	@Test
 	@TestOrder(3)
 	@Category(UITest.class)
-	public void loadFMLResource() throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+	public void loadFMLResource() throws FileNotFoundException, ResourceLoadingCancelledException, OpenflexoRuntimeException {
 
 		VirtualModelLibrary vpLib = serviceManager.getVirtualModelLibrary();
 		assertNotNull(vpLib);

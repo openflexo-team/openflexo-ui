@@ -47,7 +47,7 @@ import org.openflexo.components.validation.RevalidationTask;
 import org.openflexo.connie.annotations.NotificationUnsafe;
 import org.openflexo.fml.controller.validation.FixIssueDialog;
 import org.openflexo.fml.controller.validation.IssueFixing;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.InvalidNameException;
 import org.openflexo.foundation.action.DeleteRepositoryFolder;
@@ -864,7 +864,7 @@ public class FMLFIBController extends FlexoFIBController {
 	// Should be above to be available from everywhere
 	// TODO: refactor this (generic perspective should be adapted to FML in OpenflexoModeller)
 	public VirtualModel createContainedVirtualModel(FlexoResource<FMLCompilationUnit> containerVirtualModelResource)
-			throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+			throws FileNotFoundException, ResourceLoadingCancelledException, OpenflexoRuntimeException {
 		CreateContainedVirtualModel createContainedVirtualModel = CreateContainedVirtualModel.actionType
 				.makeNewAction(containerVirtualModelResource.getResourceData(), null, getEditor());
 		createContainedVirtualModel.doAction();
@@ -874,7 +874,7 @@ public class FMLFIBController extends FlexoFIBController {
 	// Should be above to be available from everywhere
 	// TODO: refactor this (generic perspective should be adapted to FML in OpenflexoModeller)
 	public void deleteCompilationUnit(FlexoResource<FMLCompilationUnit> compilationUnitResource)
-			throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+			throws FileNotFoundException, ResourceLoadingCancelledException, OpenflexoRuntimeException {
 		DeleteCompilationUnit deleteCompilationUnit = DeleteCompilationUnit.actionType
 				.makeNewAction(compilationUnitResource.getResourceData(), null, getEditor());
 		deleteCompilationUnit.doAction();
