@@ -12,6 +12,8 @@ Fixed defects are moved to [`FIXED_DEFECTS.md`](./FIXED_DEFECTS.md) once their s
 
 ### UI-D-2 — A concept-typed project nature has no icon on the paths that do not go through the module controller  ·  `TODO`
 
+**GitHub:** [openflexo-team/openflexo-ui#4](https://github.com/openflexo-team/openflexo-ui/issues/4)
+
 **Symptom.** `Sorry, no icon defined for FormoseProjectNature[…]` (`FlexoController.statelessIconForObject`), logged when the inspector of the nature is built. The module controller of Formose does give the icon (`FMSController.iconForObject`).
 
 **Read, not reproduced in isolation.** `statelessIconForObject(Object)` is static and cannot see the overrides of the controller of the module; the instance method `iconForObject` calls it. The caller that uses the static one for the nature was not identified.
@@ -25,6 +27,8 @@ Fixed defects are moved to [`FIXED_DEFECTS.md`](./FIXED_DEFECTS.md) once their s
 
 ### UI-D-4 — A project imported into another one is loaded as a root project  ·  `TODO`
 
+**GitHub:** [openflexo-team/openflexo-ui#5](https://github.com/openflexo-team/openflexo-ui/issues/5)
+
 **Symptom.** File → Import project schedules `makeLoadProjectTask(directory, true)`, but `LoadProjectTask.performTask` calls `ProjectLoader.loadProject(projectDirectory)`, which is `loadProject(projectDirectory, false)`: the `asImportedProject` flag of the task is never passed on.
 
 **Verified.** By reading the code only (2026-11-05), not reproduced in the application.
@@ -32,6 +36,8 @@ Fixed defects are moved to [`FIXED_DEFECTS.md`](./FIXED_DEFECTS.md) once their s
 **Expected.** `loadProject(projectDirectory, asImportedProject)`: an imported project is not added to the root projects nor to the recent projects.
 
 ### UI-D-6 — `TestMultiProcessChallengeFMLEditor` loads a VirtualModel that no longer exists  ·  `TODO`
+
+**GitHub:** [openflexo-team/openflexo-ui#6](https://github.com/openflexo-team/openflexo-ui/issues/6)
 
 **Symptom.** Its five UI tests fail (`uiTest` of fml-technologyadapter-ui): `loadFMLResource` finds no VirtualModel
 `http://www.openflexo.org/test/MultiProcessChallengeMetaModel.fml`, the four next steps fail with a `NullPointerException`.
@@ -41,3 +47,46 @@ openflexo-integration-tests (`http://openflexo.org/multi-process-challenge/FML/M
 not depend on. Unrelated to CORE-F-8: without that model the test cannot pass, whatever the platform does.
 
 **Options.** Repoint it to a model of flexo-test-resources of the same size, or delete it.
+
+### UI-D-7 — A saved window position outside the screens is not corrected (negative `x`)  ·  `TODO`
+
+**GitHub:** [openflexo-team/openflexo-ui#3](https://github.com/openflexo-team/openflexo-ui/issues/3)
+
+**Symptom.** The preference `BoundsForFrame_OMFrame` saved with `x=-1683` (a second screen that is no longer there) opens the window outside of the visible area.
+
+**Verified (2026-11-17, reading the code).** `FlexoFrame`'s constructor corrects the bounds only when there is exactly ONE screen and only when
+`screen.width <= bounds.x` or `screen.height <= bounds.y`: a negative `x` is never corrected. `WindowBoundsSaver` checks that the location is inside
+SOME screen (and resets the location otherwise), which is the right test.
+
+**Proposed fix.** Apply the `WindowBoundsSaver` test (the rectangle must intersect a screen, otherwise default location) to `FlexoFrame`, whatever the number of screens.
+
+**Original report** by `ChahrazedBoudj`, 2024-02-15 (issue gina#3):
+
+> ```xml
+> <CoreProperty id="106" name="BoundsForFrame_OMFrame" value="[x=-1683,y=41,width=1440,height=924]" userID="CHA" flexoID="-1" />
+> <CoreProperty id="107" name="showPaletteInOMFrame" userID="CHA" flexoID="-1" />
+> <CoreProperty id="108" name="BoundsForFrame_JFIBInspector"  value="[x=800,y=400,width=400,height=400]" userID="CHA" flexoID="-1" />
+> ```
+> 
+> 
+> "BoundsForFrame_OMFrame" has bad values. 
+> I suggest to add a condition on the positioning values (do not exceed the screen size).
+> These values worked for me : 
+> 
+> ```xml
+> <CoreProperty id="106" name="BoundsForFrame_OMFrame" value="[x=78,y=78,width=1440,height=810]" userID="CHA" flexoID="-1" />
+> ```
+
+### UI-D-8 — Double-click in the FML textual editor selects the whole FML element and loses the selection  ·  `TODO`
+
+**GitHub:** [openflexo-team/openflexo-ui#1](https://github.com/openflexo-team/openflexo-ui/issues/1)
+
+**Problem.** If part of an FML entity is selected (for example the type of a variable), a double-click selects the whole element and the initial selection is lost; this is
+annoying in large FML files.
+
+**Verified (2026-11-17, reading the code).** `FMLEditor` still carries the comment "Double-click generates a bad user experience" at the mouse listener; the
+element-focus feature is bound to the triple-click.
+
+**Original report** by `sylvain-openflexo`, 2025-01-20 (issue openflexo-ui#1):
+
+> Double-click user experience is somehow very annoying. If you select a part of a FML entity (for example a type of a variable), it select the whole element and you loose your initial selection which was only a part of that entity. This can be very annoying on large FML files...

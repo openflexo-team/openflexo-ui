@@ -7,6 +7,8 @@ with what was verified, the cause and the fix. Identifiers are those of `KNOWN_D
 
 ### UI-D-1 — The user interface of the FML technology adapter ships the test resources and test libraries to every application  ·  `DONE`
 
+**GitHub:** [openflexo-team/openflexo-ui#7](https://github.com/openflexo-team/openflexo-ui/issues/7)
+
 **Symptom.** Every application that includes `fml-technologyadapter-ui` — formod-app, the Modeller — loads the `TestResourceCenter` of `flexo-test-resources` as one of its resource centers, and logs warnings about it at the start: `makeDelegateRC not implemented for [ClasspathResourceLocatorImpl]jar:…/flexo-test-resources-…jar!/TestResourceCenter/PRJ/TestSingleInheritance.prj`, `No MigrationVM.fml in …`, `No InsideVM.fml in …`, and `Could not find org.openflexo.technologyadapter.xml.XMLModelSlot` (a fixture of that center needs a technology the application does not have).
 
 **Verified (2026-10-09).** `./gradlew :formod:formod-app:dependencies --configuration runtimeClasspath` shows `flexo-test-resources` reached through `fml-technologyadapter-ui` <- `b-ta-ui` <- `formod-module`. `openflexo-ui/fml-technologyadapter-ui/build.gradle` declares `implementation ginaTest()`, `implementation flexoTestResources()` and `implementation flexoFoundationTest()` as production dependencies (the `testImplementation` ones are commented out above them). The log also carries 14 lines naming `TestResourceCenter`.
@@ -16,6 +18,8 @@ with what was verified, the cause and the fix. Identifiers are those of `KNOWN_D
 **Impact.** The test center, and JUnit, are in every distribution; its fixtures are visible in the resource center browsers of the user, and compete with real ones for URIs (a test fixture already named like a user model masks it silently: see the workspace `CLAUDE.md`).
 
 ### UI-D-3 — On a Java runtime without its class library files, the application dies at startup behind its splash screen  ·  `DONE`
+
+**GitHub:** [openflexo-team/openflexo-ui#8](https://github.com/openflexo-team/openflexo-ui/issues/8)
 
 **Symptom.** The splash screen stays forever. The log ends with `[ERROR]: Cannot locate JRE jar in …/jre` then `Exception in thread "main" java.lang.IllegalArgumentException: info cannot be null` at `JarManager.addClassFileSource(JarManager.java:155)` ← `JarManager.addCurrentJreClassFileSource` ← `FMLTechnologyAdapterController.activate(FMLTechnologyAdapterController.java:214)` ← `DefaultTechnologyAdapterControllerService.initialize` ← `ApplicationContext.<init>` ← `Flexo.main`.
 
@@ -28,6 +32,8 @@ with what was verified, the cause and the fix. Identifiers are those of `KNOWN_D
 **Original proposal.** In `activate()`, skip the JRE class-file source (with a warning) when `getMainJreJarInfo()` is null, so that only the completion of Java types in the FML editor is degraded; more generally, an exception during the initialization of a service should not leave the splash screen up with a dead main thread.
 
 ### UI-D-5 — Loading a module initialized the inspectors and actions of its technologies twice  ·  `DONE`
+
+**GitHub:** [openflexo-team/openflexo-ui#9](https://github.com/openflexo-team/openflexo-ui/issues/9)
 
 **Symptom.** Loading the Free Modelling Editor took 15.8 s, and 47 inspectors were loaded twice (`CreateDiagram` four times).
 

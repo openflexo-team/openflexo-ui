@@ -10,6 +10,8 @@ Status legend: `TODO` · `IN PROGRESS` · `BLOCKED` · `DONE` · `DEFERRED`.
 
 ### UI-F-1 — Editable colouring themes for the FML editor  ·  `IN PROGRESS`
 
+**GitHub:** [openflexo-team/openflexo-ui#10](https://github.com/openflexo-team/openflexo-ui/issues/10)
+
 **Problem.** The FML editor loaded one hard-coded RSyntaxTextArea theme and overrode the annotation colour with a constant. The user could not change any colour.
 
 **Done.**
@@ -27,6 +29,8 @@ Status legend: `TODO` · `IN PROGRESS` · `BLOCKED` · `DONE` · `DEFERRED`.
 ---
 
 ### UI-F-2 — Faster startup and linear progress bars for long tasks  ·  `IN PROGRESS`
+
+**GitHub:** [openflexo-team/openflexo-ui#11](https://github.com/openflexo-team/openflexo-ui/issues/11)
 
 **Problem.** Long tasks (startup, module loading, project loading, resource center and technology activation, validation, FML creation actions) show progress bars that jump back, stop early or stay indeterminate:
 - `Progress` only acts when the current thread is a `FlexoTaskThread`: the whole startup (23 s on `main`, before the Welcome) reports nothing, and the splash is a still image;
@@ -84,3 +88,26 @@ Status legend: `TODO` · `IN PROGRESS` · `BLOCKED` · `DONE` · `DEFERRED`.
 - The Diana inspector panel of the Diagram controller (`JDianaInspectors`, shown at the bottom right of diagram views) is still built at module loading: most of the 4.7 s spent before the first Diagram inspector (13.2 s for the whole loading of the Free Modelling Editor). Building it on demand would move this cost to the opening of the first diagram, in the event dispatch thread.
 
 **Acceptance.** Between the Welcome and the opened module, and while a project loads, the bar moves forward without going back, and in near-linear time from the second execution on.
+
+### UI-F-3 — A keyboard shortcut to comment and uncomment the selected lines of the FML editor  ·  `TODO`
+
+**GitHub:** [openflexo-team/openflexo-ui#2](https://github.com/openflexo-team/openflexo-ui/issues/2)
+
+**Problem.** Commenting a line or a block requires typing `//` by hand.
+
+**Verified (2026-11-17, reading the code).** No toggle-comment action exists in the FML editor (`FMLEditor`).
+
+**Acceptance.** A shortcut that comments or uncomments the selected lines (or the current one), listed in the localized key bindings, with a test.
+
+**Where to start.** `FMLEditor` (`openflexo-ui/fml-technologyadapter-ui`, package `org.openflexo.fml.controller.widget.fmleditor`) is built on
+RSyntaxTextArea 3.6.3, which already provides `RSyntaxTextAreaEditorKit.rstaToggleCommentAction` (`"RSTA.ToggleCommentAction"`): bind it to a key in the
+input map of the text area (no key binding is set there today) and check that the FML language style gives it the `//` comment marker.
+
+**Original report** by `chamomile93`, 2026-08-11 (issue openflexo-ui#2):
+
+> Hi, 
+> 
+> I'm suggesting a feature : keyboard shortcut to comment a line instead of typing "//"
+> Perhaps I missed this feature in 3.0.0
+> 
+> Kindly,
