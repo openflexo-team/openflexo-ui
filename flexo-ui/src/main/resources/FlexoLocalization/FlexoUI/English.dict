@@ -73,4 +73,5 @@ would_you_like_to_exit_anyway=Would you like to exit anyway
 would_you_like_to_try_again?=Would you like to try again?
 xml_error=XML error
 you_may_loose_some_informations=You may loose some informations
+you_must_define_project_name=You must define the project name
 you_must_define_project_uri=You must define project uri

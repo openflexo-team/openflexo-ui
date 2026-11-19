@@ -73,4 +73,5 @@ would_you_like_to_exit_anyway=Voulez-vous quitter malgr\u00E9 tout ?
 would_you_like_to_try_again?=Voulez-vous r\u00E9essayer ?
 xml_error=Erreur XML
 you_may_loose_some_informations=Vous risquez de perdre des informations
+you_must_define_project_name=Vous devez d\u00E9finir le nom du projet
 you_must_define_project_uri=Vous devez d\u00E9finir l'URI du projet

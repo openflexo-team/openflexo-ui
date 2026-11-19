@@ -73,4 +73,5 @@ would_you_like_to_exit_anyway=Wilt u toch afsluiten?
 would_you_like_to_try_again?=Wilt u het opnieuw proberen?
 xml_error=XML-fout
 you_may_loose_some_informations=U kunt informatie verliezen
+you_must_define_project_name=U moet de naam van het project opgeven
 you_must_define_project_uri=U moet de URI van het project defini\u00EBren
