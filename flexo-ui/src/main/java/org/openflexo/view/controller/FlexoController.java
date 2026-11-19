@@ -87,12 +87,17 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.tree.TreePath;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.FlexoCst;
 import org.openflexo.components.ReviewUnsavedDialog;
 import org.openflexo.components.validation.ValidationWindow;
 import org.openflexo.components.widget.FIBResourceManagerBrowser;
+import org.openflexo.gina.swing.view.widget.JFIBBrowserWidget;
+import org.openflexo.gina.model.widget.FIBBrowser;
+import org.openflexo.gina.model.FIBComponent;
+import org.openflexo.gina.model.FIBContainer;
 import org.openflexo.connie.annotations.NotificationUnsafe;
 import org.openflexo.editor.SelectAndFocusObjectTask;
 import org.openflexo.foundation.FlexoEditingContext;
@@ -537,6 +542,51 @@ public abstract class FlexoController implements PropertyChangeListener, HasProp
 			perspective.updateEditor(from, to);
 		}
 
+		if (to != null && to.getProject() != null) {
+			expandFirstLevelOfProject(to.getProject());
+		}
+	}
+
+	/**
+	 * Expands, in the shared resource browser, the first level of the supplied project (its root folder), so that its resources show when
+	 * it is opened. The project reaches the browser once its resource center is registered, which is done in a task: the root folder is
+	 * looked for a few times, until the browser knows it.
+	 */
+	private void expandFirstLevelOfProject(FlexoProject<?> project) {
+		final int[] attempts = { 0 };
+		javax.swing.Timer timer = new javax.swing.Timer(250, null);
+		timer.addActionListener(e -> {
+			attempts[0]++;
+			if (tryToExpandRootFolder(project) || attempts[0] >= 40) {
+				timer.stop();
+			}
+		});
+		timer.start();
+	}
+
+	private boolean tryToExpandRootFolder(FlexoProject<?> project) {
+		try {
+			FIBResourceManagerBrowser browser = getSharedBrowser();
+			if (browser == null || browser.getFIBView() == null || project.getRootFolder() == null) {
+				return false;
+			}
+			for (FIBComponent c : ((FIBContainer) browser.getFIBComponent()).getAllSubComponents()) {
+				if (c instanceof FIBBrowser) {
+					Object widget = browser.getFIBView().getController().viewForComponent(c);
+					if (widget instanceof JFIBBrowserWidget) {
+						JFIBBrowserWidget<?> browserWidget = (JFIBBrowserWidget<?>) widget;
+						TreePath[] paths = browserWidget.getBrowserModel().getPaths(project.getRootFolder());
+						if (paths.length > 0) {
+							browserWidget.getTechnologyComponent().getJTree().expandPath(paths[0]);
+							return true;
+						}
+					}
+				}
+			}
+		} catch (RuntimeException e) {
+			logger.fine("Could not expand the project in the browser: " + e);
+		}
+		return false;
 	}
 
 	public abstract FlexoObject getDefaultObjectToSelect(FlexoProject<?> project);
