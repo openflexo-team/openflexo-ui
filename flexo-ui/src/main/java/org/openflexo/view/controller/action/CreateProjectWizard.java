@@ -121,7 +121,7 @@ public class CreateProjectWizard extends FlexoActionWizard<CreateProject> {
 		public boolean isValid() {
 
 			if (StringUtils.isEmpty(getProjectName())) {
-				setIssueMessage(getAction().getLocales().localizedForKey("you_must_define_project_name"), IssueMessageType.ERROR);
+				setIssueMessage(FlexoUILocalization.locales().localizedForKey("you_must_define_project_name"), IssueMessageType.ERROR);
 				return false;
 			}
 			if (StringUtils.isEmpty(getProjectURI())) {
