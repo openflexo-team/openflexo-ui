@@ -52,16 +52,16 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 /**
  * Runs the validation of the project and shows the report in the validation window of the module, as the Tools menu does
  */
-public class ValidateProjectInitializer extends ActionInitializer<ValidateProject, FlexoProject<?>, FlexoObject> {
+public class ValidateProjectInitializer extends ActionInitializer<ValidateProject, FlexoObject, FlexoObject> {
 
 	public ValidateProjectInitializer(ControllerActionInitializer actionInitializer) {
 		super(ValidateProject.actionType, actionInitializer);
 	}
 
 	@Override
-	protected FlexoActionRunnable<ValidateProject, FlexoProject<?>, FlexoObject> getDefaultFinalizer() {
+	protected FlexoActionRunnable<ValidateProject, FlexoObject, FlexoObject> getDefaultFinalizer() {
 		return (e, action) -> {
-			FlexoProject<?> project = action.getFocusedObject();
+			FlexoProject<?> project = action.getProject();
 			if (project != null && project.getProjectValidationModel() != null) {
 				getController().getValidationWindow(true).validateAndDisplayReportForObject(project, project.getProjectValidationModel());
 			}
@@ -70,7 +70,7 @@ public class ValidateProjectInitializer extends ActionInitializer<ValidateProjec
 	}
 
 	@Override
-	protected Icon getEnabledIcon(FlexoActionFactory<ValidateProject, FlexoProject<?>, FlexoObject> actionType) {
+	protected Icon getEnabledIcon(FlexoActionFactory<ValidateProject, FlexoObject, FlexoObject> actionType) {
 		return IconLibrary.VALID_ICON;
 	}
 }

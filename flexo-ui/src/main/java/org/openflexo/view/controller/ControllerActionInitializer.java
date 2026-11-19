@@ -59,6 +59,7 @@ import org.openflexo.view.controller.action.DeleteRepositoryFolderInitializer;
 import org.openflexo.view.controller.action.InspectActionizer;
 import org.openflexo.view.controller.action.LoadAllImportedProjectInitializer;
 import org.openflexo.view.controller.action.LoadResourceActionInitializer;
+import org.openflexo.view.controller.action.CloseProjectInitializer;
 import org.openflexo.view.controller.action.ValidateProjectInitializer;
 
 /**
@@ -200,6 +201,7 @@ public class ControllerActionInitializer implements EditorProvider {
 		new InspectActionizer(this);
 		new LoadResourceActionInitializer(this);
 		new ValidateProjectInitializer(this);
+		new CloseProjectInitializer(this);
 		new ImportProjectInitializer(this);
 		new RemoveImportedProjectInitializer(this);
 
