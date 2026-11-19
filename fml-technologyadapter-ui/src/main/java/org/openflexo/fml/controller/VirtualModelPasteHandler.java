@@ -233,7 +233,7 @@ public class VirtualModelPasteHandler extends FlexoPasteHandler<VirtualModel> {
 
 					ModelEntity<VirtualModel> vmEntity = clipboard.getLeaderClipboard().getModelFactory().getModelContext()
 							.getModelEntity(VirtualModel.class);
-					ModelProperty<? super VirtualModel> conceptProperty = vmEntity.getModelProperty(VirtualModel.FLEXO_CONCEPTS_KEY);
+					ModelProperty<? super VirtualModel> conceptProperty = vmEntity.getModelProperty(FlexoConcept.CONTENTS_KEY);
 
 					// System.out.println("OK, je copie le concept dans le VM " + pastingContext.getPastingPointHolder());
 					// System.out.println("vmEntity=" + vmEntity);

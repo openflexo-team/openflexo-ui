@@ -165,7 +165,7 @@ public class FlexoConceptPasteHandler extends FlexoPasteHandler<FlexoConcept> {
 					try {
 						ModelEntity<VirtualModel> vmEntity = clipboard.getLeaderClipboard().getModelFactory().getModelContext()
 								.getModelEntity(VirtualModel.class);
-						ModelProperty<? super VirtualModel> conceptProperty = vmEntity.getModelProperty(VirtualModel.FLEXO_CONCEPTS_KEY);
+						ModelProperty<? super VirtualModel> conceptProperty = vmEntity.getModelProperty(FlexoConcept.CONTENTS_KEY);
 						translateNameWhenRequired((FlexoConcept) copiedObject, (VirtualModel) container);
 						return clipboard.getLeaderClipboard().getModelFactory().paste(clipboard.getLeaderClipboard(), conceptProperty,
 								pastingContext.getPastingPointHolder());
@@ -185,7 +185,7 @@ public class FlexoConceptPasteHandler extends FlexoPasteHandler<FlexoConcept> {
 						ModelEntity<FlexoConcept> conceptEntity = clipboard.getLeaderClipboard().getModelFactory().getModelContext()
 								.getModelEntity(FlexoConcept.class);
 						ModelProperty<? super FlexoConcept> conceptProperty = conceptEntity
-								.getModelProperty(FlexoConcept.EMBEDDED_FLEXO_CONCEPT_KEY);
+								.getModelProperty(FlexoConcept.CONTENTS_KEY);
 						translateNameWhenRequired((FlexoConcept) copiedObject, container);
 						return clipboard.getLeaderClipboard().getModelFactory().paste(clipboard.getLeaderClipboard(), conceptProperty,
 								pastingContext.getPastingPointHolder());
