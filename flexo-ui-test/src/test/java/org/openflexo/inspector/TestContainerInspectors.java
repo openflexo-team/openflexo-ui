@@ -76,7 +76,7 @@ public class TestContainerInspectors extends OpenflexoTestCase {
 		virtualModel = resource.getCompilationUnit().getVirtualModel();
 		assertNotNull(virtualModel);
 		// A failed parse leaves an EMPTY compilation unit behind, which validates with zero errors
-		assertEquals("The fixture did not parse", 21, virtualModel.getFlexoConcepts().size());
+		assertEquals("The fixture did not parse", 21, virtualModel.getAllFlexoConcepts().size());
 
 	}
 
@@ -155,7 +155,7 @@ public class TestContainerInspectors extends OpenflexoTestCase {
 	@TestOrder(4)
 	public void test3EveryBindingOfAContainerComponentIsValid() throws InterruptedException {
 
-		for (FlexoConcept concept : virtualModel.getFlexoConcepts()) {
+		for (FlexoConcept concept : virtualModel.getAllFlexoConcepts()) {
 
 			FIBComponent component = FMLControlledComponent.loadInspectorComponent(concept, null);
 			if (component == null) {

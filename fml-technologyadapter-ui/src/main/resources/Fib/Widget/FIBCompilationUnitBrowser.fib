@@ -266,7 +266,7 @@
 			label="virtualModel.name" editableLabel="virtualModel.name"
 			isEditable="false" name="virtualModel">
 			<Children
-				data="virtualModel.flexoConcepts"
+				data="virtualModel.allFlexoConcepts"
 				name="rootFlexoConcepts" />
 			<BrowserRemoveAction
 				method="controller.deleteCompilationUnit(selected.resource)"

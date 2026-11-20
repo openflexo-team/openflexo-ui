@@ -882,34 +882,51 @@ public class FMLFIBController extends FlexoFIBController {
 
 	@NotificationUnsafe
 	public void moveFlexoConcept(FlexoConcept concept, FlexoConcept container) {
+		if (!canMoveFlexoConcept(concept, container)) {
+			logger.warning("Cannot move concept " + concept + " into " + container);
+			return;
+		}
 		logger.info("Moving concept " + concept + " into " + container);
-		// Disconnect from former container concept (if any)
-		if (concept.getApplicableContainerFlexoConcept() != null) {
-			concept.getApplicableContainerFlexoConcept().removeFromEmbeddedFlexoConcepts(concept);
-		}
-		// Disconnect from owner VirtualModel
-		if (concept.getOwner() != null) {
-			concept.getOwner().removeFromFlexoConcepts(concept);
-		}
-		if (container instanceof VirtualModel) {
-			// Normal case
-			((VirtualModel) container).addToFlexoConcepts(concept);
-		}
-		else {
-			// Move in a container FlexoConcept
-			container.getOwner().addToFlexoConcepts(concept);
-			container.addToEmbeddedFlexoConcepts(concept);
-		}
+		// One setContainer (the VirtualModel to make it a root concept): it notifies the contents of both containers, and never
+		// announces the transient null owner that a removal followed by an addition would
+		concept.setContainer(container);
 		revalidate(concept.getDeclaringCompilationUnit());
 	}
 
 	@NotificationUnsafe
 	public boolean canMoveFlexoConcept(FlexoConcept concept, FlexoConcept container) {
-		// System.out.println("on peut bouger " + concept + " dans " + container + " ?");
-		// System.out.println("alors: " + (concept != null && concept != container && concept.getContainerFlexoConcept() != container
-		// && concept.getDeclaringVirtualModel() != container));
-		return concept != null && concept != container && concept.getApplicableContainerFlexoConcept() != container
-				&& concept.getDeclaringCompilationUnit() != container;
+		return concept != null && container != concept.getContainer()
+				&& isAcceptableContainer(concept.getOwner(), concept, container);
+	}
+
+	/**
+	 * Tells whether a concept may be declared in the supplied container (CORE-F-19): the {@link VirtualModel} itself (the concept is
+	 * then a root concept), or a concept of that same {@link VirtualModel}, which is neither the concept nor one of the concepts nested
+	 * in it, and is not a {@link FlexoEnum}. A concept is never put in another {@link VirtualModel} than its own.
+	 *
+	 * @param virtualModel
+	 *            the {@link VirtualModel} of the concept
+	 * @param concept
+	 *            the concept to place, null for a concept still to be created
+	 * @param container
+	 *            the candidate container
+	 */
+	public static boolean isAcceptableContainer(VirtualModel virtualModel, FlexoConcept concept, FlexoConcept container) {
+		if (virtualModel == null || container == null || concept instanceof VirtualModel) {
+			return false;
+		}
+		if (container == virtualModel) {
+			return true;
+		}
+		if (container instanceof VirtualModel || container instanceof FlexoEnum || container.getOwner() != virtualModel) {
+			return false;
+		}
+		for (FlexoConcept c = container; c != null; c = c.getContainerFlexoConcept()) {
+			if (c == concept) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override

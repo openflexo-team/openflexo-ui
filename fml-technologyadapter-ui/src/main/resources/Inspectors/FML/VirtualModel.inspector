@@ -9,6 +9,13 @@
 			darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true"
 			horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED"
 			verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+			<!-- A VirtualModel has no container (CORE-F-19) -->
+			<Label name="ContainerLabel">
+				<Parameter name="hidden" value="true" />
+			</Label>
+			<Custom name="ContainerSelector">
+				<Parameter name="hidden" value="true" />
+			</Custom>
 			<!--  <Label label="uri" index="2"
 				constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)"
 				name="ViewPointURILabel" localize="true" />

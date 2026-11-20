@@ -448,6 +448,13 @@ public abstract class FIBFlexoObjectSelector<T extends FlexoObject> extends Text
 		return _revertValue;
 	}
 
+	/**
+	 * The value the reset button sets: null by default. Override when null is not a valid value
+	 */
+	public T getResetValue() {
+		return null;
+	}
+
 	@Override
 	protected SelectorDetailsPanel createCustomPanel(T editedObject) {
 		_selectorPanel = makeCustomPanel(editedObject);
@@ -621,9 +628,10 @@ public abstract class FIBFlexoObjectSelector<T extends FlexoObject> extends Text
 		}
 
 		public void reset() {
-			selector.setEditedObject(null);
-			selector.setSelectedObject(null);
-			selector.setSelectedValue(null);
+			FlexoObject resetValue = selector.getResetValue();
+			selector.setEditedObject(resetValue);
+			selector.setSelectedObject(resetValue);
+			selector.setSelectedValue(resetValue);
 			selector.apply();
 		}
 

@@ -199,7 +199,7 @@ public class TestFMLEditor6 extends OpenflexoFIBTestCase {
 		assertNotNull(cu);
 		assertEquals(0, cu.getVirtualModel().getFlexoProperties().size());
 		assertEquals(0, cu.getVirtualModel().getFlexoBehaviours().size());
-		assertEquals(1, cu.getVirtualModel().getFlexoConcepts().size());
+		assertEquals(1, cu.getVirtualModel().getAllFlexoConcepts().size());
 
 		assertSame(cu, compilationUnit);
 		assertSame(cu.getVirtualModel(), virtualModel);
@@ -238,7 +238,7 @@ public class TestFMLEditor6 extends OpenflexoFIBTestCase {
 		assertNotNull(cu);
 		assertEquals(0, cu.getVirtualModel().getFlexoProperties().size());
 		assertEquals(0, cu.getVirtualModel().getFlexoBehaviours().size());
-		assertEquals(2, cu.getVirtualModel().getFlexoConcepts().size());
+		assertEquals(2, cu.getVirtualModel().getAllFlexoConcepts().size());
 
 		assertSame(cu, compilationUnit);
 		assertSame(cu.getVirtualModel(), virtualModel);
@@ -282,7 +282,7 @@ public class TestFMLEditor6 extends OpenflexoFIBTestCase {
 		assertNotNull(cu);
 		assertEquals(0, cu.getVirtualModel().getFlexoProperties().size());
 		assertEquals(0, cu.getVirtualModel().getFlexoBehaviours().size());
-		assertEquals(2, cu.getVirtualModel().getFlexoConcepts().size());
+		assertEquals(2, cu.getVirtualModel().getAllFlexoConcepts().size());
 
 		assertSame(cu, compilationUnit);
 		assertSame(cu.getVirtualModel(), virtualModel);

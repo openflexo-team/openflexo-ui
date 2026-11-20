@@ -104,15 +104,9 @@ public class FIBCompilationUnitDetailedBrowserFIBController extends FMLFIBContro
 		if (!listenedConcepts.contains(concept)) {
 			listenedConcepts.add(concept);
 			concept.getPropertyChangeSupport().addPropertyChangeListener(this);
-			if (concept instanceof VirtualModel) {
-				for (FlexoConcept c : ((VirtualModel) concept).getFlexoConcepts()) {
-					listenTo(c);
-				}
-			}
-			else {
-				for (FlexoConcept c : concept.getEmbeddedFlexoConcepts()) {
-					listenTo(c);
-				}
+			// The contents of a VirtualModel are its root concepts, the recursion reaches the nested ones
+			for (FlexoConcept c : concept.getContents()) {
+				listenTo(c);
 			}
 		}
 	}
@@ -124,15 +118,9 @@ public class FIBCompilationUnitDetailedBrowserFIBController extends FMLFIBContro
 		if (listenedConcepts.contains(concept)) {
 			listenedConcepts.remove(concept);
 			concept.getPropertyChangeSupport().removePropertyChangeListener(this);
-			if (concept instanceof VirtualModel) {
-				for (FlexoConcept c : ((VirtualModel) concept).getFlexoConcepts()) {
-					stopListenTo(c);
-				}
-			}
-			else {
-				for (FlexoConcept c : concept.getEmbeddedFlexoConcepts()) {
-					stopListenTo(c);
-				}
+			// The contents of a VirtualModel are its root concepts, the recursion reaches the nested ones
+			for (FlexoConcept c : concept.getContents()) {
+				stopListenTo(c);
 			}
 		}
 	}
@@ -161,8 +149,7 @@ public class FIBCompilationUnitDetailedBrowserFIBController extends FMLFIBContro
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getSource() instanceof FlexoConcept) {
-			if (evt.getPropertyName().equals(FlexoConcept.EMBEDDED_FLEXO_CONCEPT_KEY)
-					|| evt.getPropertyName().equals(VirtualModel.FLEXO_CONCEPTS_KEY)) {
+			if (evt.getPropertyName().equals(FlexoConcept.CONTENTS_KEY)) {
 				if (evt.getOldValue() instanceof FlexoConcept) {
 					stopListenTo((FlexoConcept) evt.getOldValue());
 				}
@@ -173,14 +160,12 @@ public class FIBCompilationUnitDetailedBrowserFIBController extends FMLFIBContro
 
 			if (evt.getPropertyName().equals(FlexoConcept.FLEXO_PROPERTIES_KEY)
 					|| evt.getPropertyName().equals(FlexoConcept.FLEXO_BEHAVIOURS_KEY)
-					|| evt.getPropertyName().equals(FlexoConcept.EMBEDDED_FLEXO_CONCEPT_KEY)
-					|| evt.getPropertyName().equals(VirtualModel.FLEXO_CONCEPTS_KEY)) {
+					|| evt.getPropertyName().equals(FlexoConcept.CONTENTS_KEY)) {
 				FIBCompilationUnitDetailedBrowserFIBController.this.getPropertyChangeSupport().firePropertyChange("getContents(FMLObject)",
 						false, true);
 			}
 
-			if (evt.getPropertyName().equals(FlexoConcept.EMBEDDED_FLEXO_CONCEPT_KEY)
-					|| evt.getPropertyName().equals(VirtualModel.FLEXO_CONCEPTS_KEY)) {
+			if (evt.getPropertyName().equals(FlexoConcept.CONTENTS_KEY)) {
 				if (evt.getNewValue() instanceof FlexoConcept) {
 					tryToExpand(((FlexoConcept) evt.getNewValue()).getOwningVirtualModel());
 					tryToExpand((FlexoConcept) evt.getNewValue());

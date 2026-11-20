@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.components.widget.FIBFlexoObjectSelector;
+import org.openflexo.fml.controller.FMLFIBController;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.fml.FMLUtils;
 import org.openflexo.foundation.fml.FlexoConcept;
@@ -132,6 +133,72 @@ public class FIBFlexoConceptSelector extends FIBFlexoObjectSelector<FlexoConcept
 		}
 	}
 
+	private boolean selectContainer = false;
+	private FlexoConcept containedConcept = null;
+
+	/**
+	 * When true, this selector chooses the container of a concept (CORE-F-19): it shows {@link #getVirtualModel()} and its concepts
+	 * through their containment, and accepts the {@link VirtualModel} itself (a root concept) or one of its concepts that may contain
+	 * {@link #getContainedConcept()}, see {@link FMLFIBController#isAcceptableContainer(VirtualModel, FlexoConcept, FlexoConcept)}
+	 * 
+	 * @return
+	 */
+	public boolean getSelectContainer() {
+		return selectContainer;
+	}
+
+	@CustomComponentParameter(name = "selectContainer", type = CustomComponentParameter.Type.OPTIONAL)
+	public void setSelectContainer(boolean selectContainer) {
+		if (selectContainer != this.selectContainer) {
+			FlexoObject oldRoot = getRootObject();
+			this.selectContainer = selectContainer;
+			getPropertyChangeSupport().firePropertyChange("selectContainer", !selectContainer, selectContainer);
+			getPropertyChangeSupport().firePropertyChange("rootObject", oldRoot, getRootObject());
+		}
+	}
+
+	/**
+	 * When {@link #getSelectContainer()}, the concept whose container is chosen: null for a concept still to be created
+	 * 
+	 * @return
+	 */
+	public FlexoConcept getContainedConcept() {
+		return containedConcept;
+	}
+
+	@CustomComponentParameter(name = "containedConcept", type = CustomComponentParameter.Type.OPTIONAL)
+	public void setContainedConcept(FlexoConcept containedConcept) {
+		if (containedConcept != this.containedConcept) {
+			FlexoConcept oldValue = this.containedConcept;
+			this.containedConcept = containedConcept;
+			getPropertyChangeSupport().firePropertyChange("containedConcept", oldValue, containedConcept);
+		}
+	}
+
+	/**
+	 * When choosing a container, the reset button makes the concept a root concept: its container is then the {@link VirtualModel}
+	 */
+	@Override
+	public FlexoConcept getResetValue() {
+		if (getSelectContainer()) {
+			return getVirtualModel();
+		}
+		return super.getResetValue();
+	}
+
+	/**
+	 * When choosing a container, applying no value (a double click on a concept that is not acceptable, an unknown name) keeps the
+	 * current container: a concept always has a container, null would detach it from its {@link VirtualModel}
+	 */
+	@Override
+	public void apply() {
+		if (getSelectContainer() && getSelectedValue() == null) {
+			cancel();
+			return;
+		}
+		super.apply();
+	}
+
 	private VirtualModel inheritingContext = null;
 	private boolean restrictToContext = false;
 
@@ -192,6 +259,9 @@ public class FIBFlexoConceptSelector extends FIBFlexoObjectSelector<FlexoConcept
 	@Override
 	public boolean isAcceptableValue(Object o) {
 		boolean returned = super.isAcceptableValue(o);
+		if (getSelectContainer()) {
+			return returned && FMLFIBController.isAcceptableContainer(getVirtualModel(), getContainedConcept(), (FlexoConcept) o);
+		}
 		if (returned && isRestrictToContext()) {
 			if (getInheritingContext() == null) {
 				return true;
@@ -214,6 +284,10 @@ public class FIBFlexoConceptSelector extends FIBFlexoObjectSelector<FlexoConcept
 	}
 
 	public FlexoObject getRootObject() {
+		if (getSelectContainer()) {
+			// A container is chosen in the VirtualModel of the concept, never elsewhere (and never according to the expected type)
+			return getVirtualModel();
+		}
 		if (getExpectedFlexoConceptType() != null) {
 			return getExpectedFlexoConceptType();
 		}

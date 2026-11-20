@@ -29,7 +29,7 @@
 				label="virtualModel.name" icon="controller.iconForObject(virtualModel)"
 				tooltip="" enabled="" visible="" isEditable="false" editableLabel=""
 				filtered="false" defaultVisible="true" dynamicFont="" name="virtualModel">
-				<Children data="data.allRootFlexoConcepts" visible="data.flexoConcepts!=null"
+				<Children data="data.allRootFlexoConcepts" visible="data.contents!=null"
 					cast="" name="children" />
 				<BrowserAddAction method="controller.createFlexoConcept(selected)"
 					isAvailable="" name="add_flexo_concept" />

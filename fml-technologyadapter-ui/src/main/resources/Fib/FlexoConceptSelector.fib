@@ -64,16 +64,18 @@
 			isEditable="false"
 			editableLabel="" filtered="false" defaultVisible="true" dynamicFont=""
 			name="virtualModel">
-			<Children data="virtualModel.virtualModels" name="subresources" />
-			<Children data="virtualModel.allSuperFlexoConcepts" name="allSuperFlexoConcepts" />
+			<Children data="virtualModel.virtualModels" visible="!(data.selectContainer)" name="subresources" />
+			<Children data="virtualModel.allSuperFlexoConcepts" visible="!(data.selectContainer)" name="allSuperFlexoConcepts" />
+			<Children data="virtualModel.contents" visible="data.selectContainer" name="contents" />
 		</BrowserElement>
 		<BrowserElement dataClassName="org.openflexo.foundation.fml.FlexoConcept"
 			label="flexoConcept.name" icon="controller.iconForObject(flexoConcept)"
 			enabled="data.isAcceptableValue(flexoConcept)"
 			tooltip="" visible="" isEditable="false" editableLabel=""
 			filtered="false" defaultVisible="true" dynamicFont="" name="flexoConcept">
-			<Children data="flexoConcept.childFlexoConcepts" visible=""
+			<Children data="flexoConcept.childFlexoConcepts" visible="!(data.selectContainer)"
 				cast="" name="children" />
+			<Children data="flexoConcept.contents" visible="data.selectContainer" name="contents" />
 		</BrowserElement>
 		<BrowserElement 
 			dataClassName="org.openflexo.foundation.fml.FlexoEnum"

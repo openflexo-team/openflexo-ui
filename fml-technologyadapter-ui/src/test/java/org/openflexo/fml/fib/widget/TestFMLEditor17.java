@@ -214,7 +214,7 @@ public class TestFMLEditor17 extends OpenflexoFIBTestCase {
 		assertNotNull(cu);
 		assertEquals(0, cu.getVirtualModel().getFlexoProperties().size());
 		assertEquals(3, cu.getVirtualModel().getFlexoBehaviours().size());
-		assertEquals(0, cu.getVirtualModel().getFlexoConcepts().size());
+		assertEquals(0, cu.getVirtualModel().getAllFlexoConcepts().size());
 
 		assertSame(cu, compilationUnit);
 		assertSame(cu.getVirtualModel(), virtualModel);
