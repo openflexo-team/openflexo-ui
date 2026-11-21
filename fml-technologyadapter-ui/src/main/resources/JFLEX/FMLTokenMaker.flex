@@ -271,7 +271,6 @@ URL						= (((https?|f(tp|ile))"://"|"www.")({URLCharacters}{URLEndCharacter})?)
 "if" |
 "import" |
 "in" |
-"inside" |
 "instanceof" |
 "listen" |
 "log" |
