@@ -171,7 +171,7 @@ public abstract class FIBAbstractFMLRTObjectSelector<T extends FlexoConceptInsta
 				if (current.isAssignableFrom(fci.getFlexoConcept())) {
 					contained = true;
 				}
-				current = current.getApplicableContainerFlexoConcept();
+				current = current.getContainerFlexoConcept();
 			}
 			if (contained) {
 				return true;
