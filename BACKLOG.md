@@ -112,7 +112,7 @@ input map of the text area (no key binding is set there today) and check that th
 > 
 > Kindly,
 
-### UI-F-4 — Choosing the container of a concept applies the containment rule of inheritance  ·  `IN PROGRESS`
+### UI-F-4 — Choosing the container of a concept applies the containment rule of inheritance  ·  `DONE`
 
 **GitHub:** [openflexo-team/openflexo-ui#12](https://github.com/openflexo-team/openflexo-ui/issues/12)
 
@@ -141,4 +141,12 @@ descendants) and `isAcceptableContainerForParents(parents, container)` (a concep
 code. `FMLFIBController.isAcceptableContainer` (inspector selector, drag and drop) and `isAcceptableContainerForParents` (wizard)
 apply it after the structural checks; `FIBFlexoConceptSelector` has a `parentConcepts` parameter, and the wizard page follows the
 parent entries. Tests: `TestAcceptableContainer` (test5, test6), `TestConceptContainment.theRuleTellsWhichContainersAreAcceptable`.
-Not checked in the application.
+
+**Resolution (2026-11-23).** Done as described above (core `0b53cbd69`, ui `68fde0e`), checked by the user in the Maintainer
+(inspector selector, drag and drop to the root, wizard error when a root parent is added).
+
+Accepted (decided with the user after the review, 2026-11-23): the Reset button of the container selector still makes the concept a
+root concept without applying the rule (the validation then reports it); the default container of the creation wizard stays the
+focused concept, so "create a child of" a nested concept opens the wizard in error until the container is chosen. Known limits: only
+the loaded concepts extending the moved one are checked (`getChildFlexoConcepts`); the parent selector of the wizard is not filtered by
+the container (the page reports the incompatibility).
