@@ -111,3 +111,34 @@ input map of the text area (no key binding is set there today) and check that th
 > Perhaps I missed this feature in 3.0.0
 > 
 > Kindly,
+
+### UI-F-4 — Choosing the container of a concept applies the containment rule of inheritance  ·  `IN PROGRESS`
+
+**GitHub:** [openflexo-team/openflexo-ui#12](https://github.com/openflexo-team/openflexo-ui/issues/12)
+
+**Problem.** Choosing the container of a concept (the container mode of `FIBFlexoConceptSelector` in the FlexoConcept inspector, the
+creation wizard, drag and drop in the browser) goes through `FMLFIBController.isAcceptableContainer`. That rule only keeps the concept
+inside its own VirtualModel and out of itself and of its nested concepts. It does not apply the containment rule of inheritance
+(`ContainerFlexoConceptMustBeConsistentWithParents`, openflexo-core `CORE-D-95` / `CORE-D-96`): a concept extending a nested concept
+must be declared in the container of its parent, or in a specialization of it. So the editor offers moves that the validation then
+reports as an error (for instance moving `Novel extends Book`, nested in `Shelf`, to the root).
+
+Left open by openflexo-core `CORE-F-19` (phase 3b, "not decided").
+
+**Options.**
+- Filter: offer only the containers satisfying the rule (the concept's ancestors decide).
+- Allow but warn: keep every candidate, and show the ones breaking the rule as such (greyed, or with the validation message).
+- Leave as is: the validation reports the error after the move.
+
+**Acceptance criteria.** The selector, the creation wizard and drag and drop apply one and the same rule (`isAcceptableContainer`),
+covered by `TestAcceptableContainer` with a concept extending a nested one and one extending a root one.
+
+**Progress (2026-11-23).** Decided with the user: filter (a container breaking the rule is neither offered nor accepted by a drop),
+check the ancestors and the descendants of the moved concept, and in the creation wizard filter by the parents chosen so far and block
+(error, no Finish) when a parent added afterwards makes the container incompatible. The rule lives in openflexo-core, next to the
+validation it mirrors: `ContainerFlexoConceptMustBeConsistentWithParents.isAcceptableContainer(concept, container)` (ancestors and
+descendants) and `isAcceptableContainerForParents(parents, container)` (a concept still to be created); `applyValidation` uses the same
+code. `FMLFIBController.isAcceptableContainer` (inspector selector, drag and drop) and `isAcceptableContainerForParents` (wizard)
+apply it after the structural checks; `FIBFlexoConceptSelector` has a `parentConcepts` parameter, and the wizard page follows the
+parent entries. Tests: `TestAcceptableContainer` (test5, test6), `TestConceptContainment.theRuleTellsWhichContainersAreAcceptable`.
+Not checked in the application.

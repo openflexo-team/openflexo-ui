@@ -39,6 +39,7 @@
 package org.openflexo.fml.controller;
 
 import java.io.FileNotFoundException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -64,6 +65,7 @@ import org.openflexo.foundation.fml.FMLValidationReport;
 import org.openflexo.foundation.fml.FlexoBehaviour;
 import org.openflexo.foundation.fml.FlexoBehaviourArgument;
 import org.openflexo.foundation.fml.FlexoConcept;
+import org.openflexo.foundation.fml.FlexoConcept.ContainerFlexoConceptMustBeConsistentWithParents;
 import org.openflexo.foundation.fml.FlexoConceptInstanceRole;
 import org.openflexo.foundation.fml.FlexoConceptObject;
 import org.openflexo.foundation.fml.FlexoEnum;
@@ -903,15 +905,37 @@ public class FMLFIBController extends FlexoFIBController {
 	 * Tells whether a concept may be declared in the supplied container (CORE-F-19): the {@link VirtualModel} itself (the concept is
 	 * then a root concept), or a concept of that same {@link VirtualModel}, which is neither the concept nor one of the concepts nested
 	 * in it, and is not a {@link FlexoEnum}. A concept is never put in another {@link VirtualModel} than its own.
+	 * <p>
+	 * The containment rule of inheritance applies too (UI-F-4, {@link ContainerFlexoConceptMustBeConsistentWithParents}): the container
+	 * is a subtype of the container of each ancestor of the concept, and stays a supertype of the container of each concept extending
+	 * it. So a move never creates a validation error of that rule.
 	 *
 	 * @param virtualModel
 	 *            the {@link VirtualModel} of the concept
 	 * @param concept
-	 *            the concept to place, null for a concept still to be created
+	 *            the concept to place, null for a concept still to be created (with no parent: see
+	 *            {@link #isAcceptableContainerForParents(VirtualModel, Collection, FlexoConcept)})
 	 * @param container
 	 *            the candidate container
 	 */
 	public static boolean isAcceptableContainer(VirtualModel virtualModel, FlexoConcept concept, FlexoConcept container) {
+		if (!isStructurallyAcceptableContainer(virtualModel, concept, container)) {
+			return false;
+		}
+		return concept == null || ContainerFlexoConceptMustBeConsistentWithParents.isAcceptableContainer(concept, container);
+	}
+
+	/**
+	 * Tells whether a concept still to be created, with the supplied parent concepts, may be declared in the supplied container (UI-F-4):
+	 * see {@link #isAcceptableContainer(VirtualModel, FlexoConcept, FlexoConcept)}
+	 */
+	public static boolean isAcceptableContainerForParents(VirtualModel virtualModel, Collection<? extends FlexoConcept> parentConcepts,
+			FlexoConcept container) {
+		return isStructurallyAcceptableContainer(virtualModel, null, container)
+				&& ContainerFlexoConceptMustBeConsistentWithParents.isAcceptableContainerForParents(parentConcepts, container);
+	}
+
+	private static boolean isStructurallyAcceptableContainer(VirtualModel virtualModel, FlexoConcept concept, FlexoConcept container) {
 		if (virtualModel == null || container == null || concept instanceof VirtualModel) {
 			return false;
 		}

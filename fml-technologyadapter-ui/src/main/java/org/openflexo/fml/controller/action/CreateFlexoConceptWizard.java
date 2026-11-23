@@ -39,14 +39,20 @@
 package org.openflexo.fml.controller.action;
 
 import java.awt.Image;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.components.wizard.WizardStep;
+import org.openflexo.fml.controller.FMLFIBController;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.Visibility;
+import org.openflexo.foundation.fml.action.AbstractCreateFlexoConcept;
 import org.openflexo.foundation.fml.action.AbstractCreateFlexoConcept.ParentFlexoConceptEntry;
 import org.openflexo.foundation.fml.action.CreateFlexoConcept;
 import org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstance;
@@ -64,6 +70,7 @@ public class CreateFlexoConceptWizard extends AbstractCreateFlexoConceptWizard<C
 
 	private static final String DUPLICATED_NAME = "this_name_is_already_used_please_choose_an_other_one";
 	private static final String EMPTY_NAME = "flexo_concept_must_have_an_non_empty_and_unique_name";
+	private static final String INCOMPATIBLE_CONTAINER = "the_container_must_be_a_subtype_of_the_container_of_each_parent_concept";
 
 	private final DescribeFlexoConcept describeFlexoConcept;
 
@@ -96,6 +103,46 @@ public class CreateFlexoConceptWizard extends AbstractCreateFlexoConceptWizard<C
 	@FIBPanel("Fib/Wizard/CreateFMLElement/DescribeFlexoConcept.fib")
 	public class DescribeFlexoConcept extends WizardStep {
 
+		private final Set<ParentFlexoConceptEntry> listenedEntries = new HashSet<>();
+		private final PropertyChangeListener parentConceptListener = evt -> parentConceptsChanged();
+
+		public DescribeFlexoConcept() {
+			// The container must agree with the parent concepts (UI-F-4): follow the entries and the concept each one names
+			getAction().getPropertyChangeSupport().addPropertyChangeListener(evt -> {
+				if (AbstractCreateFlexoConcept.PARENT_FLEXO_CONCEPT_ENTRIES.equals(evt.getPropertyName())) {
+					parentConceptsChanged();
+				}
+			});
+			listenToEntries();
+		}
+
+		private void listenToEntries() {
+			for (ParentFlexoConceptEntry entry : getParentFlexoConceptEntries()) {
+				if (listenedEntries.add(entry)) {
+					entry.getPropertyChangeSupport().addPropertyChangeListener(parentConceptListener);
+				}
+			}
+		}
+
+		private void parentConceptsChanged() {
+			listenToEntries();
+			getPropertyChangeSupport().firePropertyChange("parentFlexoConcepts", null, getParentFlexoConcepts());
+			checkValidity();
+		}
+
+		/**
+		 * The parent concepts chosen so far, for the container selector (UI-F-4)
+		 */
+		public List<FlexoConcept> getParentFlexoConcepts() {
+			List<FlexoConcept> returned = new ArrayList<>();
+			for (ParentFlexoConceptEntry entry : getParentFlexoConceptEntries()) {
+				if (entry.getParentConcept() != null) {
+					returned.add(entry.getParentConcept());
+				}
+			}
+			return returned;
+		}
+
 		public ApplicationContext getServiceManager() {
 			return getController().getApplicationContext();
 		}
@@ -123,6 +170,11 @@ public class CreateFlexoConceptWizard extends AbstractCreateFlexoConceptWizard<C
 			else if (getAction().getFocusedObject() instanceof VirtualModel
 					&& getAction().getFocusedObject().getDeclaringCompilationUnit().getFlexoConcept(getNewFlexoConceptName()) != null) {
 				setIssueMessage(getAction().getLocales().localizedForKey(DUPLICATED_NAME), IssueMessageType.ERROR);
+				return false;
+			}
+			else if (!FMLFIBController.isAcceptableContainerForParents(getVirtualModel(), getParentFlexoConcepts(),
+					getContainerFlexoConcept() != null ? getContainerFlexoConcept() : getVirtualModel())) {
+				setIssueMessage(getAction().getLocales().localizedForKey(INCOMPATIBLE_CONTAINER), IssueMessageType.ERROR);
 				return false;
 			}
 			else if (StringUtils.isEmpty(getNewFlexoConceptDescription())) {
@@ -172,6 +224,7 @@ public class CreateFlexoConceptWizard extends AbstractCreateFlexoConceptWizard<C
 				FlexoConcept oldValue = getContainerFlexoConcept();
 				getAction().setContainerFlexoConcept(containerFlexoConcept);
 				getPropertyChangeSupport().firePropertyChange("containerFlexoConcept", oldValue, containerFlexoConcept);
+				checkValidity();
 			}
 		}
 

@@ -42,6 +42,7 @@ import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 import org.openflexo.components.widget.FIBFlexoObjectSelector;
@@ -175,6 +176,27 @@ public class FIBFlexoConceptSelector extends FIBFlexoObjectSelector<FlexoConcept
 		}
 	}
 
+	private List<FlexoConcept> parentConcepts = null;
+
+	/**
+	 * When {@link #getSelectContainer()} and the concept is still to be created (no {@link #getContainedConcept()}), the parent concepts
+	 * it will have: only the containers satisfying the containment rule of inheritance with them are accepted (UI-F-4)
+	 * 
+	 * @return
+	 */
+	public List<FlexoConcept> getParentConcepts() {
+		return parentConcepts;
+	}
+
+	@CustomComponentParameter(name = "parentConcepts", type = CustomComponentParameter.Type.OPTIONAL)
+	public void setParentConcepts(List<FlexoConcept> parentConcepts) {
+		if (!Objects.equals(parentConcepts, this.parentConcepts)) {
+			List<FlexoConcept> oldValue = this.parentConcepts;
+			this.parentConcepts = parentConcepts != null ? new ArrayList<>(parentConcepts) : null;
+			getPropertyChangeSupport().firePropertyChange("parentConcepts", oldValue, this.parentConcepts);
+		}
+	}
+
 	/**
 	 * When choosing a container, the reset button makes the concept a root concept: its container is then the {@link VirtualModel}
 	 */
@@ -260,6 +282,9 @@ public class FIBFlexoConceptSelector extends FIBFlexoObjectSelector<FlexoConcept
 	public boolean isAcceptableValue(Object o) {
 		boolean returned = super.isAcceptableValue(o);
 		if (getSelectContainer()) {
+			if (getContainedConcept() == null && getParentConcepts() != null) {
+				return returned && FMLFIBController.isAcceptableContainerForParents(getVirtualModel(), getParentConcepts(), (FlexoConcept) o);
+			}
 			return returned && FMLFIBController.isAcceptableContainer(getVirtualModel(), getContainedConcept(), (FlexoConcept) o);
 		}
 		if (returned && isRestrictToContext()) {

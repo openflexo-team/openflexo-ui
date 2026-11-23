@@ -53,7 +53,7 @@ public class TestAcceptableContainer extends OpenflexoTestCase {
 	@Test
 	@TestOrder(2)
 	public void test1RootAndSiblingAreAcceptable() {
-		FlexoConcept simple = concept("Simple");
+		FlexoConcept simple = concept("Presented");
 		FlexoConcept plain = concept("Plain");
 		assertTrue(FMLFIBController.isAcceptableContainer(virtualModel, simple, virtualModel));
 		assertTrue(FMLFIBController.isAcceptableContainer(virtualModel, simple, plain));
@@ -78,7 +78,7 @@ public class TestAcceptableContainer extends OpenflexoTestCase {
 	@Test
 	@TestOrder(4)
 	public void test3NeverItselfNorANestedConcept() {
-		FlexoConcept simple = concept("Simple");
+		FlexoConcept simple = concept("Presented");
 		FlexoConcept plain = concept("Plain");
 		assertFalse(FMLFIBController.isAcceptableContainer(virtualModel, simple, simple));
 		// Nest Plain in Simple: Plain is then nested in Simple, and cannot contain it
@@ -127,6 +127,54 @@ public class TestAcceptableContainer extends OpenflexoTestCase {
 			plain.getPropertyChangeSupport().removePropertyChangeListener(listener);
 		}
 		assertFalse("A null owner was announced: " + owners, owners.contains(null));
+	}
+
+	/**
+	 * UI-F-4: the containment rule of inheritance. InheritingFromSimple and Annotated extend Simple, three root concepts: none of them may
+	 * go into another concept (Simple would leave its children at the root, a child would leave its parent's container)
+	 */
+	@Test
+	@TestOrder(6)
+	public void test5TheContainerOfARootParentIsTheVirtualModel() {
+		FlexoConcept simple = concept("Simple");
+		FlexoConcept inheriting = concept("InheritingFromSimple");
+		FlexoConcept plain = concept("Plain");
+		assertFalse(FMLFIBController.isAcceptableContainer(virtualModel, inheriting, plain));
+		assertTrue(FMLFIBController.isAcceptableContainer(virtualModel, inheriting, virtualModel));
+		// The descendants of a moved concept
+		assertFalse(FMLFIBController.isAcceptableContainer(virtualModel, simple, plain));
+		assertTrue(FMLFIBController.isAcceptableContainer(virtualModel, simple, virtualModel));
+		// A concept still to be created, extending Simple
+		assertFalse(FMLFIBController.isAcceptableContainerForParents(virtualModel, List.of(simple), plain));
+		assertTrue(FMLFIBController.isAcceptableContainerForParents(virtualModel, List.of(simple), virtualModel));
+		assertTrue(FMLFIBController.isAcceptableContainerForParents(virtualModel, List.of(), plain));
+		// The drag and drop applies the same rule
+		assertFalse(new FMLFIBController(null, null).canMoveFlexoConcept(inheriting, plain));
+	}
+
+	/**
+	 * UI-F-4: a parent nested in a concept. With Plain nested in Simple, a concept extending Plain is declared in Simple or in a
+	 * specialization of it (InheritingFromSimple), never at the root nor elsewhere
+	 */
+	@Test
+	@TestOrder(7)
+	public void test6TheContainerOfANestedParent() {
+		FlexoConcept simple = concept("Simple");
+		FlexoConcept inheriting = concept("InheritingFromSimple");
+		FlexoConcept plain = concept("Plain");
+		FlexoConcept presented = concept("Presented");
+		simple.addToContents(plain);
+		try {
+			assertTrue(FMLFIBController.isAcceptableContainerForParents(virtualModel, List.of(plain), simple));
+			assertTrue(FMLFIBController.isAcceptableContainerForParents(virtualModel, List.of(plain), inheriting));
+			assertFalse(FMLFIBController.isAcceptableContainerForParents(virtualModel, List.of(plain), virtualModel));
+			assertFalse(FMLFIBController.isAcceptableContainerForParents(virtualModel, List.of(plain), presented));
+			// Plain itself, with no parent and no child, may go anywhere it could before
+			assertTrue(FMLFIBController.isAcceptableContainer(virtualModel, plain, presented));
+		} finally {
+			virtualModel.addToContents(plain);
+		}
+		assertSame(virtualModel, plain.getContainer());
 	}
 
 	private static FlexoConcept concept(String name) {
