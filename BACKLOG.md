@@ -8,7 +8,7 @@ Status legend: `TODO` · `IN PROGRESS` · `BLOCKED` · `DONE` · `DEFERRED`.
 
 ---
 
-### UI-F-1 — Editable colouring themes for the FML editor  ·  `IN PROGRESS`
+### UI-F-1 — Editable colouring themes for the FML editor  ·  `DONE`
 
 **GitHub:** [openflexo-team/openflexo-ui#10](https://github.com/openflexo-team/openflexo-ui/issues/10)
 
@@ -25,6 +25,8 @@ Status legend: `TODO` · `IN PROGRESS` · `BLOCKED` · `DONE` · `DEFERRED`.
 - Checking the page in the running application.
 
 **Acceptance.** Creating, duplicating, editing and deleting a theme works from the preferences; a change of the active theme or of its colours is seen at once in every open FML editor; the shipped themes cannot be altered.
+
+**Resolution (2026-11-24).** Closed by decision of the user. Accepted as left: sharing the themes with the B editors of formod (`b-ta-ui`), out of scope; the check of the preferences page in the running application is not recorded.
 
 ---
 
@@ -150,3 +152,31 @@ root concept without applying the rule (the validation then reports it); the def
 focused concept, so "create a child of" a nested concept opens the wizard in error until the container is chosen. Known limits: only
 the loaded concepts extending the moved one are checked (`getChildFlexoConcepts`); the parent selector of the wizard is not filtered by
 the container (the page reports the incompatibility).
+
+### UI-F-5 — Improve code completion in the FML editor and in the FML language server  ·  `TODO`
+
+**GitHub:** [openflexo-team/openflexo-ui#13](https://github.com/openflexo-team/openflexo-ui/issues/13)
+
+**Problem.** The code completion of the FML editor is rudimentary. It proposes little and mostly independently of the context, so that writing FML still requires knowing the names, the types and the syntax by heart. The same holds for the language server.
+
+Verified on the current `3.0` branch: there are two completion mechanisms.
+- The integrated FML editor of `fml-technologyadapter-ui`, in the package `org.openflexo.fml.rstasupport` (`FMLCompletionProvider`, `FMLSourceCompletionProvider`, `BindingVariableCompletionFactory`, `BindingPathElementCompletionFactory`, template and shorthand completions), built on the RSyntaxTextArea auto-completion.
+- The language server `fml-lsp` of `openflexo-core` (`CompletionProvider`), used by external editors.
+
+Entries `CORE-F-20` and `CORE-F-21` of `openflexo-core` already list completion as tooling of the syntax they introduce.
+
+**Goal.** Improve the completion in both the integrated FML editor and the FML language server, so that it proposes what is valid at the cursor, with the information needed to choose.
+
+**Open questions.** Nothing is decided yet; the design is part of this entry.
+- Cases to cover: after a dot in a binding path, types, behaviours and their arguments, `select … where`, imported concepts, annotations, keywords by context. The current state has not been inventoried, and a list of what is missing or wrong is to be established first.
+- Quality: completion aware of the context and of the type (only valid proposals), documentation shown with a proposal, parameters of behaviours, automatic import, relevance ordering, response time.
+- Architecture: whether the integrated editor and the language server share one completion engine (where it lives, and how each front end uses it), or stay separate.
+- Repository split: a single entry for both targets, or two linked entries (`openflexo-ui` and `openflexo-core`).
+- Relation with the syntax tracked in `CORE-F-20` (lambdas) and `CORE-F-21` (anonymous element of `where`), which add things to complete.
+- Impacts to inventory: localization, performance on large models, the state of an incomplete or invalid document while it is being typed.
+
+**Acceptance criteria** (to be refined once the cases are listed).
+- The listed cases are completed in the integrated editor, with only valid proposals for the context.
+- The same cases are completed by the language server, as decided.
+- A test covers each case (see the `TestFMLEditor*` tests), and the response time on a representative model is measured.
+- The new texts are localized in English, French and Dutch.
