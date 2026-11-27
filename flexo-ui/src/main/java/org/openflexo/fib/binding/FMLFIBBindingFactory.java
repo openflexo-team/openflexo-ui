@@ -58,18 +58,14 @@ import org.openflexo.gina.model.bindings.FIBVariablePathElement;
  * Extends {@link FMLBindingFactory} by providing access to GINA model
  *
  * <p>
- * This is what makes the bindings of a GINA component speak FML: it is installed on any component a {@link VirtualModel} drives, whether
- * that component is reached through the container convention (a <code>.fib</code> / <code>.inspector</code> stored in the
- * <code>Xxx.fml/</code> directory) or through the deprecated <code>gina-ta</code> model slot.
+ * This is what makes the bindings of a GINA component speak FML: it is installed on any component a {@link VirtualModel} drives, a
+ * component reached through the container convention (a <code>.fib</code> / <code>.inspector</code> stored in the <code>Xxx.fml/</code>
+ * directory).
  *
  * <p>
  * One consequence is easy to misdiagnose: expressions are parsed by the <b>FML</b> parser, under which a path element starting with a
  * capital is read as a type name. <b>Name the widgets of a driven component in lowerCamelCase</b>, or every binding going through them
  * fails to parse.
- *
- * <p>
- * A copy of this class still lives in <code>gina-ta</code>, which sits below this module and cannot depend on it. That copy goes away with
- * the model slot; this one is the platform's.
  *
  * @author sylvain
  *
