@@ -306,6 +306,8 @@ public class FMLEditor extends JPanel implements PropertyChangeListener, Hyperli
 		// String fmlPrettyPrint = fmlResource.getLoadedResourceData().getFMLPrettyPrint();
 		String fmlPrettyPrint = fmlResource.getRawSource();
 		textArea.setText(fmlPrettyPrint);
+		// The compilation unit was loaded from this text: parsing it again is not an edition (see TextUpdate)
+		lastParsedText = textArea.getText();
 
 		boolean requiresNewParsing = fmlResource.getLoadedResourceData().getPrettyPrintDelegate() != null
 				&& (!fmlResource.getLoadedResourceData().getPrettyPrintDelegate().hasSource());
@@ -613,6 +615,8 @@ public class FMLEditor extends JPanel implements PropertyChangeListener, Hyperli
 
 			lastFML = newFML;
 			getTextArea().setTextNoParsingAnalysis(newFML);
+			// The text comes from the model: they are in sync
+			lastParsedText = getTextArea().getText();
 
 			// Replacing the whole text sends the caret to the end and the view with it: put both back where they were
 			// (the text is edited from the model, from the inspector for instance, while the user is reading it)
@@ -648,6 +652,17 @@ public class FMLEditor extends JPanel implements PropertyChangeListener, Hyperli
 
 		// Reset caret update policy
 		caret.setUpdatePolicy(updatePolicy);
+	}
+
+	/** The text the compilation unit was last in sync with: the one it was loaded from, the last parsed one, or the last one shown from the model */
+	private String lastParsedText = null;
+
+	protected String getLastParsedText() {
+		return lastParsedText;
+	}
+
+	protected void setLastParsedText(String text) {
+		lastParsedText = text;
 	}
 
 	private boolean modelWillChange = false;

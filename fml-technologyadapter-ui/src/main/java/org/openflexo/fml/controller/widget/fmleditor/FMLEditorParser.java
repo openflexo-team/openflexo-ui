@@ -60,6 +60,7 @@ import org.openflexo.foundation.fml.SemanticAnalysisWarning;
 import org.openflexo.foundation.fml.parser.FMLCompilationUnitParser;
 import org.openflexo.foundation.fml.parser.ParseException;
 import org.openflexo.foundation.fml.rm.CompilationUnitResource;
+import org.openflexo.foundation.fml.rm.TextUpdate;
 import org.openflexo.pamela.validation.ValidationIssue;
 
 /**
@@ -161,7 +162,8 @@ public class FMLEditorParser extends AbstractParser {
 			// System.out.println(editor.getTextArea().getText());
 			// System.out.println("]");
 
-			FMLCompilationUnit parsedCompilationUnit = getFMLParser().parse(editor.getTextArea().getText(), editor.getFactory(),
+			String parsedText = editor.getTextArea().getText();
+			FMLCompilationUnit parsedCompilationUnit = getFMLParser().parse(parsedText, editor.getFactory(),
 					(modelSlotClasses) -> {
 						// System.out.println("Parsing: " + editor.getTextArea().getText());
 						// System.out.println("Uses model slot classes : " + modelSlotClasses);
@@ -178,25 +180,31 @@ public class FMLEditorParser extends AbstractParser {
 			}
 
 			// This is the update process
+			// Parsing the same text again is not an edition: the merge sets new pretty-print delegates, IDs and types on every object, and
+			// the resource of a FML that was only opened would be marked modified (see TextUpdate)
 			FMLCompilationUnit existingData = editor.getFMLResource().getCompilationUnit();
 			RequiresNewPrettyPrintListener pcListener = new RequiresNewPrettyPrintListener(existingData);
-			existingData.updateWith(parsedCompilationUnit);
-			existingData.getTypingSpace().resolveUnresolvedTypes();
+			try (TextUpdate textUpdate = new TextUpdate(editor.getFMLResource(), parsedText.equals(editor.getLastParsedText()))) {
+				existingData.updateWith(parsedCompilationUnit);
+				existingData.getTypingSpace().resolveUnresolvedTypes();
 
-			// There is a trick here: the update has nullified the resource
-			// (this is normal, just parsed FMLCompilationUnit does not knows the resource)
-			// So set the resource again at the end of the update process
-			existingData.setResource(editor.getFMLResource());
-			// System.out.println("Check also: " + (editor.getFMLResource().getResourceData() == existingData));
+				// There is a trick here: the update has nullified the resource
+				// (this is normal, just parsed FMLCompilationUnit does not knows the resource)
+				// So set the resource again at the end of the update process
+				existingData.setResource(editor.getFMLResource());
+				// System.out.println("Check also: " + (editor.getFMLResource().getResourceData() == existingData));
 
-			// Checking imports
-			existingData.getPropertyChangeSupport().addPropertyChangeListener(pcListener);
-			existingData.manageImports();
-			existingData.getPropertyChangeSupport().removePropertyChangeListener(pcListener);
-			requiresNewPrettyPrint = pcListener.requiresNewPrettyPrint();
+				// Checking imports
+				existingData.getPropertyChangeSupport().addPropertyChangeListener(pcListener);
+				existingData.manageImports();
+				existingData.getPropertyChangeSupport().removePropertyChangeListener(pcListener);
+				requiresNewPrettyPrint = pcListener.requiresNewPrettyPrint();
 
-			// Now revalidate all bindings
-			existingData.revalidateAllBindings();
+				// Now revalidate all bindings
+				existingData.revalidateAllBindings();
+			}
+			// The model is now in sync with this text
+			editor.setLastParsedText(parsedText);
 
 			// We perform a full validation to detect validation issues
 			validate(existingData);
