@@ -300,11 +300,17 @@ public class FMLEditor extends JPanel implements PropertyChangeListener, Hyperli
 
 		// boolean requiresNewParsing = !fmlResource.getLoadedResourceData().getPrettyPrintDelegate().hasSource();
 
-		// This call is a little bit brutal, because it triggers a new parsing
-		// But it has the advantage to recompute a full-valid FML pretty-print with FML code and internal representation synchronized
-		// Validation status is also updated during this call
-		// String fmlPrettyPrint = fmlResource.getLoadedResourceData().getFMLPrettyPrint();
+		// The text area is filled with the text the compilation unit was loaded from. When the unit was parsed from it and not changed
+		// since, it is in sync with it and its notices are known (validation report of the loading, issues of the semantic analysis):
+		// the parsing that the text area triggers is then skipped (it still runs, so that the text area displays these notices).
+		// Otherwise it is a real one: a source that does not parse must show its error, a unit edited before the editor opens must be
+		// validated again
 		String fmlPrettyPrint = fmlResource.getRawSource();
+		FMLCompilationUnit loadedUnit = fmlResource.getLoadedResourceData();
+		if (!fmlResource.isUnparseable() && loadedUnit.getPrettyPrintDelegate() != null && loadedUnit.getPrettyPrintDelegate().hasSource()
+				&& !loadedUnit.isModified()) {
+			parser.skipParsingOfLoadedText();
+		}
 		textArea.setText(fmlPrettyPrint);
 		// The compilation unit was loaded from this text: parsing it again is not an edition (see TextUpdate)
 		lastParsedText = textArea.getText();
@@ -488,6 +494,8 @@ public class FMLEditor extends JPanel implements PropertyChangeListener, Hyperli
 	}
 
 	public void parseImmediately() {
+		// A parsing requested now is a real one
+		parser.cancelSkippingOfLoadedText();
 		parser.parse((RSyntaxDocument) textArea.getDocument(), textArea.getSyntaxEditingStyle());
 	}
 

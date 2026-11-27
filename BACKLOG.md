@@ -62,6 +62,7 @@ Status legend: `TODO` · `IN PROGRESS` · `BLOCKED` · `DONE` · `DEFERRED`.
 | FML creation actions | `CreateTopLevelVirtualModel`, `CreateContainedVirtualModel`, `AbstractCreateFlexoConcept`, `CreateFlexoBehaviour`, `CreateFMLControlled{Diagram,FIB}VirtualModel`, `CreateJDBCVirtualModel`, formod `ImportDocXDocument` (`LongRunningAction`) | task | counted | TODO |
 | FML long-running action schemes | `LongRunningActionSchemeAction`, `NotifyProgressAction` (user FML) | task | counted, driven by the FML | TODO (keep driven by FML) |
 | Loading a resource on demand | `LoadResourceAction`; pdf, docx, markdown resources | task | one step | TODO |
+| Opening a FML unit (double-click), with its dependencies and their technologies | `LoadResourceAction`, `CompilationUnitResourceImpl`, `FMLEditor` | task, then EDT (view) | one step | IN PROGRESS (17.5 s → 15 s; tasks per resource and technology to come) |
 | Opening the FIB editor of a component / of a FML-controlled view | `LoadFIBEditor` (gina-ta-ui, `FMLGINAPlugin`), `OpenFIBEditor` | task | indeterminate | TODO |
 | Loading the editor of a selector widget | `LoadEditor` (doc image / fragment / table selectors, `FIBCellRangeSelector`) | task | indeterminate | TODO |
 | Selecting and focusing an object | `SelectAndFocusObjectTask` | task | indeterminate | TODO (probably to hide) |
@@ -80,6 +81,9 @@ Status legend: `TODO` · `IN PROGRESS` · `BLOCKED` · `DONE` · `DEFERRED`.
 - File → Open, File → Recent projects and the "Open" button of a module welcome panel loaded the project in the event dispatch thread, without a task: they now go through a loading task (`ApplicationContext.openProject`), as the Welcome dialog does, and `LoadProjectTask` reports a project that cannot be opened.
 - The splash screen shows the progress of the startup: a thin bar at its bottom and the name of the current step. The startup is a task that no task manager executes (`FlexoTask.begin()`/`end()`), bound to the main thread (`Progress.bindToCurrentThread`), replayed from the previous startup like the other timed tasks (history `Startup`), and ended when the splash screen closes, just before the Welcome. Its milestones are the initialization of each service (`FlexoServiceManager.registerService`) and the existing steps of resource centers and technology adapters.
 - Measured on `TestNewFME5`: 9.1 s in the Free Modelling Editor (virtual models and instances preloaded and validated), 2.1 s in the Openflexo Modeller (nothing preloaded, nothing heavy left to the event dispatch thread).
+- Opening a FML unit (2026-11-27, `SatAlpha` of mom-challenge in the Openflexo Modeller, first opening of the session, double-click to idle window): 17.5 s → 15 s. Measured before: 1.7 s parsing the file only to read its dependencies, 2.8 s parsing it, 2.8 s for its 5 dependencies and the JSON, DocX and CSV technologies, 3.3 s activating OWL (its resource center scan loads the standard ontologies, 2 s for `rdf-schema`), then about 6 s of the event dispatch thread building the view, validating the unit twice and parsing its text again.
+  - The dependencies of a unit are read from its metadata when they were written for its current contents (the modification time of the `.fml` is now stored with them). At the first opening of a session the gain is small: the parser tables and the PAMELA proxies of the FML classes, built on first use, are then paid by the real parsing.
+  - The FML editor no longer parses again, nor validates again, the text its unit was loaded from, when the unit was not changed since: the event dispatch thread works about 3 s after the view is created instead of 6.5 s. An edited unit, or a source that does not parse, is still parsed when the editor opens.
 
 **Left.**
 - Work done on the event dispatch thread still reports nothing (`Progress` follows the task thread, or a task bound to the current thread).
@@ -87,6 +91,13 @@ Status legend: `TODO` · `IN PROGRESS` · `BLOCKED` · `DONE` · `DEFERRED`.
 - A project opened from the command line (`Flexo.main`) may start loading before its module is active: no preloading then, and a history without module.
 - Default histories shipped with the application, for the first execution (not through `ResourceLocator.locateResource`, which prints a stack trace for every resource it does not find).
 - The rows `TODO` of the inventory.
+- Opening a FML unit, still 15 s for `SatAlpha` (2026-11-27):
+  - one task per resource and per technology adapter to load, shown in the task panel, after a first phase that computes them from the metadata (dependencies and model slots of each unit, without parsing);
+  - the technologies activated while the unit is parsed, instead of one after the other as each dependency is reached;
+  - building the PAMELA proxies of a class is quadratic in its methods (`ByteBuddyProxyBackend.generate`: one matcher per method, tried on every method), about 2 s at the first opening of a session;
+  - activating OWL loads the standard ontologies during the resource center scan (about 3 s);
+  - a unit modified then saved before its FML editor opens shows the validation report of its loading;
+  - the validation report of a unit is kept by `FMLTechnologyAdapterController` and does not follow every edition of the model.
 - The Diana inspector panel of the Diagram controller (`JDianaInspectors`, shown at the bottom right of diagram views) is still built at module loading: most of the 4.7 s spent before the first Diagram inspector (13.2 s for the whole loading of the Free Modelling Editor). Building it on demand would move this cost to the opening of the first diagram, in the event dispatch thread.
 
 **Acceptance.** Between the Welcome and the opened module, and while a project loads, the bar moves forward without going back, and in near-linear time from the second execution on.

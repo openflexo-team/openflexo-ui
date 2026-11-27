@@ -93,10 +93,35 @@ public class FMLEditorParser extends AbstractParser {
 		fmlParser = new FMLCompilationUnitParser();
 		result = new FMLParseResult(this);
 		if (compilationUnit != null) {
-			FMLValidationReport validationReport = validate(compilationUnit);
+			// The report computed when the unit was loaded (in the background) is up to date: validating it again here took the event
+			// dispatch thread for about a second at each opening
+			FMLValidationReport validationReport = validate(compilationUnit, false);
 			result.setValidationReport(validationReport);
 		}
 		isInitialized = true;
+	}
+
+	/**
+	 * When true, the next parsing of a text equal to the one the compilation unit was loaded from is skipped (see
+	 * {@link #skipParsingOfLoadedText()})
+	 */
+	private boolean skipParsingOfLoadedText = false;
+
+	/**
+	 * Skip the parsing that the editor triggers when it is filled with the text its compilation unit was loaded from.<br>
+	 * The unit is already in sync with this text and its validation notices are known: parsing it again, merging the result and
+	 * validating it took about 1.5 s of the event dispatch thread at each opening. The parsing still happens (the text area asks for it),
+	 * but returns the current result at once, so that the text area displays its notices.
+	 */
+	public void skipParsingOfLoadedText() {
+		skipParsingOfLoadedText = true;
+	}
+
+	/**
+	 * Cancel {@link #skipParsingOfLoadedText()}: the next parsing is a real one
+	 */
+	public void cancelSkippingOfLoadedText() {
+		skipParsingOfLoadedText = false;
 	}
 
 	public PropertyChangeSupport getPropertyChangeSupport() {
@@ -142,6 +167,19 @@ public class FMLEditorParser extends AbstractParser {
 		/*if (!editor.isDocumentModified()) {
 			return result;
 		}*/
+
+		if (skipParsingOfLoadedText) {
+			skipParsingOfLoadedText = false;
+			if (editor.getTextArea().getText().equals(editor.getLastParsedText())) {
+				result.setParsedLines(0, editor.getTextArea().getLineCount());
+				// The notices were computed while the text area was still empty: the margin icons of all lines but the first were left
+				// out, they are added now that the text is there
+				updateEditorGutter();
+				// What a parsing tells its listeners (code completion among them): the unit of the editor
+				getPropertyChangeSupport().firePropertyChange(PROPERTY_COMPILATION_UNIT, null, getCompilationUnit());
+				return result;
+			}
+		}
 
 		// We keep this log unless debug of 2.99 is performed, because a parsing is really impacting and should be tracked
 		logger.info("Parsing FML document......");
@@ -324,6 +362,17 @@ public class FMLEditorParser extends AbstractParser {
 	}
 
 	public FMLValidationReport validate(FMLCompilationUnit compilationUnit) {
+		return validate(compilationUnit, true);
+	}
+
+	/**
+	 * Update the notices of the editor from the validation report of supplied compilation unit, and from the issues of its semantic
+	 * analysis
+	 *
+	 * @param revalidate
+	 *            false when the report is known to be up to date (just computed for this unit): it is then used as it is
+	 */
+	private FMLValidationReport validate(FMLCompilationUnit compilationUnit, boolean revalidate) {
 
 		result.clearNotices();
 		editor.getGutter().removeAllTrackingIcons();
@@ -332,10 +381,12 @@ public class FMLEditorParser extends AbstractParser {
 				.getValidationReport(compilationUnit);
 		result.setValidationReport(virtualModelReport);
 
-		try {
-			virtualModelReport.revalidate(compilationUnit);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
+		if (revalidate) {
+			try {
+				virtualModelReport.revalidate(compilationUnit);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
 		}
 
 		// Then we browse SemanticAnalysisIssue as raised by semantics analyzing
