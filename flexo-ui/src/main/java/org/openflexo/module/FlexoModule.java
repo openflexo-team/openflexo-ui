@@ -66,6 +66,8 @@ import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.ProjectClosed;
 import org.openflexo.foundation.resource.ProjectLoaded;
 import org.openflexo.foundation.resource.ResourceModified;
+import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
+import org.openflexo.foundation.resource.ResourceLoadingPlan;
 import org.openflexo.foundation.resource.ResourceRegistered;
 import org.openflexo.foundation.resource.ResourceSaved;
 import org.openflexo.foundation.resource.ResourceUnregistered;
@@ -391,7 +393,12 @@ public abstract class FlexoModule<M extends FlexoModule<M>> implements DataFlexo
 			if (!resource.isLoaded()) {
 				Progress.progress(step + " " + resource.getName());
 				try {
-					resource.getResourceData();
+					// The technologies and units it needs are steps of their own, shown in the task panel
+					ResourceLoadingPlan.compute(resource).execute();
+				} catch (ResourceLoadingCancelledException e) {
+					// The loading of the project was cancelled: the resources left are not loaded
+					logger.info("Loading of the resources of " + project + " cancelled");
+					return;
 				} catch (Exception e) {
 					logger.warning("Could not load " + resource + " while loading project " + project + ": " + e);
 				}

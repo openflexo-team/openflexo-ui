@@ -147,6 +147,13 @@ public class TaskManagerPanel extends JDialog implements PropertyChangeListener 
 				returned.add(task);
 			}
 		}
+		// The steps of a longer work, run by its thread (the loading of a resource and what it needs)
+		for (FlexoTask task : taskManager.getFollowedTasks()) {
+			if (task.isShownInTaskPanel() && !returned.contains(task) && task.getTaskStatus() != TaskStatus.FINISHED
+					&& task.getTaskStatus() != TaskStatus.CANCELLED && task.getTaskStatus() != TaskStatus.EXCEPTION_THROWN) {
+				returned.add(task);
+			}
+		}
 		return returned;
 	}
 
@@ -155,12 +162,22 @@ public class TaskManagerPanel extends JDialog implements PropertyChangeListener 
 			SwingUtilities.invokeLater(() -> updatePanel());
 			return;
 		}
-		for (FlexoTask task : getShownTasks()) {
+		List<FlexoTask> shownTasks = getShownTasks();
+		for (FlexoTask task : shownTasks) {
 			TaskPanel p = taskPanels.get(task);
 			if (p == null) {
 				p = new TaskPanel(task);
 				contentPane.add(p);
 				taskPanels.put(task, p);
+			}
+		}
+		// A followed step may end before its panel is built (its end was then not heard): the panel of a task no longer shown goes
+		for (FlexoTask task : new ArrayList<>(taskPanels.keySet())) {
+			if (!shownTasks.contains(task) && !taskManager.getFollowedTasks().contains(task)
+					&& !taskManager.getScheduledTasks().contains(task)) {
+				TaskPanel p = taskPanels.remove(task);
+				p.stopTimedProgress();
+				contentPane.remove(p);
 			}
 		}
 
@@ -305,7 +322,7 @@ public class TaskManagerPanel extends JDialog implements PropertyChangeListener 
 					taskManager.stopExecution(task);
 				}
 			});
-			cancelButton.setEnabled(task.getTaskStatus() == TaskStatus.RUNNING);
+			cancelButton.setEnabled(task.getTaskStatus() == TaskStatus.RUNNING && task.isCancellable());
 
 			bottom.add(progressBar, BorderLayout.CENTER);
 			bottom.add(cancelButton, BorderLayout.EAST);
@@ -314,6 +331,17 @@ public class TaskManagerPanel extends JDialog implements PropertyChangeListener 
 			add(bottom, BorderLayout.CENTER);
 
 			setPreferredSize(new Dimension(200, 50));
+
+			// A followed step may already run when its panel is built: its start was not heard
+			if (task.getTaskStatus() == TaskStatus.RUNNING) {
+				progressBar.setEnabled(true);
+				if (task.hasTimedProgress()) {
+					startTimedProgress();
+				}
+				else {
+					progressBar.setIndeterminate(true);
+				}
+			}
 		}
 
 		private void startTimedProgress() {

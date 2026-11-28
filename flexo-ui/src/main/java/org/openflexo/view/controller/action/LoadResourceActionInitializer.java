@@ -66,6 +66,10 @@ public class LoadResourceActionInitializer extends ActionInitializer<LoadResourc
 	@Override
 	protected FlexoActionRunnable<LoadResourceAction, FlexoObject, FlexoObject> getDefaultFinalizer() {
 		return (e, action) -> {
+			// Not loaded when the loading was cancelled: loading it here would do it in the event dispatch thread
+			if (!((FlexoResource<?>) action.getFocusedObject()).isLoaded()) {
+				return true;
+			}
 			try {
 				FlexoObject loadedData = (FlexoObject) ((FlexoResource<?>) action.getFocusedObject()).getResourceData();
 				getController().setCurrentEditedObject(loadedData);
